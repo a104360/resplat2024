@@ -5,58 +5,59 @@
 #include "../include/dataTypes.h"
 
 
+static bool yearCheck(const char * );
 
-static bool dateCheck(char * );
+static bool monthCheck(const char * );
 
+static bool dayCheck(const char * );
 
-static bool datesCheck(char * , char * );
+static bool dateCheck(const char * );
 
+static bool datesCheck(const char * , const char * );
 
-static bool hourCheck(char * );
+static bool hourCheck(const char * );
 
+static bool hoursCheck(const char * , const char * );
 
-static bool hoursCheck(char * , char * );
+static bool emailCheck(const char * );
 
+static bool countryCheck(const char * );
 
-static bool emailCheck(char * );
+static bool accStatusCheck(const char * );
 
+static bool seatsCheck(const char * , const char * );
 
-static bool countryCheck(char * );
+static bool airportCheck(const char * ,const char * );
 
+static bool hotelStarsCheck(const char * );
 
-static bool accStatusCheck(char * );
+static bool taxCheck(const char * );
 
+static bool pricePNightCheck(const char * );
 
-static bool seatsCheck(char * , char * );
+static bool breakfastCheck(const char * );
 
-
-static bool airportCheck(char * ,char * );
-
-
-static bool hotelStarsCheck(char * );
-
-
-static bool taxCheck(char * );
-
-
-static bool pricePNightCheck(char * );
-
-
-static bool breakfastCheck(char * );
-
-
-static bool reviewCheck(char * );
+static bool reviewCheck(const char * );
 
 
 
 static bool lengthCheck(void ** line);
 
-static bool userCheck(char * );
+static bool userCheck(const char * );
 
-static bool reservationCheck(char * );
+static bool reservationCheck(const char * );
 
-static bool flightCheck(char * );
+static bool flightCheck(const char * );
 
-static bool passangerCheck(char * );
+static bool passangerCheck(const char * );
+
+
+static User * userAdd(const char *);
+
+static Reservation * reservationAdd(const char *);
+
+static Flight * fligthAdd(const char *);
+
+static Passanger * passangerAdd(const char *);
 
 #endif
