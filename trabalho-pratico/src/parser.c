@@ -10,7 +10,7 @@
 *
 */
 
-
+// Verifies the correctness of the year in the date string, following the determined format
 static bool yearCheck(const char * line){
     for(int i = 0; i < 5;i++){
         if(i < 4){
@@ -21,6 +21,7 @@ static bool yearCheck(const char * line){
     return true;
 }
 
+// Verifies the correctness of the month in the date string, following the determined format
 static bool monthCheck(const char * line){
         if(line[5] != '1' && line[5] != '0') return false;
         if(line[5] == '0')
@@ -31,6 +32,7 @@ static bool monthCheck(const char * line){
     return true;
 }
 
+// Verifies the correctness of the day in the date string, following the determined format
 static bool dayCheck(const char * line){
     if(line[8] < '0' || line[8] > '3') return false;
     if(line[9] < '0' && line[9] > '9') return false;
@@ -39,10 +41,19 @@ static bool dayCheck(const char * line){
 
 // format : nnnn/nn/nn (0 <= n <= 9)
 static bool dateCheck(const char * line){
-    if(yearCheck(line) && monthCheck(line) && dayCheck(line))
-        return true;
-    else 
-        return false;
+    if(yearCheck(line) && monthCheck(line) && dayCheck(line)){
+        switch (line[10])
+        {
+        case '\0':
+            return true;
+            break;
+        
+        default:
+            if(hourCheck(line)) return true;
+            break;
+        }
+    }
+    return false;
 }
 
 // starting dates cannot be after finishing dates
@@ -97,13 +108,26 @@ static bool emailCheck(const char * line){
 }
 
 // format : LL (L is a letter)
-static bool countryCheck(const char * line);
+static bool countryCheck(const char * line){
+    if(!line) return false;
+    if(line[2] == '\0') return false;
+    if(line[3] == '\0') return true;
+
+}
 
 // active vs inactive (all varitations)
-static bool accStatusCheck(const char * line);
+static bool accStatusCheck(const char * line){
+    toUpper(line);
+    if(!strcmp(line,"ACTIVE") || !strcmp(line,"INACTIVE")) return true;
+    return false;
+}
 
 // total_seats must not be less than the number of passangers
-static bool seatsCheck(const char * sold, const char * plain);
+static bool seatsCheck(const char * sold, const char * plain){
+    int real = atoi(plain), virtual = atoi(sold);
+    if(virtual > sold) return false;
+    return true;
+}
 
 // length == 3 && all variations
 static bool airportCheck(const char * departure,const char * arrival);
