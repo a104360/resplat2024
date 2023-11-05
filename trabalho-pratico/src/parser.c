@@ -11,49 +11,78 @@
 */
 
 // Verifies the correctness of the year in the date string, following the determined format
-static bool yearCheck(const char * line){
+// tm.year = years after 1900
+// Example : the year 2023 would appear on tm.year as 123
+static int yearCheck(const char * line){
     for(int i = 0; i < 5;i++){
         if(i < 4){
             if(line[i] > '9' && line[i] < '0') return false;
         }
         else if(line[i] != '/') return false;
     }
-    return true;
+    char * aux = malloc(sizeof(char) * 4);
+    strncpy(aux,line,4);
+    int n = atoi(aux);
+    free(aux);
+    return n - 1900;
 }
 
 // Verifies the correctness of the month in the date string, following the determined format
-static bool monthCheck(const char * line){
-        if(line[5] != '1' && line[5] != '0') return false;
-        if(line[5] == '0')
-            if(line[6] > '9' && line[6] < '0') return false;
-        if(line[5] == '1')
-            if(line[6] < '0' && line[6] > '2') return false;
-        if(line[7] != '/') return false;
-    return true;
+// 0 <= tm.tm_mon <= 11
+static int monthCheck(const char * line){
+    if(line[5] != '1' && line[5] != '0') return false;
+    if(line[5] == '0')
+        if(line[6] > '9' && line[6] < '0') return false;
+    if(line[5] == '1')
+        if(line[6] < '0' && line[6] > '2') return false;
+    if(line[7] != '/') return false;
+    char * aux = malloc(sizeof(char)*2);
+    aux[0] = line[5];
+    aux[1] = line[6];
+    int n = atoi(aux);
+    free(aux);
+    return n;
 }
 
 // Verifies the correctness of the day in the date string, following the determined format
-static bool dayCheck(const char * line){
+// 0 -> false
+// otherwise -> 1 <= tm.tm_mday <= 31 (true)
+static int dayCheck(const char * line){
     if(line[8] < '0' || line[8] > '3') return false;
     if(line[9] < '0' && line[9] > '9') return false;
-    return true;
+    char * aux = malloc(sizeof(char) * 2);
+    aux[0] = line[8];
+    aux[1] = line[9]; 
+    int n = atoi(aux);
+    return n;
 }
 
 // format : nnnn/nn/nn (0 <= n <= 9)
-static bool dateCheck(const char * line){
-    if(yearCheck(line) && monthCheck(line) && dayCheck(line)){
-        switch (line[10])
-        {
-        case '\0':
-            return true;
-            break;
-        
-        default:
-            if(hourCheck(line)) return true;
-            break;
-        }
+static struct tm * dateCheck(const char * line){
+    struct tm * date = malloc(sizeof(struct tm));
+    if(!date) return NULL;
+    date->tm_year = yearCheck(line);
+    date->tm_mon = monthCheck(line) - 1;
+    date->tm_mday = dayCheck(line);
+    if(date->tm_year == 0 || date->tm_mon == -1 || date->tm_mday == 0){
+        free(date);
+        return NULL;
     }
-    return false;
+    switch (line[10])
+    {
+    case '\0':
+        return date;
+        break;
+    
+    default:
+        date->tm_hour = hourCheck(line);
+        date->tm_min = minuteCheck(line);
+        date->tm_sec = secondsCheck(line);
+        return date;
+        break;
+    }
+
+    return NULL;
 }
 
 // starting dates cannot be after finishing dates
@@ -67,15 +96,56 @@ static bool datesCheck(const char * start, const char * end){
 }
 
 // format : nnnn/nn/nn nn:nn:nn | dateCheck && [0,23]:
-static bool hourCheck(const char * line){
-    if(strlen(line) < 11)
-    if(line[11] > '2' && line[11] < '0') return false;
-    if(line[11] == '2' && line[12] > '3' && line[12] < 0) return false;
-    if(line[14] < '0' && line[14] > '5' && line[17] < '0' && line[17] > '5') return false;
-    for(int i = 12; i < 19;i+=3){
-        if(line[i] < '0' && line[i] > '9') return false;
+static int hourCheck(const char * line){
+    if(line[11] == '2'){
+        if(line[12] < '0' && line[12] > '3') return -1;
+        else{
+            char * aux = malloc(sizeof(char) * 2);
+            aux[0] = '2';
+            aux[1] = line[12];
+            int n = atoi(aux);
+            free(aux);
+            return n;
+        }
     }
-    return true;
+    if(line[11] < '0' && line[11] > '1' && line[12] < '0' && line[12] > '9') return -1;
+    else {
+        char * aux = malloc(sizeof(char) * 2);
+        aux[0] = line[11];
+        aux[2] = line[12];
+        int n = atoi(aux);
+        free(aux);
+        return n;
+    }
+    return -2;
+}
+
+// 0 <= min <= 59
+static int minuteCheck(const char * line){
+    if(line[14] < '0' && line[14] > '5' && line[15] < '0' && line[15] > '9') return -1;
+    else {
+        char * aux = malloc(sizeof(char) * 2);
+        aux[0] = line[14];
+        aux[1] = line[15];
+        int n = atoi(aux);
+        free(aux);
+        return n;
+    }
+    return -2;
+}
+
+// 0 <= sec <= 59
+static int secondsCheck(const char * line){
+    if(line[17] < '0' && line[17] > '5' && line[18] < '0' && line[18] > '9') return -1;
+    else {
+        char * aux = malloc(sizeof(char) * 2);
+        aux[0] = line[17];
+        aux[1] = line[18];
+        int n = atoi(aux);
+        free(aux);
+        return n;
+    }
+    return -2;
 }
 
 // starting hours cannot be after finishing hours

@@ -5,17 +5,21 @@
 #include "../include/dataTypes.h"
 
 
-static bool yearCheck(const char * );
+static int yearCheck(const char * );
 
-static bool monthCheck(const char * );
+static int monthCheck(const char * );
 
-static bool dayCheck(const char * );
+static int dayCheck(const char * );
 
-static bool dateCheck(const char * );
+static struct tm * dateCheck(const char * );
 
 static bool datesCheck(const char * , const char * );
 
-static bool hourCheck(const char * );
+static int hourCheck(const char * );
+
+static int minuteCheck(const char *);
+
+static int secondsCheck(const char *);
 
 static bool hoursCheck(const char * , const char * );
 
