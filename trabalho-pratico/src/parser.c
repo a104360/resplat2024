@@ -1,7 +1,10 @@
 #include "../include/parser.h"
+#include "../include/dataTypes.h"
+#include "../include/utils.h"
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
+#include <ctype.h>
 
 /*
 *
@@ -9,6 +12,109 @@
 * not the whole line
 *
 */
+
+typedef struct time{
+    int tm_sec;         /* seconds,  range 0 to 59          */
+    int tm_min;         /* minutes, range 0 to 59           */
+    int tm_hour;        /* hours, range 0 to 23             */
+    int tm_mday;        /* day of the month, range 1 to 31  */
+    int tm_mon;         /* month, range 0 to 11             */
+    int tm_year;        /* The number of years since 0      */
+} Time;
+
+typedef struct user{
+    unsigned int id;
+    char* name;
+    char* email;
+    unsigned int phone_number;
+    struct time birth_date;
+    bool sex;
+    unsigned int passport;
+    unsigned int country_code;
+    char* address;
+    struct time account_creation;
+    unsigned int pay_method;
+    bool account_status;
+} User;
+
+typedef struct flight{
+    char * id;
+    char* airline;
+    char* plane_model;
+    unsigned int total_seats;
+    char* origin;
+    char* destination;
+    struct time schedule_departure_date;
+    struct time schedule_arrival_date;
+    struct time real_departure_date;
+    struct time real_arrival_date;
+    char* pilot;
+    char* copilot;
+    char* notes;
+} Flight;
+
+typedef struct reservation{
+    char * id;
+    char * user_id;
+    char * hotel_id;
+    char * hotel_name;
+    unsigned int hotel_stars;
+    double city_tax;
+    char* address;
+    struct time begin_date;
+    struct time end_date;
+    double price_per_night;
+    bool includes_breakfast;
+    char* room_details;                 //********substituir por uma struct******* 
+    unsigned int rating;
+    char* comment;
+} Reservation;
+
+
+typedef struct passanger{
+    unsigned int flight_id;
+    unsigned int user_id;
+} Passanger;
+
+
+
+
+static char * idCheck(const char * line){
+    CHECKLEN(line);
+}
+
+// Free necessary
+static char * nameCheck(const char * line){
+    CHECKLEN(line);
+}
+
+static unsigned int phoneNumberCheck(const char * line){
+    if(line[0] == '\0') return NULL;
+    unsigned int n = atoi(line);
+    return n;
+}
+
+static bool sexCheck(const char * line){
+    if(line[0] == '\0') return NULL;
+    
+}
+
+// Free necessary
+static char * passaportCheck(const char * line){
+    CHECKLEN(line);
+}
+
+// Free necessary
+static char * addressCheck(const char * line){
+    CHECKLEN(line);
+}
+
+static unsigned int pay_methodCheck(const char * line){
+    if(line[0] == '\0') return -1;
+    char * aux = strdup(line);
+    for(int i = 0;aux[i] != '\0';aux[i] = tolower(aux[i]),i++);
+}
+
 
 // Verifies the correctness of the year in the date string, following the determined format
 // tm.year = years after 1900
@@ -24,7 +130,7 @@ static int yearCheck(const char * line){
     strncpy(aux,line,4);
     int n = atoi(aux);
     free(aux);
-    return n - 1900;
+    return n;
 }
 
 // Verifies the correctness of the month in the date string, following the determined format
@@ -58,8 +164,8 @@ static int dayCheck(const char * line){
 }
 
 // format : nnnn/nn/nn (0 <= n <= 9)
-static struct tm * dateCheck(const char * line){
-    struct tm * date = malloc(sizeof(struct tm));
+static Time * dateCheck(const char * line){
+    Time * date = (Time *) malloc(sizeof(struct time));
     if(!date) return NULL;
     date->tm_year = yearCheck(line);
     date->tm_mon = monthCheck(line) - 1;
@@ -73,7 +179,7 @@ static struct tm * dateCheck(const char * line){
     case '\0':
         return date;
         break;
-    
+        
     default:
         date->tm_hour = hourCheck(line);
         date->tm_min = minuteCheck(line);
@@ -149,6 +255,7 @@ static int secondsCheck(const char * line){
 }
 
 // starting hours cannot be after finishing hours
+// RETURN HERE !!
 static bool hoursCheck(const char * departure, const char * arrival){
     if(!hourCheck(departure) || !hourCheck(arrival)) return false;
     for(int i = 11;i < 19;i++){
@@ -159,80 +266,135 @@ static bool hoursCheck(const char * departure, const char * arrival){
 }
 
 // format : <username>@<domain>.<TLD> | username.length >= 1 , domain.length >= 2 , TDL.length >= 2
-static bool emailCheck(const char * line){
-    if(line[0] == '@') return false;
+static char * emailCheck(const char * line){
+    if(line[0] == '@') return NULL;
     int i = 1, len = strlen(line);
     // Username
     for(;line[i] != '@' && i < len;i++);
-    if(i >= len) return false;
+    if(i >= len) return NULL;
     // Domain
-    if(line[i+1] == '.') return false;
+    if(line[i+1] == '.') return NULL;
     int domain = 0;
     for(i += 1; line[i] != '.' && i < len;domain++,i++);
-    if(i >= len && domain < 2) return false;
+    if(i >= len && domain < 2) return NULL;
     // TDL
     int tdl = 0;
     for(i += 1;i < len;tdl++,i++);
-    if(tdl < 2) return false;
-    return true;
+    if(tdl < 2) return NULL;
+    char * email = malloc(sizeof(strlen(line)));
+    strcpy(email,line);
+    return email;
 }
 
 // format : LL (L is a letter)
-static bool countryCheck(const char * line){
+static char * countryCheck(const char * line){
     if(!line) return false;
-    if(line[2] == '\0') return false;
-    if(line[3] == '\0') return true;
-
+    if(line[2] == '\0') return NULL;
+    if(line[3] == '\0'){
+        char * country = malloc(sizeof(char) * 2);
+        strcpy(country,line);
+        return country;
+    }
 }
 
 // active vs inactive (all varitations)
 static bool accStatusCheck(const char * line){
-    toUpper(line);
-    if(!strcmp(line,"ACTIVE") || !strcmp(line,"INACTIVE")) return true;
+    char * aux = strdup(line);
+    ALLVAR(aux);
+    if(!strcmp(line,"active") || !strcmp(line,"inactive")) return true;
     return false;
 }
 
 // total_seats must not be less than the number of passangers
 static bool seatsCheck(const char * sold, const char * plain){
     int real = atoi(plain), virtual = atoi(sold);
-    if(virtual > sold) return false;
+    if(virtual > real) return false;
     return true;
 }
 
 // length == 3 && all variations
-static bool airportCheck(const char * departure,const char * arrival);
+static bool airportCheck(const char * departure,const char * arrival){
+    if(strlen(departure) != 3 || strlen(arrival) != 3) return false;
+    char * d = strdup(departure), * a = strdup(arrival);
+    ALLVAR(d);
+    ALLVAR(a);
+    if(!strcmp(d,a)) return false;
+    free(d);
+    free(a);
+    return true;
+}
 
 // int stars : 1 <= starts <= 5
-static bool hotelStarsCheck(const char * line);
+static int hotelStarsCheck(const char * line){
+    if(line >= '1' && line <= '5') return line - '0';
+    return false;
+}
 
 // int tax : 0 <= tax
-static bool taxCheck(const char * line);
+// if invalid, functions returns -1
+static double taxCheck(const char * line){
+    double n = atof(line);
+    if(n < 0) return -1;
+    return n;
+}
 
-// int price : 0 <= price
-static bool pricePNightCheck(const char * line);
+// int price : 0 < price
+// if invalid, functions returns -1
+static double pricePNightCheck(const char * line){
+    double n = atof(line);
+    if(n <= 0) return -1;
+    return n;
+}
 
 // bool breakfast : if(false){"f","false",0,""} else {"t","true","1"}
-static bool breakfastCheck(const char * line);
+static bool breakfastCheck(const char * line){
+    char * aux = strdup(line);
+    ALLVAR(aux);
+    if(!strcmp(aux,"TRUE") || !strcmp(aux,"T") || !strcmp(aux,"1")){ 
+        free(aux);
+        return true;
+    }
+    free(aux);
+    return false;
+}
 
 // int rating : 1 <= rating <= 5
-static bool reviewCheck(const char * line);
-
-// Check the length of some camps of the users, reservations and flights
-static bool lengthCheck(void ** line);
-
-static bool userCheck(const char * line);
-
-static bool reservationCheck(const char * line);
-
-static bool flightCheck(const char * line);
-
-static bool passangerCheck(const char * line);
+static int reviewCheck(const char * line){
+    if(line - '0' < 1 && line - '0' > 5) return false;
+    return line - '0';
+}
 
 
-static User * userAdd(const char * line);
 
-static Reservation * reservationAdd(const char * line);
+// *** The next 4 functions receive the full line ***  
 
-static Flight * fligthAdd(const char * line);
 
-static Passanger * passangerAdd(const char * line);
+static User * userCreate(const char * line){
+    char * aux = strdup(line);
+    char * token = NULL;
+    char * saveptr = aux;
+    token = strtok_r(aux,";",&saveptr);
+
+
+    char * id = idCheck(token);
+    if(!id){ free(aux); return NULL;}
+    TOKENIZE(token,saveptr);
+
+
+    char * name = nameCheck(token);
+    if(!name){free(id); free(aux); return NULL;}
+    TOKENIZE(token,saveptr);
+
+    char * email = emailCheck(token);
+    if(!email) {
+        free(id); free(name); free(aux); return NULL;
+    }
+
+
+}
+
+static Reservation * reservationCreate(const char * line);
+
+static Flight * fligthCreate(const char * line);
+
+static Passanger * passangerCreate(const char * line);
