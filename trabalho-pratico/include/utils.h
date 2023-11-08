@@ -10,6 +10,6 @@
 
 #define ALLVAR(aux) for(int i = 0;aux[i] != '\0';aux[i] = tolower(aux[i]),i++);
 
-#define TOKENIZE(token,saveptr) token = strtok_r(NULL,";",&saveptr);
+#define TOKENIZE(token,saveptr) token = strtok_r(NULL,";",&saveptr); 
 
 #endif
