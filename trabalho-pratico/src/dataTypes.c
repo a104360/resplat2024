@@ -717,7 +717,7 @@ void setReservHotelAddress(Reservation * reserv, char * line){
 }
 
 char *getReservHotelAddress(Reservation * reserv){
-     if(reserv->address){
+    if(reserv->address){
         char * address = strdup(reserv->address);
         return address;
     }
@@ -730,7 +730,14 @@ void setReservBeginDate(Reservation * reserv,Time * tempo){
     setTime(reserv->begin_date,tempo);
 }
 
-Time *getReservBeginDate(Reservation * reserv);
+Time * getReservBeginDate(Reservation * reserv){
+    if(reserv->begin_date){
+        Time * tempo = createTime();
+        setTime(tempo,reserv->begin_date);
+        return tempo;
+    }
+    return NULL;
+}
 
 
 void setReservEndDate(Reservation * reserv,Time * tempo){
@@ -738,21 +745,32 @@ void setReservEndDate(Reservation * reserv,Time * tempo){
     setTime(reserv->end_date,tempo);
 }
 
-Time *getReservEndDate(Reservation * reserv);
+Time *getReservEndDate(Reservation * reserv){
+    if(reserv->end_date){
+        Time * tempo = createTime();
+        setTime(tempo,reserv->end_date);
+        return tempo;
+    }
+    return NULL;
+}
 
 
 void setReservPricePerNight(Reservation * reserv,double n){
     reserv->price_per_night = n;
 }
 
-double getReservPricePerNight(Reservation * reserv);
+double getReservPricePerNight(Reservation * reserv){
+    return reserv->price_per_night;
+}
 
 
 void setReservBreakfast(Reservation * reserv,bool x){
     reserv->includes_breakfast = x;
 }
 
-bool getReservBreakfast(Reservation * reserv);
+bool getReservBreakfast(Reservation * reserv){
+    return reserv->includes_breakfast;
+}
 
 
 void setReservRoomDetails(Reservation * reserv,char * line){
@@ -760,14 +778,22 @@ void setReservRoomDetails(Reservation * reserv,char * line){
     reserv->room_details = strdup(line);
 }
 
-char *getReservRoomDetails(Reservation * reserv);
+char *getReservRoomDetails(Reservation * reserv){
+    if(reserv->room_details){
+        char * room_details = strdup(reserv->room_details);
+        return room_details;
+    }
+    return NULL;
+}
 
 
 void setReservRating(Reservation * reserv,unsigned int n){
     reserv->rating = n;
 }
 
-unsigned int getReservRating(Reservation * reserv);
+unsigned int getReservRating(Reservation * reserv){
+    return reserv->rating;
+}
 
 
 void setReservComment(Reservation * reserv,char * line){
@@ -775,7 +801,13 @@ void setReservComment(Reservation * reserv,char * line){
     reserv->comment = strdup(line);
 }
 
-char *getReservComment(Reservation * reserv);
+char *getReservComment(Reservation * reserv){
+    if(reserv->comment){
+        char * comment = strdup(reserv->comment);
+        return comment;
+    }
+    return NULL;
+}
 
 
 
@@ -797,6 +829,32 @@ void destroyPassanger(Passanger * p) {
         free(p->flight_id); 
         free(p->user_id); 
         free(p); 
+    }
+}
+
+void setPassangerFlightId(Passanger * passanger,char * line){
+    if(passanger->flight_id) free(passanger->flight_id);
+    passanger->flight_id = strdup(line);
+}
+
+char *getPassangerFlightId(Passanger * passanger){
+    if(passanger->flight_id){
+        char * flight_id = strdup(passanger->flight_id);
+        return flight_id;
+    }
+    return NULL;
+}
+
+
+void setPassangerUserId(Passanger * passanger,char * line){
+    if(passanger->user_id) free(passanger->user_id);
+    passanger->user_id = strdup(line);
+}
+
+char *getPassangerUserId(Passanger * passanger){
+    if(passanger->user_id){
+        char * user_id = strdup(passanger->user_id);
+        return user_id;
     }
 }
 
