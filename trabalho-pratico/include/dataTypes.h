@@ -34,6 +34,7 @@ Passanger * createPassanger();
 
 
 
+
 void setUserId(User *,char *);
 
 void setUserName(User *,char *);
@@ -45,5 +46,17 @@ void setUserBday(User *,Time *);
 void setUserSex(User *,char *);
 
 void setUser(User *,char *);
+
+void setUserPassport(User * user ,char *);
+
+void setUserCountryCode(User * user ,char *);
+
+void setUserAddress(User * user ,char *);
+
+void setUserAccountCreation(User * user ,Time *);
+
+void setUserPayMethod(User * user ,char *);
+
+void setUserAccountStatus(User * user ,bool);
 
 #endif

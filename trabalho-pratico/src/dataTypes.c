@@ -15,6 +15,7 @@ typedef struct time{
     int year;        /* The number of years since 0      */
 } Time;
 
+
 typedef struct user{
     char * id;
     char * name;
@@ -29,6 +30,8 @@ typedef struct user{
     char * pay_method;
     bool account_status;
 } User;
+
+
 
 typedef struct flight{
     char * id;
@@ -238,14 +241,27 @@ void setUserSex(User * user ,char * sexo){
     user->sex = strdup(sexo);
 }
 
-void setUserPassport(User * user ,char *);
+void setUserPassport(User * user ,char * line){
+    if(user->passport) free(user->passport);
+    user->passport = strdup(line);
+}
 
-void setUserCountryCode(User * user ,char *);
+void setUserCountryCode(User * user ,char * line){
+    if(user->country_code) free(user->country_code);
+    user->country_code = strdup(line);
+}
 
-void setUserAddress(User * user ,char *);
+void setUserAddress(User * user ,char * line){
+    if(user->address) free(user->address);
+    user->address = strdup(line);
+}
 
-void setUserAccountCreation(User * user ,Time *);
+void setUserAccountCreation(User * user ,Time *tempo){
+    user->account_creation = *tempo;
+}
 
-void setUserPayMethod(User * user ,char *);
+void setUserPayMethod(User * user ,char * line){
+    
+}
 
 void setUserAccountStatus(User * user ,bool);
