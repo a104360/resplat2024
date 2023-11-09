@@ -100,7 +100,16 @@ static Time * createTime(){
     return t;
 }
 
-static void setTime(Time * t,Time * aux){
+static void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
+    t->year = year;
+    t->mon = mon;
+    t->mday = mday;
+    t->hour = hour;
+    t->min = min;
+    t->sec = sec;
+}
+
+static void copyTime(Time * t,Time * aux){
     t->year = aux->year;
     t->mday = aux->mday;
     t->mon = aux->mon;
@@ -212,13 +221,13 @@ static char * getUserEmail(User * user){
 
 static void setUserBday(User * user ,Time * tempo){
     if(!user->birth_date) user->birth_date = createTime();
-    setTime(user->birth_date,tempo);
+    copyTime(user->birth_date,tempo);
 }
 
 static Time * getUserBday(User * user){
     if(user->birth_date){
         Time * aux = createTime();
-        setTime(aux,user->birth_date);
+        copyTime(aux,user->birth_date);
         return aux;
     }
     return NULL;
@@ -283,13 +292,13 @@ static char * getUserAddress(User * user){
 
 static void setUserAccountCreation(User * user ,Time *tempo){
     if(!user->account_creation) user->account_creation = createTime();
-    setTime(user->account_creation,tempo);
+    copyTime(user->account_creation,tempo);
 }
 
 static Time * getUserAccountCreation(User * user){
     if(user->account_creation){
         Time * t = createTime();
-        setTime(t,user->account_creation);
+        copyTime(t,user->account_creation);
         return t;
     }
     return NULL;
@@ -479,13 +488,13 @@ static char *getFlightDestination(Flight * flight){
 
 static void setFlightSDepartureDate(Flight * flight,Time * tempo){
     if(!flight->schedule_departure_date) flight->schedule_departure_date = createTime();
-    setTime(flight->schedule_departure_date,tempo);
+    copyTime(flight->schedule_departure_date,tempo);
 }
 
 static Time *getFlightSDepartureDate(Flight * flight){
     if(flight->schedule_departure_date){
         Time * tempo = createTime();
-        setTime(tempo,flight->schedule_departure_date);
+        copyTime(tempo,flight->schedule_departure_date);
         return tempo;
     }
     return NULL;
@@ -494,13 +503,13 @@ static Time *getFlightSDepartureDate(Flight * flight){
 
 static void setFlightSArrivalDate(Flight * flight,Time * tempo){
     if(!flight->schedule_arrival_date) flight->schedule_arrival_date = createTime();
-    setTime(flight->schedule_arrival_date,tempo);
+    copyTime(flight->schedule_arrival_date,tempo);
 }
 
 static Time *getFlightSArrivalDate(Flight * flight){
     if(flight->schedule_arrival_date){
         Time * tempo = createTime();
-        setTime(tempo,flight->schedule_arrival_date);
+        copyTime(tempo,flight->schedule_arrival_date);
         return tempo;
     }
     return NULL;
@@ -509,13 +518,13 @@ static Time *getFlightSArrivalDate(Flight * flight){
 
 static void setFlightRDepartureDate(Flight * flight, Time * tempo){
     if(!flight->real_departure_date) flight->real_departure_date = createTime();
-    setTime(flight->real_departure_date,tempo);
+    copyTime(flight->real_departure_date,tempo);
 }
 
 static Time *getFlightRDepartureDate(Flight * flight){
     if(flight->real_departure_date){
         Time * tempo = createTime();
-        setTime(tempo,flight->real_departure_date);
+        copyTime(tempo,flight->real_departure_date);
         return tempo;
     }
     return NULL;
@@ -524,13 +533,13 @@ static Time *getFlightRDepartureDate(Flight * flight){
 
 static void setFlightRArrivalDate(Flight * flight,Time * tempo){
     if(!flight->real_arrival_date) flight->real_arrival_date = createTime();
-    setTime(flight->real_arrival_date,tempo);
+    copyTime(flight->real_arrival_date,tempo);
 }
 
 static Time *getFlightRArrivalDate(Flight * flight){
     if(flight->real_arrival_date){
         Time * tempo = createTime();
-        setTime(tempo,flight->real_arrival_date);
+        copyTime(tempo,flight->real_arrival_date);
         return tempo;
     }
     return NULL;
@@ -727,13 +736,13 @@ static char *getReservHotelAddress(Reservation * reserv){
 
 static void setReservBeginDate(Reservation * reserv,Time * tempo){
     if(!reserv->begin_date) reserv->begin_date = createTime();
-    setTime(reserv->begin_date,tempo);
+    copyTime(reserv->begin_date,tempo);
 }
 
 static Time * getReservBeginDate(Reservation * reserv){
     if(reserv->begin_date){
         Time * tempo = createTime();
-        setTime(tempo,reserv->begin_date);
+        copyTime(tempo,reserv->begin_date);
         return tempo;
     }
     return NULL;
@@ -742,13 +751,13 @@ static Time * getReservBeginDate(Reservation * reserv){
 
 static void setReservEndDate(Reservation * reserv,Time * tempo){
     if(!reserv->end_date) reserv->end_date = createTime();
-    setTime(reserv->end_date,tempo);
+    copyTime(reserv->end_date,tempo);
 }
 
 static Time *getReservEndDate(Reservation * reserv){
     if(reserv->end_date){
         Time * tempo = createTime();
-        setTime(tempo,reserv->end_date);
+        copyTime(tempo,reserv->end_date);
         return tempo;
     }
     return NULL;

@@ -1,8 +1,6 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H
 
-enum structs;
-
 typedef struct time Time;
 
 typedef struct user User;
@@ -20,7 +18,9 @@ static Time * createTime();
 
 static void initTime(Time *);
 
-static void setTime(Time *,Time *);
+static void setTime(Time *,int,int,int,int,int,int);
+
+static void copyTime(Time *,Time *);
 
 static void destroyTime(Time *); 
 

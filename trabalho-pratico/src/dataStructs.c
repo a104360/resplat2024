@@ -13,7 +13,7 @@ typedef struct node
 
 typedef struct htable
 {
-    unsigned int size;
+    size_t size;
     Node ** table;
 
 } HashTable;
