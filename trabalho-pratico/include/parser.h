@@ -47,7 +47,7 @@ static bool seatsCheck(const char * , const char * );
 
 static bool airportCheck(const char * ,const char * );
 
-static int hotelStarsCheck(const char * );
+static unsigned int hotelStarsCheck(const char * );
 
 static double taxCheck(const char * );
 
@@ -55,7 +55,7 @@ static double pricePNightCheck(const char * );
 
 static bool breakfastCheck(const char * );
 
-static int reviewCheck(const char * );
+static unsigned int reviewCheck(const char * );
 
 
 static User * userCheck(const char *);
