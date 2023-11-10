@@ -70,6 +70,9 @@ static char * getUserName(User *);
 static void setUserEmail(User *, const char *);
 static char * getUserEmail(User *);
 
+static void setUserPhone(User *,const char *);
+static char * getUserPhone(User *);
+
 static void setUserBday(User *,Time *);
 static Time * getUserBday(User *);
 
