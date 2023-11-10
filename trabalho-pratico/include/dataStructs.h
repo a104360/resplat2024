@@ -14,4 +14,14 @@ static int hash(int,void *);
 
 static void insertHTable(HashTable *,void *,void *);
 
+
+
+typedef struct binTree BinTree;
+
+static BinTree * createTree();
+
+static void destroyTree(BinTree * );
+
+static insertTree(  )
+
 #endif

@@ -7,6 +7,7 @@
 typedef struct node
 {
     void * data;
+    int key;
     struct keypair * next;
 
 } Node;
@@ -61,4 +62,28 @@ static void insertHTable(HashTable * hTable,void * key,void * data){
         current = newElement;
     }
 }
+
+typedef struct binTree {
+    Node * node;
+    struct binTree * less;
+    struct binTree * more;
+} BinTree;
+
+static BinTree * createTree(){
+    BinTree * tree = malloc(sizeof(struct binTree));
+    tree->node = NULL;
+    tree->less = NULL;
+    tree->more = NULL;
+    return tree;
+}
+
+static void destroyTree(BinTree * tree){
+    if(tree){
+        free(tree->node);
+        destroyTree(tree->less);
+        destroyTree(tree->more);
+    }
+    return;
+}
+
 

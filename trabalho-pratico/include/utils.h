@@ -1,7 +1,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#define BUFFERSIZE 100
+#define BUFFERSIZE 1000
 
 #define CHECKLEN(line) \
     if(line[0] == '\0') return NULL;\
