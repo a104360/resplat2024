@@ -60,11 +60,11 @@ static int reviewCheck(const char * );
 
 static User * userCheck(const char *);
 
-static Reservation * reservationCreate(const char *);
+static Reservation * reservationCheck(const char *);
 
-static Flight * fligthCreate(const char *);
+static Flight * fligthCheck(const char *);
 
-static Passanger * passangerCreate(const char *);
+static Passanger * passangerCheck(const char *);
 
 
 #endif

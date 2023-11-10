@@ -363,7 +363,7 @@ static User * userCheck(const char * line){
 
 }
 
-static Reservation * reservationCreate(const char * line){
+static Reservation * reservationCheck(const char * line){
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
@@ -410,9 +410,9 @@ static Reservation * reservationCreate(const char * line){
     
 }
 
-static Flight * fligthCreate(const char * line);
+static Flight * fligthCheck(const char * line);
 
-static Passanger * passangerCreate(const char * line){
+static Passanger * passangerCheck(const char * line){
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
