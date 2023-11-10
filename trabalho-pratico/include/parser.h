@@ -5,13 +5,13 @@
 #include "../include/dataTypes.h"
 
 
-static int * idCheck(const char *);
+static char * idCheck(const char *);
 
 static char * nameCheck(const char *);
 
 static char * phoneNumberCheck(const char *);
 
-static bool sexCheck(const char *);
+static char sexCheck(const char *);
 
 static char * passaportCheck(const char *);
 
@@ -27,7 +27,7 @@ static int dayCheck(const char * );
 
 static Time * dateCheck(const char * );
 
-static bool datesCheck(const char *);
+static bool datesCheck(const char * , const char *);
 
 static int hourCheck(const char *);
 
@@ -58,7 +58,7 @@ static bool breakfastCheck(const char * );
 static int reviewCheck(const char * );
 
 
-static User * userCreate(const char *);
+static User * userCheck(const char *);
 
 static Reservation * reservationCreate(const char *);
 
