@@ -323,14 +323,73 @@ static User * userCreate(const char * line){
 
     char * email = emailCheck(token);
     if(!email) {
-        free(id); free(name); free(aux); return NULL;
+        free(name); free(id); free(aux); return NULL;
     }
 
 
 }
 
-static Reservation * reservationCreate(const char * line);
+static Reservation * reservationCreate(const char * line){
+    char * aux = strdup(line);
+    char * token = NULL;
+    char * saveptr = aux;
+    token = strtok_r(aux,";",&saveptr);
+
+    char * id = idCheck(token);
+    if(!id){ free(aux); return NULL};
+    TOKENIZE(token,saveptr);
+
+    char * userId = idCheck(token);
+    if(!userId){ free(id); free(aux); return NULL};
+    TOKENIZE(token,saveptr);
+
+    char * hotelId = idCheck(token);
+    if(!hotelId){ free(userId); free(id); free(aux); return NULL};
+    TOKENIZE(token,saveptr);
+
+    char * hotelName = nameCheck(token);
+    if(!hotelName){ free(hotelId); free(userId); free(id); free(aux); return NULL};
+    TOKENIZE(token,saveptr);
+
+    unsigned int * hotelStars = hotelStarsCheck(token);
+    if(!hotelStars){ free(hotelName); free(hotelId); free(userId); free(id); free(aux); return NULL};
+    TOKENIZE(token,saveptr);
+
+    double * tax = taxCheck(token);
+    if(!tax){ free(hotelStars); free(hotelName); free(hotelId); free(userId); free(id); free(aux); return NULL};
+    TOKENIZE(token;saveptr);
+
+    char * adress = addressCheck(token);
+    if(!adress){ free(tax); free(hotelStars); free(hotelName); free(hotelId); free(userId); free(id); free(aux); return NULL};
+    TOKENIZE(token;saveptr);
+
+    /*char * beginDate = ;
+    if(!beginDate){ free(adress); free(tax); free(hotelStars); free(hotelName); free(hotelId); free(userId); free(id); free(aux); return NULL};
+    TOKENIZE(token;saveptr);
+    */
+
+    /*char * endDate = ;
+    if(!endDate){ free(beginDate); free(adress); free(tax); free(hotelStars); free(hotelName); free(hotelId); free(userId); free(id); free(aux); return NULL};
+    TOKENIZE(token;saveptr);
+    */
+
+    
+}
 
 static Flight * fligthCreate(const char * line);
 
-static Passanger * passangerCreate(const char * line);
+static Passanger * passangerCreate(const char * line){
+    char * aux = strdup(line);
+    char * token = NULL;
+    char * saveptr = aux;
+    token = strtok_r(aux,";",&saveptr);
+
+    char * flightId = idCheck(token);
+    if(!flightId){ free(aux); return NULL};
+    TOKENIZE(token;saveptr);
+
+    char * userId = idCheck(token);
+    if(!userId){ free(flightId); free(aux); return NULL};
+
+    
+}
