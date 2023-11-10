@@ -253,7 +253,7 @@ static bool airportCheck(const char * departure,const char * arrival){
 }
 
 // int stars : 1 <= starts <= 5
-static int hotelStarsCheck(const char * line){
+static unsigned int hotelStarsCheck(const char * line){
     if(line >= '1' && line <= '5') return line - '0';
     return false;
 }
@@ -287,12 +287,10 @@ static bool breakfastCheck(const char * line){
 }
 
 // int rating : 1 <= rating <= 5
-static int reviewCheck(const char * line){
-    if(line - '0' < 1 && line - '0' > 5) return false;
+static unsigned int reviewCheck(const char * line){
+    if(line > '0' && line - '0' < 0 && line - '0' > 4 ) return false;
     return line - '0';
 }
-
-
 
 // *** The next 4 functions receive the full line ***  
 
@@ -360,14 +358,35 @@ static User * userCheck(const char * line){
     free(countryCode);
     TOKENIZE(token,saveptr);
 
+    //check userAdress
     char * adress = addressCheck(token);
     if(!adress) { free(aux); destroyUser(user); return NULL;}
     setUserAddress(user,adress);
     free(adress);
     TOKENIZE(token,saveptr);
 
-    //ainda n acabou
+    //check userAccountCreation time
+    Time * userAccountCreation = dateCheck(token);
+    if(!userAccountCreation) { free(aux); destroyUser(user); return NULL;}
+    setUserAccountCreation(user,userAccountCreation);
+    free(userAccountCreation);
+    TOKENIZE(token,saveptr);
 
+    //check userPayMethod
+    char * payMethod = pay_methodCheck(token);
+    if(!payMethod) { free(aux); destroyUser(user); return NULL;}
+    setUserPayMethod(user,payMethod);
+    free(payMethod);
+    TOKENIZE(token,saveptr);
+
+    //check user accountStatus
+    bool accStatus = accStatusCheck(token);
+    if(!accStatus) { free(aux); destroyUser(user); return NULL;}
+    setUserAccountStatus(user,accStatus);
+    free(accStatus);
+    
+    free(aux);
+    return user;
 }
 
 static Reservation * reservationCheck(const char * line){
@@ -375,46 +394,85 @@ static Reservation * reservationCheck(const char * line){
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";",&saveptr);
+    Reservation * reservation = createReservation();
 
-    char * id = idCheck(token);
-    if(!id){ free(aux); return NULL;};
+    char * reservationId = idCheck(token);
+    if(!reservationId){ free(aux); destroyReservation(reservation); return NULL;}
+    setReservId(reservation,reservationId);
+    free(reservationId);
     TOKENIZE(token,saveptr);
 
-    char * userId = idCheck(token);
-    if(!userId){ free(id); free(aux); return NULL;};
+    char * reservationUserId = idCheck(token);
+    if(!reservationUserId){ free(aux); destroyReservation(reservation); return NULL;}
+    setReservUserId(reservation,reservationUserId);
+    free(reservationUserId);
     TOKENIZE(token,saveptr);
 
-    char * hotelId = idCheck(token);
-    if(!hotelId){ free(userId); free(id); free(aux); return NULL;};
+    char * reservationHotelId = idCheck(token);
+    if(!reservationHotelId){ free(aux); destroyReservation(reservation); NULL;}
+    setReservHotelId(reservation,reservationHotelId);
+    free(reservationHotelId);
     TOKENIZE(token,saveptr);
 
-    char * hotelName = nameCheck(token);
-    if(!hotelName){ free(hotelId); free(userId); free(id); free(aux); return NULL;};
+    char * reservationHotelName = nameCheck(token);
+    if(!reservationHotelName){ free(aux); destroyReservation(reservation); NULL;}
+    setReservHotelName(reservation,reservationHotelName);
+    free(reservationHotelName);
     TOKENIZE(token,saveptr);
 
-    unsigned int * hotelStars = hotelStarsCheck(token);
-    if(!hotelStars){ free(hotelName); free(hotelId); free(userId); free(id); free(aux); return NULL;};
+    unsigned int reservationHotelStars = hotelStarsCheck(token);
+    if(!reservationHotelStars){ free(aux); destroyReservation(reservation); NULL;}
+    setReservHotelStars(reservation,reservationHotelStars);
     TOKENIZE(token,saveptr);
 
-    double tax = taxCheck(token);
-    if(!tax){ free(hotelStars); free(hotelName); free(hotelId); free(userId); free(id); free(aux); return NULL;};
+    double reservationTax = taxCheck(token);
+    if(!reservationTax){ free(aux); destroyReservation(reservation) ;return NULL;}
+    setReservCityTax(reservation,reservationTax);
     TOKENIZE(token,saveptr);
 
-    char * adress = addressCheck(token);
-    if(!adress){ free(hotelStars); free(hotelName); free(hotelId); free(userId); free(id); free(aux); return NULL;};
+    char * reservationAdress = addressCheck(token);
+    if(!reservationAdress){ free(aux); destroyReservation(reservation) ;return NULL;}
+    setReservHotelAddress(reservation,reservationAdress);
+    free(reservationAdress);
     TOKENIZE(token,saveptr);
 
-    /*char * beginDate = ;
-    if(!beginDate){ free(adress); free(tax); free(hotelStars); free(hotelName); free(hotelId); free(userId); free(id); free(aux); return NULL};
+    Time * beginDate = dateCheck(token);
+    if(!beginDate){ free(aux); destroyReservation(reservation); return NULL;}
+    setReservBeginDate(reservation, beginDate);
+    free(beginDate);
     TOKENIZE(token,saveptr);
-    */
 
-    /*char * endDate = ;
-    if(!endDate){ free(beginDate); free(adress); free(tax); free(hotelStars); free(hotelName); free(hotelId); free(userId); free(id); free(aux); return NULL};
+    Time * endDate = dateCheck(token);
+    if(!endDate){ free(aux); destroyReservation(reservation); return NULL;}
+    setReservEndDate(reservation, endDate);
+    free(endDate);
     TOKENIZE(token,saveptr);
-    */
 
+    double pricePerNight = pricePNightCheck(token);
+    if(!pricePerNight){ free(aux); destroyReservation(reservation); return NULL;}
+    setReservPricePerNight(reservation, pricePerNight);
+    TOKENIZE(token,saveptr);
+
+    bool includesBreakfast = breakfastCheck(token);
+    if(!breakfastCheck){ free(aux); destroyReservation(reservation); return NULL;}
+    setReservBreakfast(reservation, includesBreakfast);
+    //free(includesBreakfast);
+    TOKENIZE(token,saveptr);
+
+    //RoomDetails
+    setReservRoomDetails(reservation,token);
+    TOKENIZE(token,saveptr);
     
+    unsigned int rating = reviewCheck(token);
+    if(!rating){ free(aux); destroyReservation(reservation); return NULL;}
+    setReservRating(reservation,rating);
+    TOKENIZE(token,saveptr);
+
+    //Comment
+    setReservComment(reservation,token);
+    
+    free(aux);
+    return reservation;
 }
 
 static Flight * fligthCheck(const char * line);
@@ -424,13 +482,19 @@ static Passanger * passangerCheck(const char * line){
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";",&saveptr);
+    Passanger * passanger = createPassanger();
 
-    char * flightId = idCheck(token);
-    if(!flightId){ free(aux); return NULL;};
+    char * passangerFlightId = idCheck(token);
+    if(!passangerFlightId){ free(aux); destroyPassanger(passanger); return NULL;}
+    setPassangerFlightId(passanger,passangerFlightId);
+    free(passangerFlightId);
     TOKENIZE(token,saveptr);
 
-    char * userId = idCheck(token);
-    if(!userId){ free(flightId); free(aux); return NULL;};
+    char * passangerUserId = idCheck(token);
+    if(!passangerUserId){ free(aux); destroyPassanger(passanger); return NULL;}
+    setPassangerUserId(passanger,passangerUserId);
+    free(passangerUserId);
 
-    
+    free(aux);
+    return passanger;
 }
