@@ -360,6 +360,13 @@ static User * userCheck(const char * line){
     free(countryCode);
     TOKENIZE(token,saveptr);
 
+    char * adress = addressCheck(token);
+    if(!adress) { free(aux); destroyUser(user); return NULL;}
+    setUserAddress(user,adress);
+    free(adress);
+    TOKENIZE(token,saveptr);
+
+    //ainda n acabou
 
 }
 
