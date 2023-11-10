@@ -253,7 +253,7 @@ static bool airportCheck(const char * departure,const char * arrival){
 }
 
 // int stars : 1 <= starts <= 5
-static int hotelStarsCheck(const char * line){
+static unsigned int hotelStarsCheck(const char * line){
     if(line >= '1' && line <= '5') return line - '0';
     return false;
 }
@@ -287,12 +287,10 @@ static bool breakfastCheck(const char * line){
 }
 
 // int rating : 1 <= rating <= 5
-static int reviewCheck(const char * line){
-    if(line - '0' < 1 && line - '0' > 5) return false;
+static unsigned int reviewCheck(const char * line){
+    if(line > '0' && line - '0' < 0 && line - '0' > 4 ) return false;
     return line - '0';
 }
-
-
 
 // *** The next 4 functions receive the full line ***  
 
@@ -422,10 +420,9 @@ static Reservation * reservationCheck(const char * line){
     free(reservationHotelName);
     TOKENIZE(token,saveptr);
 
-    unsigned int * reservationHotelStars = hotelStarsCheck(token);
+    unsigned int reservationHotelStars = hotelStarsCheck(token);
     if(!reservationHotelStars){ free(aux); destroyReservation(reservation); NULL;}
     setReservHotelStars(reservation,reservationHotelStars);
-    free(reservationHotelStars);
     TOKENIZE(token,saveptr);
 
     double reservationTax = taxCheck(token);
@@ -439,17 +436,43 @@ static Reservation * reservationCheck(const char * line){
     free(reservationAdress);
     TOKENIZE(token,saveptr);
 
-    /*char * beginDate = ;
-    if(!beginDate){ free(adress); free(tax); free(hotelStars); free(hotelName); free(hotelId); free(userId); free(id); free(aux); return NULL};
+    Time * beginDate = dateCheck(token);
+    if(!beginDate){ free(aux); destroyReservation(reservation); return NULL;}
+    setReservBeginDate(reservation, beginDate);
+    free(beginDate);
     TOKENIZE(token,saveptr);
-    */
 
-    /*char * endDate = ;
-    if(!endDate){ free(beginDate); free(adress); free(tax); free(hotelStars); free(hotelName); free(hotelId); free(userId); free(id); free(aux); return NULL};
+    Time * endDate = dateCheck(token);
+    if(!endDate){ free(aux); destroyReservation(reservation); return NULL;}
+    setReservEndDate(reservation, endDate);
+    free(endDate);
     TOKENIZE(token,saveptr);
-    */
 
+    double pricePerNight = pricePNightCheck(token);
+    if(!pricePerNight){ free(aux); destroyReservation(reservation); return NULL;}
+    setReservPricePerNight(reservation, pricePerNight);
+    TOKENIZE(token,saveptr);
+
+    bool includesBreakfast = breakfastCheck(token);
+    if(!breakfastCheck){ free(aux); destroyReservation(reservation); return NULL;}
+    setReservBreakfast(reservation, includesBreakfast);
+    //free(includesBreakfast);
+    TOKENIZE(token,saveptr);
+
+    //RoomDetails
+    setReservRoomDetails(reservation,token);
+    TOKENIZE(token,saveptr);
     
+    unsigned int rating = reviewCheck(token);
+    if(!rating){ free(aux); destroyReservation(reservation); return NULL;}
+    setReservRating(reservation,rating);
+    TOKENIZE(token,saveptr);
+
+    //Comment
+    setReservComment(reservation,token);
+    
+    free(aux);
+    return reservation;
 }
 
 static Flight * fligthCheck(const char * line);
