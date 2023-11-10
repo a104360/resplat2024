@@ -160,17 +160,17 @@ static void initUser(User * user){
 
 static void destroyUser(User *user) {
     if(user) {
-        free(user->id);
-        free(user->name);
-        free(user->email);
-        free(user->phone_number);
-        free(user->sex);
-        free(user->passport);
-        free(user->country_code);
-        free(user->address);
-        free(user->pay_method);
-        destroyTime(user->account_creation);
-        destroyTime(user->birth_date);
+        if(user->id) free(user->id);
+        if(user->name) free(user->name);
+        if(user->email) free(user->email);
+        if(user->phone_number) free(user->phone_number);
+        if(user->sex) free(user->sex);
+        if(user->passport) free(user->passport);
+        if(user->country_code) free(user->country_code);
+        if(user->address) free(user->address);
+        if(user->pay_method) free(user->pay_method);
+        if(user->account_creation) destroyTime(user->account_creation);
+        if(user->birth_date) destroyTime(user->birth_date);
         free(user);
     }
 }
@@ -217,6 +217,19 @@ static char * getUserEmail(User * user){
     }
     return NULL;
 }
+
+static void setUserPhone(User * user,const char * line){
+    if(user->phone_number) free(user->phone_number);
+    user->phone_number = strdup(line);
+}
+static char * getUserPhone(User * user){
+    if(user->phone_number){
+        char * aux = strdup(user->phone_number);
+        return aux;
+    }
+    return NULL;
+}
+
 
 
 static void setUserBday(User * user ,Time * tempo){
@@ -389,18 +402,18 @@ static void initFlight(Flight * flight){
 
 static void destroyFlight(Flight * f) {
     if (f != NULL) {
-        free(f->id); 
-        free(f->airline); 
-        free(f->plane_model); 
-        free(f->origin); 
-        free(f->destination); 
-        destroyTime(f->schedule_departure_date); 
-        destroyTime(f->schedule_arrival_date); 
-        destroyTime(f->real_departure_date); 
-        destroyTime(f->real_arrival_date); 
-        free(f->pilot); 
-        free(f->copilot); 
-        free(f->notes); 
+        if(f->id) free(f->id); 
+        if(f->airline) free(f->airline); 
+        if(f->plane_model) free(f->plane_model); 
+        if(f->origin) free(f->origin); 
+        if(f->destination) free(f->destination); 
+        if(f->schedule_departure_date) destroyTime(f->schedule_departure_date); 
+        if(f->schedule_arrival_date) destroyTime(f->schedule_arrival_date); 
+        if(f->real_departure_date) destroyTime(f->real_departure_date); 
+        if(f->real_arrival_date) destroyTime(f->real_arrival_date); 
+        if(f->pilot) free(f->pilot); 
+        if(f->copilot) free(f->copilot); 
+        if(f->notes) free(f->notes); 
         free(f); 
     }
 }
@@ -632,15 +645,15 @@ static void initReservation(Reservation * reservation){
 
 static void destroyReservation(Reservation * r) {
     if (r != NULL) {
-        free(r->id); 
-        free(r->user_id); 
-        free(r->hotel_id); 
-        free(r->hotel_name); 
-        free(r->address); 
-        destroyTime(r->begin_date); 
-        destroyTime(r->end_date); 
-        free(r->room_details); 
-        free(r->comment); 
+        if(r->id) free(r->id); 
+        if(r->user_id) free(r->user_id); 
+        if(r->hotel_id) free(r->hotel_id); 
+        if(r->hotel_name) free(r->hotel_name); 
+        if(r->address) free(r->address); 
+        if(r->begin_date) destroyTime(r->begin_date); 
+        if(r->end_date) destroyTime(r->end_date); 
+        if(r->room_details) free(r->room_details); 
+        if(r->comment) free(r->comment); 
         free(r); 
     }
 }
@@ -834,9 +847,9 @@ static void initPassanger(Passanger * passanger){
 }
 
 static void destroyPassanger(Passanger * p) {
-    if (p != NULL) {
-        free(p->flight_id); 
-        free(p->user_id); 
+    if (p) {
+        if(p->flight_id) free(p->flight_id); 
+        if(p->user_id) free(p->user_id); 
         free(p); 
     }
 }
