@@ -20,7 +20,7 @@ typedef struct user{
     char * email;
     char * phone_number;
     struct time * birth_date;
-    char * sex;
+    char sex;
     char * passport;
     char * country_code;
     char * address;
@@ -247,17 +247,12 @@ static Time * getUserBday(User * user){
 }
 
 
-static void setUserSex(User * user ,const char * sexo){
-    if(user->sex) free(user->sex);
-    user->sex = strdup(sexo);
+static void setUserSex(User * user ,const char line){
+    user->sex = line;
 }
 
-static char * getUserSex(User * user){
-     if(user->sex){
-        char * aux = strdup(user->sex);
-        return aux;
-    }
-    return NULL;
+static char getUserSex(User * user){
+    return user->sex;
 }
 
 

@@ -76,8 +76,8 @@ static char * getUserPhone(User *);
 static void setUserBday(User *,Time *);
 static Time * getUserBday(User *);
 
-static void setUserSex(User *, const char *);
-static char * getUserSex(User *);
+static void setUserSex(User *, const char);
+static char getUserSex(User *);
 
 static void setUserPassport(User *, const char *);
 static char * getUserPassaport(User *);
