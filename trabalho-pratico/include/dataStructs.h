@@ -16,12 +16,14 @@ static void insertHTable(HashTable *,void *,void *);
 
 
 
-typedef struct binTree BinTree;
+typedef struct bTree BTree;
 
-static BinTree * createTree();
+static BTree * createTree();
 
-static void destroyTree(BinTree * );
+static void destroyTree(BTree * );
 
-static insertTree(  )
+static void insertTree(  );
+
+static void * search(BTree*,void * );
 
 #endif
