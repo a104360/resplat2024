@@ -3,7 +3,11 @@
 #include "../include/dataTypes.h"
 #include <glib.h>
 
-static GHashTable * Users();
+
+
+
+
+static GHashTable * UsersDataBase();
 
 static void insertUser(void *,User *);
 
@@ -13,17 +17,19 @@ static User * lookupUser(void *,const char *);
 
 
 
-static GHashTable * Flights();
+static GHashTable * FlightsDataBase();
 
 static void insertFlight(void *,Flight *);
 
 static Flight * lookupFlight(void * ,const char *);
 
+static double dalayMedianAirport(void*, void*);
 
 
 
 
-static GHashTable * Reservations();
+
+static GHashTable * ReservationsDataBase();
 
 static void insertReserv(void *,Reservation *);
 
@@ -36,7 +42,7 @@ static Reservation * lookupReservUser(void * ,const char * );
 
 
 
-static GHashTable * Passangers();
+static GHashTable * PassangersDataBase();
 
 static void insertPassangerFlightId(void * ,Passanger * );
 static void insertPassangerUserId(void * ,Passanger * );
@@ -47,6 +53,36 @@ static Passanger * lookupPassangerUserId(void * ,const char * );
 
 
 
-static void destroyCatalog(void *);
+static void destroyDataBase(void *);
+
+
+
+
+static gint compareTimes(Time *,Time*,char *,char *);
+static gint comparePassangers(gint,gint);
+static gint compareMedian(gdouble,gdouble);
+static gint compareNames(char *,char*);
+
+
+static GTree * UsersAnalysisCatalog();
+
+static void UsersAnalysisCatalogInsert(void *,void *);
+
+
+
+
+static GTree * FlightsAnalysisCatalog();
+
+
+
+
+static GTree * ReservationsAnalysisCatalog();
+
+
+
+
+static GTree * PassangerAnalysisCatalog();
+
+
 
 #endif
