@@ -439,13 +439,14 @@ static Reservation * reservationCheck(const char * line){
     Time * beginDate = dateCheck(token);
     if(!beginDate){ free(aux); destroyReservation(reservation); return NULL;}
     setReservBeginDate(reservation, beginDate);
-    free(beginDate);
     TOKENIZE(token,saveptr);
 
     Time * endDate = dateCheck(token);
     if(!endDate){ free(aux); destroyReservation(reservation); return NULL;}
     setReservEndDate(reservation, endDate);
+    if(!datesCheck(beginDate,endDate)){ free(endDate); free(beginDate); free(aux); destroyReservation(reservation); return NULL;}
     free(endDate);
+    free(beginDate);
     TOKENIZE(token,saveptr);
 
     double pricePerNight = pricePNightCheck(token);
@@ -475,7 +476,96 @@ static Reservation * reservationCheck(const char * line){
     return reservation;
 }
 
-static Flight * fligthCheck(const char * line);
+static Flight * fligthCheck(const char * line){
+    char * aux = strdup(line);
+    char * token = NULL;
+    char * saveptr = aux;
+    token = strtok_r(aux,";",&saveptr);
+    Flight * flight = createFlight();
+
+    char * flightId = idCheck(token);
+    if(!flightId){ free(aux); destroyFlight(flight); return NULL;}
+    setFlightId(flight,flightId);
+    free(flightId);
+    TOKENIZE(token,saveptr);
+
+    char * airline = nameCheck(token);
+    if(!airline){ free(aux); destroyFlight(flight); return NULL;}
+    setFlightAirline(flight,airline);
+    free(airline);
+    TOKENIZE(token,saveptr);
+
+    char * planeModel = nameCheck(token);
+    if(!planeModel){ free(aux); destroyFlight(planeModel); return NULL;}
+    setFlightPlaneModel(flight,planeModel);
+    free(planeModel);
+    TOKENIZE(token,saveptr);
+
+    /*unsigned int totalSeats = seatsCheck(token);
+    if(!totalSeats){ free(aux); destroyFlight(totalSeats); return NULL;}
+    setFlightTotalSeats(flight,totalSeats);
+    free(totalSeats);
+    TOKENIZE(token,saveptr);*/
+
+    //Origin
+    if(strlen(token)!=3){ free(aux); destroyFlight(flight); return NULL;}
+    char * origin = strdup(token);
+    setFlightOrigin(flight,origin);
+    TOKENIZE(token,saveptr);
+
+    //Destination
+    if(!airportCheck(origin,token)){ free(origin); free(aux); destroyFlight(flight); return NULL;}
+    free(origin);
+    setFlightDestination(flight,token);
+    TOKENIZE(token,saveptr);
+    
+    Time * sDepartDate = dateCheck(token);
+    if(!sDepartDate){ free(aux); destroyFlight(flight); return NULL;}
+    setFlightSDepartureDate(flight,sDepartDate);
+    TOKENIZE(token,saveptr);
+
+    Time * sArrivalDate = dateCheck(token);
+    if(!sArrivalDate){ free(aux); destroyFlight(flight); return NULL;}
+    setFlightSArrivalDate(flight,sArrivalDate);
+
+    //sDepartDate before sArrivalDate
+    if(datesCheck(sDepartDate,sArrivalDate)){ free(sArrivalDate); free(sDepartDate); free(aux); destroyFlight(flight); return NULL;}
+    free(sArrivalDate);
+    free(sDepartDate);
+    TOKENIZE(token,saveptr);
+
+    Time * rDepartDate = dateCheck(token);
+    if(!rDepartDate){ free(aux); destroyFlight(flight); return NULL;}
+    setFlightRDepartureDate(flight,rDepartDate);
+    TOKENIZE(token,saveptr);
+
+    Time * rArrivalDate = dateCheck(token);
+    if(!rArrivalDate){ free(aux); destroyFlight(flight); return NULL;}
+    setFlightRArrivalDate(flight,rArrivalDate);
+
+    //rDepartDate before rArrivalDate
+    if(datesCheck(rDepartDate,rArrivalDate)){ free(rArrivalDate); free(rDepartDate); free(aux); destroyFlight(flight); return NULL;}
+    free(rArrivalDate);
+    free(rDepartDate);
+    TOKENIZE(token,saveptr);
+
+    char * pilot = nameCheck(token);
+    if(!pilot){ free(aux); destroyFlight(flight); return NULL;}
+    setFlightPilot(flight,pilot);
+    free(pilot);
+    TOKENIZE(token,saveptr);
+
+    char * copilot = nameCheck(token);
+    if(!copilot){ free(aux); destroyFlight(flight); return NULL;}
+    setFlightCopilot(flight,copilot);
+    free(copilot);
+    TOKENIZE(token,saveptr);
+
+    setFlightNotes(flight,token);
+    free(aux);
+    return flight;
+
+}
 
 static Passanger * passangerCheck(const char * line){
     char * aux = strdup(line);
