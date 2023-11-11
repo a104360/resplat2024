@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../include/dataTypes.h"
+#include <glib.h>
 
 
 typedef struct time{
@@ -85,17 +86,12 @@ static void initTime(Time * tempo){
 }
 
 static void destroyTime(Time *time) {
-    time->hour = 0;
-    time->min = 0;
-    time->sec = 0;
-    time->mday = 0;
-    time->year = 0;
-    time->mon = 0;
-    free(time);
+    initTime(time);
+    g_free(time);
 }
 
 static Time * createTime(){
-    Time * t = malloc(sizeof(struct time));
+    Time * t = g_malloc(sizeof(struct time));
     initTime(t);
     return t;
 }
@@ -127,7 +123,7 @@ static void copyTime(Time * t,Time * aux){
 
 
 static User * createUser(){
-    User * u = malloc(sizeof(struct user));
+    User * u = g_malloc(sizeof(struct user));
     initUser(u);    
     return u;
 
@@ -160,31 +156,31 @@ static void initUser(User * user){
 
 static void destroyUser(User *user) {
     if(user) {
-        if(user->id) free(user->id);
-        if(user->name) free(user->name);
-        if(user->email) free(user->email);
-        if(user->phone_number) free(user->phone_number);
-        if(user->sex) free(user->sex);
-        if(user->passport) free(user->passport);
-        if(user->country_code) free(user->country_code);
-        if(user->address) free(user->address);
-        if(user->pay_method) free(user->pay_method);
+        if(user->id) g_free(user->id);
+        if(user->name) g_free(user->name);
+        if(user->email) g_free(user->email);
+        if(user->phone_number) g_free(user->phone_number);
+        if(user->sex) g_free(user->sex);
+        if(user->passport) g_free(user->passport);
+        if(user->country_code) g_free(user->country_code);
+        if(user->address) g_free(user->address);
+        if(user->pay_method) g_free(user->pay_method);
         if(user->account_creation) destroyTime(user->account_creation);
         if(user->birth_date) destroyTime(user->birth_date);
-        free(user);
+        g_free(user);
     }
 }
 
 
 
 static void setUserId(User * user,const char * id){
-    if(user->id) free(user->id);
-    user->id = strdup(id);
+    if(user->id) g_free(user->id);
+    user->id = g_strdup(id);
 }
 
 static char * getUserId(User * user){
     if(user->id){
-        char * aux = strdup(user->id);
+        char * aux = g_strdup(user->id);
         return aux;
     }
     return NULL;
@@ -192,13 +188,13 @@ static char * getUserId(User * user){
 
 
 static void setUserName(User * user,const char * name){
-    if(user->name) free(user->name);
-    user->name = strdup(name);
+    if(user->name) g_free(user->name);
+    user->name = g_strdup(name);
 }
 
 static char * getUserName(User * user){
      if(user->name){
-        char * aux = strdup(user->name);
+        char * aux = g_strdup(user->name);
         return aux;
     }
     return NULL;
@@ -206,25 +202,25 @@ static char * getUserName(User * user){
 
 
 static void setUserEmail(User * user,const char * email){
-    if(user->email) free(user->email);
-    user->email = strdup(email);
+    if(user->email) g_free(user->email);
+    user->email = g_strdup(email);
 }
 
 static char * getUserEmail(User * user){
     if(user->email){
-        char * aux = strdup(user->email);
+        char * aux = g_strdup(user->email);
         return aux;
     }
     return NULL;
 }
 
 static void setUserPhone(User * user,const char * line){
-    if(user->phone_number) free(user->phone_number);
-    user->phone_number = strdup(line);
+    if(user->phone_number) g_free(user->phone_number);
+    user->phone_number = g_strdup(line);
 }
 static char * getUserPhone(User * user){
     if(user->phone_number){
-        char * aux = strdup(user->phone_number);
+        char * aux = g_strdup(user->phone_number);
         return aux;
     }
     return NULL;
@@ -257,13 +253,13 @@ static char getUserSex(User * user){
 
 
 static void setUserPassport(User * user ,const char * line){
-    if(user->passport) free(user->passport);
-    user->passport = strdup(line);
+    if(user->passport) g_free(user->passport);
+    user->passport = g_strdup(line);
 }
 
 static char * getUserPassaport(User * user){
     if(user->passport){
-        char * aux = strdup(user->passport);
+        char * aux = g_strdup(user->passport);
         return aux;
     }
     return NULL;
@@ -271,13 +267,13 @@ static char * getUserPassaport(User * user){
 
 
 static void setUserCountryCode(User * user ,const char * line){
-    if(user->country_code) free(user->country_code);
-    user->country_code = strdup(line);
+    if(user->country_code) g_free(user->country_code);
+    user->country_code = g_strdup(line);
 }
 
 static char * getUserCountryCode(User * user){
     if(user->country_code){
-        char * aux = strdup(user->country_code);
+        char * aux = g_strdup(user->country_code);
         return aux;
     }
     return NULL;
@@ -285,13 +281,13 @@ static char * getUserCountryCode(User * user){
 
 
 static void setUserAddress(User * user ,const char * line){
-    if(user->address) free(user->address);
-    user->address = strdup(line);
+    if(user->address) g_free(user->address);
+    user->address = g_strdup(line);
 }
 
 static char * getUserAddress(User * user){
     if(user->address){
-        char * aux = strdup(user->address);
+        char * aux = g_strdup(user->address);
         return aux;
     }
     return NULL;
@@ -314,13 +310,13 @@ static Time * getUserAccountCreation(User * user){
 
 
 static void setUserPayMethod(User * user ,const char * line){
-    if(user->pay_method) free(user->pay_method);
-    user->pay_method = strdup(line);
+    if(user->pay_method) g_free(user->pay_method);
+    user->pay_method = g_strdup(line);
 }
 
 static char * getUserPayMethod(User * user){
     if(user->pay_method){
-        char * aux = strdup(user->pay_method);
+        char * aux = g_strdup(user->pay_method);
         return aux;
     }
     return NULL;
@@ -354,7 +350,7 @@ static bool getUserAccountStatus(User * user){
 // *** Flight related functions ***
 
 static Flight * createFlight(){
-    Flight * f = malloc(sizeof(struct flight));
+    Flight * f = g_malloc(sizeof(struct flight));
     initFlight(f);
     return f;
 }
@@ -397,32 +393,32 @@ static void initFlight(Flight * flight){
 
 static void destroyFlight(Flight * f) {
     if (f != NULL) {
-        if(f->id) free(f->id); 
-        if(f->airline) free(f->airline); 
-        if(f->plane_model) free(f->plane_model); 
-        if(f->origin) free(f->origin); 
-        if(f->destination) free(f->destination); 
+        if(f->id) g_free(f->id); 
+        if(f->airline) g_free(f->airline); 
+        if(f->plane_model) g_free(f->plane_model); 
+        if(f->origin) g_free(f->origin); 
+        if(f->destination) g_free(f->destination); 
         if(f->schedule_departure_date) destroyTime(f->schedule_departure_date); 
         if(f->schedule_arrival_date) destroyTime(f->schedule_arrival_date); 
         if(f->real_departure_date) destroyTime(f->real_departure_date); 
         if(f->real_arrival_date) destroyTime(f->real_arrival_date); 
-        if(f->pilot) free(f->pilot); 
-        if(f->copilot) free(f->copilot); 
-        if(f->notes) free(f->notes); 
-        free(f); 
+        if(f->pilot) g_free(f->pilot); 
+        if(f->copilot) g_free(f->copilot); 
+        if(f->notes) g_free(f->notes); 
+        g_free(f); 
     }
 }
 
 
 
 static void setFlightId(Flight * flight,const char * line){
-    if(flight->id) free(flight->id);
-    flight->id = strdup(line);
+    if(flight->id) g_free(flight->id);
+    flight->id = g_strdup(line);
 }
 
 static char *getFlightId(Flight * flight){
     if(flight->id){
-        char * id = strdup(flight->id);
+        char * id = g_strdup(flight->id);
         return id;
     }
     return NULL;
@@ -430,13 +426,13 @@ static char *getFlightId(Flight * flight){
 
   
 static void setFlightAirline(Flight * flight,const char * line){
-    if(flight->airline) free(flight->airline);
-    flight->airline = strdup(line);
+    if(flight->airline) g_free(flight->airline);
+    flight->airline = g_strdup(line);
 }
 
 static char *getFlightAirline(Flight * flight){
     if(flight->airline){
-        char * airline = strdup(flight->airline);
+        char * airline = g_strdup(flight->airline);
         return airline;
     }
     return NULL;
@@ -444,13 +440,13 @@ static char *getFlightAirline(Flight * flight){
 
 
 static void setFlightPlaneModel(Flight * flight,const char * line){
-    if(flight->plane_model) free(flight->plane_model);
-    flight->plane_model = strdup(line);
+    if(flight->plane_model) g_free(flight->plane_model);
+    flight->plane_model = g_strdup(line);
 }
 
 static char *getFlightPlaneModel(Flight * flight){
     if(flight->plane_model){
-        char * plane_model = strdup(flight->plane_model);
+        char * plane_model = g_strdup(flight->plane_model);
         return plane_model;
     }
     return NULL;
@@ -467,13 +463,13 @@ static unsigned int getFlightTotalSeats(Flight * flight){
 
 
 static void setFlightOrigin(Flight * flight,const char * line){
-    if(flight->origin) free(flight->origin);
-    flight->origin = strdup(line);
+    if(flight->origin) g_free(flight->origin);
+    flight->origin = g_strdup(line);
 }
 
 static char *getFlightOrigin(Flight * flight){
     if(flight->origin){
-        char * origin = strdup(flight->origin);
+        char * origin = g_strdup(flight->origin);
         return origin;
     }
     return NULL;
@@ -481,13 +477,13 @@ static char *getFlightOrigin(Flight * flight){
 
 
 static void setFlightDestination(Flight * flight,const char * line){
-    if(flight->destination) free(flight->destination);
-    flight->destination = strdup(line);
+    if(flight->destination) g_free(flight->destination);
+    flight->destination = g_strdup(line);
 }
 
 static char *getFlightDestination(Flight * flight){
     if(flight->destination){
-        char * destination = strdup(flight->destination);
+        char * destination = g_strdup(flight->destination);
         return destination;
     }
     return NULL;
@@ -555,13 +551,13 @@ static Time *getFlightRArrivalDate(Flight * flight){
 
 
 static void setFlightPilot(Flight * flight,const char * line){
-    if(flight->pilot) free(flight->pilot);
-    flight->pilot = strdup(line);
+    if(flight->pilot) g_free(flight->pilot);
+    flight->pilot = g_strdup(line);
 }
 
 static char *getFlightPilot(Flight * flight){
     if(flight->pilot){
-        char * pilot = strdup(flight->pilot);
+        char * pilot = g_strdup(flight->pilot);
         return pilot;
     }
     return NULL;
@@ -569,13 +565,13 @@ static char *getFlightPilot(Flight * flight){
 
 
 static void setFlightCopilot(Flight * flight,const char * line){
-    if(flight->copilot) free(flight->copilot);
-    flight->copilot = strdup(line);
+    if(flight->copilot) g_free(flight->copilot);
+    flight->copilot = g_strdup(line);
 }
 
 static char *getFlightCopilot(Flight * flight){
     if(flight->copilot){
-        char * copilot = strdup(flight->copilot);
+        char * copilot = g_strdup(flight->copilot);
         return copilot;
     }
     return NULL;
@@ -583,13 +579,13 @@ static char *getFlightCopilot(Flight * flight){
 
 
 static void setFlightNotes(Flight * flight,const char * line){
-    if(flight->notes) free(flight->notes);
-    flight->notes = strdup(line);
+    if(flight->notes) g_free(flight->notes);
+    flight->notes = g_strdup(line);
 }
 
 static char *getFlightNotes(Flight * flight){
     if(flight->notes){
-        char * notes = strdup(flight->notes);
+        char * notes = g_strdup(flight->notes);
         return notes;
     }
     return NULL;
@@ -606,7 +602,7 @@ static char *getFlightNotes(Flight * flight){
 
 // *** Reservation related functions ***
 static Reservation * createReservation(){
-    Reservation * r = malloc(sizeof(struct reservation));
+    Reservation * r = g_malloc(sizeof(struct reservation));
     initReservation(r);
     return r;
 }
@@ -640,28 +636,28 @@ static void initReservation(Reservation * reservation){
 
 static void destroyReservation(Reservation * r) {
     if (r != NULL) {
-        if(r->id) free(r->id); 
-        if(r->user_id) free(r->user_id); 
-        if(r->hotel_id) free(r->hotel_id); 
-        if(r->hotel_name) free(r->hotel_name); 
-        if(r->address) free(r->address); 
+        if(r->id) g_free(r->id); 
+        if(r->user_id) g_free(r->user_id); 
+        if(r->hotel_id) g_free(r->hotel_id); 
+        if(r->hotel_name) g_free(r->hotel_name); 
+        if(r->address) g_free(r->address); 
         if(r->begin_date) destroyTime(r->begin_date); 
         if(r->end_date) destroyTime(r->end_date); 
-        if(r->room_details) free(r->room_details); 
-        if(r->comment) free(r->comment); 
-        free(r); 
+        if(r->room_details) g_free(r->room_details); 
+        if(r->comment) g_free(r->comment); 
+        g_free(r); 
     }
 }
 
 
 static void setReservId(Reservation * reserv,const char * line){
-    if(reserv->id) free(reserv->id);
-    reserv->id = strdup(line);
+    if(reserv->id) g_free(reserv->id);
+    reserv->id = g_strdup(line);
 }
 
 static char *getReservId(Reservation * reserv){
     if(reserv->id){
-        char * id = strdup(reserv->id);
+        char * id = g_strdup(reserv->id);
         return id;
     }
     return NULL;
@@ -669,13 +665,13 @@ static char *getReservId(Reservation * reserv){
 
 
 static void setReservUserId(Reservation * reserv,const char * line){
-    if(reserv->user_id) free(reserv->user_id);
-    reserv->user_id = strdup(line);
+    if(reserv->user_id) g_free(reserv->user_id);
+    reserv->user_id = g_strdup(line);
 }
 
 static char *getReservUserId(Reservation * reserv){
      if(reserv->user_id){
-        char * user_id = strdup(reserv->user_id);
+        char * user_id = g_strdup(reserv->user_id);
         return user_id;
     }
     return NULL;
@@ -683,13 +679,13 @@ static char *getReservUserId(Reservation * reserv){
 
 
 static void setReservHotelId(Reservation * reserv,const char * line){
-    if(reserv->hotel_id) free(reserv->hotel_id);
-    reserv->hotel_id = strdup(line);
+    if(reserv->hotel_id) g_free(reserv->hotel_id);
+    reserv->hotel_id = g_strdup(line);
 }
 
 static char *getReservHotelId(Reservation * reserv){
      if(reserv->hotel_id){
-        char * hotel_id = strdup(reserv->hotel_id);
+        char * hotel_id = g_strdup(reserv->hotel_id);
         return hotel_id;
     }
     return NULL;
@@ -697,13 +693,13 @@ static char *getReservHotelId(Reservation * reserv){
 
 
 static void setReservHotelName(Reservation * reserv,const char * line){
-    if(reserv->hotel_name) free(reserv->hotel_name);
-    reserv->hotel_name = strdup(line);
+    if(reserv->hotel_name) g_free(reserv->hotel_name);
+    reserv->hotel_name = g_strdup(line);
 }
 
 static char *getReservHotelName(Reservation * reserv){
      if(reserv->hotel_name){
-        char * hotel_name = strdup(reserv->hotel_name);
+        char * hotel_name = g_strdup(reserv->hotel_name);
         return hotel_name;
     }
     return NULL;
@@ -729,13 +725,13 @@ static double getReservCityTax(Reservation * reserv){
 
 
 static void setReservHotelAddress(Reservation * reserv,const char * line){
-    if(reserv->address) free(reserv->address);
-    reserv->address = strdup(line);
+    if(reserv->address) g_free(reserv->address);
+    reserv->address = g_strdup(line);
 }
 
 static char *getReservHotelAddress(Reservation * reserv){
     if(reserv->address){
-        char * address = strdup(reserv->address);
+        char * address = g_strdup(reserv->address);
         return address;
     }
     return NULL;
@@ -791,13 +787,13 @@ static bool getReservBreakfast(Reservation * reserv){
 
 
 static void setReservRoomDetails(Reservation * reserv,const char * line){
-    if(reserv->room_details) free(reserv->room_details);
-    reserv->room_details = strdup(line);
+    if(reserv->room_details) g_free(reserv->room_details);
+    reserv->room_details = g_strdup(line);
 }
 
 static char *getReservRoomDetails(Reservation * reserv){
     if(reserv->room_details){
-        char * room_details = strdup(reserv->room_details);
+        char * room_details = g_strdup(reserv->room_details);
         return room_details;
     }
     return NULL;
@@ -814,13 +810,13 @@ static unsigned int getReservRating(Reservation * reserv){
 
 
 static void setReservComment(Reservation * reserv,const char * line){
-    if(reserv->comment) free(reserv->comment);
-    reserv->comment = strdup(line);
+    if(reserv->comment) g_free(reserv->comment);
+    reserv->comment = g_strdup(line);
 }
 
 static char *getReservComment(Reservation * reserv){
     if(reserv->comment){
-        char * comment = strdup(reserv->comment);
+        char * comment = g_strdup(reserv->comment);
         return comment;
     }
     return NULL;
@@ -831,7 +827,7 @@ static char *getReservComment(Reservation * reserv){
 // *** Passanger related functions *** 
 
 static Passanger * createPassanger(){
-    Passanger * p = malloc(sizeof(struct passanger));
+    Passanger * p = g_malloc(sizeof(struct passanger));
     initPassanger(p);
     return p;
 }
@@ -843,20 +839,20 @@ static void initPassanger(Passanger * passanger){
 
 static void destroyPassanger(Passanger * p) {
     if (p) {
-        if(p->flight_id) free(p->flight_id); 
-        if(p->user_id) free(p->user_id); 
-        free(p); 
+        if(p->flight_id) g_free(p->flight_id); 
+        if(p->user_id) g_free(p->user_id); 
+        g_free(p); 
     }
 }
 
 static void setPassangerFlightId(Passanger * passanger,const char * line){
-    if(passanger->flight_id) free(passanger->flight_id);
-    passanger->flight_id = strdup(line);
+    if(passanger->flight_id) g_free(passanger->flight_id);
+    passanger->flight_id = g_strdup(line);
 }
 
 static char *getPassangerFlightId(Passanger * passanger){
     if(passanger->flight_id){
-        char * flight_id = strdup(passanger->flight_id);
+        char * flight_id = g_strdup(passanger->flight_id);
         return flight_id;
     }
     return NULL;
@@ -864,13 +860,13 @@ static char *getPassangerFlightId(Passanger * passanger){
 
 
 static void setPassangerUserId(Passanger * passanger,const char * line){
-    if(passanger->user_id) free(passanger->user_id);
-    passanger->user_id = strdup(line);
+    if(passanger->user_id) g_free(passanger->user_id);
+    passanger->user_id = g_strdup(line);
 }
 
 static char *getPassangerUserId(Passanger * passanger){
     if(passanger->user_id){
-        char * user_id = strdup(passanger->user_id);
+        char * user_id = g_strdup(passanger->user_id);
         return user_id;
     }
 }
