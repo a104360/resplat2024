@@ -1,6 +1,5 @@
 #ifndef PARSER_H
 #define PARSER_H
-#include <time.h>
 #include <stdbool.h>
 #include "../include/dataTypes.h"
 
