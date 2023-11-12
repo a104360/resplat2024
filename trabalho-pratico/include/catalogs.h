@@ -10,6 +10,12 @@ typedef GHashTable * ReservationsDatabase;
 typedef GHashTable * PassangersDatabase;
 
 
+typedef GList * UserSearchResults;
+typedef GList * FlightSearchResults;
+typedef GList * ReservationSearchResults;
+typedef GList * PassangerSearchResults;
+
+
 
 static UsersDatabase initUsers();
 
@@ -54,6 +60,11 @@ static Passanger * findPassangerUserId(void * ,const char * );
 
 
 static void destroyDataBase(void *);
+
+
+
+
+
 
 
 
