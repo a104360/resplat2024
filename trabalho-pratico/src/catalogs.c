@@ -4,6 +4,10 @@
 #include <glib.h>
 
 
+
+
+
+
 // Init usersDatabase
 static UsersDatabase initUsers(){
     UsersDatabase users = g_hash_table_new_full(g_str_hash,g_str_equal,(GDestroyNotify)g_free,(GDestroyNotify)g_hash_table_destroy);
@@ -14,7 +18,7 @@ static void insertUser(void * table,User * user){
     g_hash_table_insert((UsersDatabase) table,(gpointer) getUserId(user),(gpointer) user);
 }
 
-// Find a user
+// Returns the user that is supposed to be identified by the ID, that is on the TABLE
 static User * lookupUser(void * table ,const char * id){
     User * user = g_hash_table_lookup((UsersDatabase) table,(gconstpointer) id);
     return user;
@@ -68,7 +72,6 @@ static void insertReserv(void * structs,Reservation * reserv){
 
 // Returns the reservations by the reservations id
 static Reservation * lookupReserv(void * table,const char * reservId){
-
     Reservation * reserv = g_hash_table_lookup((ReservationsDatabase ) table,(gconstpointer) reservId);
     return reserv;
 }
@@ -76,17 +79,20 @@ static Reservation * lookupReserv(void * table,const char * reservId){
 
 
 
+
 // Returns the reservations by the hotel id
-static Reservation * findReservHotel(void * table,const char * hotelId){
-    Reservation * reserv = g_hash_table_find((ReservationsDatabase) table,(GHRFunc) lookupReservHotel,(gpointer) hotelId);
+static Reservation ** allReservsInHotel(void * table,const char * hotelId){
+    Reservation ** reservs = malloc(sizeof(struct reservation));
+
+    g_hash_table_find((ReservationsDatabase) table,(GHRFunc) lookupReservHotel,(gpointer) hotelId);
     return reserv;
 }
 
 
 // Returns the reservations by the user id
 static Reservation * findReservUser(void * table,const char * userId){
-    Reservation * reserv = g_hash_table_find((ReservationsDatabase) table,(GHRFunc) lookupReservUser,(gpointer) userId);
-    return reserv;
+    ReservationSearchResults reservs = g_hash_table_find    ((ReservationsDatabase) table,(GHRFunc) lookupReservUser,(gpointer) userId);
+    return reservs;
 }
 
 
@@ -145,8 +151,6 @@ static void destroyDataBase(void * structs){
 static GArray * UsersAnalysisCatalog();
 
 static void UsersAnalysisCatalogInsert(void *,void *);
-
-
 
 
 static GArray * FlightsAnalysisCatalog();

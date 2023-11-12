@@ -16,6 +16,7 @@ typedef struct passanger Passanger;
 
 
 
+
 static Time * createTime();
 
 static void initTime(Time *);
@@ -220,15 +221,17 @@ char *getPassangerUserId(Passanger *);
 
 
 
+typedef struct hotelReservs HotelReservs;
 
-static Reservation * lookupReservUser(gpointer , gpointer , gpointer );
+static Reservation ** getAllReservsInHotel(void * ,const char * );
 
-static Reservation * lookupReservHotel(gpointer , gpointer , gpointer );
+static void allHotelReservs(gpointer , gpointer , gpointer );
 
-static Passanger * lookupPassangerUserId(gpointer , gpointer , gpointer );
+
+
+
 
 
 static double dalayMedianAirport(void*, void*);
-
 
 #endif

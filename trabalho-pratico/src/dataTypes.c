@@ -2,6 +2,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include "../include/dataTypes.h"
+#include "../include/catalogs.h"
+#include "../include/utils.h"
 #include <glib.h>
 
 
@@ -12,7 +14,7 @@ typedef struct time{
     int mday;        /* day of the month, range 1 to 31  */
     int mon;         /* month, range 0 to 11             */
     int year;        /* The number of years since 0      */
-} Time;
+} ;
 
 
 typedef struct user{
@@ -28,7 +30,7 @@ typedef struct user{
     struct time * account_creation;
     char * pay_method;
     bool account_status;
-} User;
+} ;
 
 
 
@@ -46,7 +48,7 @@ typedef struct flight{
     char * pilot;
     char * copilot;
     char * notes;
-} Flight;
+} ;
 
 typedef struct reservation{
     char * id;
@@ -63,13 +65,13 @@ typedef struct reservation{
     char * room_details;                  
     unsigned int rating;
     char * comment;
-} Reservation;
+} ;
 
 
 typedef struct passanger{
     char * flight_id;
     char * user_id;
-} Passanger;
+} ;
 
 
 
@@ -880,25 +882,60 @@ static char *getPassangerUserId(Passanger * passanger){
 
 
 
-static Reservation * lookupReservUser(gpointer key, gpointer value, gpointer userData) {
-    const char * userId = (const char *)userData;
+
+
+
+ReservationSearchResults lookupReservUserId(gpointer key, gpointer value, gpointer user_data) {
+    const char *user_id_to_find = (const char *)user_data;
     Reservation *reservation = (Reservation *)value;
 
-    if (g_strcmp0(reservation->user_id,userId) == 0) {
-        return reservation;  
+    if (g_strcmp0(reservation->user_id, user_id_to_find) == 0) {
+        // Create a new list node with the found reservation
+        return g_slist_prepend(NULL, reservation);
     }
-    return NULL;  
+
+    return NULL;
 }
 
-static Reservation * lookupReservHotel(gpointer key, gpointer value, gpointer hotelData) {
-    const char * hotelId = (const char *)hotelData;
-    Reservation *reservation = (Reservation *)value;
 
-    if (g_strcmp0(reservation->hotel_id,hotelId) == 0) {
-        return reservation;  
-    }
-    return NULL;  
+
+
+
+
+// *** Block to get Types through other meanings than the hash table keys *** 
+
+// struct to store the list of reservations of an hotel and the hotel id
+typedef struct hotelReservs{
+    struct reservation ** hotelReservs;
+    char * hotel_id;
+} ;
+
+// Returns the reservations by the hotel id
+static Reservation ** getAllReservsInHotel(void * dataStruct,const char * hotelId){
+    HotelReservs * reservs = malloc(sizeof(struct hotelReservs) * g_hash_table_size((GHashTable *) dataStruct));
+    g_hash_table_foreach((GHashTable *)dataStruct,allHotelReservs,reservs);
+    return reservs->hotelReservs;
 }
+
+// Function to iterate and get the reservations on the list
+static void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
+    HotelReservs * array = (HotelReservs *) hotelData;
+    Reservation * reservation = (Reservation *)value;
+    static int i = 0;
+
+    if (!g_strcmp0(reservation->hotel_id,array->hotel_id)) {
+          array->hotelReservs = reservation;
+          i++;
+    }  
+}
+
+//                                  *** End block ***
+
+
+
+
+
+
 
 
 static Passanger * lookupPassangerUserId(gpointer key, gpointer value, gpointer userData){
@@ -906,7 +943,7 @@ static Passanger * lookupPassangerUserId(gpointer key, gpointer value, gpointer 
     Passanger *passanger = (Passanger *) value;
 
     if (g_strcmp0(passanger->user_id,userId) == 0) {
-        return passanger;  
+        return passanger;
     }
     return NULL;  
 }
