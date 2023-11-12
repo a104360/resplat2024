@@ -17,7 +17,7 @@ static void query4();
 //listar voos com origem num dado aeroporto, entre 2 datas, ordenados por data partida estimada (antiga -> recente) (se houver 2, usar id)
 static void query5();
 
-//lsitar top N aeroportos com mais passageiros, para um dado ano. Contabilizar voos com data estimada de partida nesse ano. (se 2, usar nome)
+//listar top N aeroportos com mais passageiros, para um dado ano. Contabilizar voos com data estimada de partida nesse ano. (se 2, usar nome)
 static void query6();
 
 //listar top N aeroportos com maior mediana de atrasos. Valor atraso em segundos. (se 2, usar nome)

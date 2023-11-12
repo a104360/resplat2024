@@ -1,5 +1,7 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H
+#include <stdbool.h>
+#include <glib.h>
 
 typedef struct time Time;
 
@@ -214,5 +216,19 @@ char *getPassangerFlightId(Passanger *);
 
 static void setPassangerUserId(Passanger *, const char *);
 char *getPassangerUserId(Passanger *);
+
+
+
+
+
+static Reservation * lookupReservUser(gpointer , gpointer , gpointer );
+
+static Reservation * lookupReservHotel(gpointer , gpointer , gpointer );
+
+static Passanger * lookupPassangerUserId(gpointer , gpointer , gpointer );
+
+
+static double dalayMedianAirport(void*, void*);
+
 
 #endif
