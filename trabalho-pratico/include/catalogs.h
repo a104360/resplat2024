@@ -4,10 +4,14 @@
 #include <glib.h>
 
 
+typedef GHashTable * UsersDatabase;
+typedef GHashTable * FlightsDatabase;
+typedef GHashTable * ReservationsDatabase;
+typedef GHashTable * PassangersDatabase;
 
 
 
-static GHashTable * UsersDataBase();
+static UsersDatabase initUsers();
 
 static void insertUser(void *,User *);
 
@@ -17,43 +21,40 @@ static User * lookupUser(void *,const char *);
 
 
 
-static GHashTable * FlightsDataBase();
+static FlightsDatabase initFlights();
 
 static void insertFlight(void *,Flight *);
 
 static Flight * lookupFlight(void * ,const char *);
 
-static double dalayMedianAirport(void*, void*);
 
 
 
 
-
-static GHashTable * ReservationsDataBase();
+static ReservationsDatabase initReservations();
 
 static void insertReserv(void *,Reservation *);
 
 static Reservation * lookupReserv(void * ,const char * );
 
-static Reservation * lookupReservHotel(void * ,const char * );
+static Reservation * findReservHotel(void * ,const char * );
 
-static Reservation * lookupReservUser(void * ,const char * );
-
-
+static Reservation * findReservUser(void * ,const char * );
 
 
-static GHashTable * PassangersDataBase();
+
+
+static PassangersDatabase initPassangers();
 
 static void insertPassangerFlightId(void * ,Passanger * );
-static void insertPassangerUserId(void * ,Passanger * );
-
 
 static Passanger * lookupPassangerFlightId(void * ,const char * );
-static Passanger * lookupPassangerUserId(void * ,const char * );
+static Passanger * findPassangerUserId(void * ,const char * );
 
 
 
 static void destroyDataBase(void *);
+
 
 
 
@@ -64,24 +65,24 @@ static gint compareMedian(gdouble,gdouble);
 static gint compareNames(char *,char*);
 
 
-static GTree * UsersAnalysisCatalog();
+static GArray * UsersAnalysisCatalog();
 
 static void UsersAnalysisCatalogInsert(void *,void *);
 
 
 
 
-static GTree * FlightsAnalysisCatalog();
+static GArray * FlightsAnalysisCatalog();
 
 
 
 
-static GTree * ReservationsAnalysisCatalog();
+static GArray * ReservationsAnalysisCatalog();
 
 
 
 
-static GTree * PassangerAnalysisCatalog();
+static GArray * PassangerAnalysisCatalog();
 
 
 

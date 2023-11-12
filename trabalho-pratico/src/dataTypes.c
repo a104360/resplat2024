@@ -871,3 +871,79 @@ static char *getPassangerUserId(Passanger * passanger){
     }
 }
 
+
+
+
+
+
+
+
+
+
+static Reservation * lookupReservUser(gpointer key, gpointer value, gpointer userData) {
+    const char * userId = (const char *)userData;
+    Reservation *reservation = (Reservation *)value;
+
+    if (g_strcmp0(reservation->user_id,userId) == 0) {
+        return reservation;  
+    }
+    return NULL;  
+}
+
+static Reservation * lookupReservHotel(gpointer key, gpointer value, gpointer hotelData) {
+    const char * hotelId = (const char *)hotelData;
+    Reservation *reservation = (Reservation *)value;
+
+    if (g_strcmp0(reservation->hotel_id,hotelId) == 0) {
+        return reservation;  
+    }
+    return NULL;  
+}
+
+
+static Passanger * lookupPassangerUserId(gpointer key, gpointer value, gpointer userData){
+    const char * userId = (const char *) userData;
+    Passanger *passanger = (Passanger *) value;
+
+    if (g_strcmp0(passanger->user_id,userId) == 0) {
+        return passanger;  
+    }
+    return NULL;  
+}
+
+
+
+
+
+
+
+static gint compareTimes(Time *t1,char *passangers1,Time*t2,char *passangers2){
+    if(t1->year != t2->year){
+        if(t1->year > t2->year) return 1;
+        return 0;
+    }
+    if(t1->mon != t2->mon){
+        if(t1->mon > t2->mon) return 1;
+        return 0;
+    }
+    if(t1->mday != t2->mday){
+        if(t1->mday > t2->mday) return 1;
+        return 0;
+    }
+    if(t1->hour != t2->hour){
+        if(t1->hour> t2->hour) return 1;
+        return 0;
+    }if(t1->min != t2->min){
+        if(t1->min > t2->min) return 1;
+        return 0;
+    }
+    if(t1->sec != t2->sec){
+        if(t1->sec > t2->sec) return 1;
+        return 0;
+    }
+    return strcmp(passangers1,passangers2);
+}
+
+static gint comparePassangers(gint,gint);
+static gint compareMedian(gdouble,gdouble);
+static gint compareNames(char *,char*);
