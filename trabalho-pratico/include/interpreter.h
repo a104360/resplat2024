@@ -2,6 +2,6 @@
 #define INTERPRETER_H
 
 
-int readFile(int agrc, char **agrv);
+int readEntryFile(int agrc, char **agrv);
 
 #endif

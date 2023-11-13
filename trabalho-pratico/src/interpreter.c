@@ -3,7 +3,7 @@
 #include <utils.h>
 #include <queries.h>
 
-int readFile(int agrc, char **argv){
+int readEntryFile(int agrc, char **argv){
     FILE * comandos = fopen(argv[2],"r");
 
     if (comandos == NULL){ perror("Erro a abrir o ficheiro dos comandos"); return 1;} 
@@ -18,10 +18,10 @@ int readFile(int agrc, char **argv){
         {
 
         //QUERIE 1 ou 10
-        case 1:
+        case '1':
 
             //QUERIE 10
-            if(linha[1] == 0){
+            if(linha[1] == '0'){
                 if(linha[2] == 'F'){
                     char * resultadoQuerie10 = query10(&linha[4]);
                     //mandar para o output das F
@@ -44,7 +44,7 @@ int readFile(int agrc, char **argv){
             break;
         
         //QUERIE 2
-        case 2:
+        case '2':
 
             if(linha[1] == 'F'){
                     char * resultadoQuerie2 = query2(&linha[3]);
@@ -58,7 +58,7 @@ int readFile(int agrc, char **argv){
 
 
         //QUERIE 3
-        case 3:
+        case '3':
 
             if(linha[1] == 'F'){
                     char * resultadoQuerie3 = query3(&linha[3]);
@@ -72,7 +72,7 @@ int readFile(int agrc, char **argv){
 
 
         //QUERIE 4
-        case 4:
+        case '4':
 
             if(linha[1] == 'F'){
                     char * resultadoQuerie4 = query4(&linha[3]);
@@ -86,7 +86,7 @@ int readFile(int agrc, char **argv){
 
 
         //QUERIE 5
-        case 5:
+        case '5':
 
             if(linha[1] == 'F'){
                     char * resultadoQuerie5 = query5(&linha[3]);
@@ -100,7 +100,7 @@ int readFile(int agrc, char **argv){
 
 
         //QUERIE 6
-        case 6:
+        case '6':
 
             if(linha[1] == 'F'){
                     char * resultadoQuerie6 = query6(&linha[3]);
@@ -114,7 +114,7 @@ int readFile(int agrc, char **argv){
 
 
         //QUERIE 7
-        case 7:
+        case '7':
 
             if(linha[1] == 'F'){
                     char * resultadoQuerie7 = query7(&linha[3]);
@@ -128,7 +128,7 @@ int readFile(int agrc, char **argv){
 
 
         //QUERIE 8
-        case 8:
+        case '8':
 
             if(linha[1] == 'F'){
                     char * resultadoQuerie8 = query8(&linha[3]);
@@ -142,7 +142,7 @@ int readFile(int agrc, char **argv){
 
 
         //QUERIE 9
-        case 9:
+        case '9':
 
             if(linha[1] == 'F'){
                     char * resultadoQuerie9 = query9(&linha[3]);
