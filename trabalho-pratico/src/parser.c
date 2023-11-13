@@ -237,10 +237,9 @@
 }
 
 // total_seats must not be less than the number of passangers
- bool seatsCheck(const char * sold, const char * plain){
-    int real = atoi(plain), virtual = atoi(sold);
-    if(virtual > real) return false;
-    return true;
+ unsigned int seatsCheck(const char * sold){
+    int virtual = atoi(sold);
+    return virtual;
 }
 
 // length == 3 && all variations

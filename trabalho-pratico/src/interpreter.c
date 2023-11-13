@@ -1,7 +1,19 @@
 #include "../include/interpreter.h"
 #include <stdio.h>
+#include <string.h>
 #include <utils.h>
 #include <queries.h>
+
+
+int verTamanhoLinha(char * linha){
+    int i = 0;
+    int count = 0;
+    while(linha[i] != '\0'){
+        count++;
+        i++;
+    }
+    return count;
+}
 
 int readEntryFile(int agrc, char **argv){
     FILE * comandos = fopen(argv[2],"r");
@@ -12,31 +24,41 @@ int readEntryFile(int agrc, char **argv){
 
     if(!linha) { perror("Erro a alocar memoria no readFile"); return 1;}
 
+    memset(linha, '\0', sizeof(linha));
+
     while(fgets(linha,sizeof(linha),comandos)){
-        // colocar funcoes para identificar quais as queries para enviar para as queries certas
-        switch (linha[0])
+
+        int tamanhoLinha = verTamanhoLinha(linha);
+
+        char linhaLimpa[tamanhoLinha +1];
+
+        strncpy(linhaLimpa,linha,tamanhoLinha);
+
+        linhaLimpa[tamanhoLinha] = '\0';
+
+        switch (linhaLimpa[0])
         {
 
         //QUERIE 1 ou 10
         case '1':
 
             //QUERIE 10
-            if(linha[1] == '0'){
-                if(linha[2] == 'F'){
-                    char * resultadoQuerie10 = query10(&linha[4]);
+            if(linhaLimpa[1] == '0'){
+                if(linhaLimpa[2] == 'F'){
+                    char * resultadoQuerie10 = query10(&linhaLimpa[4]);
                     //mandar para o output das F
                 }else {
-                    char * resultadoQuerie10 = query10(&linha[3]);
+                    char * resultadoQuerie10 = query10(&linhaLimpa[3]);
                     //mandar para o output sem F
                 }
 
             //QUERIE 1
             }else {
-                if(linha[1] == 'F'){
-                    char * resultadoQuerie1 = query1(&linha[3]);
+                if(linhaLimpa[1] == 'F'){
+                    char * resultadoQuerie1 = query1(&linhaLimpa[3]);
                     //mandar para o output das F
                 }else {
-                    char * resultadoQuerie1 = query1(&linha[2]);
+                    char * resultadoQuerie1 = query1(&linhaLimpa[2]);
                     //mandar para o output sem F
                 }
             }
@@ -46,11 +68,11 @@ int readEntryFile(int agrc, char **argv){
         //QUERIE 2
         case '2':
 
-            if(linha[1] == 'F'){
-                    char * resultadoQuerie2 = query2(&linha[3]);
+            if(linhaLimpa[1] == 'F'){
+                    char * resultadoQuerie2 = query2(&linhaLimpa[3]);
                     //mandar para o output das F
                 }else {
-                    char * resultadoQuerie2 = query2(&linha[2]);
+                    char * resultadoQuerie2 = query2(&linhaLimpa[2]);
                     //mandar para o output sem F
                 }
 
@@ -60,11 +82,11 @@ int readEntryFile(int agrc, char **argv){
         //QUERIE 3
         case '3':
 
-            if(linha[1] == 'F'){
-                    char * resultadoQuerie3 = query3(&linha[3]);
+            if(linhaLimpa[1] == 'F'){
+                    char * resultadoQuerie3 = query3(&linhaLimpa[3]);
                     //mandar para o output das F
                 }else {
-                    char * resultadoQuerie3 = query3(&linha[2]);
+                    char * resultadoQuerie3 = query3(&linhaLimpa[2]);
                     //mandar para o output sem F
                 }
 
@@ -74,11 +96,11 @@ int readEntryFile(int agrc, char **argv){
         //QUERIE 4
         case '4':
 
-            if(linha[1] == 'F'){
-                    char * resultadoQuerie4 = query4(&linha[3]);
+            if(linhaLimpa[1] == 'F'){
+                    char * resultadoQuerie4 = query4(&linhaLimpa[3]);
                     //mandar para o output das F
                 }else {
-                    char * resultadoQuerie4 = query4(&linha[2]);
+                    char * resultadoQuerie4 = query4(&linhaLimpa[2]);
                     //mandar para o output sem F
                 }
 
@@ -88,11 +110,11 @@ int readEntryFile(int agrc, char **argv){
         //QUERIE 5
         case '5':
 
-            if(linha[1] == 'F'){
-                    char * resultadoQuerie5 = query5(&linha[3]);
+            if(linhaLimpa[1] == 'F'){
+                    char * resultadoQuerie5 = query5(&linhaLimpa[3]);
                     //mandar para o output das F
                 }else {
-                    char * resultadoQuerie5 = query5(&linha[2]);
+                    char * resultadoQuerie5 = query5(&linhaLimpa[2]);
                     //mandar para o output sem F
                 }
 
@@ -102,11 +124,11 @@ int readEntryFile(int agrc, char **argv){
         //QUERIE 6
         case '6':
 
-            if(linha[1] == 'F'){
-                    char * resultadoQuerie6 = query6(&linha[3]);
+            if(linhaLimpa[1] == 'F'){
+                    char * resultadoQuerie6 = query6(&linhaLimpa[3]);
                     //mandar para o output das F
                 }else {
-                    char * resultadoQuerie6 = query6(&linha[2]);
+                    char * resultadoQuerie6 = query6(&linhaLimpa[2]);
                     //mandar para o output sem F
                 }
 
@@ -116,11 +138,11 @@ int readEntryFile(int agrc, char **argv){
         //QUERIE 7
         case '7':
 
-            if(linha[1] == 'F'){
-                    char * resultadoQuerie7 = query7(&linha[3]);
+            if(linhaLimpa[1] == 'F'){
+                    char * resultadoQuerie7 = query7(&linhaLimpa[3]);
                     //mandar para o output das F
                 }else {
-                    char * resultadoQuerie7 = query7(&linha[2]);
+                    char * resultadoQuerie7 = query7(&linhaLimpa[2]);
                     //mandar para o output sem F
                 }
 
@@ -130,11 +152,11 @@ int readEntryFile(int agrc, char **argv){
         //QUERIE 8
         case '8':
 
-            if(linha[1] == 'F'){
-                    char * resultadoQuerie8 = query8(&linha[3]);
+            if(linhaLimpa[1] == 'F'){
+                    char * resultadoQuerie8 = query8(&linhaLimpa[3]);
                     //mandar para o output das F
                 }else {
-                    char * resultadoQuerie8 = query8(&linha[2]);
+                    char * resultadoQuerie8 = query8(&linhaLimpa[2]);
                     //mandar para o output sem F
                 }
 
@@ -144,11 +166,11 @@ int readEntryFile(int agrc, char **argv){
         //QUERIE 9
         case '9':
 
-            if(linha[1] == 'F'){
-                    char * resultadoQuerie9 = query9(&linha[3]);
+            if(linhaLimpa[1] == 'F'){
+                    char * resultadoQuerie9 = query9(&linhaLimpa[3]);
                     //mandar para o output das F
                 }else {
-                    char * resultadoQuerie9 = query9(&linha[2]);
+                    char * resultadoQuerie9 = query9(&linhaLimpa[2]);
                     //mandar para o output sem F
                 }
 
@@ -166,4 +188,3 @@ int readEntryFile(int agrc, char **argv){
 
     return 0;
 }
-
