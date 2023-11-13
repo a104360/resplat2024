@@ -43,7 +43,7 @@ static void insertReserv(void *,Reservation *);
 
 static Reservation * lookupReserv(void * ,const char * );
 
-static Reservation * findReservHotel(void * ,const char * );
+static Reservation ** findHotelReservations(void * ,const char *);
 
 static Reservation * findReservUser(void * ,const char * );
 
@@ -65,35 +65,6 @@ static void destroyDataBase(void *);
 
 
 
-
-
-
-
-
-static gint compareTimes(Time *,Time*,char *,char *);
-static gint comparePassangers(gint,gint);
-static gint compareMedian(gdouble,gdouble);
-static gint compareNames(char *,char*);
-
-
-static GArray * UsersAnalysisCatalog();
-
-static void UsersAnalysisCatalogInsert(void *,void *);
-
-
-
-
-static GArray * FlightsAnalysisCatalog();
-
-
-
-
-static GArray * ReservationsAnalysisCatalog();
-
-
-
-
-static GArray * PassangerAnalysisCatalog();
 
 
 

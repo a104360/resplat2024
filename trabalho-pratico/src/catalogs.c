@@ -29,8 +29,6 @@ static User * lookupUser(void * table ,const char * id){
 
 
 
-
-
 // Inits the flights database
 static FlightsDatabase initFlights(){
     FlightsDatabase flights = g_hash_table_new_full(g_str_hash,g_str_equal,(GDestroyNotify)g_free,(GDestroyNotify)g_hash_table_destroy);
@@ -76,23 +74,22 @@ static Reservation * lookupReserv(void * table,const char * reservId){
     return reserv;
 }
 
-
-
-
-
-// Returns the reservations by the hotel id
-static Reservation ** allReservsInHotel(void * table,const char * hotelId){
-    Reservation ** reservs = malloc(sizeof(struct reservation));
-
-    g_hash_table_find((ReservationsDatabase) table,(GHRFunc) lookupReservHotel,(gpointer) hotelId);
-    return reserv;
+static Reservation ** findHotelReservations(void * table,const char *hotelId){
+    Reservation ** hReservs = getAllReservsInHotel(table,hotelId);
+    return hReservs;
 }
+
+
+
+
+
+
 
 
 // Returns the reservations by the user id
 static Reservation * findReservUser(void * table,const char * userId){
-    ReservationSearchResults reservs = g_hash_table_find    ((ReservationsDatabase) table,(GHRFunc) lookupReservUser,(gpointer) userId);
-    return reservs;
+    //ReservationSearchResults reservs = g_hash_table_find    ((ReservationsDatabase) table,(GHRFunc) lookupReservUser,(gpointer) userId);
+    //return reservs;
 }
 
 
@@ -140,29 +137,5 @@ static void destroyDataBase(void * structs){
 
 
 
-
-
-
-
-
-
-
-
-static GArray * UsersAnalysisCatalog();
-
-static void UsersAnalysisCatalogInsert(void *,void *);
-
-
-static GArray * FlightsAnalysisCatalog();
-
-
-
-
-static GArray * ReservationsAnalysisCatalog();
-
-
-
-
-static GArray * PassangerAnalysisCatalog();
 
 

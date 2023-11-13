@@ -932,6 +932,12 @@ static void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
 //                                  *** End block ***
 
 
+//                          *** Get total spend by an user ***
+
+
+
+
+//                                  *** End block ***
 
 
 
