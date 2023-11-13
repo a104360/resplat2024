@@ -14,7 +14,7 @@ typedef struct time{
     int mday;        /* day of the month, range 1 to 31  */
     int mon;         /* month, range 0 to 11             */
     int year;        /* The number of years since 0      */
-} ;
+} Time;
 
 
 typedef struct user{
@@ -30,7 +30,7 @@ typedef struct user{
     struct time * account_creation;
     char * pay_method;
     bool account_status;
-} ;
+} User;
 
 
 
@@ -48,7 +48,7 @@ typedef struct flight{
     char * pilot;
     char * copilot;
     char * notes;
-} ;
+} Flight;
 
 typedef struct reservation{
     char * id;
@@ -65,20 +65,22 @@ typedef struct reservation{
     char * room_details;                  
     unsigned int rating;
     char * comment;
-} ;
+}Reservation;
 
 
 typedef struct passanger{
     char * flight_id;
     char * user_id;
-} ;
+} Passanger;
+
+
 
 
 
 
 // *** Time related functions ***
 
-static void initTime(Time * tempo){
+  void initTime(Time * tempo){
     tempo->hour = 0;
     tempo->min = 0;
     tempo->sec = 0;
@@ -87,18 +89,18 @@ static void initTime(Time * tempo){
     tempo->mon = 0;
 }
 
-static void destroyTime(Time *time) {
+  void destroyTime(Time *time) {
     initTime(time);
     g_free(time);
 }
 
-static Time * createTime(){
+ Time * createTime(){
     Time * t = g_malloc(sizeof(struct time));
     initTime(t);
     return t;
 }
 
-static void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
+  void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
     t->year = year;
     t->mon = mon;
     t->mday = mday;
@@ -107,7 +109,7 @@ static void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
     t->sec = sec;
 }
 
-static void copyTime(Time * t,Time * aux){
+  void copyTime(Time * t,Time * aux){
     t->year = aux->year;
     t->mday = aux->mday;
     t->mon = aux->mon;
@@ -116,7 +118,7 @@ static void copyTime(Time * t,Time * aux){
     t->sec = aux->sec;
 }
 
-
+// *** End time functions block ***
 
 
 
@@ -124,14 +126,14 @@ static void copyTime(Time * t,Time * aux){
 // *** User Related Functions ***
 
 
-static User * createUser(){
+ User * createUser(){
     User * u = g_malloc(sizeof(struct user));
     initUser(u);    
     return u;
 
 }
 
-static void initUser(User * user){
+  void initUser(User * user){
     user->id = NULL;
     user->name = NULL;
     user->email = NULL;
@@ -142,7 +144,7 @@ static void initUser(User * user){
     user->birth_date->mday = 0;
     user->birth_date->year = 0;
     user->birth_date->mon = 0;
-    user->sex = NULL;
+    user->sex = '\0';
     user->passport = NULL;
     user->country_code = NULL;
     user->address = NULL;
@@ -156,13 +158,13 @@ static void initUser(User * user){
     user->account_status = false;
 }
 
-static void destroyUser(User *user) {
+  void destroyUser(User *user) {
     if(user) {
         if(user->id) g_free(user->id);
         if(user->name) g_free(user->name);
         if(user->email) g_free(user->email);
         if(user->phone_number) g_free(user->phone_number);
-        if(user->sex) g_free(user->sex);
+        if(user->sex) user->sex = '\0';
         if(user->passport) g_free(user->passport);
         if(user->country_code) g_free(user->country_code);
         if(user->address) g_free(user->address);
@@ -175,12 +177,12 @@ static void destroyUser(User *user) {
 
 
 
-static void setUserId(User * user,const char * id){
+  void setUserId(User * user,const char * id){
     if(user->id) g_free(user->id);
     user->id = g_strdup(id);
 }
 
-static char * getUserId(User * user){
+ char * getUserId(User * user){
     if(user->id){
         char * aux = g_strdup(user->id);
         return aux;
@@ -189,12 +191,12 @@ static char * getUserId(User * user){
 }
 
 
-static void setUserName(User * user,const char * name){
+  void setUserName(User * user,const char * name){
     if(user->name) g_free(user->name);
     user->name = g_strdup(name);
 }
 
-static char * getUserName(User * user){
+ char * getUserName(User * user){
      if(user->name){
         char * aux = g_strdup(user->name);
         return aux;
@@ -203,12 +205,12 @@ static char * getUserName(User * user){
 }
 
 
-static void setUserEmail(User * user,const char * email){
+ void setUserEmail(User * user,const char * email){
     if(user->email) g_free(user->email);
     user->email = g_strdup(email);
 }
 
-static char * getUserEmail(User * user){
+ char * getUserEmail(User * user){
     if(user->email){
         char * aux = g_strdup(user->email);
         return aux;
@@ -216,11 +218,11 @@ static char * getUserEmail(User * user){
     return NULL;
 }
 
-static void setUserPhone(User * user,const char * line){
+ void setUserPhone(User * user,const char * line){
     if(user->phone_number) g_free(user->phone_number);
     user->phone_number = g_strdup(line);
 }
-static char * getUserPhone(User * user){
+ char * getUserPhone(User * user){
     if(user->phone_number){
         char * aux = g_strdup(user->phone_number);
         return aux;
@@ -230,12 +232,12 @@ static char * getUserPhone(User * user){
 
 
 
-static void setUserBday(User * user ,Time * tempo){
+  void setUserBday(User * user ,Time * tempo){
     if(!user->birth_date) user->birth_date = createTime();
     copyTime(user->birth_date,tempo);
 }
 
-static Time * getUserBday(User * user){
+ Time * getUserBday(User * user){
     if(user->birth_date){
         Time * aux = createTime();
         copyTime(aux,user->birth_date);
@@ -245,21 +247,21 @@ static Time * getUserBday(User * user){
 }
 
 
-static void setUserSex(User * user ,const char line){
-    user->sex = line;
+  void setUserSex(User * user ,const char line){
+    user->sex = (char) line;
 }
 
-static char getUserSex(User * user){
+ char getUserSex(User * user){
     return user->sex;
 }
 
 
-static void setUserPassport(User * user ,const char * line){
+  void setUserPassport(User * user ,const char * line){
     if(user->passport) g_free(user->passport);
     user->passport = g_strdup(line);
 }
 
-static char * getUserPassaport(User * user){
+ char * getUserPassaport(User * user){
     if(user->passport){
         char * aux = g_strdup(user->passport);
         return aux;
@@ -268,12 +270,12 @@ static char * getUserPassaport(User * user){
 }
 
 
-static void setUserCountryCode(User * user ,const char * line){
+ void setUserCountryCode(User * user ,const char * line){
     if(user->country_code) g_free(user->country_code);
     user->country_code = g_strdup(line);
 }
 
-static char * getUserCountryCode(User * user){
+ char * getUserCountryCode(User * user){
     if(user->country_code){
         char * aux = g_strdup(user->country_code);
         return aux;
@@ -282,12 +284,12 @@ static char * getUserCountryCode(User * user){
 }
 
 
-static void setUserAddress(User * user ,const char * line){
+ void setUserAddress(User * user ,const char * line){
     if(user->address) g_free(user->address);
     user->address = g_strdup(line);
 }
 
-static char * getUserAddress(User * user){
+ char * getUserAddress(User * user){
     if(user->address){
         char * aux = g_strdup(user->address);
         return aux;
@@ -296,12 +298,12 @@ static char * getUserAddress(User * user){
 }
 
 
-static void setUserAccountCreation(User * user ,Time *tempo){
+  void setUserAccountCreation(User * user ,Time *tempo){
     if(!user->account_creation) user->account_creation = createTime();
     copyTime(user->account_creation,tempo);
 }
 
-static Time * getUserAccountCreation(User * user){
+ Time * getUserAccountCreation(User * user){
     if(user->account_creation){
         Time * t = createTime();
         copyTime(t,user->account_creation);
@@ -311,12 +313,12 @@ static Time * getUserAccountCreation(User * user){
 }
 
 
-static void setUserPayMethod(User * user ,const char * line){
+  void setUserPayMethod(User * user ,const char * line){
     if(user->pay_method) g_free(user->pay_method);
     user->pay_method = g_strdup(line);
 }
 
-static char * getUserPayMethod(User * user){
+ char * getUserPayMethod(User * user){
     if(user->pay_method){
         char * aux = g_strdup(user->pay_method);
         return aux;
@@ -325,18 +327,19 @@ static char * getUserPayMethod(User * user){
 }
 
 
-static void setUserAccountStatus(User * user ,const bool status){
+  void setUserAccountStatus(User * user ,const bool status){
     user->account_status = status;
 
 }
 
-static bool getUserAccountStatus(User * user){
+ bool getUserAccountStatus(User * user){
     if(user){
         return user->account_status;
     }
+    return false;
 } 
 
-
+// *** End of user functions ***
 
 
 
@@ -351,13 +354,13 @@ static bool getUserAccountStatus(User * user){
 
 // *** Flight related functions ***
 
-static Flight * createFlight(){
+ Flight * createFlight(){
     Flight * f = g_malloc(sizeof(struct flight));
     initFlight(f);
     return f;
 }
 
-static void initFlight(Flight * flight){
+  void initFlight(Flight * flight){
     flight->id = NULL;
     flight->airline = NULL;
     flight->plane_model = NULL;
@@ -393,7 +396,7 @@ static void initFlight(Flight * flight){
     flight->notes = NULL;
 }
 
-static void destroyFlight(Flight * f) {
+  void destroyFlight(Flight * f) {
     if (f != NULL) {
         if(f->id) g_free(f->id); 
         if(f->airline) g_free(f->airline); 
@@ -411,14 +414,17 @@ static void destroyFlight(Flight * f) {
     }
 }
 
+int getFlightSize(){
+    return sizeof(struct flight);
+}
 
 
-static void setFlightId(Flight * flight,const char * line){
+  void setFlightId(Flight * flight,const char * line){
     if(flight->id) g_free(flight->id);
     flight->id = g_strdup(line);
 }
 
-static char *getFlightId(Flight * flight){
+ char *getFlightId(Flight * flight){
     if(flight->id){
         char * id = g_strdup(flight->id);
         return id;
@@ -427,12 +433,12 @@ static char *getFlightId(Flight * flight){
 }
 
   
-static void setFlightAirline(Flight * flight,const char * line){
+  void setFlightAirline(Flight * flight,const char * line){
     if(flight->airline) g_free(flight->airline);
     flight->airline = g_strdup(line);
 }
 
-static char *getFlightAirline(Flight * flight){
+ char *getFlightAirline(Flight * flight){
     if(flight->airline){
         char * airline = g_strdup(flight->airline);
         return airline;
@@ -441,12 +447,12 @@ static char *getFlightAirline(Flight * flight){
 }
 
 
-static void setFlightPlaneModel(Flight * flight,const char * line){
+  void setFlightPlaneModel(Flight * flight,const char * line){
     if(flight->plane_model) g_free(flight->plane_model);
     flight->plane_model = g_strdup(line);
 }
 
-static char *getFlightPlaneModel(Flight * flight){
+ char *getFlightPlaneModel(Flight * flight){
     if(flight->plane_model){
         char * plane_model = g_strdup(flight->plane_model);
         return plane_model;
@@ -455,21 +461,21 @@ static char *getFlightPlaneModel(Flight * flight){
 }
 
 
-static void setFlightTotalSeats(Flight * flight,const unsigned int n){
+  void setFlightTotalSeats(Flight * flight,const unsigned int n){
     flight->total_seats = n;
 }
 
-static unsigned int getFlightTotalSeats(Flight * flight){
+ unsigned int getFlightTotalSeats(Flight * flight){
     return flight->total_seats;
 }
 
 
-static void setFlightOrigin(Flight * flight,const char * line){
+  void setFlightOrigin(Flight * flight,const char * line){
     if(flight->origin) g_free(flight->origin);
     flight->origin = g_strdup(line);
 }
 
-static char *getFlightOrigin(Flight * flight){
+ char *getFlightOrigin(Flight * flight){
     if(flight->origin){
         char * origin = g_strdup(flight->origin);
         return origin;
@@ -478,12 +484,12 @@ static char *getFlightOrigin(Flight * flight){
 }
 
 
-static void setFlightDestination(Flight * flight,const char * line){
+  void setFlightDestination(Flight * flight,const char * line){
     if(flight->destination) g_free(flight->destination);
     flight->destination = g_strdup(line);
 }
 
-static char *getFlightDestination(Flight * flight){
+ char *getFlightDestination(Flight * flight){
     if(flight->destination){
         char * destination = g_strdup(flight->destination);
         return destination;
@@ -492,12 +498,12 @@ static char *getFlightDestination(Flight * flight){
 }
 
 
-static void setFlightSDepartureDate(Flight * flight,Time * tempo){
+  void setFlightSDepartureDate(Flight * flight,Time * tempo){
     if(!flight->schedule_departure_date) flight->schedule_departure_date = createTime();
     copyTime(flight->schedule_departure_date,tempo);
 }
 
-static Time *getFlightSDepartureDate(Flight * flight){
+ Time *getFlightSDepartureDate(Flight * flight){
     if(flight->schedule_departure_date){
         Time * tempo = createTime();
         copyTime(tempo,flight->schedule_departure_date);
@@ -507,12 +513,12 @@ static Time *getFlightSDepartureDate(Flight * flight){
 }
 
 
-static void setFlightSArrivalDate(Flight * flight,Time * tempo){
+  void setFlightSArrivalDate(Flight * flight,Time * tempo){
     if(!flight->schedule_arrival_date) flight->schedule_arrival_date = createTime();
     copyTime(flight->schedule_arrival_date,tempo);
 }
 
-static Time *getFlightSArrivalDate(Flight * flight){
+ Time *getFlightSArrivalDate(Flight * flight){
     if(flight->schedule_arrival_date){
         Time * tempo = createTime();
         copyTime(tempo,flight->schedule_arrival_date);
@@ -522,12 +528,12 @@ static Time *getFlightSArrivalDate(Flight * flight){
 }
 
 
-static void setFlightRDepartureDate(Flight * flight, Time * tempo){
+  void setFlightRDepartureDate(Flight * flight, Time * tempo){
     if(!flight->real_departure_date) flight->real_departure_date = createTime();
     copyTime(flight->real_departure_date,tempo);
 }
 
-static Time *getFlightRDepartureDate(Flight * flight){
+ Time *getFlightRDepartureDate(Flight * flight){
     if(flight->real_departure_date){
         Time * tempo = createTime();
         copyTime(tempo,flight->real_departure_date);
@@ -537,12 +543,12 @@ static Time *getFlightRDepartureDate(Flight * flight){
 }
 
 
-static void setFlightRArrivalDate(Flight * flight,Time * tempo){
+  void setFlightRArrivalDate(Flight * flight,Time * tempo){
     if(!flight->real_arrival_date) flight->real_arrival_date = createTime();
     copyTime(flight->real_arrival_date,tempo);
 }
 
-static Time *getFlightRArrivalDate(Flight * flight){
+ Time *getFlightRArrivalDate(Flight * flight){
     if(flight->real_arrival_date){
         Time * tempo = createTime();
         copyTime(tempo,flight->real_arrival_date);
@@ -552,12 +558,12 @@ static Time *getFlightRArrivalDate(Flight * flight){
 }
 
 
-static void setFlightPilot(Flight * flight,const char * line){
+  void setFlightPilot(Flight * flight,const char * line){
     if(flight->pilot) g_free(flight->pilot);
     flight->pilot = g_strdup(line);
 }
 
-static char *getFlightPilot(Flight * flight){
+ char *getFlightPilot(Flight * flight){
     if(flight->pilot){
         char * pilot = g_strdup(flight->pilot);
         return pilot;
@@ -566,12 +572,12 @@ static char *getFlightPilot(Flight * flight){
 }
 
 
-static void setFlightCopilot(Flight * flight,const char * line){
+  void setFlightCopilot(Flight * flight,const char * line){
     if(flight->copilot) g_free(flight->copilot);
     flight->copilot = g_strdup(line);
 }
 
-static char *getFlightCopilot(Flight * flight){
+ char *getFlightCopilot(Flight * flight){
     if(flight->copilot){
         char * copilot = g_strdup(flight->copilot);
         return copilot;
@@ -580,12 +586,12 @@ static char *getFlightCopilot(Flight * flight){
 }
 
 
-static void setFlightNotes(Flight * flight,const char * line){
+  void setFlightNotes(Flight * flight,const char * line){
     if(flight->notes) g_free(flight->notes);
     flight->notes = g_strdup(line);
 }
 
-static char *getFlightNotes(Flight * flight){
+ char *getFlightNotes(Flight * flight){
     if(flight->notes){
         char * notes = g_strdup(flight->notes);
         return notes;
@@ -593,7 +599,19 @@ static char *getFlightNotes(Flight * flight){
     return NULL;
 }
 
+int getFlightDelay(Flight * flight){
+    return (flight->real_departure_date->year - flight->schedule_departure_date->year) + 
+    ((flight->real_departure_date->year - flight->schedule_departure_date->year) * 31536000) + 
+    ((flight->real_departure_date->mon - flight->schedule_departure_date->mon) * 2592000) + 
+    ((flight->real_departure_date->mday - flight->schedule_departure_date->mday) * 86400) + 
+    ((flight->real_departure_date->hour - flight->schedule_departure_date->hour) * 3600) + 
+    ((flight->real_departure_date->min - flight->schedule_departure_date->min) * 60) +
+    ((flight->real_departure_date->sec - flight->schedule_departure_date->sec));
+}
 
+
+
+// 
 
 
 
@@ -603,13 +621,13 @@ static char *getFlightNotes(Flight * flight){
 
 
 // *** Reservation related functions ***
-static Reservation * createReservation(){
+ Reservation * createReservation(){
     Reservation * r = g_malloc(sizeof(struct reservation));
     initReservation(r);
     return r;
 }
 
-static void initReservation(Reservation * reservation){
+  void initReservation(Reservation * reservation){
     reservation->id = NULL;
     reservation->user_id = NULL;
     reservation->hotel_id = NULL;
@@ -636,7 +654,7 @@ static void initReservation(Reservation * reservation){
     reservation->comment = NULL;
 }
 
-static void destroyReservation(Reservation * r) {
+  void destroyReservation(Reservation * r) {
     if (r != NULL) {
         if(r->id) g_free(r->id); 
         if(r->user_id) g_free(r->user_id); 
@@ -652,12 +670,12 @@ static void destroyReservation(Reservation * r) {
 }
 
 
-static void setReservId(Reservation * reserv,const char * line){
+  void setReservId(Reservation * reserv,const char * line){
     if(reserv->id) g_free(reserv->id);
     reserv->id = g_strdup(line);
 }
 
-static char *getReservId(Reservation * reserv){
+ char *getReservId(Reservation * reserv){
     if(reserv->id){
         char * id = g_strdup(reserv->id);
         return id;
@@ -666,12 +684,12 @@ static char *getReservId(Reservation * reserv){
 }
 
 
-static void setReservUserId(Reservation * reserv,const char * line){
+  void setReservUserId(Reservation * reserv,const char * line){
     if(reserv->user_id) g_free(reserv->user_id);
     reserv->user_id = g_strdup(line);
 }
 
-static char *getReservUserId(Reservation * reserv){
+ char *getReservUserId(Reservation * reserv){
      if(reserv->user_id){
         char * user_id = g_strdup(reserv->user_id);
         return user_id;
@@ -680,12 +698,12 @@ static char *getReservUserId(Reservation * reserv){
 }
 
 
-static void setReservHotelId(Reservation * reserv,const char * line){
+  void setReservHotelId(Reservation * reserv,const char * line){
     if(reserv->hotel_id) g_free(reserv->hotel_id);
     reserv->hotel_id = g_strdup(line);
 }
 
-static char *getReservHotelId(Reservation * reserv){
+ char *getReservHotelId(Reservation * reserv){
      if(reserv->hotel_id){
         char * hotel_id = g_strdup(reserv->hotel_id);
         return hotel_id;
@@ -694,12 +712,12 @@ static char *getReservHotelId(Reservation * reserv){
 }
 
 
-static void setReservHotelName(Reservation * reserv,const char * line){
+  void setReservHotelName(Reservation * reserv,const char * line){
     if(reserv->hotel_name) g_free(reserv->hotel_name);
     reserv->hotel_name = g_strdup(line);
 }
 
-static char *getReservHotelName(Reservation * reserv){
+ char *getReservHotelName(Reservation * reserv){
      if(reserv->hotel_name){
         char * hotel_name = g_strdup(reserv->hotel_name);
         return hotel_name;
@@ -708,30 +726,30 @@ static char *getReservHotelName(Reservation * reserv){
 }
 
 
-static void setReservHotelStars(Reservation * reserv,const unsigned int n){
+  void setReservHotelStars(Reservation * reserv,const unsigned int n){
     reserv->hotel_stars = n;
 }
 
-static unsigned int getReservHotelStars(Reservation * reserv){
+ unsigned int getReservHotelStars(Reservation * reserv){
     return reserv->hotel_stars;
 }
 
 
-static void setReservCityTax(Reservation * reserv,const double n){
+  void setReservCityTax(Reservation * reserv,const double n){
     reserv->city_tax = n;
 }
 
-static double getReservCityTax(Reservation * reserv){
+ double getReservCityTax(Reservation * reserv){
     return reserv->city_tax;
 }
 
 
-static void setReservHotelAddress(Reservation * reserv,const char * line){
+  void setReservHotelAddress(Reservation * reserv,const char * line){
     if(reserv->address) g_free(reserv->address);
     reserv->address = g_strdup(line);
 }
 
-static char *getReservHotelAddress(Reservation * reserv){
+ char *getReservHotelAddress(Reservation * reserv){
     if(reserv->address){
         char * address = g_strdup(reserv->address);
         return address;
@@ -740,12 +758,12 @@ static char *getReservHotelAddress(Reservation * reserv){
 }
 
 
-static void setReservBeginDate(Reservation * reserv,Time * tempo){
+  void setReservBeginDate(Reservation * reserv,Time * tempo){
     if(!reserv->begin_date) reserv->begin_date = createTime();
     copyTime(reserv->begin_date,tempo);
 }
 
-static Time * getReservBeginDate(Reservation * reserv){
+ Time * getReservBeginDate(Reservation * reserv){
     if(reserv->begin_date){
         Time * tempo = createTime();
         copyTime(tempo,reserv->begin_date);
@@ -755,12 +773,12 @@ static Time * getReservBeginDate(Reservation * reserv){
 }
 
 
-static void setReservEndDate(Reservation * reserv,Time * tempo){
+  void setReservEndDate(Reservation * reserv,Time * tempo){
     if(!reserv->end_date) reserv->end_date = createTime();
     copyTime(reserv->end_date,tempo);
 }
 
-static Time *getReservEndDate(Reservation * reserv){
+ Time *getReservEndDate(Reservation * reserv){
     if(reserv->end_date){
         Time * tempo = createTime();
         copyTime(tempo,reserv->end_date);
@@ -770,30 +788,30 @@ static Time *getReservEndDate(Reservation * reserv){
 }
 
 
-static void setReservPricePerNight(Reservation * reserv,const double n){
+  void setReservPricePerNight(Reservation * reserv,const double n){
     reserv->price_per_night = n;
 }
 
-static double getReservPricePerNight(Reservation * reserv){
+ double getReservPricePerNight(Reservation * reserv){
     return reserv->price_per_night;
 }
 
 
-static void setReservBreakfast(Reservation * reserv,const bool x){
+  void setReservBreakfast(Reservation * reserv,const bool x){
     reserv->includes_breakfast = x;
 }
 
-static bool getReservBreakfast(Reservation * reserv){
+ bool getReservBreakfast(Reservation * reserv){
     return reserv->includes_breakfast;
 }
 
 
-static void setReservRoomDetails(Reservation * reserv,const char * line){
+  void setReservRoomDetails(Reservation * reserv,const char * line){
     if(reserv->room_details) g_free(reserv->room_details);
     reserv->room_details = g_strdup(line);
 }
 
-static char *getReservRoomDetails(Reservation * reserv){
+ char *getReservRoomDetails(Reservation * reserv){
     if(reserv->room_details){
         char * room_details = g_strdup(reserv->room_details);
         return room_details;
@@ -802,21 +820,21 @@ static char *getReservRoomDetails(Reservation * reserv){
 }
 
 
-static void setReservRating(Reservation * reserv,const unsigned int n){
+  void setReservRating(Reservation * reserv,const unsigned int n){
     reserv->rating = n;
 }
 
-static unsigned int getReservRating(Reservation * reserv){
+ unsigned int getReservRating(Reservation * reserv){
     return reserv->rating;
 }
 
 
-static void setReservComment(Reservation * reserv,const char * line){
+  void setReservComment(Reservation * reserv,const char * line){
     if(reserv->comment) g_free(reserv->comment);
     reserv->comment = g_strdup(line);
 }
 
-static char *getReservComment(Reservation * reserv){
+ char *getReservComment(Reservation * reserv){
     if(reserv->comment){
         char * comment = g_strdup(reserv->comment);
         return comment;
@@ -828,18 +846,18 @@ static char *getReservComment(Reservation * reserv){
 
 // *** Passanger related functions *** 
 
-static Passanger * createPassanger(){
+ Passanger * createPassanger(){
     Passanger * p = g_malloc(sizeof(struct passanger));
     initPassanger(p);
     return p;
 }
 
-static void initPassanger(Passanger * passanger){
+  void initPassanger(Passanger * passanger){
     passanger->flight_id = NULL;
     passanger->user_id = NULL;
 }
 
-static void destroyPassanger(Passanger * p) {
+  void destroyPassanger(Passanger * p) {
     if (p) {
         if(p->flight_id) g_free(p->flight_id); 
         if(p->user_id) g_free(p->user_id); 
@@ -847,12 +865,17 @@ static void destroyPassanger(Passanger * p) {
     }
 }
 
-static void setPassangerFlightId(Passanger * passanger,const char * line){
+int getPassangerSize(){
+    return sizeof(struct passanger);
+}
+
+
+  void setPassangerFlightId(Passanger * passanger,const char * line){
     if(passanger->flight_id) g_free(passanger->flight_id);
     passanger->flight_id = g_strdup(line);
 }
 
-static char *getPassangerFlightId(Passanger * passanger){
+ char *getPassangerFlightId(Passanger * passanger){
     if(passanger->flight_id){
         char * flight_id = g_strdup(passanger->flight_id);
         return flight_id;
@@ -861,41 +884,29 @@ static char *getPassangerFlightId(Passanger * passanger){
 }
 
 
-static void setPassangerUserId(Passanger * passanger,const char * line){
+  void setPassangerUserId(Passanger * passanger,const char * line){
     if(passanger->user_id) g_free(passanger->user_id);
     passanger->user_id = g_strdup(line);
 }
 
-static char *getPassangerUserId(Passanger * passanger){
+ char *getPassangerUserId(Passanger * passanger){
     if(passanger->user_id){
         char * user_id = g_strdup(passanger->user_id);
         return user_id;
     }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-ReservationSearchResults lookupReservUserId(gpointer key, gpointer value, gpointer user_data) {
-    const char *user_id_to_find = (const char *)user_data;
-    Reservation *reservation = (Reservation *)value;
-
-    if (g_strcmp0(reservation->user_id, user_id_to_find) == 0) {
-        // Create a new list node with the found reservation
-        return g_slist_prepend(NULL, reservation);
-    }
-
     return NULL;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -906,25 +917,30 @@ ReservationSearchResults lookupReservUserId(gpointer key, gpointer value, gpoint
 
 // struct to store the list of reservations of an hotel and the hotel id
 typedef struct hotelReservs{
-    struct reservation ** hotelReservs;
+    struct reservation ** _hotelReservs;
     char * hotel_id;
-} ;
+} HotelReservs;
 
 // Returns the reservations by the hotel id
-static Reservation ** getAllReservsInHotel(void * dataStruct,const char * hotelId){
+ Reservation ** getAllReservsInHotel(void * dataStruct,const char * hotelId){
     HotelReservs * reservs = malloc(sizeof(struct hotelReservs) * g_hash_table_size((GHashTable *) dataStruct));
+    reservs->hotel_id = strdup(hotelId);
     g_hash_table_foreach((GHashTable *)dataStruct,allHotelReservs,reservs);
-    return reservs->hotelReservs;
+    free(reservs->_hotelReservs);
+    Reservation ** list = reservs->_hotelReservs;
+    free(reservs->_hotelReservs);
+    free(reservs);
+    return list;
 }
 
 // Function to iterate and get the reservations on the list
-static void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
+void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
     HotelReservs * array = (HotelReservs *) hotelData;
     Reservation * reservation = (Reservation *)value;
     static int i = 0;
 
     if (!g_strcmp0(reservation->hotel_id,array->hotel_id)) {
-          array->hotelReservs = reservation;
+          array->_hotelReservs[i] = reservation;
           i++;
     }  
 }
@@ -932,61 +948,79 @@ static void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
 //                                  *** End block ***
 
 
-//                          *** Get total spend by an user ***
+//                      *** Get all the reservations of a user ***
 
+typedef struct userReservs{
+    struct reservation ** _userReservs;
+    char * userId;
+} UserReservs;
 
+ Reservation ** getAllUserReservs(void * table,const char * userId){
+    UserReservs * reservs = malloc(sizeof(struct userReservs) * g_hash_table_size((ReservationsDatabase) table));
+    reservs->userId = strdup(userId);
+    g_hash_table_foreach((UsersDatabase) table,allUserReservs,reservs);
+    free(reservs->userId);
+    Reservation ** list = reservs->_userReservs;
+    free(reservs->_userReservs);
+    free(reservs);
+    return list;
+}
 
+  void allUserReservs(gpointer key ,gpointer value,gpointer userData){
+    UserReservs * array = (UserReservs *) userData;
+    Reservation * reserv = (Reservation *) value;
+    static int i = 0;
+
+    if(!g_strcmp0(reserv->user_id,array->userId)){
+        array->_userReservs[i] = reserv;
+        i++;
+    }
+}
 
 //                                  *** End block ***
 
 
 
+//                      *** Get all the passangers of a flight ***
 
 
+//                                  *** End block ***
 
-static Passanger * lookupPassangerUserId(gpointer key, gpointer value, gpointer userData){
-    const char * userId = (const char *) userData;
-    Passanger *passanger = (Passanger *) value;
 
-    if (g_strcmp0(passanger->user_id,userId) == 0) {
-        return passanger;
+double getTotalSpentByUser(Reservation ** list){
+    int total = 0;
+    for(int i = 0;list[i];i++){
+        int dayDiff = numberOfDays(list[i]->begin_date,list[i]->end_date);
+        total += (list[i]->price_per_night * dayDiff) + ((dayDiff / 100) * list[i]->city_tax);
     }
-    return NULL;  
+    return total;
 }
 
 
+ bool compareTimes(Time *t1,Time*t2){
 
+    if(t1->year != t2->year)
+        if(t1->year > t2->year) return false;
 
+    if(t1->mon != t2->mon)
+        if(t1->mon > t2->mon) return false;
+    
+    if(t1->mday != t2->mday)
+        if(t1->mday > t2->mday) return false;
+    
+    if(t1->hour != t2->hour)
+        if(t1->hour > t2->hour) return false;
 
-
-
-static gint compareTimes(Time *t1,char *passangers1,Time*t2,char *passangers2){
-    if(t1->year != t2->year){
-        if(t1->year > t2->year) return 1;
-        return 0;
-    }
-    if(t1->mon != t2->mon){
-        if(t1->mon > t2->mon) return 1;
-        return 0;
-    }
-    if(t1->mday != t2->mday){
-        if(t1->mday > t2->mday) return 1;
-        return 0;
-    }
-    if(t1->hour != t2->hour){
-        if(t1->hour> t2->hour) return 1;
-        return 0;
-    }if(t1->min != t2->min){
-        if(t1->min > t2->min) return 1;
-        return 0;
-    }
-    if(t1->sec != t2->sec){
-        if(t1->sec > t2->sec) return 1;
-        return 0;
-    }
-    return strcmp(passangers1,passangers2);
+    if(t1->min != t2->min)
+        if(t1->min > t2->min) return false;
+    
+    if(t1->sec != t2->sec)
+        if(t1->sec > t2->sec) return false;
+    
+    return true;
 }
 
-static gint comparePassangers(gint,gint);
-static gint compareMedian(gdouble,gdouble);
-static gint compareNames(char *,char*);
+int numberOfDays(Time * start,Time * end){
+    return (365 * (end->year - start->year)) + (30 * (end->mon - start->mon)) + (end->mday - start->mday);
+}
+
