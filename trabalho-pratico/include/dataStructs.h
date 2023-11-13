@@ -2,7 +2,7 @@
 #define DATASTRUCTS_H
 #include <stdbool.h>
 
-typedef struct node Node;
+/*typedef struct node Node;
 
 typedef struct htable HashTable;
 
@@ -24,6 +24,6 @@ static void destroyTree(BTree * );
 
 static void insertTree(  );
 
-static void * search(BTree*,void * );
+static void * search(BTree*,void * );*/
 
 #endif

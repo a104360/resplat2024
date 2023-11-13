@@ -16,94 +16,92 @@ typedef struct passanger Passanger;
 
 
 
-static Time * createTime();
+Time * createTime();
 
-static void initTime(Time *);
+void initTime(Time *);
 
-static void setTime(Time *,int,int,int,int,int,int);
+void setTime(Time *,int,int,int,int,int,int);
 
-static void copyTime(Time *,Time *);
+void copyTime(Time *,Time *);
 
-static void destroyTime(Time *); 
-
-
-
-static User * createUser();
-
-static void initUser(User *);
-
-static void destroyUser(User *);
+void destroyTime(Time *); 
 
 
 
-static Flight * createFlight();
+User * createUser();
 
-static void initFlight(Flight *);
+void initUser(User *);
 
-static void destroyFlight(Flight *);
-
-
-
-static Reservation * createReservation();
-
-static void initReservation(Reservation *);
-
-static void destroyReservation(Reservation *);
+void destroyUser(User *);
 
 
 
+Flight * createFlight();
 
-static Passanger * createPassanger();
+void initFlight(Flight *);
 
-static void initPassanger(Passanger *);
+void destroyFlight(Flight *);
 
-static void destroyPassanger(Passanger *);
+int getFlightSize();
+
+
+
+Reservation * createReservation();
+
+void initReservation(Reservation *);
+
+void destroyReservation(Reservation *);
 
 
 
 
+Passanger * createPassanger();
 
-static void setUserId(User *, const char *);
-static char * getUserId(User *);
+void initPassanger(Passanger *);
 
-static void setUserName(User *, const char *);
-static char * getUserName(User *);
+void destroyPassanger(Passanger *);
 
-static void setUserEmail(User *, const char *);
-static char * getUserEmail(User *);
-
-static void setUserPhone(User *,const char *);
-static char * getUserPhone(User *);
-
-static void setUserBday(User *,Time *);
-static Time * getUserBday(User *);
-
-static void setUserSex(User *, const char);
-static char getUserSex(User *);
-
-static void setUserPassport(User *, const char *);
-static char * getUserPassaport(User *);
-
-static void setUserCountryCode(User *, const char *);
-static char * getUserCountryCode(User *);
-
-static void setUserAddress(User *, const char *);
-static char * getUserAddress(User *);
-
-static void setUserAccountCreation(User *,Time *);
-static Time * getUserAccountCreation(User *);
-
-static void setUserPayMethod(User *, const char *);
-static char * getUserPayMethod(User *);
-
-static void setUserAccountStatus(User *, const bool);
-static bool getUserAccountStatus(User *);
+int getPassangerSize();
 
 
 
 
 
+void setUserId(User *, const char *);
+char * getUserId(User *);
 
+void setUserName(User *, const char *);
+char * getUserName(User *);
+
+void setUserEmail(User *, const char *);
+char * getUserEmail(User *);
+
+void setUserPhone(User *,const char *);
+char * getUserPhone(User *);
+
+void setUserBday(User *,Time *);
+Time * getUserBday(User *);
+
+void setUserSex(User *, const char);
+char getUserSex(User *);
+
+void setUserPassport(User *, const char *);
+char * getUserPassaport(User *);
+
+void setUserCountryCode(User *, const char *);
+char * getUserCountryCode(User *);
+
+void setUserAddress(User *, const char *);
+char * getUserAddress(User *);
+
+void setUserAccountCreation(User *,Time *);
+Time * getUserAccountCreation(User *);
+
+void setUserPayMethod(User *, const char *);
+char * getUserPayMethod(User *);
+
+void setUserAccountStatus(User *, const bool);
+bool getUserAccountStatus(User *);
 
 
 
@@ -112,48 +110,52 @@ static bool getUserAccountStatus(User *);
 
 
 
-static void setFlightId(Flight *, const char *);
-static char * getFlightId(Flight *);
+
+
+
+
+
+
+void setFlightId(Flight *, const char *);
+char * getFlightId(Flight *);
     
-static void setFlightAirline(Flight *,const char *);
-static char * getFlightAirline(Flight *);
+void setFlightAirline(Flight *,const char *);
+char * getFlightAirline(Flight *);
 
-static void setFlightPlaneModel(Flight *, const char *);
-static char * getFlightPlaneModel(Flight *);
+void setFlightPlaneModel(Flight *, const char *);
+char * getFlightPlaneModel(Flight *);
 
-static void setFlightTotalSeats(Flight *,const unsigned int);
-static unsigned int getFlightTotalSeats(Flight *);
+void setFlightTotalSeats(Flight *,const unsigned int);
+unsigned int getFlightTotalSeats(Flight *);
 
-static void setFlightOrigin(Flight *, const char *);
-static char * getFlightOrigin(Flight *);
+void setFlightOrigin(Flight *, const char *);
+char * getFlightOrigin(Flight *);
 
-static void setFlightDestination(Flight *, const char *);
-static char * getFlightDestination(Flight *);
+void setFlightDestination(Flight *, const char *);
+char * getFlightDestination(Flight *);
 
-static void setFlightSDepartureDate(Flight *,Time *);
-static Time * getFlightSDepartureDate(Flight *);
+void setFlightSDepartureDate(Flight *,Time *);
+Time * getFlightSDepartureDate(Flight *);
 
-static void setFlightSArrivalDate(Flight *,Time *);
-static Time * getFlightSArrivalDate(Flight *);
+void setFlightSArrivalDate(Flight *,Time *);
+Time * getFlightSArrivalDate(Flight *);
 
-static void setFlightRDepartureDate(Flight *, Time *);
-static Time * getFlightRDepartureDate(Flight *);
+void setFlightRDepartureDate(Flight *, Time *);
+Time * getFlightRDepartureDate(Flight *);
 
-static void setFlightRArrivalDate(Flight *,Time *);
-static Time * getFlightRArrivalDate(Flight *);
+void setFlightRArrivalDate(Flight *,Time *);
+Time * getFlightRArrivalDate(Flight *);
 
-static void setFlightPilot(Flight *, const char *);
-static char * getFlightPilot(Flight *);
+void setFlightPilot(Flight *, const char *);
+char * getFlightPilot(Flight *);
 
-static void setFlightCopilot(Flight *, const char *);
-static char * getFlightCopilot(Flight *);
+void setFlightCopilot(Flight *, const char *);
+char * getFlightCopilot(Flight *);
 
-static void setFlightNotes(Flight *, const char *);
-static char * getFlightNotes(Flight *);
+void setFlightNotes(Flight *, const char *);
+char * getFlightNotes(Flight *);
 
-
-
-
+int getFlightDelay(Flight *);
 
 
 
@@ -163,58 +165,61 @@ static char * getFlightNotes(Flight *);
 
 
 
-static void setReservId(Reservation *, const char *);
-static char * getReservId(Reservation *);
-
-static void setReservUserId(Reservation *,const char *);
-static char * getReservUserId(Reservation *);
-
-static void setReservHotelId(Reservation *,const char *);
-static char * getReservHotelId(Reservation *);
-
-static void setReservHotelName(Reservation *, const char *);
-static char * getReservHotelName(Reservation *);
-
-static void setReservHotelStars(Reservation *,const unsigned int);
-static unsigned int getReservHotelStars(Reservation *);
-
-static void setReservCityTax(Reservation *,const double);
-static double getReservCityTax(Reservation *);
-
-static void setReservHotelAddress(Reservation *,const char *);
-static char *getReservHotelAddress(Reservation *);
-
-static void setReservBeginDate(Reservation*,Time *);
-static Time *getReservBeginDate(Reservation *);
-
-static void setReservEndDate(Reservation *,Time *);
-static Time *getReservEndDate(Reservation *);
-
-static void setReservPricePerNight(Reservation *,const double);
-static double getReservPricePerNight(Reservation *);
-
-static void setReservBreakfast(Reservation *, const bool);
-static bool getReservBreakfast(Reservation *);
-
-static void setReservRoomDetails(Reservation *, const char *);
-static char *getReservRoomDetails(Reservation *);
-
-static void setReservRating(Reservation *,const unsigned int);
-static unsigned int getReservRating(Reservation *);
-
-static void setReservComment(Reservation *, const char *);
-static char *getReservComment(Reservation *);
 
 
+void setReservId(Reservation *, const char *);
+char * getReservId(Reservation *);
+
+void setReservUserId(Reservation *,const char *);
+char * getReservUserId(Reservation *);
+
+void setReservHotelId(Reservation *,const char *);
+char * getReservHotelId(Reservation *);
+
+void setReservHotelName(Reservation *, const char *);
+char * getReservHotelName(Reservation *);
+
+void setReservHotelStars(Reservation *,const unsigned int);
+unsigned int getReservHotelStars(Reservation *);
+
+void setReservCityTax(Reservation *,const double);
+double getReservCityTax(Reservation *);
+
+void setReservHotelAddress(Reservation *,const char *);
+char *getReservHotelAddress(Reservation *);
+
+void setReservBeginDate(Reservation*,Time *);
+Time *getReservBeginDate(Reservation *);
+
+void setReservEndDate(Reservation *,Time *);
+Time *getReservEndDate(Reservation *);
+
+void setReservPricePerNight(Reservation *,const double);
+double getReservPricePerNight(Reservation *);
+
+void setReservBreakfast(Reservation *, const bool);
+bool getReservBreakfast(Reservation *);
+
+void setReservRoomDetails(Reservation *, const char *);
+char *getReservRoomDetails(Reservation *);
+
+void setReservRating(Reservation *,const unsigned int);
+unsigned int getReservRating(Reservation *);
+
+void setReservComment(Reservation *, const char *);
+char *getReservComment(Reservation *);
+
+double getTotalSpentByUser(Reservation **);
 
 
 
 
 
-static void setPassangerFlightId(Passanger *, const char *);
+
+void setPassangerFlightId(Passanger *, const char *);
 char *getPassangerFlightId(Passanger *);
 
-static void setPassangerUserId(Passanger *, const char *);
+void setPassangerUserId(Passanger *, const char *);
 char *getPassangerUserId(Passanger *);
 
 
@@ -222,15 +227,32 @@ char *getPassangerUserId(Passanger *);
 
 typedef struct hotelReservs HotelReservs;
 
-static Reservation ** getAllReservsInHotel(void * ,const char * );
+Reservation ** getAllReservsInHotel(void * ,const char * );
 
-static void allHotelReservs(gpointer , gpointer , gpointer );
-
-
+void allHotelReservs(gpointer , gpointer , gpointer );
 
 
 
 
-static double dalayMedianAirport(void*, void*);
+
+typedef struct userReservs UserReservs;
+
+Reservation ** getAllUserReservs(void *,const char *);
+
+void allUserReservs(gpointer,gpointer,gpointer);
+
+
+
+
+
+
+
+
+
+double dalayMedianAirport(void*, void*);
+
+int numberOfDays(Time *,Time *);
+
+bool compareTimes(Time *, Time *);
 
 #endif
