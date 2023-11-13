@@ -42,7 +42,7 @@ char * countryCheck(const char * );
 
 bool accStatusCheck(const char * );
 
-bool seatsCheck(const char * , const char * );
+unsigned int seatsCheck(const char *);
 
 bool airportCheck(const char * ,const char * );
 
