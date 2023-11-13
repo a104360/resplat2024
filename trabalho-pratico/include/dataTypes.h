@@ -1,7 +1,6 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H
 #include <stdbool.h>
-#include <glib.h>
 
 typedef struct time Time;
 
