@@ -4,66 +4,66 @@
 #include "../include/dataTypes.h"
 
 
-static char * idCheck(const char *);
+char * idCheck(const char *);
 
-static char * nameCheck(const char *);
+char * nameCheck(const char *);
 
-static char * phoneNumberCheck(const char *);
+char * phoneNumberCheck(const char *);
 
-static char sexCheck(const char *);
+char sexCheck(const char *);
 
-static char * passaportCheck(const char *);
+char * passaportCheck(const char *);
 
-static char * addressCheck(const char *);
+char * addressCheck(const char *);
 
-static unsigned int pay_methodCheck(const char *);
+char * pay_methodCheck(const char *);
 
-static int yearCheck(const char * );
+int yearCheck(const char * );
 
-static int monthCheck(const char * );
+int monthCheck(const char * );
 
-static int dayCheck(const char * );
+int dayCheck(const char * );
 
-static Time * dateCheck(const char * );
+Time * dateCheck(const char * );
 
-static bool datesCheck(const char * , const char *);
+bool datesCheck(const char * , const char *);
 
-static int hourCheck(const char *);
+int hourCheck(const char *);
 
-static int minuteCheck(const char *);
+int minuteCheck(const char *);
 
-static int secondsCheck(const char *);
+int secondsCheck(const char *);
 
-static bool hoursCheck(const char * , const char *);
+bool hoursCheck(const char * , const char *);
 
-static char * emailCheck(const char * );
+char * emailCheck(const char * );
 
-static char * countryCheck(const char * );
+char * countryCheck(const char * );
 
-static bool accStatusCheck(const char * );
+bool accStatusCheck(const char * );
 
-static bool seatsCheck(const char * , const char * );
+bool seatsCheck(const char * , const char * );
 
-static bool airportCheck(const char * ,const char * );
+bool airportCheck(const char * ,const char * );
 
-static unsigned int hotelStarsCheck(const char * );
+unsigned int hotelStarsCheck(const char *);
 
-static double taxCheck(const char * );
+double taxCheck(const char * );
 
-static double pricePNightCheck(const char * );
+double pricePNightCheck(const char * );
 
-static bool breakfastCheck(const char * );
+bool breakfastCheck(const char * );
 
-static unsigned int reviewCheck(const char * );
+unsigned int reviewCheck(const char *);
 
 
-static User * userCheck(const char *);
+User * userCheck(const char *);
 
-static Reservation * reservationCheck(const char *);
+Reservation * reservationCheck(const char *);
 
-static Flight * fligthCheck(const char *);
+Flight * fligthCheck(const char *);
 
-static Passanger * passangerCheck(const char *);
+Passanger * passangerCheck(const char *);
 
 
 #endif
