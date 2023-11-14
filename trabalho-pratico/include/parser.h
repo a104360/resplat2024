@@ -1,6 +1,5 @@
 #ifndef PARSER_H
 #define PARSER_H
-#include <time.h>
 #include <stdbool.h>
 #include "../include/dataTypes.h"
 
@@ -43,7 +42,7 @@ char * countryCheck(const char * );
 
 bool accStatusCheck(const char * );
 
-bool seatsCheck(const char * , const char * );
+unsigned int seatsCheck(const char *);
 
 bool airportCheck(const char * ,const char * );
 
