@@ -7,7 +7,6 @@
 typedef GHashTable * UsersDatabase;
 typedef GHashTable * FlightsDatabase;
 typedef GHashTable * ReservationsDatabase;
-typedef struct flightBook FlightBook;
 
 
 
@@ -29,16 +28,17 @@ Flight * lookupFlight(void * ,const char *);
 
 
 
+typedef struct flightBook FlightBook;
 
+int getNumPassangers(const FlightBook *);
 
-void initFlightBook(void *);
+Passanger ** getFlightPassangers(const FlightBook *);
 
-FlightBook * createFlightBook();
+FlightBook * getFlightBook(void *, const char *);
 
-void insertPassanger(void * ,void *);
+void getPassangers(gpointer,gpointer,gpointer);
 
-char * isUserOnFlight(void * voo,void * userData);
-
+void destroyFlightBook(FlightBook *);
 
 
 
@@ -48,17 +48,40 @@ void insertReserv(void *,Reservation *);
 
 Reservation * lookupReserv(void * ,const char * );
 
-Reservation ** findHotelReservations(void * ,const char *);
-
-Reservation * findReservUser(void * ,const char * );
 
 
+
+typedef struct hotelDatabase HotelDatabase;
+
+int getSumRatings(void *);
+
+int getNumReservas(void *);
+
+Reservation ** getAllHotelReservs(const HotelDatabase *);
+
+HotelDatabase * getHotelDataBase(void * ,const char * );
+
+void allHotelReservs(gpointer , gpointer , gpointer );
+
+void destroyHotelDatabase(HotelDatabase *);
+
+
+
+
+typedef struct userReservsDB UserReservsDB;
+
+UserReservsDB * getUserReservsDB(void *,const char *);
+
+Reservation ** getUserReservs(const UserReservsDB *);
+
+int getNumReservs(const UserReservsDB *);
+
+void allUserReservs(gpointer,gpointer,gpointer);
+
+void destroyUserReservsDB(UserReservsDB *);
 
 
 void destroyDataBase(void *);
-
-
-
 
 
 

@@ -4,11 +4,14 @@
 #include <glib.h>
 
 
+
+
 // Init usersDatabase
 UsersDatabase initUsers(){
     UsersDatabase users = g_hash_table_new_full(g_str_hash,g_str_equal,(GDestroyNotify)g_free,(GDestroyNotify)g_hash_table_destroy);
     return users;
 }
+
 // Insert User
 void insertUser(void * table,User * user){
     g_hash_table_insert((UsersDatabase) table,(gpointer) getUserId(user),(gpointer) user);
@@ -61,49 +64,50 @@ typedef struct flightBook {
     int flightSize;
 } FlightBook;
 
-void initFlightBook(void * pointer ){
-    FlightBook * book = (FlightBook *) pointer;
-    book->flight = NULL;
-    book->flightSize = getFlightSize();
-    book->passangerSize = getPassangerSize();
-    book->size = 0;
-    book->passangers = NULL;
-    return book;
+
+int getNumPassangers(const FlightBook * book){
+    return book->size;
 }
 
-FlightBook * createFlightBook(){
+Passanger ** getFlightPassangers(const FlightBook * book){
+    return book->passangers;
+}
+
+
+FlightBook * getFlightBook(void * dataStruct, const char * id){
+    GHashTable * table = (GHashTable *) dataStruct;
+    int aux = g_hash_table_size(table);
     FlightBook * book = malloc(sizeof(struct flightBook));
-    initFlightBook(book);
+    book->flight = lookupFlight(table,id);
+    book->size = 0;
+    book->passangerSize = getPassangerSize();
+    book->flightSize = getFlightSize();
+    book->passangers = malloc(book->passangerSize * aux);
+    g_hash_table_foreach(table,getPassangers,book);
     return book;
 }
 
-void insertPassanger(void * voo,void * passanger){
-    FlightBook * flight = (FlightBook *) voo;
-    Passanger * new = (Passanger *) passanger;
-    if(flight->passangers){ 
-        flight->passangers = realloc(flight->passangers,flight->passangerSize * flight->size + 1);
-        if(!flight->passangers[flight->size + 1]) return;
-        flight->passangers[flight->size + 1] = new;
-        flight->size++;
-    }
-    else {
-        flight->passangers = malloc(flight->passangerSize);
-        flight->passangers[0] = new;
-        flight->size++;
+// Iterative function to fetch every passanger on the flight
+void getPassangers(gpointer key,gpointer value,gpointer flightbook){
+    FlightBook * book = (FlightBook * ) flightbook;
+    Passanger * passanger = (Passanger * ) value;
+    static int i = 0;
+
+    if(g_strcmp0(getFlightId(book->flight),getPassangerFlightId(passanger)) == 0){
+        book->passangers[i] = passanger;
+        i++;
+        book->size++;
     }
 }
 
-char * isUserOnFlight(void * voo,void * userData){
-    FlightBook * flight = (FlightBook * ) voo;
-    char * userId = (char *) userData;
-    
-    for(int i = 0;i < flight->size;i++){
-        if(strcmp(getPassangerUserId(flight->passangers[i]),userId)) return getFlightId(flight->flight);
+// Destroys Flight Book
+void destroyFlightBook(FlightBook * book){
+    destroyFlight(book->flight);
+    for(int i = 0; i < book->size;i++){
+        destroyPassanger(book->passangers[i]);
     }
+    free(book);
 }
-
-
-
 
 
 
@@ -132,36 +136,123 @@ Reservation * lookupReserv(void * table,const char * reservId){
     return reserv;
 }
 
-// Returns all reservations of an hotel
-Reservation ** findHotelReservations(void * table,const char *hotelId){
-    Reservation ** hReservs = getAllReservsInHotel(table,hotelId);
-    return hReservs;
+
+
+
+
+
+//                             *** Get Hotel Reservations ***
+
+typedef struct hotelDatabase{
+    struct reservation ** _hotelReservs;
+    char * hotel_id;
+    int sumRatings;
+    int numReservas;
+} HotelDatabase;
+
+
+
+int getSumRatings(void * hReservs){
+    HotelDatabase * reservs = (HotelDatabase *) hReservs;
+    return reservs->sumRatings;
 }
 
-// Only use after call findHotelReservations (free the array)
-void destroyHotelReservations(void * list,void * table){
-    Reservation ** reservs = (Reservation **) list;
-    GHashTable * tabela = (GHashTable * ) table;
-    for(int i = 0;i < g_hash_table_size(tabela);i++){
-        if(reservs[i]) free(reservs[i]);
+int getNumReservas(void * hReservs){
+    HotelDatabase * reservs = (HotelDatabase *) hReservs;
+    return reservs->numReservas;
+}
+
+Reservation ** getAllHotelReservs(const HotelDatabase * hotelData){
+    return hotelData->_hotelReservs;
+}
+
+// Returns the reservations by the hotel id
+HotelDatabase * getHotelDataBase(void * dataStruct,const char * hotelId){
+    HotelDatabase * reservs = malloc(sizeof(struct hotelDatabase) * g_hash_table_size((GHashTable *) dataStruct));
+    reservs->hotel_id = strdup(hotelId);
+    reservs->numReservas = 0;
+    reservs->sumRatings = 0;
+    reservs->_hotelReservs = malloc(getReservSize() * g_hash_table_size((GHashTable *) dataStruct));
+    g_hash_table_foreach((GHashTable *)dataStruct,allHotelReservs,reservs);
+    return reservs;
+}
+
+// Function to iterate and get the reservations on the list
+void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
+    HotelDatabase * array = (HotelDatabase *) hotelData;
+    Reservation * reservation = (Reservation *)value;
+    static int i = 0;
+
+    if (!g_strcmp0(getReservHotelId(reservation),array->hotel_id)) {
+          array->_hotelReservs[i] = reservation;
+          array->sumRatings += getReservRating(reservation);
+          array->numReservas++;
+          i++;
+    }  
+}
+
+void destroyHotelDatabase(HotelDatabase * hotel){
+    free(hotel->hotel_id);
+    for(int i = 0;i < hotel->numReservas;i++){
+        destroyReservation(hotel->_hotelReservs[i]);
     }
-    free(reservs);
+    free(hotel);
+}
+
+//                                  *** End block ***
+
+
+
+//                      *** Get all the reservations of a user ***
+
+typedef struct userReservsDB{
+    struct reservation ** _userReservs;
+    char * userId;
+    int size;
+} UserReservsDB;
+
+
+UserReservsDB * getUserReservsDB(void * table,const char * userId){
+    UserReservsDB * reservs = malloc(sizeof(struct userReservsDB));
+    reservs->userId = strdup(userId);
+    reservs->size = 0;
+    reservs->_userReservs = malloc(getReservSize() * g_hash_table_size((UsersDatabase *) table));
+    g_hash_table_foreach((UsersDatabase *) table,allUserReservs,reservs);
+    return reservs;
+}
+
+Reservation ** getUserReservs(const UserReservsDB * userData){
+    return userData->_userReservs;
+}
+
+int getNumReservs(const UserReservsDB * userData){
+    return userData->size;
 }
 
 
-
-
-
-
-
-// Returns the reservations by the user id
-Reservation * findReservUser(void * table,const char * userId){
-    //ReservationSearchResults reservs = g_hash_table_find    ((ReservationsDatabase) table,(GHRFunc) lookupReservUser,(gpointer) userId);
-    //return reservs;
-    return NULL;
+void allUserReservs(gpointer key ,gpointer value,gpointer userData){
+  UserReservsDB * array = (UserReservsDB *) userData;
+  Reservation * reserv = (Reservation *) value;
+  static int i = 0;
+ 
+  if(!g_strcmp0(getReservUserId(reserv),array->userId)){
+      array->_userReservs[i] = reserv;
+      array->size++;
+      i++;
+  }
 }
 
 
+void destroyUserReservsDB(UserReservsDB * database){
+    for(int i = 0;i < database->size;i++){
+        destroyReservation(database->_userReservs[i]);
+    }
+    free(database->_userReservs);
+    free(database->userId);
+    free(database);
+}
+
+//                                  *** End block ***
 
 
 
@@ -172,9 +263,7 @@ Reservation * findReservUser(void * table,const char * userId){
 
 
 
-
-
-// ** Destroys any database passed as argument
+// Destroys User, Reservation or Flight database
 void destroyDataBase(void * structs){
     g_hash_table_destroy((GHashTable *) structs);
 }
@@ -189,68 +278,3 @@ void destroyDataBase(void * structs){
 
 
 
-// *** Block to get Types through other meanings than the hash table keys *** 
-
-// struct to store the list of reservations of an hotel and the hotel id
-typedef struct hotelReservs{
-    struct reservation ** _hotelReservs;
-    char * hotel_id;
-} HotelReservs;
-
-// Returns the reservations by the hotel id
- Reservation ** getAllReservsInHotel(void * dataStruct,const char * hotelId){
-    HotelReservs * reservs = malloc(sizeof(struct hotelReservs) * g_hash_table_size((GHashTable *) dataStruct));
-    reservs->hotel_id = strdup(hotelId);
-    g_hash_table_foreach((GHashTable *)dataStruct,allHotelReservs,reservs);
-    free(reservs->_hotelReservs);
-    Reservation ** list = reservs->_hotelReservs;
-    free(reservs->_hotelReservs);
-    free(reservs);
-    return list;
-}
-
-// Function to iterate and get the reservations on the list
-void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
-    HotelReservs * array = (HotelReservs *) hotelData;
-    Reservation * reservation = (Reservation *)value;
-    static int i = 0;
-
-    if (!g_strcmp0(getReservHotelId(reservation),array->hotel_id)) {
-          array->_hotelReservs[i] = reservation;
-          i++;
-    }  
-}
-
-//                                  *** End block ***
-
-
-//                      *** Get all the reservations of a user ***
-
-typedef struct userReservs{
-    struct reservation ** _userReservs;
-    char * userId;
-} UserReservs;
-
- Reservation ** getAllUserReservs(void * table,const char * userId){
-    UserReservs * reservs = malloc(sizeof(struct userReservs) * g_hash_table_size((ReservationsDatabase) table));
-    reservs->userId = strdup(userId);
-    g_hash_table_foreach((UsersDatabase) table,allUserReservs,reservs);
-    free(reservs->userId);
-    Reservation ** list = reservs->_userReservs;
-    free(reservs->_userReservs);
-    free(reservs);
-    return list;
-}
-
-  void allUserReservs(gpointer key ,gpointer value,gpointer userData){
-    UserReservs * array = (UserReservs *) userData;
-    Reservation * reserv = (Reservation *) value;
-    static int i = 0;
-
-    if(!g_strcmp0(getReservUserId(reserv),array->userId)){
-        array->_userReservs[i] = reserv;
-        i++;
-    }
-}
-
-//                                  *** End block ***

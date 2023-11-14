@@ -166,7 +166,7 @@ int getFlightDelay(Flight *);
 
 
 
-
+int getReservSize();
 
 void setReservId(Reservation *, const char *);
 char * getReservId(Reservation *);
@@ -210,8 +210,6 @@ unsigned int getReservRating(Reservation *);
 void setReservComment(Reservation *, const char *);
 char *getReservComment(Reservation *);
 
-double getTotalSpentByUser(Reservation **);
-
 
 
 
@@ -223,24 +221,6 @@ char *getPassangerFlightId(Passanger *);
 void setPassangerUserId(Passanger *, const char *);
 char *getPassangerUserId(Passanger *);
 
-
-
-
-typedef struct hotelReservs HotelReservs;
-
-Reservation ** getAllReservsInHotel(void * ,const char * );
-
-void allHotelReservs(gpointer , gpointer , gpointer );
-
-
-
-
-
-typedef struct userReservs UserReservs;
-
-Reservation ** getAllUserReservs(void *,const char *);
-
-void allUserReservs(gpointer,gpointer,gpointer);
 
 
 

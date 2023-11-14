@@ -2,6 +2,9 @@
 #define STATISTICS_H
 #include "../include/dataTypes.h"
 
-int getTotalSpentByUser(Reservation **,int );
+double getTotalSpentByUser(void **);
+
+double averageRating(void *,const char *);
+
 
 #endif

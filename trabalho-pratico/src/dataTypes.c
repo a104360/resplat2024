@@ -669,6 +669,9 @@ int getFlightDelay(Flight * flight){
     }
 }
 
+int getReservSize(){
+    return sizeof(struct reservation);
+}
 
   void setReservId(Reservation * reserv,const char * line){
     if(reserv->id) g_free(reserv->id);
@@ -902,99 +905,11 @@ int getPassangerSize(){
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-// *** Block to get Types through other meanings than the hash table keys *** 
-
-// struct to store the list of reservations of an hotel and the hotel id
-typedef struct hotelReservs{
-    struct reservation ** _hotelReservs;
-    char * hotel_id;
-} HotelReservs;
-
-// Returns the reservations by the hotel id
- Reservation ** getAllReservsInHotel(void * dataStruct,const char * hotelId){
-    HotelReservs * reservs = malloc(sizeof(struct hotelReservs) * g_hash_table_size((GHashTable *) dataStruct));
-    reservs->hotel_id = strdup(hotelId);
-    g_hash_table_foreach((GHashTable *)dataStruct,allHotelReservs,reservs);
-    free(reservs->_hotelReservs);
-    Reservation ** list = reservs->_hotelReservs;
-    free(reservs->_hotelReservs);
-    free(reservs);
-    return list;
-}
-
-// Function to iterate and get the reservations on the list
-void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
-    HotelReservs * array = (HotelReservs *) hotelData;
-    Reservation * reservation = (Reservation *)value;
-    static int i = 0;
-
-    if (!g_strcmp0(reservation->hotel_id,array->hotel_id)) {
-          array->_hotelReservs[i] = reservation;
-          i++;
-    }  
-}
-
-//                                  *** End block ***
-
-
-//                      *** Get all the reservations of a user ***
-
-typedef struct userReservs{
-    struct reservation ** _userReservs;
-    char * userId;
-} UserReservs;
-
- Reservation ** getAllUserReservs(void * table,const char * userId){
-    UserReservs * reservs = malloc(sizeof(struct userReservs) * g_hash_table_size((ReservationsDatabase) table));
-    reservs->userId = strdup(userId);
-    g_hash_table_foreach((UsersDatabase) table,allUserReservs,reservs);
-    free(reservs->userId);
-    Reservation ** list = reservs->_userReservs;
-    free(reservs->_userReservs);
-    free(reservs);
-    return list;
-}
-
-  void allUserReservs(gpointer key ,gpointer value,gpointer userData){
-    UserReservs * array = (UserReservs *) userData;
-    Reservation * reserv = (Reservation *) value;
-    static int i = 0;
-
-    if(!g_strcmp0(reserv->user_id,array->userId)){
-        array->_userReservs[i] = reserv;
-        i++;
-    }
-}
-
-//                                  *** End block ***
-
-
-
 //                      *** Get all the passangers of a flight ***
 
 
 //                                  *** End block ***
 
-
-double getTotalSpentByUser(Reservation ** list){
-    int total = 0;
-    for(int i = 0;list[i];i++){
-        int dayDiff = numberOfDays(list[i]->begin_date,list[i]->end_date);
-        total += (list[i]->price_per_night * dayDiff) + ((dayDiff / 100) * list[i]->city_tax);
-    }
-    return total;
-}
 
 
  bool compareTimes(Time *t1,Time*t2){
