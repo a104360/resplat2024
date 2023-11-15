@@ -7,4 +7,6 @@ double getTotalSpentByUser(void **);
 double averageRating(void *,const char *);
 
 
+double dalayMedianAirport(void*, void*);
+
 #endif

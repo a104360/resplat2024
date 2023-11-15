@@ -21,3 +21,5 @@ double averageRating(void * reservations, const char * id){
     destroyHotelDatabase(hotelDB);
     return sumRatings / n;
 }
+
+double dalayMedianAirport(void*, void*);

@@ -1,8 +1,7 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H
 #include <stdbool.h>
-
-typedef struct time Time;
+#include "../include/time.h"
 
 typedef struct user User;
 
@@ -14,35 +13,13 @@ typedef struct passanger Passanger;
 
 
 
-
-
-Time * createTime();
-
-void initTime(Time *);
-
-void setTime(Time *,int,int,int,int,int,int);
-
-void copyTime(Time *,Time *);
-
-void destroyTime(Time *); 
-
-
-
-User * createUser();
-
-void initUser(User *);
-
-void destroyUser(User *);
-
-
-
 Flight * createFlight();
 
 void initFlight(Flight *);
 
 void destroyFlight(Flight *);
 
-int getFlightSize();
+size_t getFlightSize();
 
 
 
@@ -61,7 +38,7 @@ void initPassanger(Passanger *);
 
 void destroyPassanger(Passanger *);
 
-int getPassangerSize();
+size_t getPassangerSize();
 
 
 
@@ -165,7 +142,7 @@ int getFlightDelay(Flight *);
 
 
 
-int getReservSize();
+size_t getReservSize();
 
 void setReservId(Reservation *, const char *);
 char * getReservId(Reservation *);
@@ -220,19 +197,5 @@ char *getPassangerFlightId(Passanger *);
 void setPassangerUserId(Passanger *, const char *);
 char *getPassangerUserId(Passanger *);
 
-
-
-
-
-
-
-
-
-
-double dalayMedianAirport(void*, void*);
-
-int numberOfDays(Time *,Time *);
-
-bool compareTimes(Time *, Time *);
 
 #endif

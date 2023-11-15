@@ -19,6 +19,21 @@ User * lookupUser(void *,const char *);
 
 
 
+typedef struct passangersDB PassangersDatabase;
+
+PassangersDatabase * createPassangerDatabase();
+
+void insertPassanger(void * , void * );
+
+int getNumAllPassangers(const PassangersDatabase * );
+
+Passanger ** getAllUserPassages(const PassangersDatabase * ,char *);
+
+void destroyPassangersDB(PassangersDatabase * );
+
+
+
+
 
 FlightsDatabase initFlights();
 
@@ -28,17 +43,8 @@ Flight * lookupFlight(void * ,const char *);
 
 
 
-typedef struct flightBook FlightBook;
 
-int getNumPassangers(const FlightBook *);
 
-Passanger ** getFlightPassangers(const FlightBook *);
-
-FlightBook * getFlightBook(void *, const char *);
-
-void getPassangers(gpointer,gpointer,gpointer);
-
-void destroyFlightBook(FlightBook *);
 
 
 
@@ -47,6 +53,12 @@ ReservationsDatabase initReservations();
 void insertReserv(void *,Reservation *);
 
 Reservation * lookupReserv(void * ,const char * );
+
+
+
+
+
+
 
 
 
@@ -68,6 +80,13 @@ void destroyHotelDatabase(HotelDatabase *);
 
 
 
+
+
+
+
+
+
+
 typedef struct userReservsDB UserReservsDB;
 
 UserReservsDB * getUserReservsDB(void *,const char *);
@@ -79,6 +98,22 @@ int getNumReservs(const UserReservsDB *);
 void allUserReservs(gpointer,gpointer,gpointer);
 
 void destroyUserReservsDB(UserReservsDB *);
+
+
+
+
+typedef struct userFlightsDB UserFlightsDB;
+
+UserFlightsDB * getUserFlightsDB(void *,const char *);
+
+Flight ** getUserFlights(const UserFlightsDB *);
+
+int getNumFlights(const UserFlightsDB *);
+
+void allUserFlights(gpointer,gpointer,gpointer);
+
+void destroyUserFlightsDB(UserFlightsDB *);
+
 
 
 void destroyDataBase(void *);

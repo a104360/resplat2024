@@ -1,10 +1,20 @@
 #include "../include/parser.h"
 #include "../include/dataTypes.h"
-#include "../include/utils.h"
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
 #include <ctype.h>
+
+
+#define CHECKLEN(line) \
+    if(line[0] == '\0') return NULL;\
+    char * aux = strdup(line);\
+    return aux; \
+
+#define ALLVAR(aux) for(int i = 0;aux[i] != '\0';aux[i] = tolower(aux[i]),i++);
+
+#define TOKENIZE(token,saveptr) token = strtok_r(NULL,";",&saveptr); 
+
 
 /*
 *

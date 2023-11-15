@@ -3,18 +3,7 @@
 #include <string.h>
 #include "../include/dataTypes.h"
 #include "../include/catalogs.h"
-#include "../include/utils.h"
 #include <glib.h>
-
-
-typedef struct time{
-    int sec;         /* seconds,  range 0 to 59          */
-    int min;         /* minutes, range 0 to 59           */
-    int hour;        /* hours, range 0 to 23             */
-    int mday;        /* day of the month, range 1 to 31  */
-    int mon;         /* month, range 0 to 11             */
-    int year;        /* The number of years since 0      */
-} Time;
 
 
 typedef struct user{
@@ -78,48 +67,6 @@ typedef struct passanger{
 
 
 
-// *** Time related functions ***
-
-  void initTime(Time * tempo){
-    tempo->hour = 0;
-    tempo->min = 0;
-    tempo->sec = 0;
-    tempo->mday = 0;
-    tempo->year = 0;
-    tempo->mon = 0;
-}
-
-  void destroyTime(Time *time) {
-    initTime(time);
-    g_free(time);
-}
-
- Time * createTime(){
-    Time * t = g_malloc(sizeof(struct time));
-    initTime(t);
-    return t;
-}
-
-  void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
-    t->year = year;
-    t->mon = mon;
-    t->mday = mday;
-    t->hour = hour;
-    t->min = min;
-    t->sec = sec;
-}
-
-  void copyTime(Time * t,Time * aux){
-    t->year = aux->year;
-    t->mday = aux->mday;
-    t->mon = aux->mon;
-    t->hour = aux->hour;
-    t->min = aux->min;
-    t->sec = aux->sec;
-}
-
-// *** End time functions block ***
-
 
 
 
@@ -138,22 +85,12 @@ typedef struct passanger{
     user->name = NULL;
     user->email = NULL;
     user->phone_number = NULL;
-    user->birth_date->hour = 0;
-    user->birth_date->min = 0;
-    user->birth_date->sec = 0;
-    user->birth_date->mday = 0;
-    user->birth_date->year = 0;
-    user->birth_date->mon = 0;
+    setTime(user->birth_date,0,0,0,0,0,0);
     user->sex = '\0';
     user->passport = NULL;
     user->country_code = NULL;
     user->address = NULL;
-    user->account_creation->hour = 0;
-    user->account_creation->min = 0;
-    user->account_creation->sec = 0;
-    user->account_creation->mday = 0;
-    user->account_creation->year = 0;
-    user->account_creation->mon = 0;
+    setTime(user->account_creation,0,0,0,0,0,0);
     user->pay_method = NULL;
     user->account_status = false;
 }
@@ -367,30 +304,10 @@ typedef struct passanger{
     flight->total_seats = 0;
     flight->origin = NULL;
     flight->destination = NULL;
-    flight->schedule_departure_date->hour = 0;
-    flight->schedule_departure_date->min = 0;
-    flight->schedule_departure_date->sec = 0;
-    flight->schedule_departure_date->mday = 0;
-    flight->schedule_departure_date->year = 0;
-    flight->schedule_departure_date->mon = 0;
-    flight->schedule_arrival_date->hour = 0;
-    flight->schedule_arrival_date->min = 0;
-    flight->schedule_arrival_date->sec = 0;
-    flight->schedule_arrival_date->mday = 0;
-    flight->schedule_arrival_date->year = 0;
-    flight->schedule_arrival_date->mon = 0;
-    flight->real_departure_date->hour = 0;
-    flight->real_departure_date->min = 0;
-    flight->real_departure_date->sec = 0;
-    flight->real_departure_date->mday = 0;
-    flight->real_departure_date->year = 0;
-    flight->real_departure_date->mon = 0;
-    flight->real_arrival_date->hour = 0;
-    flight->real_arrival_date->min = 0;
-    flight->real_arrival_date->sec = 0;
-    flight->real_arrival_date->mday = 0;
-    flight->real_arrival_date->year = 0;
-    flight->real_arrival_date->mon = 0;
+    setTime(flight->schedule_departure_date,0,0,0,0,0,0);
+    setTime(flight->schedule_arrival_date,0,0,0,0,0,0);
+    setTime(flight->real_departure_date,0,0,0,0,0,0);
+    setTime(flight->real_arrival_date,0,0,0,0,0,0);
     flight->pilot = NULL;
     flight->copilot = NULL;
     flight->notes = NULL;
@@ -414,7 +331,7 @@ typedef struct passanger{
     }
 }
 
-int getFlightSize(){
+size_t getFlightSize(){
     return sizeof(struct flight);
 }
 
@@ -600,13 +517,12 @@ int getFlightSize(){
 }
 
 int getFlightDelay(Flight * flight){
-    return (flight->real_departure_date->year - flight->schedule_departure_date->year) + 
-    ((flight->real_departure_date->year - flight->schedule_departure_date->year) * 31536000) + 
-    ((flight->real_departure_date->mon - flight->schedule_departure_date->mon) * 2592000) + 
-    ((flight->real_departure_date->mday - flight->schedule_departure_date->mday) * 86400) + 
-    ((flight->real_departure_date->hour - flight->schedule_departure_date->hour) * 3600) + 
-    ((flight->real_departure_date->min - flight->schedule_departure_date->min) * 60) +
-    ((flight->real_departure_date->sec - flight->schedule_departure_date->sec));
+    return ((getYear(flight->real_departure_date) - getYear(flight->schedule_departure_date)) * 31536000) + 
+    ((getMon(flight->real_departure_date) - getMon(flight->schedule_departure_date)) * 2592000) + 
+    ((getMday(flight->real_departure_date) - getMday(flight->schedule_departure_date)) * 86400) + 
+    ((getHour(flight->real_departure_date) - getHour(flight->schedule_departure_date)) * 3600) + 
+    ((getMin(flight->real_departure_date) - getMin(flight->schedule_departure_date)) * 60) +
+    ((getSec(flight->real_departure_date) - getSec(flight->schedule_departure_date)));
 }
 
 
@@ -635,18 +551,8 @@ int getFlightDelay(Flight * flight){
     reservation->hotel_stars = 0;
     reservation->city_tax = 0.0;
     reservation->address = NULL;
-    reservation->begin_date->hour = 0;
-    reservation->begin_date->min = 0;
-    reservation->begin_date->sec = 0;
-    reservation->begin_date->mday = 0;
-    reservation->begin_date->year = 0;
-    reservation->begin_date->mon = 0;
-    reservation->end_date->hour = 0;
-    reservation->end_date->min = 0;
-    reservation->end_date->sec = 0;
-    reservation->end_date->mday = 0;
-    reservation->end_date->year = 0;
-    reservation->end_date->mon = 0;
+    setTime(reservation->begin_date,0,0,0,0,0,0);
+    setTime(reservation->end_date,0,0,0,0,0,0);
     reservation->price_per_night = 0.0;
     reservation->includes_breakfast = false;
     reservation->room_details = NULL;
@@ -669,7 +575,7 @@ int getFlightDelay(Flight * flight){
     }
 }
 
-int getReservSize(){
+size_t getReservSize(){
     return sizeof(struct reservation);
 }
 
@@ -868,7 +774,7 @@ int getReservSize(){
     }
 }
 
-int getPassangerSize(){
+size_t getPassangerSize(){
     return sizeof(struct passanger);
 }
 
@@ -909,33 +815,3 @@ int getPassangerSize(){
 
 
 //                                  *** End block ***
-
-
-
- bool compareTimes(Time *t1,Time*t2){
-
-    if(t1->year != t2->year)
-        if(t1->year > t2->year) return false;
-
-    if(t1->mon != t2->mon)
-        if(t1->mon > t2->mon) return false;
-    
-    if(t1->mday != t2->mday)
-        if(t1->mday > t2->mday) return false;
-    
-    if(t1->hour != t2->hour)
-        if(t1->hour > t2->hour) return false;
-
-    if(t1->min != t2->min)
-        if(t1->min > t2->min) return false;
-    
-    if(t1->sec != t2->sec)
-        if(t1->sec > t2->sec) return false;
-    
-    return true;
-}
-
-int numberOfDays(Time * start,Time * end){
-    return (365 * (end->year - start->year)) + (30 * (end->mon - start->mon)) + (end->mday - start->mday);
-}
-

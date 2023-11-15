@@ -1,8 +1,9 @@
 #include "../include/interpreter.h"
 #include <stdio.h>
 #include <string.h>
-#include <utils.h>
-#include <queries.h>
+#include "../include/queries.h"
+
+#define BUFFERSIZE 1000
 
 
 int verTamanhoLinha(char * linha){

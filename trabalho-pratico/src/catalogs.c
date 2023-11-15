@@ -1,8 +1,10 @@
 #include "../include/catalogs.h"
-#include "../include/utils.h"
 #include "../include/dataTypes.h"
+#include "../include/dataStructs.h"
 #include <glib.h>
 
+
+#define BUFFERSIZE 1000
 
 
 
@@ -56,58 +58,112 @@ Flight * lookupFlight(void * table ,const char * id){
 
 
 
-typedef struct flightBook {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+typedef struct passangersDB {
     Passanger ** passangers;
-    Flight * flight;
-    int size;
-    int passangerSize;
-    int flightSize;
-} FlightBook;
+    unsigned int max;
+    unsigned int numPassangers;
+} PassangersDatabase;
 
 
-int getNumPassangers(const FlightBook * book){
-    return book->size;
+PassangersDatabase * createPassangerDatabase(){
+    PassangersDatabase * db = malloc(sizeof(struct passangersDB));
+    db->passangers = NULL;
+    db->max = BUFFERSIZE;
+    db->numPassangers = 0;
+    return db;
 }
 
-Passanger ** getFlightPassangers(const FlightBook * book){
-    return book->passangers;
+void insertPassanger(void * dataStruct, void * passangerData){
+    PassangersDatabase * table = (PassangersDatabase *) dataStruct;
+    Passanger * passanger = (Passanger *) passangerData;
+    if(table->numPassangers == 0){
+        table->passangers = malloc(getPassangerSize() * BUFFERSIZE);
+        if(!table->passangers){
+            free(table);
+            return;
+        }
+        table->passangers[table->numPassangers] = passanger;
+        table->numPassangers++;
+        return;
+    } else {
+        if(table->numPassangers >= table->max){
+            Passanger *temp = realloc(table->passangers, (table->max * 2) * getPassangerSize());
+                if (!temp) {
+                    for(int i = 0;i < table->max;i++){
+                        free(table->passangers[i]);
+                    }
+                    free(table);
+                    return;
+                }
+                table->passangers = temp;
+                table->max *= 2;
+                table->passangers[table->numPassangers] = passanger;
+                table->numPassangers++;
+            }
+        }
+    table->passangers[table->numPassangers] = passanger;
+    table->numPassangers++;
+
 }
 
-
-FlightBook * getFlightBook(void * dataStruct, const char * id){
-    GHashTable * table = (GHashTable *) dataStruct;
-    int aux = g_hash_table_size(table);
-    FlightBook * book = malloc(sizeof(struct flightBook));
-    book->flight = lookupFlight(table,id);
-    book->size = 0;
-    book->passangerSize = getPassangerSize();
-    book->flightSize = getFlightSize();
-    book->passangers = malloc(book->passangerSize * aux);
-    g_hash_table_foreach(table,getPassangers,book);
-    return book;
+int getNumAllPassangers(const PassangersDatabase * database){
+    return database->numPassangers;
 }
 
-// Iterative function to fetch every passanger on the flight
-void getPassangers(gpointer key,gpointer value,gpointer flightbook){
-    FlightBook * book = (FlightBook * ) flightbook;
-    Passanger * passanger = (Passanger * ) value;
-    static int i = 0;
-
-    if(g_strcmp0(getFlightId(book->flight),getPassangerFlightId(passanger)) == 0){
-        book->passangers[i] = passanger;
-        i++;
-        book->size++;
+// Returns a filter
+Passanger ** getAllPassages(const PassangersDatabase * database,char * userId){
+    Passanger ** list = malloc(getPassangerSize() * database->numPassangers);
+    int iList = 0;
+    for(int iPdb = 0;iPdb < database->numPassangers;iPdb++){
+        if(strcmp(getPassangerUserId(database->passangers[iPdb]),userId)){
+            list[iList] = database->passangers[iPdb];
+            iList++;
+        } 
     }
+    return list;
 }
 
-// Destroys Flight Book
-void destroyFlightBook(FlightBook * book){
-    destroyFlight(book->flight);
-    for(int i = 0; i < book->size;i++){
-        destroyPassanger(book->passangers[i]);
+void destroyPassangersDB(PassangersDatabase * database){
+    for(int i = 0;i < database->numPassangers;i++){
+        free(database->passangers[i]);
     }
-    free(book);
+    free(database);
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -141,6 +197,27 @@ Reservation * lookupReserv(void * table,const char * reservId){
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 //                             *** Get Hotel Reservations ***
 
 typedef struct hotelDatabase{
@@ -168,7 +245,7 @@ Reservation ** getAllHotelReservs(const HotelDatabase * hotelData){
 
 // Returns the reservations by the hotel id
 HotelDatabase * getHotelDataBase(void * dataStruct,const char * hotelId){
-    HotelDatabase * reservs = malloc(sizeof(struct hotelDatabase) * g_hash_table_size((GHashTable *) dataStruct));
+    HotelDatabase * reservs = malloc(sizeof(struct hotelDatabase));
     reservs->hotel_id = strdup(hotelId);
     reservs->numReservas = 0;
     reservs->sumRatings = 0;
@@ -216,8 +293,8 @@ UserReservsDB * getUserReservsDB(void * table,const char * userId){
     UserReservsDB * reservs = malloc(sizeof(struct userReservsDB));
     reservs->userId = strdup(userId);
     reservs->size = 0;
-    reservs->_userReservs = malloc(getReservSize() * g_hash_table_size((UsersDatabase *) table));
-    g_hash_table_foreach((UsersDatabase *) table,allUserReservs,reservs);
+    reservs->_userReservs = malloc(getReservSize() * g_hash_table_size((UsersDatabase) table));
+    g_hash_table_foreach((UsersDatabase) table,allUserReservs,reservs);
     return reservs;
 }
 
@@ -253,6 +330,8 @@ void destroyUserReservsDB(UserReservsDB * database){
 }
 
 //                                  *** End block ***
+
+
 
 
 

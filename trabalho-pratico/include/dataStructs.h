@@ -2,28 +2,17 @@
 #define DATASTRUCTS_H
 #include <stdbool.h>
 
-/*typedef struct node Node;
 
-typedef struct htable HashTable;
+typedef struct passangersDB PassangersDatabase;
 
-static HashTable * createTable();
+PassangersDatabase * createPassangerDatabase();
 
-static void destroyTable(HashTable *);
+void insertPassanger(void * , void * );
 
-static int hash(int,void *);
+int getNumAllPassangers(const PassangersDatabase * );
 
-static void insertHTable(HashTable *,void *,void *);
+Passanger ** getAllPassangers(const PassangersDatabase * );
 
-
-
-typedef struct bTree BTree;
-
-static BTree * createTree();
-
-static void destroyTree(BTree * );
-
-static void insertTree(  );
-
-static void * search(BTree*,void * );*/
+void destroyPassangersDB(PassangersDatabase *);
 
 #endif

@@ -6,7 +6,10 @@
         "glob.h": "c",
         "stdlib.h": "c",
         "catalogs.h": "c",
-        "utils.h": "c"
+        "utils.h": "c",
+        "datatypes.h": "c",
+        "initializer_list": "c",
+        "utility": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }
