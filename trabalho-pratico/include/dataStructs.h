@@ -1,6 +1,8 @@
 #ifndef DATASTRUCTS_H
 #define DATASTRUCTS_H
 #include <stdbool.h>
+#include "../include/dataTypes.h"
+
 
 
 typedef struct passangersDB PassangersDatabase;

@@ -1,7 +1,9 @@
 #ifndef DATATYPES_H
 #define DATATYPES_H
 #include <stdbool.h>
+#include <stddef.h>
 #include "../include/time.h"
+
 
 typedef struct user User;
 
@@ -10,6 +12,13 @@ typedef struct flight Flight;
 typedef struct reservation Reservation;
 
 typedef struct passanger Passanger;
+
+
+User * createUser();
+
+void initUser(User *);
+
+void destroyUser(User *);
 
 
 

@@ -1,6 +1,7 @@
-#include "../include/interpreter.h"
 #include <stdio.h>
 #include <string.h>
+#include <stdlib.h>
+#include "../include/interpreter.h"
 #include "../include/queries.h"
 
 #define BUFFERSIZE 1000
@@ -25,9 +26,9 @@ int readEntryFile(int agrc, char **argv){
 
     if(!linha) { perror("Erro a alocar memoria no readFile"); return 1;}
 
-    memset(linha, '\0', sizeof(linha));
+    memset(linha, '\0', strlen(linha));
 
-    while(fgets(linha,sizeof(linha),comandos)){
+    while(fgets(linha,strlen(linha),comandos)){
 
         int tamanhoLinha = verTamanhoLinha(linha);
 

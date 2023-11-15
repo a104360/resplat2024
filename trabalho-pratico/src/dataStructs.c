@@ -36,7 +36,7 @@ void insertPassanger(void * dataStruct, void * passangerData){
         return;
     } else {
         if(table->numPassangers >= table->max){
-            Passanger *temp = realloc(table->passangers, (table->max * 2) * getPassangerSize());
+            Passanger **temp = realloc(table->passangers, (table->max * 2) * getPassangerSize());
                 if (!temp) {
                     for(int i = 0;i < table->max;i++){
                         free(table->passangers[i]);

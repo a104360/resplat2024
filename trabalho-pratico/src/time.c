@@ -16,19 +16,19 @@ int getYear(Time * time){
     return time->year;
 }
 int getMon(Time * time){
-    time->mon;
+    return time->mon;
 }
 int getMday(Time * time){
-    time->mday;
+    return time->mday;
 }
 int getHour(Time * time){
-    time->hour;
+    return time->hour;
 }
 int getMin(Time * time){
-    time->min;
+    return time->min;
 }
 int getSec(Time * time){
-    time->sec;
+    return time->sec;
 }
 
 

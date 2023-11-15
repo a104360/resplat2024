@@ -1,9 +1,11 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <string.h>
+#include <glib.h>
+#include <stddef.h>
 #include "../include/dataTypes.h"
 #include "../include/catalogs.h"
-#include <glib.h>
+
 
 
 typedef struct user{
@@ -73,12 +75,6 @@ typedef struct passanger{
 // *** User Related Functions ***
 
 
- User * createUser(){
-    User * u = g_malloc(sizeof(struct user));
-    initUser(u);    
-    return u;
-
-}
 
   void initUser(User * user){
     user->id = NULL;
@@ -95,6 +91,12 @@ typedef struct passanger{
     user->account_status = false;
 }
 
+ User * createUser(){
+    User * u = g_malloc(sizeof(struct user));
+    initUser(u);    
+    return u;
+
+}
   void destroyUser(User *user) {
     if(user) {
         if(user->id) g_free(user->id);
