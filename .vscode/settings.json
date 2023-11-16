@@ -6,7 +6,8 @@
         "glob.h": "c",
         "stdlib.h": "c",
         "catalogs.h": "c",
-        "utils.h": "c"
+        "utils.h": "c",
+        "output.h": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }
