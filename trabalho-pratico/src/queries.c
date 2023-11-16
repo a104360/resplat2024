@@ -4,10 +4,18 @@
 #include "../include/statistics.h"
 #include "../include/dataStructs.h"
 #include <stdio.h>
+#include <ctype.h>
+
 
 #define BUFFERSIZE 100
 
-char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,FlightsDatabase * fDatabase,PassangersDatabase * pDatabase,const char * id,int flag){
+char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,FlightsDatabase * fDatabase,PassangersDatabase * pDatabase,const char * id,bool f){
+    char * analisa = malloc(sizeof(char) * 4);
+    strncpy(analisa,id,4);
+    int flag = 0;
+    if(strcoll(analisa,"Book") == 0) flag = 3; //Reservation
+    if(isdigit(analisa[0])) flag = 2;//Flights
+    if(isalpha(analisa[0])) flag = 1;//User
     switch (flag)
     {
     case 1: // ** User ** 
@@ -15,7 +23,7 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
 
         char * name = getUserName(user);
         char sex = getUserSex(user);
-        char * age = timeToString(getUserAge(user));
+        int age = getUserAge(user);
         char * country_code = getUserCountryCode(user);
 
         UserFlightsDB * uFDatabase = getUserFlightsDB(fDatabase,pDatabase,id);
@@ -31,8 +39,8 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
         char * total_spent = malloc(sizeof(char) * 10);
         sprintf(total_spent,"%.2f",getTotalSpentByUser(getUserReservs(uRDatabase)));
         
-        char * final = malloc(sizeof(char) * BUFFERSIZE);
-        sprintf(final,"%s;%s;%s;%s;%s;%s;%s;",name,sex,&age,number_of_fights,number_of_reservations,total_spent);
+        char * final1 = malloc(sizeof(char) * BUFFERSIZE);
+        sprintf(final1,"%s;%c;%d;%s;%s;%s;%s;",name,sex,age,number_of_fights,number_of_reservations,total_spent);
 
         free(name);
         free(age);
@@ -41,7 +49,7 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
         free(number_of_reservations);
         free(total_spent);
 
-        return final;
+        return final1;
         break;
     
     case 2: // ** Flight **
@@ -63,8 +71,8 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
         sprintf(delay,"%d",getFlightDelay(flight));
 
 
-        char * final = malloc(sizeof(char) * BUFFERSIZE);
-        sprintf(final,"%s;%s;%s;%s;%s;%s;%s;%s;",airline,plane_model,origin,destination,schedule_departure_date,
+        char * final2 = malloc(sizeof(char) * BUFFERSIZE);
+        sprintf(final2,"%s;%s;%s;%s;%s;%s;%s;%s;",airline,plane_model,origin,destination,schedule_departure_date,
         schedule_arrival_date,nPassangers,delay);
 
         free(airline);
@@ -76,7 +84,7 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
         free(nPassangers);
         free(delay);
 
-        return final;
+        return final2;
         break;
 
     case 3: // ** Reservation **
@@ -90,8 +98,8 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
         char includes_breakfast = getReservBreakfast(reserv) + '0';
         char * total_price = malloc(sizeof(char) * 10);
         sprintf(total_price,"%d",getTotalSpentOnReserv(reserv));
-        char * final = malloc(sizeof(char) * BUFFERSIZE);
-        sprintf(final,"%s;%s;%c;%s;%s;%s;%c;%s;",hotel_id,hotel_name,hotel_stars,begin_date,end_date,
+        char * final3 = malloc(sizeof(char) * BUFFERSIZE);
+        sprintf(final3,"%s;%s;%c;%s;%s;%s;%c;%s;",hotel_id,hotel_name,hotel_stars,begin_date,end_date,
         nights,includes_breakfast,total_price);
 
         free(hotel_id);
@@ -101,12 +109,13 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
         free(nights);
         free(total_price);
 
-        return final;
+        return final3;
         break;
     default:
         return NULL;
         break;
     }
+    free(analisa);
     return NULL;
 }
 

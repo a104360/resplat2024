@@ -40,9 +40,9 @@
 }
 
  char sexCheck(const char * line){
-    if(line[0] == 'm' || line[0] == 'M') return 'M';
-    if(line[0] == 'f' || line[0] == 'F') return 'F';
-    return line[0];
+    if(line[0] == 'M') return 'M';
+    if(line[0] == 'F') return 'F';
+    return '\0';
 }
 
 // Free necessary
@@ -345,7 +345,7 @@
     Time * userBday = dateCheck(token);
     if(userBday == NULL) { free(aux); destroyUser(user); return NULL;}
     setUserBday(user,userBday);
-    destroyTime(userBday);
+    //destroyTime(userBday);
     TOKENIZE(token,saveptr);
 
     //check userSex
@@ -378,9 +378,10 @@
 
     //check userAccountCreation time
     Time * userAccountCreation = dateCheck(token);
-    if(!userAccountCreation) { free(aux); destroyUser(user); return NULL;}
+    if(!userAccountCreation && compareTimes(userBday,userAccountCreation) == false) { free(aux); destroyUser(user); return NULL;}
     setUserAccountCreation(user,userAccountCreation);
     destroyTime(userAccountCreation);
+    destroyTime(userBday);
     TOKENIZE(token,saveptr);
 
     //check userPayMethod
@@ -392,7 +393,7 @@
 
     //check user accountStatus
     bool accStatus = accStatusCheck(token);
-    if(!accStatus) { free(aux); destroyUser(user); return NULL;}
+    if(accStatus == false) { free(aux); destroyUser(user); return NULL;}
     setUserAccountStatus(user,accStatus);
     
     free(aux);
@@ -512,9 +513,8 @@
     TOKENIZE(token,saveptr);
 
     unsigned int totalSeats = seatsCheck(token);
-    if(!totalSeats){ free(aux); destroyFlight(totalSeats); return NULL;}
+    if(!totalSeats){ free(aux); destroyFlight(flight); return NULL;}
     setFlightTotalSeats(flight,totalSeats);
-    free(totalSeats);
     TOKENIZE(token,saveptr);
 
     //Origin
@@ -524,7 +524,7 @@
     TOKENIZE(token,saveptr);
 
     //Destination
-    if(!airportCheck(origin,token)){ free(origin); free(aux); destroyFlight(flight); return NULL;}
+    if(!airportCheck(origin,token) && strlen(token)){ free(origin); free(aux); destroyFlight(flight); return NULL;}
     free(origin);
     setFlightDestination(flight,token);
     TOKENIZE(token,saveptr);
