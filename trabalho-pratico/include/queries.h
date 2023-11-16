@@ -1,12 +1,13 @@
 #ifndef QUERIES_H
 #define QUERIES_H
-
+#include "../include/dataTypes.h"
+#include "../include/dataStructs.h"
 
 // Listar o resumo de um user/reserva/voo, através do identificador
 char * query1();
 
 //listar voos ou reservas de um user !!atencao ao enunciado!!
-char * query2();
+char * query2(ReservationsDatabase *,PassangersDatabase *,const char *,bool);
 
 //apresentar classificacao media de um hotel, atraves do identificador
 char * query3();

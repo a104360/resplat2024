@@ -110,7 +110,8 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
     return NULL;
 }
 
-char * query2(){
+char * query2(ReservationsDatabase * reservs,PassangersDatabase * passangers,const char * id,bool f){
+    
     return NULL;
 }
 
