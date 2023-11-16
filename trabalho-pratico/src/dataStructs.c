@@ -65,7 +65,7 @@ Passanger * lookupPassangerUID(const PassangersDatabase * database,const char * 
     return NULL;
 }
 
-Passanger * lookupPassangerUID(const PassangersDatabase * database,const char * id){
+Passanger * lookupPassangerFID(const PassangersDatabase * database,const char * id){
     for(int i = 0;i < database->numPassangers;i++){
         if(strcoll(getPassangerFlightId(database->passangers[i]),id)){
             return database->passangers[i];

@@ -6,6 +6,7 @@
 #include <ctype.h>
 
 
+
 #define CHECKLEN(line) \
     if(line[0] == '\0') return NULL;\
     char * aux = strdup(line);\
@@ -13,7 +14,7 @@
 
 #define ALLVAR(aux) for(int i = 0;aux[i] != '\0';aux[i] = tolower(aux[i]),i++);
 
-#define TOKENIZE(token,saveptr) token = strtok_r(NULL,";",&saveptr); 
+#define TOKENIZE(token,saveptr) token = strtok_r(NULL,";\n\0",&saveptr); 
 
 
 /*
@@ -35,9 +36,7 @@
 }
 
  char * phoneNumberCheck(const char * line){
-    if(line[0] == '\0') return NULL;
-    char * n = strdup(line);
-    return n;
+    CHECKLEN(line);
 }
 
  char sexCheck(const char * line){
@@ -242,13 +241,13 @@
  bool accStatusCheck(const char * line){
     char * aux = strdup(line);
     ALLVAR(aux);
-    if(!strcmp(line,"active") || !strcmp(line,"inactive")) return true;
+    if(!strcoll(line,"active") || !strcoll(line,"inactive")) return true;
     return false;
 }
 
 // total_seats must not be less than the number of passangers
  unsigned int seatsCheck(const char * sold){
-    int virtual = atoi(sold);
+    unsigned int virtual = atoi(sold);
     return virtual;
 }
 
@@ -258,7 +257,7 @@
     char * d = strdup(departure), * a = strdup(arrival);
     ALLVAR(d);
     ALLVAR(a);
-    if(!strcmp(d,a)) return false;
+    if(!strcoll(d,a)) return false;
     free(d);
     free(a);
     return true;
@@ -290,7 +289,7 @@
  bool breakfastCheck(const char * line){
     char * aux = strdup(line);
     ALLVAR(aux);
-    if(!strcmp(aux,"TRUE") || !strcmp(aux,"T") || !strcmp(aux,"1")){ 
+    if(!strcoll(aux,"TRUE") || !strcoll(aux,"T") || !strcoll(aux,"1")){ 
         free(aux);
         return true;
     }
@@ -311,7 +310,7 @@
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
-    token = strtok_r(aux,";",&saveptr);
+    token = strtok_r(aux,";\n\0",&saveptr);
     User * user = createUser();
 
     //check userId
@@ -404,7 +403,7 @@
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
-    token = strtok_r(aux,";",&saveptr);
+    token = strtok_r(aux,";\n\0",&saveptr);
     Reservation * reservation = createReservation();
 
     char * reservationId = idCheck(token);
@@ -491,7 +490,7 @@
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
-    token = strtok_r(aux,";",&saveptr);
+    token = strtok_r(aux,";\n\0",&saveptr);
     Flight * flight = createFlight();
 
     char * flightId = idCheck(token);
@@ -512,11 +511,11 @@
     free(planeModel);
     TOKENIZE(token,saveptr);
 
-    /*unsigned int totalSeats = seatsCheck(token);
+    unsigned int totalSeats = seatsCheck(token);
     if(!totalSeats){ free(aux); destroyFlight(totalSeats); return NULL;}
     setFlightTotalSeats(flight,totalSeats);
     free(totalSeats);
-    TOKENIZE(token,saveptr);*/
+    TOKENIZE(token,saveptr);
 
     //Origin
     if(strlen(token)!=3){ free(aux); destroyFlight(flight); return NULL;}
@@ -582,7 +581,7 @@
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
-    token = strtok_r(aux,";",&saveptr);
+    token = strtok_r(aux,";\n\0",&saveptr);
     Passanger * passanger = createPassanger();
 
     char * passangerFlightId = idCheck(token);

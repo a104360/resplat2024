@@ -6,7 +6,8 @@ char * query1(){
     return NULL;
 }
 
-char * query2(){
+char * query2(ReservationsDatabase * reservs,PassangersDatabase * passangers,const char * id,bool f){
+    
     return NULL;
 }
 

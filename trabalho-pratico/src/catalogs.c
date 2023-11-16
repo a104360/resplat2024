@@ -165,7 +165,7 @@ void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
     Reservation * reservation = (Reservation *)value;
     static int i = 0;
 
-    if (!g_strcmp0(getReservHotelId(reservation),array->hotel_id)) {
+    if (!strcoll(getReservHotelId(reservation),array->hotel_id)) {
           array->_hotelReservs[i] = reservation;
           array->sumRatings += getReservRating(reservation);
           array->numReservas++;
@@ -218,7 +218,7 @@ void allUserReservs(gpointer key ,gpointer value,gpointer userData){
   Reservation * reserv = (Reservation *) value;
   static int i = 0;
  
-  if(!g_strcmp0(getReservUserId(reserv),array->userId)){
+  if(!strcoll(getReservUserId(reserv),array->userId)){
       array->_userReservs[i] = reserv;
       array->size++;
       i++;
@@ -327,7 +327,7 @@ Passanger ** getFlightPassangersBook(const FlightPassangers * database){
 void destroyFlightPassangers(FlightPassangers * database){
     database->allPassangers = NULL;
     for(int i = 0;i < database->numPassangers;i++){
-        destroyFlight(database->list[i]);
+        destroyPassanger(database->list[i]);
     }
     free(database->list);
     free(database);
