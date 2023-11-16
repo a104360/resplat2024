@@ -22,7 +22,7 @@ void outputQ1User(int F, char * name, char sex, int age, char * country_code , c
 
     FILE * outputFile = fopen(fileName, "a");
 
-    if(F = 0){
+    if(F == 0){
         fprintf(outputFile, "%s;", name);
         fprintf(outputFile, "%c;", sex);
         fprintf(outputFile, "%d;", age);
@@ -56,7 +56,7 @@ void outputQ1Flight(int F, char * airline, char * plane_model , char * origin, c
 
     FILE * outputFile = fopen(fileName, "a");
 
-    if(F = 0){
+    if(F == 0){
         fprintf(outputFile, "%s;", airline);
         fprintf(outputFile, "%s;", plane_model);
         fprintf(outputFile, "%s;", origin);
@@ -90,7 +90,7 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
 
     FILE * outputFile = fopen(fileName, "a");
 
-    if(F = 0){
+    if(F == 0){
         fprintf(outputFile, "%s;", hotel_id);
         fprintf(outputFile, "%s;", hotel_name);
         fprintf(outputFile, "%d;", hotel_stars);

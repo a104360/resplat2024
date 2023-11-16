@@ -249,7 +249,7 @@ typedef struct userFlightsDB {
 
 
 
-UserFlightsDB * getUserFlightsBook(void * fDatabase,void * travels,const char * userId){
+UserFlightsDB * getUserFlightsDB(void * fDatabase,void * travels,const char * userId){
     FlightsDatabase allFlights = (FlightsDatabase) fDatabase;
     UserFlightsDB * book = malloc(sizeof(struct userFlightsDB));
     book->passangers = (PassangersDatabase *) travels;
@@ -273,7 +273,7 @@ Flight ** getFlightIdList(const UserFlightsDB * database){
     return database->flights;
 }
 
-void destroyUserFlightsBook(UserFlightsDB * database){
+void destroyUserFlightsDB(UserFlightsDB * database){
     destroyPassangersDB(database->passangers);
     for(int i = 0;i < database->numTravels;i++){
         destroyFlight(database->flights[i]);

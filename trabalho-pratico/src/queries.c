@@ -3,6 +3,7 @@
 #include "../include/catalogs.h"
 #include "../include/statistics.h"
 #include "../include/dataStructs.h"
+#include "../include/catalogs.h"
 #include <stdio.h>
 #include <ctype.h>
 
@@ -26,24 +27,23 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
         int age = getUserAge(user);
         char * country_code = getUserCountryCode(user);
 
-        UserFlightsDB * uFDatabase = getUserFlightsDB(fDatabase,pDatabase,id);
+        UserFlightsDB * uFDatabase = getUserFlightsDB(*fDatabase,pDatabase,id);
         char * number_of_fights = malloc(sizeof(char) * 10);
         sprintf(number_of_fights,"%d",getNumFlights(uFDatabase));
         destroyUserFlightsDB(uFDatabase);
 
-        UserReservsDB * uRDatabase = getUserReservsDB(uDatabase,id);
+        UserReservsDB * uRDatabase = getUserReservsDB(*uDatabase,id);
         char * number_of_reservations = malloc(sizeof(char) * 10);
         sprintf(number_of_reservations,"%d",getNumReservs(uRDatabase));
         destroyUserReservsDB(uRDatabase);
 
         char * total_spent = malloc(sizeof(char) * 10);
-        sprintf(total_spent,"%.2f",getTotalSpentByUser(getUserReservs(uRDatabase)));
+        sprintf(total_spent,"%.3f",getTotalSpentByUser((void **) getUserReservs(uRDatabase)));
         
         char * final1 = malloc(sizeof(char) * BUFFERSIZE);
-        sprintf(final1,"%s;%c;%d;%s;%s;%s;%s;",name,sex,age,number_of_fights,number_of_reservations,total_spent);
+        sprintf(final1,"%s;%c;%d;%s;%s;%s;",name,sex,age,number_of_fights,number_of_reservations,total_spent);
 
         free(name);
-        free(age);
         free(country_code);
         free(number_of_fights);
         free(number_of_reservations);
@@ -94,19 +94,18 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
         char hotel_stars = getReservHotelStars(reserv) + '0';
         char * begin_date = timeToString(getReservBeginDate(reserv));
         char * end_date = timeToString(getReservEndDate(reserv));
-        char * nights = numberOfDays(getReservBeginDate(reserv),getReservEndDate(reserv));
+        int nights = numberOfDays(getReservBeginDate(reserv),getReservEndDate(reserv));
         char includes_breakfast = getReservBreakfast(reserv) + '0';
         char * total_price = malloc(sizeof(char) * 10);
-        sprintf(total_price,"%d",getTotalSpentOnReserv(reserv));
+        sprintf(total_price,"%.3f",getTotalSpentOnReserv(reserv));
         char * final3 = malloc(sizeof(char) * BUFFERSIZE);
-        sprintf(final3,"%s;%s;%c;%s;%s;%s;%c;%s;",hotel_id,hotel_name,hotel_stars,begin_date,end_date,
+        sprintf(final3,"%s;%s;%c;%s;%s;%d;%c;%s;",hotel_id,hotel_name,hotel_stars,begin_date,end_date,
         nights,includes_breakfast,total_price);
 
         free(hotel_id);
         free(hotel_name);
         free(begin_date);
         free(end_date);
-        free(nights);
         free(total_price);
 
         return final3;
@@ -119,7 +118,7 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
     return NULL;
 }
 
-char * query2(ReservationsDatabase * reservs,PassangersDatabase * passangers,const char * id,bool f){
+char * query2(ReservationsDatabase reservs,PassangersDatabase * passangers,const char * id,bool f){
     
     return NULL;
 }

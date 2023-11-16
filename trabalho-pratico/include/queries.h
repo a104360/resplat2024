@@ -5,10 +5,10 @@
 #include "../include/catalogs.h"
 
 // Listar o resumo de um user/reserva/voo, através do identificador
-char * query1(UsersDatabase * , ReservationsDatabase * ,FlightsDatabase * ,PassangersDatabase * ,const char * ,bool);
+char * query1(UsersDatabase *, ReservationsDatabase *,FlightsDatabase *,PassangersDatabase *,const char * ,bool);
 
 //listar voos ou reservas de um user !!atencao ao enunciado!!
-char * query2(ReservationsDatabase *,PassangersDatabase *,const char *,bool);
+char * query2(ReservationsDatabase reservs,PassangersDatabase * passangers,const char * id,bool f);
 
 //apresentar classificacao media de um hotel, atraves do identificador
 char * query3();
