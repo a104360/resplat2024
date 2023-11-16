@@ -4,8 +4,10 @@
 #include "../include/statistics.h"
 #include "../include/dataStructs.h"
 #include "../include/catalogs.h"
+#include "../include/sort.h"
 #include <stdio.h>
 #include <ctype.h>
+#include <string.h>
 
 
 #define BUFFERSIZE 100
@@ -22,6 +24,11 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
     case 1: // ** User ** 
         User * user = lookupUser(uDatabase,id);
 
+        if(getUserAccountStatus(user) == false){
+            free(user);
+            return;
+        }
+
         char * name = getUserName(user);
         char sex = getUserSex(user);
         int age = getUserAge(user);
@@ -30,12 +37,12 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
         UserFlightsDB * uFDatabase = getUserFlightsDB(*fDatabase,pDatabase,id);
         char * number_of_fights = malloc(sizeof(char) * 10);
         sprintf(number_of_fights,"%d",getNumFlights(uFDatabase));
-        destroyUserFlightsDB(uFDatabase);
+        free(uFDatabase);
 
         UserReservsDB * uRDatabase = getUserReservsDB(*uDatabase,id);
         char * number_of_reservations = malloc(sizeof(char) * 10);
         sprintf(number_of_reservations,"%d",getNumReservs(uRDatabase));
-        destroyUserReservsDB(uRDatabase);
+        free(uRDatabase);
 
         char * total_spent = malloc(sizeof(char) * 10);
         sprintf(total_spent,"%.3f",getTotalSpentByUser((void **) getUserReservs(uRDatabase)));
@@ -118,8 +125,64 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
     return NULL;
 }
 
-char * query2(ReservationsDatabase reservs,PassangersDatabase * passangers,const char * id,bool f){
+char * query2(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * passangers,
+const char * id,char * tipo,bool f){
+    User * user = lookupUser(uDatabase,id);
+
+    if(getUserAccountStatus(user) == false){
+        free(user);
+        return NULL;
+    }
+    int flag = 0;
+    if(!tipo) flag = 1;
+    else{
+    if(strcool(tipo,"flight") == 0) flag = 2;
+        else if(strcool(tipo,"reservation") == 0) flag = 3;
+    }
+    switch (flag)
+    {
+    case 1: // SEM ARGUMENTOS
+        UserFlightsDB * uFDatabase = getUserFlightsDB(fDatabase,passangers,id);
+        UserReservsDB * uRDatabase = getUserReservsDB(rDatabase,id);
+        
+        Reservation ** rList = getUserReservs(uRDatabase);
+        Flight ** fList = getUserFlights(uFDatabase);
+
+        mergeSortF(fList,0,getNumFlights(uFDatabase));
+        mergeSortR(rList,0,getNumReservs(uRDatabase));
+
+        
+
+        break;
+
+    case 2: // FLIGHT
+        UserFlightsDB * uFDatabase = getUserFlightsDB(fDatabase,passangers,id);
+        
+        Flight ** fList = getUserFlights(uFDatabase);
+
+        mergeSortF(fList,0,getNumFlights(uFDatabase));
+
+
+
+        break;
+
+    case 3: // RESERVATION
+        UserReservsDB * uRDatabase = getUserReservsDB(rDatabase,id);
+        
+        Reservation ** rList = getUserReservs(uRDatabase);
+
+        mergeSortR(rList,0,getNumReservs(uRDatabase));
+
+
+
+        break;
     
+    
+    default:
+        break;
+    }
+    
+
     return NULL;
 }
 

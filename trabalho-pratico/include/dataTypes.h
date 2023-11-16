@@ -91,6 +91,8 @@ bool getUserAccountStatus(User *);
 
 int getUserAge(User *);
 
+void copyUser(User *,User *);
+
 
 
 
@@ -143,7 +145,7 @@ char * getFlightNotes(Flight *);
 
 int getFlightDelay(Flight *);
 
-
+void copyFlight(Flight *, Flight *);
 
 
 
@@ -195,7 +197,7 @@ unsigned int getReservRating(Reservation *);
 void setReservComment(Reservation *, const char *);
 char *getReservComment(Reservation *);
 
-
+void copyReservation(Reservation *,Reservation *);
 
 
 
@@ -206,5 +208,6 @@ char *getPassangerFlightId(Passanger *);
 void setPassangerUserId(Passanger *, const char *);
 char *getPassangerUserId(Passanger *);
 
+void copyPassanger(Passanger *,Passanger *);
 
 #endif

@@ -8,7 +8,7 @@
 char * query1(UsersDatabase *, ReservationsDatabase *,FlightsDatabase *,PassangersDatabase *,const char * ,bool);
 
 //listar voos ou reservas de um user !!atencao ao enunciado!!
-char * query2(ReservationsDatabase reservs,PassangersDatabase * passangers,const char * id,bool f);
+char * query2(UsersDatabase , ReservationsDatabase ,FlightsDatabase,PassangersDatabase *,const char *,char *,bool);
 
 //apresentar classificacao media de um hotel, atraves do identificador
 char * query3();

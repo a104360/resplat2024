@@ -282,9 +282,28 @@ typedef struct passanger{
 
 int getUserAge(User * user){
     Time * userBday = getUserBday(user);
-    int age = PYEAR - (getYear(userBday));
-    return age;
+    int n = PYEAR - (getYear(userBday));
+    if(PDAY >= getMday(userBday))
+        if(PMON >= getMon(userBday))
+            return n;
+    return n - 1;
 }
+
+void copyUser(User * dest,User * src){
+    setUserId(dest,getUserId(src));
+    setUserName(dest,getUserName(src));
+    setUserEmail(dest,getUserEmail(src));
+    setUserPhoneNumber(dest,getUserPhoneNumber(src));
+    setUserBday(dest,getUserBday(src));
+    setUserSex(dest,getUserSex(src));
+    setUserPassaport(dest,getUserPassaport(src));
+    setUserCountryCode(dest,getUserCountryCode(src));
+    setUserAddress(dest,getUserAddress(src));
+    setUserAccountCreation(dest,getUserAccountCreation(src));
+    setUserPayMethod(dest,getUserPayMethod(src));
+    setUserAccountStatus(dest,getUserAccountStatus(src));
+}
+
 // *** End of user functions ***
 
 
@@ -535,6 +554,22 @@ int getFlightDelay(Flight * flight){
 }
 
 
+void copyFlight(Flight * dest,Flight * src){
+    setFlightId(dest,getFlightId(src));
+    setFlightAirline(dest,getFlightAirline(src));
+    setFlightPlaneModel(dest,getFlightPlaneModel(src));
+    setFlightTotalSeats(dest,getFlightTotalSeats(src));
+    setFlightOrigin(dest,getFlightOrigin(src));
+    setFlightDestination(dest,getFlightDestination(src));
+    setFlightSDepartureDate(dest,getFlightSDepartureDate(src));
+    setFlightSArrivalDate(dest,getFlightSArrivalDate(src));
+    setFlightRDepartureDate(dest,getFlightRDepartureDate(src));
+    setFlightRArrivalDate(dest,getFlightRArrivalDate(src));
+    setFlightPilot(dest,getFlightPilot(src));
+    setFlightCopilot(dest,getFlightCopilot(src));
+    setFlightNotes(dest,getFlightNotes(src));
+}
+
 
 // 
 
@@ -761,6 +796,35 @@ size_t getReservSize(){
 }
 
 
+void copyReservation(Reservation * dest,Reservation * src){
+    setReservId(dest,getReservId(src));
+    setReservUserId(dest,getReservUserId(src));
+    setReservHotelId(dest,getReservHotelId(src));
+    setReservHotelName(dest,getReservHotelName(src));
+    setReservHotelStars(dest,getReservHotelStars(src));
+    setReservCityTax(dest,getReservCityTax(src));
+    setReservHotelAddress(dest,getReservAddsetReservHotelAddress(src));
+    setReservBeginDate(dest,getReservBeginDate(src));
+    setReservEndDate(dest,getReservEndDate(src));
+    setReservPricePerNight(dest,getReservPricePerNight(src));
+    setReservBreakfast(dest,getReservBreakfast(src));
+    setReservRoomDetails(dest,getReservRoomDetails(src));
+    setReservRating(dest,getReservRating(src));
+    setReservComment(dest,getReservComment(src));
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // *** Passanger related functions *** 
 
@@ -816,7 +880,10 @@ size_t getPassangerSize(){
 }
 
 
-
+void copyPassanger(Passanger * dest,Passanger * src){
+    setPassangerFlightId(dest,getPassangerFlightId(src));
+    setPassangerUserId(dest,getPassangerUserId(src));
+}
 
 
 
