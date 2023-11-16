@@ -178,6 +178,7 @@ void destroyHotelDatabase(HotelDatabase * hotel){
     for(int i = 0;i < hotel->numReservas;i++){
         destroyReservation(hotel->_hotelReservs[i]);
     }
+    free(hotel->_hotelReservs);
     free(hotel);
 }
 
@@ -235,6 +236,105 @@ void destroyUserReservsDB(UserReservsDB * database){
 }
 
 //                                  *** End block ***
+
+
+
+//                             *** All flights of a user ***
+
+typedef struct userFlightsDB {
+    struct passangersDB * passangers;
+    struct flight ** flights;
+    int numTravels;
+} UserFlightsDB;
+
+
+
+UserFlightsDB * getUserFlightsBook(void * fDatabase,void * travels,const char * userId){
+    FlightsDatabase allFlights = (FlightsDatabase) fDatabase;
+    UserFlightsDB * book = malloc(sizeof(struct userFlightsDB));
+    book->passangers = (PassangersDatabase *) travels;
+    book->flights = malloc(getFlightSize() * g_hash_table_size((GHashTable *) allFlights));
+    book->numTravels = 0; 
+    int max = getNumAllPassangers(book->passangers);
+    Passanger ** list = getAllPassangers(book->passangers); 
+    for(int passangersList = 0;passangersList < max;passangersList++){
+        if(strcoll(getPassangerUserId(list[passangersList]),userId)){
+            book->flights[book->numTravels] = lookupFlight(allFlights,getPassangerFlightId(list[passangersList]));
+            book->numTravels++;
+        }
+    }
+    return book;
+}
+int getNumFlights(const UserFlightsDB * book){
+    return book->numTravels;
+}
+
+Flight ** getFlightIdList(const UserFlightsDB * database){
+    return database->flights;
+}
+
+void destroyUserFlightsBook(UserFlightsDB * database){
+    destroyPassangersDB(database->passangers);
+    for(int i = 0;i < database->numTravels;i++){
+        destroyFlight(database->flights[i]);
+    }
+    free(database->flights);
+    free(database);
+}
+
+
+
+
+
+
+//                                 *** All Passangers of a flight ***  
+
+
+typedef struct flightPassangers {
+    struct passangersDB * allPassangers;
+    Passanger ** list;
+    int numPassangers;
+} FlightPassangers;
+
+
+
+
+FlightPassangers * getFlightPassangers(void * fDatabase,void * travels,const char * flightId){
+    FlightsDatabase allFlights = (FlightsDatabase) fDatabase;
+    FlightPassangers * book = malloc(sizeof(struct flightPassangers));
+    book->allPassangers = (PassangersDatabase *) travels;
+    book->list = malloc(getPassangerSize() * g_hash_table_size((GHashTable *) allFlights));
+    book->numPassangers = 0; 
+    int max = getNumAllPassangers(book->allPassangers);
+    Passanger ** pList = getAllPassangers(book->allPassangers); 
+    for(int passangersList = 0;passangersList < max;passangersList++){
+        if(strcoll(getPassangerFlightId(pList[passangersList]),flightId) == 0){
+            book->list[book->numPassangers] = lookupPassangerFID(book->allPassangers,getPassangerFlightId(pList[passangersList]));
+            book->numPassangers++;
+        }
+    }
+    return book;
+}
+
+int getNumPassangers(const FlightPassangers * book){
+    return book->numPassangers;
+}
+
+Passanger ** getFlightPassangersBook(const FlightPassangers * database){
+    return database->list;
+}
+
+void destroyFlightPassangers(FlightPassangers * database){
+    database->allPassangers = NULL;
+    for(int i = 0;i < database->numPassangers;i++){
+        destroyFlight(database->list[i]);
+    }
+    free(database->list);
+    free(database);
+}
+
+
+
 
 
 

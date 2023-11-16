@@ -19,21 +19,6 @@ User * lookupUser(void *,const char *);
 
 
 
-typedef struct passangersDB PassangersDatabase;
-
-PassangersDatabase * createPassangerDatabase();
-
-void insertPassanger(void * , void * );
-
-int getNumAllPassangers(const PassangersDatabase * );
-
-Passanger ** getAllUserPassages(const PassangersDatabase * ,char *);
-
-void destroyPassangersDB(PassangersDatabase * );
-
-
-
-
 
 FlightsDatabase initFlights();
 
@@ -104,15 +89,28 @@ void destroyUserReservsDB(UserReservsDB *);
 
 typedef struct userFlightsDB UserFlightsDB;
 
-UserFlightsDB * getUserFlightsDB(void *,const char *);
+UserFlightsDB * getUserFlightsDB(void *,void *,const char *);
 
 Flight ** getUserFlights(const UserFlightsDB *);
 
 int getNumFlights(const UserFlightsDB *);
 
-void allUserFlights(gpointer,gpointer,gpointer);
-
 void destroyUserFlightsDB(UserFlightsDB *);
+
+
+
+
+typedef struct flightPassangers FlightPassangers;
+
+FlightPassangers * getFlightPassangers(void *,void *,const char *);
+
+int getNumPassangers(const FlightPassangers *);
+
+Passanger ** getFlightPassangersBook(const FlightPassangers *);
+
+void destroyFlightPassangers(FlightPassangers *);
+
+
 
 
 

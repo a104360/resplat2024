@@ -55,6 +55,25 @@ void insertPassanger(void * dataStruct, void * passangerData){
 
 }
 
+
+Passanger * lookupPassangerUID(const PassangersDatabase * database,const char * id){
+    for(int i = 0;i < database->numPassangers;i++){
+        if(strcoll(getPassangerUserId(database->passangers[i]),id)){
+            return database->passangers[i];
+        }
+    }
+    return NULL;
+}
+
+Passanger * lookupPassangerUID(const PassangersDatabase * database,const char * id){
+    for(int i = 0;i < database->numPassangers;i++){
+        if(strcoll(getPassangerFlightId(database->passangers[i]),id)){
+            return database->passangers[i];
+        }
+    }
+    return NULL;
+}
+
 int getNumAllPassangers(const PassangersDatabase * database){
     return database->numPassangers;
 }
@@ -65,7 +84,8 @@ Passanger ** getAllPassangers(const PassangersDatabase * database){
 
 void destroyPassangersDB(PassangersDatabase * database){
     for(int i = 0;i < database->numPassangers;i++){
-        free(database->passangers[i]);
+        destroyPassanger(database->passangers[i]);
     }
+    free(database->passangers);
     free(database);
 }

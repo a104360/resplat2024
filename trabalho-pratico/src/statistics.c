@@ -14,6 +14,14 @@ double getTotalSpentByUser(void ** userReservs){
     return total;
 }
 
+double getTotalSpentOnReserv(void * userReservs){
+    Reservation * list = (Reservation *) userReservs; 
+    int total = 0;
+    int dayDiff = numberOfDays(getReservBeginDate(list),getReservEndDate(list));
+    total = (getReservPricePerNight(list) * dayDiff) + ((dayDiff / 100) * getReservCityTax(list));
+    return total;
+}
+
 double averageRating(void * reservations, const char * id){
     HotelDatabase * hotelDB = getHotelDataBase(reservations,id);
     int sumRatings = getSumRatings(hotelDB);

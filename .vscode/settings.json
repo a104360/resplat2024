@@ -9,7 +9,11 @@
         "utils.h": "c",
         "datatypes.h": "c",
         "initializer_list": "c",
-        "utility": "c"
+        "utility": "c",
+        "system_error": "c",
+        "functional": "c",
+        "tuple": "c",
+        "type_traits": "c"
     },
     "C_Cpp.errorSquiggles": "enabled"
 }

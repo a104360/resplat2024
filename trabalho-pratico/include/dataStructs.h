@@ -13,6 +13,10 @@ void insertPassanger(void * , void * );
 
 int getNumAllPassangers(const PassangersDatabase * );
 
+Passanger * lookupPassangerUID(const PassangersDatabase *,const char *);
+
+Passanger * lookupPassangerFID(const PassangersDatabase *,const char *);
+
 Passanger ** getAllPassangers(const PassangersDatabase * );
 
 void destroyPassangersDB(PassangersDatabase *);

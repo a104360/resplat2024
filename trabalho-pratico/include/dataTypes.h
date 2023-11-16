@@ -89,7 +89,7 @@ char * getUserPayMethod(User *);
 void setUserAccountStatus(User *, const bool);
 bool getUserAccountStatus(User *);
 
-
+int getUserAge(User *);
 
 
 

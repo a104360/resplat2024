@@ -1,5 +1,6 @@
 #include "../include/time.h"
 #include <stdbool.h>
+#include <stdio.h>
 #include <glib.h>
 
 typedef struct time{
@@ -7,7 +8,7 @@ typedef struct time{
     int min;         /* minutes, range 0 to 59           */
     int hour;        /* hours, range 0 to 23             */
     int mday;        /* day of the month, range 1 to 31  */
-    int mon;         /* month, range 0 to 11             */
+    int mon;         /* month, range 1 to 12             */
     int year;        /* The number of years since 0      */
 } Time;
 
@@ -94,6 +95,22 @@ int getSec(Time * time){
 }
 
 int numberOfDays(Time * start,Time * end){
-    return (365 * (end->year - start->year)) + (30 * (end->mon - start->mon)) + (end->mday - start->mday);
+    return (end->mday - start->mday);
 }
 
+
+
+char * timeToString(Time * time){
+    char* dateString = (char*)malloc(20); // Sufficient space for "YYYY-MM-DD HH:MM:SS\0"
+    
+    if (dateString == NULL) {
+        // Handle memory allocation failure
+        return NULL;
+    }
+
+    snprintf(dateString, 20, "%d/%02d/%02d %02d:%02d:%02d",
+             time->year, time->mon, time->mday,
+             time->hour, time->min, time->sec);
+
+    return dateString;
+}

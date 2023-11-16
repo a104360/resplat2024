@@ -3,6 +3,9 @@
 #include <stdbool.h>
 
 
+#define PYEAR 2023
+#define PMON 10
+#define PDAY 1
 
 typedef struct time Time;
 
@@ -26,5 +29,7 @@ void copyTime(Time *,Time *);
 bool compareTimes(Time *,Time*);
 
 int numberOfDays(Time *,Time *);
+
+char * timeToString(Time *);
 
 #endif

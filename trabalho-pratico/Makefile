@@ -13,8 +13,8 @@ SOURCES = $(wildcard src/*.c)
 OBJ= $(SOURCES:.c=.o)
 
 
-#OBJ = $(patsubst %.c,%.o,$(wildcard *.c))
 DEPS = $(IDIR)/$(wildcard *.h)
+
 EXE = programa-principal
 
 programa-principal: 
