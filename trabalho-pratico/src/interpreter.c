@@ -3,6 +3,9 @@
 #include <stdlib.h>
 #include "../include/interpreter.h"
 #include "../include/queries.h"
+#include "../include/dataTypes.h"
+#include "../include/dataStructs.h"
+#include "../include/catalogs.h"
 
 #define BUFFERSIZE 1000
 
@@ -17,7 +20,7 @@ int verTamanhoLinha(char * linha){
     return count;
 }
 
-int readEntryFile(int agrc, char **argv){
+void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,FlightsDatabase * fDatabase,PassangersDatabase * pDatabase,int agrc, char **argv){
     FILE * comandos = fopen(argv[2],"r");
 
     if (comandos == NULL){ perror("Erro a abrir o ficheiro dos comandos"); return 1;} 
@@ -71,10 +74,10 @@ int readEntryFile(int agrc, char **argv){
         case '2':
 
             if(linhaLimpa[1] == 'F'){
-                    char * resultadoQuerie2 = query2(&linhaLimpa[3]);
+                    char * resultadoQuerie2 = query2(rDatabase,pDatabase,&linhaLimpa[3],true);
                     //mandar para o output das F
                 }else {
-                    char * resultadoQuerie2 = query2(&linhaLimpa[2]);
+                    char * resultadoQuerie2 = query2(rDatabase,pDatabase,&linhaLimpa[2],false);
                     //mandar para o output sem F
                 }
 
@@ -187,6 +190,4 @@ int readEntryFile(int agrc, char **argv){
 
     free(linha);
     fclose(comandos);
-
-    return 0;
 }
