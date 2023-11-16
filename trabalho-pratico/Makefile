@@ -18,7 +18,7 @@ DEPS = $(IDIR)/$(wildcard *.h)
 EXE = programa-principal
 
 programa-principal: 
-	gcc $(LDFLAGS) src/*.o -o programa-principal
+	gcc $(CFLAGS) src/*.o -o programa-principal
 
 
 .PHONY: all run time clean

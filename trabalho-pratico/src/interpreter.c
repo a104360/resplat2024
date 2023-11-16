@@ -23,11 +23,11 @@ int verTamanhoLinha(char * linha){
 void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,FlightsDatabase * fDatabase,PassangersDatabase * pDatabase,int agrc, char **argv){
     FILE * comandos = fopen(argv[2],"r");
 
-    if (comandos == NULL){ perror("Erro a abrir o ficheiro dos comandos"); return 1;} 
+    if (comandos == NULL){ perror("Erro a abrir o ficheiro dos comandos"); return;} 
 
     char * linha = malloc(sizeof(char) * BUFFERSIZE);
 
-    if(!linha) { perror("Erro a alocar memoria no readFile"); return 1;}
+    if(!linha) { perror("Erro a alocar memoria no readFile"); return;}
 
     memset(linha, '\0', strlen(linha));
 
@@ -60,10 +60,10 @@ void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,Fl
             //QUERIE 1
             }else {
                 if(linhaLimpa[1] == 'F'){
-                    char * resultadoQuerie1 = query1(&linhaLimpa[3]);
+                    char * resultadoQuerie1 = query1(uDatabase,rDatabase,fDatabase,pDatabase,&linhaLimpa[3],true);
                     //mandar para o output das F
                 }else {
-                    char * resultadoQuerie1 = query1(&linhaLimpa[2]);
+                    char * resultadoQuerie1 = query1(uDatabase,rDatabase,fDatabase,pDatabase,&linhaLimpa[2],false);
                     //mandar para o output sem F
                 }
             }
