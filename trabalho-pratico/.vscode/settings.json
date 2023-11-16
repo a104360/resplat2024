@@ -2,6 +2,7 @@
     "C_Cpp.errorSquiggles": "enabledIfIncludesResolve",
     "files.associations": {
         "interpreter.h": "c",
-        "queries.h": "c"
+        "queries.h": "c",
+        "datatypes.h": "c"
     }
 }
