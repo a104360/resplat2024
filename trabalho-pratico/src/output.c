@@ -111,3 +111,10 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
         fprintf(outputFile, "total_price: %d\n", total_price);
     }
 }
+
+
+
+//      **** OUTPUTS PARA Q1 ****
+
+
+void outputQ2(Reservation ** reservation, Flight ** flight){}
