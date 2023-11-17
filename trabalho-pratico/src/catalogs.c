@@ -358,7 +358,7 @@ typedef struct airportDB{
 } AirportDB;
 
 
-AirportDB * getAirportDB(FlightsDatabase * fDatabase,const char * airport,Time * begin,Time * end){
+AirportDB * getAirportDB(FlightsDatabase fDatabase,const char * airport,Time * begin,Time * end){
     int max = g_hash_table_size(fDatabase);
     AirportDB * aList = malloc(sizeof(struct airportDB));
     aList->numFlights = 0;

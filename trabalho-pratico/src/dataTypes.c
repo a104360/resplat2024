@@ -201,7 +201,7 @@ typedef struct passanger{
     user->passport =strdup(line);
 }
 
- char * getUserPassaport(User * user){
+ char * getUserPassport(User * user){
     if(user->passport){
         char * aux =strdup(user->passport);
         return aux;
@@ -293,7 +293,7 @@ void copyUser(User * dest,User * src){
     setUserId(dest,getUserId(src));
     setUserName(dest,getUserName(src));
     setUserEmail(dest,getUserEmail(src));
-    setUserPhoneNumber(dest,getUserPhoneNumber(src));
+    setUserPhone(dest,getUserPhone(src));
     setUserBday(dest,getUserBday(src));
     setUserSex(dest,getUserSex(src));
     setUserPassaport(dest,getUserPassaport(src));

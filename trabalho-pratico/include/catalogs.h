@@ -115,7 +115,7 @@ void destroyFlightPassangers(FlightPassangers *);
 
 typedef struct airportDB AirportDB;
 
-AirportDB * getAirportDB(FlightsDatabase * ,const char * );
+AirportDB * getAirportDB(FlightsDatabase,const char *,Time *,Time *);
 
 void checkAirports(gpointer,gpointer,gpointer);
 

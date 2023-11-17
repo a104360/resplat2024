@@ -72,7 +72,7 @@ void setUserSex(User *, const char);
 char getUserSex(User *);
 
 void setUserPassport(User *, const char *);
-char * getUserPassaport(User *);
+char * getUserPassport(User *);
 
 void setUserCountryCode(User *, const char *);
 char * getUserCountryCode(User *);

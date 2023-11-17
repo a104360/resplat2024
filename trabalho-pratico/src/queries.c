@@ -241,7 +241,7 @@ void query7(){
     return;
 }
 
-void query8(ReservationsDatabase * rDatabase,const char * id,Time * begin,Time * end,bool f){
+void query8(ReservationsDatabase rDatabase,const char * id,Time * begin,Time * end,bool f){
     HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id,begin,end);
     
     Reservation ** rList = getAllHotelReservs(hDatabase);

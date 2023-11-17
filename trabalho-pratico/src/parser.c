@@ -64,8 +64,6 @@
 
 
 // Verifies the correctness of the year in the date string, following the determined format
-// tm.year = years after 1900
-// Example : the year 2023 would appear on tm.year as 123
  int yearCheck(const char * line){
     for(int i = 0; i < 5;i++){
         if(i < 4){

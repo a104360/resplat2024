@@ -6,7 +6,7 @@
 #include "../include/time.h"
 
 // Listar o resumo de um user/reserva/voo, através do identificador
-void query1(UsersDatabase *, ReservationsDatabase *,FlightsDatabase *,PassangersDatabase *,const char * ,bool);
+void query1(UsersDatabase, ReservationsDatabase,FlightsDatabase,PassangersDatabase *,const char * ,bool);
 
 //listar voos ou reservas de um user !!atencao ao enunciado!!
 void query2(UsersDatabase,ReservationsDatabase,FlightsDatabase,PassangersDatabase *,const char *,char *,bool);
@@ -27,7 +27,7 @@ void query6();
 void query7();
 
 //Apresentar receita total,de um hotel entre 2 datas, apartir do identificador. (usar preco/1noite * num_noites)
-void query8(ReservationsDatabase *,const char *,Time *,Time *,bool);
+void query8(ReservationsDatabase,const char *,Time *,Time *,bool);
 
 //listar todos os users cujo nome começa com o prefixo do argumento, ordenados por nome (crescente) (se 2, usar id)
 void query9();
