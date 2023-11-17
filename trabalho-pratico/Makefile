@@ -13,10 +13,6 @@ SOURCES = $(wildcard src/*.c)
 OBJ= $(SOURCES:.c=.o)
 
 
-DEPS = $(IDIR)/$(wildcard *.h)
-
-EXE = programa-principal
-
 programa-principal: 
 	gcc $(CFLAGS) src/*.o -o programa-principal
 

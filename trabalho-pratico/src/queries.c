@@ -5,6 +5,7 @@
 #include "../include/dataStructs.h"
 #include "../include/catalogs.h"
 #include "../include/sort.h"
+#include "../include/output.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -12,7 +13,7 @@
 
 #define BUFFERSIZE 100
 
-char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,FlightsDatabase * fDatabase,PassangersDatabase * pDatabase,const char * id,bool f){
+void query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,FlightsDatabase * fDatabase,PassangersDatabase * pDatabase,const char * id,bool f){
     char * analisa = malloc(sizeof(char) * 4);
     strncpy(analisa,id,4);
     int flag = 0;
@@ -33,30 +34,29 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
         char sex = getUserSex(user);
         int age = getUserAge(user);
         char * country_code = getUserCountryCode(user);
+        char * passaport = getUserPassaport(user);
 
         UserFlightsDB * uFDatabase = getUserFlightsDB(*fDatabase,pDatabase,id);
         char * number_of_fights = malloc(sizeof(char) * 10);
-        sprintf(number_of_fights,"%d",getNumFlights(uFDatabase));
-        free(uFDatabase);
+        snprintf(number_of_fights,10,"%d",getNumFlights(uFDatabase));
+        destroyUserFlightsDB(uFDatabase);
 
         UserReservsDB * uRDatabase = getUserReservsDB(*uDatabase,id);
         char * number_of_reservations = malloc(sizeof(char) * 10);
-        sprintf(number_of_reservations,"%d",getNumReservs(uRDatabase));
-        free(uRDatabase);
+        snprintf(number_of_reservations,10,"%d",getNumReservs(uRDatabase));
+        destroyUserReservsDB(uRDatabase);
 
         char * total_spent = malloc(sizeof(char) * 10);
-        sprintf(total_spent,"%.3f",getTotalSpentByUser((void **) getUserReservs(uRDatabase)));
+        snprintf(total_spent,10,"%.3f",getTotalSpentByUser((void **) getUserReservs(uRDatabase)));
         
-        char * final1 = malloc(sizeof(char) * BUFFERSIZE);
-        sprintf(final1,"%s;%c;%d;%s;%s;%s;",name,sex,age,number_of_fights,number_of_reservations,total_spent);
+        outputQ1User((int)f,name,sex,age,country_code,passaport,number_of_fights,number_of_reservations,total_spent);
 
         free(name);
         free(country_code);
+        free(passaport);
         free(number_of_fights);
         free(number_of_reservations);
         free(total_spent);
-
-        return final1;
         break;
     
     case 2: // ** Flight **
@@ -70,17 +70,12 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
         
 
         FlightPassangers * book = getFlightPassangers(fDatabase,pDatabase,id);
-        char * nPassangers = malloc(sizeof(char) * 10);
-        sprintf(nPassangers,"%d",getNumPassangers(book));
+        int nPassangers = getNumPassangers(book);
         destroyFlightPassangers(book);
 
-        char * delay = malloc(sizeof(char) * 10);
-        sprintf(delay,"%d",getFlightDelay(flight));
+        int delay = getFlightDelay(flight);
 
-
-        char * final2 = malloc(sizeof(char) * BUFFERSIZE);
-        sprintf(final2,"%s;%s;%s;%s;%s;%s;%s;%s;",airline,plane_model,origin,destination,schedule_departure_date,
-        schedule_arrival_date,nPassangers,delay);
+        outputQ1Flight((int)f,airline,plane_model,origin,destination,schedule_departure_date,schedule_arrival_date,nPassangers,delay);
 
         free(airline);
         free(plane_model);
@@ -91,47 +86,43 @@ char * query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,Flight
         free(nPassangers);
         free(delay);
 
-        return final2;
+
         break;
 
     case 3: // ** Reservation **
         Reservation * reserv = lookupReserv(rDatabase,id);
         char * hotel_id = getReservHotelId(reserv);
         char * hotel_name = getReservHotelName(reserv);
-        char hotel_stars = getReservHotelStars(reserv) + '0';
+        int hotel_stars = getReservHotelStars(reserv);
         char * begin_date = timeToString(getReservBeginDate(reserv));
         char * end_date = timeToString(getReservEndDate(reserv));
         int nights = numberOfDays(getReservBeginDate(reserv),getReservEndDate(reserv));
-        char includes_breakfast = getReservBreakfast(reserv) + '0';
-        char * total_price = malloc(sizeof(char) * 10);
-        sprintf(total_price,"%.3f",getTotalSpentOnReserv(reserv));
-        char * final3 = malloc(sizeof(char) * BUFFERSIZE);
-        sprintf(final3,"%s;%s;%c;%s;%s;%d;%c;%s;",hotel_id,hotel_name,hotel_stars,begin_date,end_date,
-        nights,includes_breakfast,total_price);
+        bool includes_breakfast = getReservBreakfast(reserv);
+        double total_price = getTotalSpentOnReserv(reserv);
+
+        outputQ1Reservation((int)f,hotel_id,hotel_name,hotel_stars,begin_date,end_date,
+        includes_breakfast,nights,total_price);
 
         free(hotel_id);
         free(hotel_name);
         free(begin_date);
         free(end_date);
-        free(total_price);
-
-        return final3;
         break;
     default:
-        return NULL;
+        return;
         break;
     }
     free(analisa);
-    return NULL;
+    return;
 }
 
-char * query2(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * passangers,
+void query2(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * passangers,
 const char * id,char * tipo,bool f){
     User * user = lookupUser(uDatabase,id);
 
     if(getUserAccountStatus(user) == false){
         free(user);
-        return NULL;
+        return;
     }
     int flag = 0;
     if(!tipo) flag = 1;
@@ -151,7 +142,12 @@ const char * id,char * tipo,bool f){
         mergeSortF(fList,0,getNumFlights(uFDatabase));
         mergeSortR(rList,0,getNumReservs(uRDatabase));
 
-        
+        outputQ2(f,rList,getNumReservs(uRDatabase),fList,getNumFlights(uFDatabase));
+
+        free(fList);
+        free(rList);
+        destroyUserFlightsDB(uFDatabase);
+        destroyUserReservsDB(uRDatabase);
 
         break;
 
@@ -162,7 +158,10 @@ const char * id,char * tipo,bool f){
 
         mergeSortF(fList,0,getNumFlights(uFDatabase));
 
+        outputQ2(f,NULL,0,fList,getNumFlights(uFDatabase));
 
+        free(fList);
+        destroyUserFlightsDB(uFDatabase);
 
         break;
 
@@ -173,8 +172,11 @@ const char * id,char * tipo,bool f){
 
         mergeSortR(rList,0,getNumReservs(uRDatabase));
 
+        outputQ2(f,rList,getNumReservs(uRDatabase),NULL,0);
 
-
+        free(rList);
+        destroyUserReservsDB(uRDatabase);        
+        
         break;
     
     
@@ -182,38 +184,56 @@ const char * id,char * tipo,bool f){
         break;
     }
     
-
-    return NULL;
+    free(user);
+    return;
 }
 
-char * query3(){
-    return NULL;
+// Average rating of an hotel
+void query3(ReservationsDatabase * rDatabase,const char * id,bool f){
+    double n = averageRating(rDatabase,id);
+
+    outputQ3(f,n);
+
+    return;
 }
 
-char * query4(){
-    return NULL;
+void query4(ReservationsDatabase * rDatabase,const char * id,bool f){
+    HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id);
+    Reservation ** rList = getAllHotelReservs(hDatabase);
+    mergeSortR(rList,0,getNumReservas(hDatabase));
+
+    outputQ4(f,rList,getNumReservas(hDatabase));
+
+    for(int i = 0; i < getNumReservas(hDatabase);i++){
+        free(rList[i]);
+    }
+    free(rList);
+
+    destroyHotelDatabase(hDatabase);
+
+    return;
 }
 
-char * query5(){
-    return NULL;
+void query5(){
+    return;
 }
 
-char * query6(){
-    return NULL;
+void query6(){
+    return;
 }
 
-char * query7(){
-    return NULL;
+void query7(){
+    return;
 }
 
-char * query8(){
-    return NULL;
+void query8(){
+    return;
 }
 
-char * query9(){
-    return NULL;
+void query9(){
+    return;
 }
 
-char * query10(){
-    return NULL;
+void query10(){
+    return;
 }

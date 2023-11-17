@@ -176,7 +176,7 @@ void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
 void destroyHotelDatabase(HotelDatabase * hotel){
     free(hotel->hotel_id);
     for(int i = 0;i < hotel->numReservas;i++){
-        destroyReservation(hotel->_hotelReservs[i]);
+        free(hotel->_hotelReservs[i]);
     }
     free(hotel->_hotelReservs);
     free(hotel);
@@ -228,7 +228,7 @@ void allUserReservs(gpointer key ,gpointer value,gpointer userData){
 
 void destroyUserReservsDB(UserReservsDB * database){
     for(int i = 0;i < database->size;i++){
-        destroyReservation(database->_userReservs[i]);
+        free(database->_userReservs[i]);
     }
     free(database->_userReservs);
     free(database->userId);
@@ -276,7 +276,7 @@ Flight ** getFlightIdList(const UserFlightsDB * database){
 void destroyUserFlightsDB(UserFlightsDB * database){
     destroyPassangersDB(database->passangers);
     for(int i = 0;i < database->numTravels;i++){
-        destroyFlight(database->flights[i]);
+        free(database->flights[i]);
     }
     free(database->flights);
     free(database);
@@ -327,7 +327,7 @@ Passanger ** getFlightPassangersBook(const FlightPassangers * database){
 void destroyFlightPassangers(FlightPassangers * database){
     database->allPassangers = NULL;
     for(int i = 0;i < database->numPassangers;i++){
-        destroyPassanger(database->list[i]);
+        free(database->list[i]);
     }
     free(database->list);
     free(database);

@@ -5,7 +5,7 @@
 #include "../include/catalogs.h"
 
 // Listar o resumo de um user/reserva/voo, através do identificador
-char * query1(UsersDatabase *, ReservationsDatabase *,FlightsDatabase *,PassangersDatabase *,const char * ,bool);
+void query1(UsersDatabase *, ReservationsDatabase *,FlightsDatabase *,PassangersDatabase *,const char * ,bool);
 
 //listar voos ou reservas de um user !!atencao ao enunciado!!
 char * query2(UsersDatabase , ReservationsDatabase ,FlightsDatabase,PassangersDatabase *,const char *,char *,bool);

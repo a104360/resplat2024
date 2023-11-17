@@ -140,7 +140,7 @@ int main(int argc,char **argv){
 
     // Read and execute commands, freeing after used
     
-    readEntryFile();
+    //readEntryFile();
 
     // Free everything used
 

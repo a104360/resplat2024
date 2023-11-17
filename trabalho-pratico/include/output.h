@@ -6,8 +6,12 @@ void outputQ1User(int , char * , char , int , char * , char * , char * , char * 
 
 void outputQ1Flight(int , char * , char * , char * , char * , char * , char * , int , int);
 
-void outputQ1Reservation(int , char * , char * , int , char * , char * , bool, int , int);
+void outputQ1Reservation(int , char * , char * , int , char * , char * , bool, int , double);
 
-void outputQ2(Reservation ** , Flight ** );
+void outputQ2(bool,Reservation **,int, Flight **,int);
+
+void outputQ3(bool,double);
+
+void outputQ4(bool,Reservation **,int);
 
 #endif

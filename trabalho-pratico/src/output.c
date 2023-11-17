@@ -3,6 +3,8 @@
 #include <stdlib.h>
 #include <stdbool.h>
 #include "../include/output.h"
+#include "../include/statistics.h"
+
 
 //inteiro que representa a Query q está a ser respondida
 int commandAtual = 0;
@@ -80,7 +82,7 @@ void outputQ1Flight(int F, char * airline, char * plane_model , char * origin, c
 
 
 //reservation
-void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_stars, char * begin_date , char * end_date , bool includes_breakfast, int nights, int total_price){
+void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_stars, char * begin_date , char * end_date , bool includes_breakfast, int nights, double total_price){
 
     commandAtual++;
 
@@ -98,7 +100,7 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
         fprintf(outputFile, "%s;", end_date);
         fprintf(outputFile, "%d;", includes_breakfast);
         fprintf(outputFile, "%d;", nights);
-        fprintf(outputFile, "%d;", total_price);
+        fprintf(outputFile, "%.3f;", total_price);
     }else{
         fprintf(outputFile, "--- 1 ---\n");
         fprintf(outputFile, "hotel_id: %s\n", hotel_id);
@@ -117,4 +119,105 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
 //      **** OUTPUTS PARA Q1 ****
 
 
-void outputQ2(Reservation ** reservation, Flight ** flight){}
+void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
+    
+    commandAtual++;
+
+    char fileName[50];
+
+    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+
+    FILE * outputFile = fopen(fileName, "a");
+
+
+    if(!r1 && !f2){
+        fprintf(outputFile,"\0");
+        fclose(outputFile);
+        return;
+    }
+    if(f == true){
+        if(r1 && n1 > 0 && f2 && n2 > 0){
+        int i = 0,j = 0,count = 0,max = n1 + n2;
+        while(count < max){
+            if(compareTimes(getReservBeginDate(r1[i]),getFlightSDepartureDate(f2[j])) == true){ 
+                fprintf(outputFile,"%s;%sflight\n",getFlightId(f2[j]),timeToString(getFlightSDepartureDate(f2[j])));
+                j++;
+            }
+            else{
+                fprintf(outputFile,"%s;%sreservation\n",getReservId(r1[i]),timeToString(getReservBeginDate(r1[i])));
+                i++;
+            }
+            count++;
+        }
+        fclose(outputFile);
+        return;
+        }
+        if(r1 && n1 > 0){
+            int i = 0;
+            while(i < n1){
+                fprintf(outputFile,"%s;%s\n",getReservId(r1[i]),timeToString(getReservBeginDate(r1[i])));
+                i++;
+            }
+            fclose(outputFile);
+            return;
+        }
+        if(f2 && n2 > 0){
+            int j = 0;
+            while(j < n2){
+                fprintf(outputFile,"%s;%s\n",getFlightId(f2[j]),timeToString(getFlightSDepartureDate(f2[j])));
+                j++;
+            }
+            fclose(outputFile);
+            return;
+        }
+    }
+}
+
+void outputQ3(bool f,double rating){
+
+    commandAtual++;
+
+    char fileName[50];
+
+    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+
+    FILE * outputFile = fopen(fileName, "a");
+
+
+    if(f == true){
+        fprintf(outputFile,"--- 1 ---\n%.3f\n",rating);
+    }else{
+        fprintf(outputFile,"%.3f\n",rating);
+    }
+    fclose(outputFile);
+}
+
+void outputQ4(bool f,Reservation ** rList,int max){
+    commandAtual++;
+
+    char fileName[50];
+
+    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+
+    FILE * outputFile = fopen(fileName, "a");
+
+    if(f == true){
+        for(int i = 0; i < max;i++){
+            fprintf(outputFile,"--- %d ---\n",i);
+            fprintf(outputFile,"id : %s\n",getReservId(rList[i]));
+            fprintf(outputFile,"begin_date : %s\n",timeToString(getReservBeginDate(rList[i])));
+            fprintf(outputFile,"end_date : %s\n",timeToString(getReservEndDate(rList[i])));
+            fprintf(outputFile,"user_id : %s\n",getReservUserId(rList[i]));
+            fprintf(outputFile,"rating : %d\n",getReservRating(rList[i]));
+            fprintf(outputFile,"total_price : %.3f\n",getTotalSpentOnReserv(rList[i]));
+        }
+    }else{
+        for(int i = 0;i < max;i++){
+            fprintf("%s;%s;%s;%s;%d;%.3f\n",getReservId(rList[i]),timeToString(getReservBeginDate(rList[i])),
+            timeToString(getReservEndDate(rList[i])),getReservUserId(rList[i]),
+            getReservRating(rList[i]),getTotalSpentOnReserv(rList[i]));
+        }
+    }
+    fclose(outputFile);
+    
+}
