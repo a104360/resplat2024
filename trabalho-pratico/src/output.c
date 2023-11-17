@@ -251,3 +251,20 @@ void outputQ5(bool f, Flight ** fList,int max){
     }
     fclose(outputFile);
 }
+
+void outputQ8(double revenue, bool f){
+    commandAtual++;
+
+    char fileName[50];
+
+    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+
+    FILE * outputFile = fopen(fileName, "a");
+    if(f== true){
+        fprintf(outputFile,"--- 1 ---\n");
+        fprintf(outputFile,"revenue: %.3f\n",revenue);
+    }else{
+        fprintf(outputFile,"%.3f\n",revenue);
+    }
+    fclose(outputFile);
+}

@@ -6,7 +6,7 @@
 #include "../include/time.h"
 
 // Listar o resumo de um user/reserva/voo, através do identificador
-void query1(UsersDatabase *, ReservationsDatabase *,FlightsDatabase *,PassangersDatabase *,const char * ,bool);
+void query1(UsersDatabase, ReservationsDatabase ,FlightsDatabase ,PassangersDatabase *,const char * ,bool);
 
 //listar voos ou reservas de um user !!atencao ao enunciado!!
 void query2(UsersDatabase,ReservationsDatabase,FlightsDatabase,PassangersDatabase *,const char *,char *,bool);
