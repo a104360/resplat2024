@@ -221,3 +221,33 @@ void outputQ4(bool f,Reservation ** rList,int max){
     fclose(outputFile);
     
 }
+
+void outputQ5(bool f, Flight ** fList,int max){
+    commandAtual++;
+
+    char fileName[50];
+
+    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+
+    FILE * outputFile = fopen(fileName, "a");
+    if(f == true){
+        for(int i = 0;i < max;i++){
+            fprintf(outputFile,"--- %d ---\n",i);
+            fprintf(outputFile,"id : %s\n",getFlightId(fList[i]));
+            fprintf(outputFile,"schedule_departure_date : %s\n",timeToString(getFlightSDepartureDate(fList[i])));
+            fprintf(outputFile,"destination : %s\n",getFlightDestination(fList[i]));
+            fprintf(outputFile,"airline : %s\n",getFlightAirline(fList[i]));
+            fprintf(outputFile,"plane_model : %s\n",getFlightPlaneModel(fList[i]));
+        }
+    }else{
+        for(int i = 0;i < max;i++){
+            fprintf(outputFile,"%s;%s;%s;%s;%s",
+            getFlightId(fList[i]),
+            timeToString(getFlightSDepartureDate(fList[i])),
+            getFlightDestination(fList[i]),
+            getFlightAirline(fList[i]),
+            getFlightPlaneModel(fList[i]));
+        }
+    }
+    fclose(outputFile);
+}

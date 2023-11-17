@@ -71,6 +71,7 @@ int getSec(Time * time){
     t->sec = aux->sec;
 }
 
+// ** If the first time happened first returns true **
  bool compareTimes(Time *t1,Time*t2){
 
     if(t1->year != t2->year)

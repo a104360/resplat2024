@@ -56,7 +56,7 @@ int getNumReservas(void *);
 
 Reservation ** getAllHotelReservs(const HotelDatabase *);
 
-HotelDatabase * getHotelDataBase(void * ,const char * );
+HotelDatabase * getHotelDataBase(void *,const char *,Time *,Time *);
 
 void allHotelReservs(gpointer , gpointer , gpointer );
 
@@ -112,6 +112,18 @@ void destroyFlightPassangers(FlightPassangers *);
 
 
 
+
+typedef struct airportDB AirportDB;
+
+AirportDB * getAirportDB(FlightsDatabase * ,const char * );
+
+void checkAirports(gpointer,gpointer,gpointer);
+
+int getNumAirportFlights(AirportDB *);
+
+Flight ** getAirportFlights(AirportDB *);
+
+void destroyAirport(AirportDB * db);
 
 
 void destroyDataBase(void *);

@@ -98,7 +98,7 @@ void query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,FlightsD
         char * end_date = timeToString(getReservEndDate(reserv));
         int nights = numberOfDays(getReservBeginDate(reserv),getReservEndDate(reserv));
         bool includes_breakfast = getReservBreakfast(reserv);
-        double total_price = getTotalSpentOnReserv(reserv);
+        double total_price = getTotalSpentOnReserv(reserv,-1);
 
         outputQ1Reservation((int)f,hotel_id,hotel_name,hotel_stars,begin_date,end_date,
         includes_breakfast,nights,total_price);
@@ -139,15 +139,18 @@ const char * id,char * tipo,bool f){
         Reservation ** rList = getUserReservs(uRDatabase);
         Flight ** fList = getUserFlights(uFDatabase);
 
-        mergeSortF(fList,0,getNumFlights(uFDatabase));
-        mergeSortR(rList,0,getNumReservs(uRDatabase));
+        int r = getNumReservs(uRDatabase);
+        int f = getNumFlights(uFDatabase);
 
-        outputQ2(f,rList,getNumReservs(uRDatabase),fList,getNumFlights(uFDatabase));
+        mergeSortF(fList,0,f);
+        mergeSortR(rList,0,r);
 
-        free(fList);
-        free(rList);
-        destroyUserFlightsDB(uFDatabase);
+        outputQ2(f,rList,r,fList,f);
+
         destroyUserReservsDB(uRDatabase);
+        for(int i = 0; i < r;i++) free(rList[i]);
+        for(int i = 0; i < f;i++) free(fList[i]);
+        destroyUserFlightsDB(uFDatabase);
 
         break;
 
@@ -160,7 +163,7 @@ const char * id,char * tipo,bool f){
 
         outputQ2(f,NULL,0,fList,getNumFlights(uFDatabase));
 
-        free(fList);
+        for(int i = 0; i < f;i++) free(fList[i]);
         destroyUserFlightsDB(uFDatabase);
 
         break;
@@ -174,8 +177,9 @@ const char * id,char * tipo,bool f){
 
         outputQ2(f,rList,getNumReservs(uRDatabase),NULL,0);
 
-        free(rList);
-        destroyUserReservsDB(uRDatabase);        
+
+        for(int i = 0; i < r;i++) free(rList[i]);       
+        destroyUserReservsDB(uRDatabase);
         
         break;
     
@@ -189,7 +193,7 @@ const char * id,char * tipo,bool f){
 }
 
 // Average rating of an hotel
-void query3(ReservationsDatabase * rDatabase,const char * id,bool f){
+void query3(ReservationsDatabase rDatabase,const char * id,bool f){
     double n = averageRating(rDatabase,id);
 
     outputQ3(f,n);
@@ -197,8 +201,8 @@ void query3(ReservationsDatabase * rDatabase,const char * id,bool f){
     return;
 }
 
-void query4(ReservationsDatabase * rDatabase,const char * id,bool f){
-    HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id);
+void query4(ReservationsDatabase rDatabase,const char * id,bool f){
+    HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id,NULL,NULL);
     Reservation ** rList = getAllHotelReservs(hDatabase);
     mergeSortR(rList,0,getNumReservas(hDatabase));
 
@@ -214,8 +218,19 @@ void query4(ReservationsDatabase * rDatabase,const char * id,bool f){
     return;
 }
 
-void query5(){
-    return;
+void query5(FlightsDatabase fDatabase,Time * ti,Time * tf,const char * id,bool f){
+    AirportDB * airportFlights = getAirportDb(fDatabase,id);
+    Flight ** fList = getAirportFlights(airportFlights);
+    int max = getNumAirportFlights(airportFlights);
+    mergeSortF(fList,0,max);
+
+    outputQ5(f,fList,max);
+
+    for(int i = 0;i < max;i++){
+        free(fList[i]);
+    }
+    free(fList);
+    destroyAirport(airportFlights);
 }
 
 void query6(){
@@ -226,7 +241,21 @@ void query7(){
     return;
 }
 
-void query8(){
+void query8(ReservationsDatabase * rDatabase,const char * id,Time * begin,Time * end,bool f){
+    HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id,begin,end);
+    
+    Reservation ** rList = getAllHotelReservs(hDatabase);
+
+    double total = 0;
+
+    int days = numberOfDays(begin,end);
+
+    for(int i = 0;i < getNumReservas(hDatabase);i++){
+        total += getTotalSpentOnReserv(rList[i],days);
+    }
+
+
+
     return;
 }
 

@@ -14,16 +14,21 @@ double getTotalSpentByUser(void ** userReservs){
     return total;
 }
 
-double getTotalSpentOnReserv(void * userReservs){
+double getTotalSpentOnReserv(void * userReservs,int n){
     Reservation * list = (Reservation *) userReservs; 
     int total = 0;
-    int dayDiff = numberOfDays(getReservBeginDate(list),getReservEndDate(list));
-    total = (getReservPricePerNight(list) * dayDiff) + ((dayDiff / 100) * getReservCityTax(list));
+    double p = getReservPricePerNight(list);
+    double iva = getReservCityTax(list);
+    if(n > -1) total = (p * n) + (((p * n)/ 100) * iva);
+    else{
+        int dayDiff = numberOfDays(getReservBeginDate(list),getReservEndDate(list));
+        total = (p * dayDiff) + (((p * dayDiff)/100) * iva);
+    }
     return total;
 }
 
 double averageRating(void * reservations, const char * id){
-    HotelDatabase * hotelDB = getHotelDataBase(reservations,id);
+    HotelDatabase * hotelDB = getHotelDataBase(reservations,id,NULL,NULL);
     int sumRatings = getSumRatings(hotelDB);
     int n = getNumReservas(hotelDB);
     destroyHotelDatabase(hotelDB);

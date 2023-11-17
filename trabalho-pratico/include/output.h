@@ -14,4 +14,6 @@ void outputQ3(bool,double);
 
 void outputQ4(bool,Reservation **,int);
 
+void outputQ5(bool,Flight **,int);
+
 #endif

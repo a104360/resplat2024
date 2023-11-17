@@ -1,6 +1,7 @@
 #include "../include/catalogs.h"
 #include "../include/dataTypes.h"
 #include "../include/dataStructs.h"
+#include "../include/time.h"
 #include <glib.h>
 
 
@@ -128,6 +129,8 @@ Reservation * lookupReserv(void * table,const char * reservId){
 typedef struct hotelDatabase{
     struct reservation ** _hotelReservs;
     char * hotel_id;
+    Time * begin;
+    Time * end;
     int sumRatings;
     int numReservas;
 } HotelDatabase;
@@ -149,9 +152,11 @@ Reservation ** getAllHotelReservs(const HotelDatabase * hotelData){
 }
 
 // Returns the reservations by the hotel id
-HotelDatabase * getHotelDataBase(void * dataStruct,const char * hotelId){
+HotelDatabase * getHotelDataBase(void * dataStruct,const char * hotelId,Time * begin,Time * end){
     HotelDatabase * reservs = malloc(sizeof(struct hotelDatabase));
     reservs->hotel_id = strdup(hotelId);
+    reservs->begin = begin;
+    reservs->end = end;
     reservs->numReservas = 0;
     reservs->sumRatings = 0;
     reservs->_hotelReservs = malloc(getReservSize() * g_hash_table_size((GHashTable *) dataStruct));
@@ -165,12 +170,21 @@ void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
     Reservation * reservation = (Reservation *)value;
     static int i = 0;
 
-    if (!strcoll(getReservHotelId(reservation),array->hotel_id)) {
+    if(array->begin != NULL && array->end != NULL){
+        if (!strcoll(getReservHotelId(reservation),array->hotel_id) && compareTimes(getReservBeginDate(reservation),array->end) && compareTimes(array->begin,getReservEndDate(reservation))) {
           array->_hotelReservs[i] = reservation;
           array->sumRatings += getReservRating(reservation);
           array->numReservas++;
           i++;
-    }  
+        }
+    }else{
+        if (!strcoll(getReservHotelId(reservation),array->hotel_id)) {
+          array->_hotelReservs[i] = reservation;
+          array->sumRatings += getReservRating(reservation);
+          array->numReservas++;
+          i++;
+        }
+    }
 }
 
 void destroyHotelDatabase(HotelDatabase * hotel){
@@ -274,7 +288,7 @@ Flight ** getFlightIdList(const UserFlightsDB * database){
 }
 
 void destroyUserFlightsDB(UserFlightsDB * database){
-    destroyPassangersDB(database->passangers);
+    free(database->passangers);
     for(int i = 0;i < database->numTravels;i++){
         free(database->flights[i]);
     }
@@ -335,13 +349,60 @@ void destroyFlightPassangers(FlightPassangers * database){
 
 
 
+typedef struct airportDB{
+    Flight ** fList;
+    char * aiport;
+    Time * f;
+    Time * l;
+    int numFlights;
+} AirportDB;
+
+
+AirportDB * getAirportDB(FlightsDatabase * fDatabase,const char * airport,Time * begin,Time * end){
+    int max = g_hash_table_size(fDatabase);
+    AirportDB * aList = malloc(sizeof(struct airportDB));
+    aList->numFlights = 0;
+    aList->f = begin;
+    aList->l = end;
+    aList->fList = malloc(getFlightSize() * max);
+    g_hash_table_foreach(fDatabase,checkAirports,aList);
+    return aList;
+}
 
 
 
 
+void checkAirports(gpointer key,gpointer value,gpointer flightData){
+    Flight * flight = (Flight *) value;
+    AirportDB * database = (AirportDB *) flightData;
+    static int i = 0;
+    if(strcoll(database->aiport,getFlightOrigin(flight)) && 
+    compareTimes(getFlightSDepartureDate(flight),database->l)==true && 
+    compareTimes(database->f,getFlightSArrivalDate(flight))==true){
+        database->fList[i] = flight;
+        i++;
+        database->numFlights++;
+    }
+}
 
+int getNumAirportFlights(AirportDB * db){
+    return db->numFlights;
+}
 
+Flight ** getAirportFlights(AirportDB * db){
+    return db->fList;
+}
 
+void destroyAirport(AirportDB * db){
+    free(db->aiport);
+    free(db->f);
+    free(db->l);
+    for(int i = 0;i < db->numFlights;i++){
+        free(db->fList[i]);
+    }
+    free(db->fList);
+    free(db);
+}
 
 
 

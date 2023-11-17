@@ -4,7 +4,7 @@
 
 double getTotalSpentByUser(void **);
 
-double getTotalSpentOnReserv(void *);
+double getTotalSpentOnReserv(void *,int);
 
 double averageRating(void *,const char *);
 
