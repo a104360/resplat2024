@@ -8,9 +8,10 @@
 #include "../include/catalogs.h"
 
 #define BUFFERSIZE 1000
+#define TOKENIZE(token,saveptr) token = strtok_r(NULL," \n\0",&saveptr); 
 
 
-int verTamanhoLinha(char * linha){
+int verTamanhoLinha(const char * linha){
     int i = 0;
     int count = 0;
     while(linha[i] != '\0'){
@@ -20,7 +21,72 @@ int verTamanhoLinha(char * linha){
     return count;
 }
 
-void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,FlightsDatabase * fDatabase,PassangersDatabase * pDatabase,int agrc, char **argv){
+char * limpaToken(char * token){
+    int tamanho = 0;
+    if(token[0] == '\"'){
+        while(token[tamanho]){
+            token[tamanho] = token[tamanho+1];
+            tamanho++;
+        }
+        token[tamanho-2]='\0';
+    }
+    return token;
+}
+
+Time * firstDateQ5(const char * line){
+        
+    char * aux = strndup(line,20);
+    char * tokenLimpo = limpaToken(aux);
+    Time * firstDate = dateCheck(tokenLimpo);
+
+    free(aux);
+
+    return firstDate;
+}
+
+Time * secondDateQ5(const char * line){
+
+    char * aux = strndup(line,20);
+    char * tokenLimpo = limpaToken(aux);
+    Time * secondDate = dateCheck(tokenLimpo);
+
+    free(aux);
+
+    return secondDate;
+}
+
+Time * firstDateQ8(const char * line){
+        
+    char * aux = strndup(line,10);
+    Time * firstDate = dateCheck(aux);
+
+    free(aux);
+
+    return firstDate;
+}
+
+Time * secondDateQ8(const char * line){
+
+    char * aux = strndup(line,10);
+    Time * secondDate = dateCheck(aux);
+
+    free(aux);
+
+    return secondDate;
+}
+
+char * airportName(const char * line){
+
+    char * aux = strdup(line);
+    char * token = NULL;
+    char * saveptr = aux;
+    token = strtok_r(aux," \n\0",&saveptr);
+
+    free(aux);
+    return token;
+}
+
+void readEntryFile(UsersDatabase uDatabase,ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * pDatabase,int agrc, char **argv){
     FILE * comandos = fopen(argv[2],"r");
 
     if (comandos == NULL){ perror("Erro a abrir o ficheiro dos comandos"); return;} 
@@ -50,21 +116,21 @@ void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,Fl
             //QUERIE 10
             if(linhaLimpa[1] == '0'){
                 if(linhaLimpa[2] == 'F'){
-                    char * resultadoQuerie10 = query10(&linhaLimpa[4]);
-                    //mandar para o output das F
+                    query10(&linhaLimpa[4]);
+                    
                 }else {
-                    char * resultadoQuerie10 = query10(&linhaLimpa[3]);
-                    //mandar para o output sem F
+                    query10(&linhaLimpa[3]);
+                    
                 }
 
             //QUERIE 1
             }else {
                 if(linhaLimpa[1] == 'F'){
-                    char * resultadoQuerie1 = query1(uDatabase,rDatabase,fDatabase,pDatabase,&linhaLimpa[3],true);
-                    //mandar para o output das F
+                    query1(uDatabase,rDatabase,fDatabase,pDatabase,&linhaLimpa[3],true);
+                    
                 }else {
-                    char * resultadoQuerie1 = query1(uDatabase,rDatabase,fDatabase,pDatabase,&linhaLimpa[2],false);
-                    //mandar para o output sem F
+                    query1(uDatabase,rDatabase,fDatabase,pDatabase,&linhaLimpa[2],false);
+                    
                 }
             }
 
@@ -74,11 +140,11 @@ void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,Fl
         case '2':
 
             if(linhaLimpa[1] == 'F'){
-                    char * resultadoQuerie2 = query2(rDatabase,pDatabase,&linhaLimpa[3],true);
-                    //mandar para o output das F
+                    query2(uDatabase,rDatabase,fDatabase,pDatabase,&linhaLimpa[3],true);
+                    
                 }else {
-                    char * resultadoQuerie2 = query2(rDatabase,pDatabase,&linhaLimpa[2],false);
-                    //mandar para o output sem F
+                    query2(uDatabase,rDatabase,fDatabase,pDatabase,&linhaLimpa[2],false);
+                    
                 }
 
             break;
@@ -88,11 +154,11 @@ void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,Fl
         case '3':
 
             if(linhaLimpa[1] == 'F'){
-                    char * resultadoQuerie3 = query3(&linhaLimpa[3]);
-                    //mandar para o output das F
+                    query3(rDatabase,&linhaLimpa[3],true);
+                    
                 }else {
-                    char * resultadoQuerie3 = query3(&linhaLimpa[2]);
-                    //mandar para o output sem F
+                    query3(rDatabase,&linhaLimpa[2],false);
+                    
                 }
 
             break;
@@ -102,11 +168,11 @@ void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,Fl
         case '4':
 
             if(linhaLimpa[1] == 'F'){
-                    char * resultadoQuerie4 = query4(&linhaLimpa[3]);
-                    //mandar para o output das F
+                    query4(rDatabase,&linhaLimpa[3],true);
+                    
                 }else {
-                    char * resultadoQuerie4 = query4(&linhaLimpa[2]);
-                    //mandar para o output sem F
+                    query4(rDatabase,&linhaLimpa[2],false);
+                    
                 }
 
             break;
@@ -116,11 +182,11 @@ void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,Fl
         case '5':
 
             if(linhaLimpa[1] == 'F'){
-                    char * resultadoQuerie5 = query5(&linhaLimpa[3]);
-                    //mandar para o output das F
+                    query5(fDatabase,firstDate(&linhaLimpa[7]),secondDate(&linhaLimpa[29]),airportName(&linhaLimpa[3]),true);
+                    
                 }else {
-                    char * resultadoQuerie5 = query5(&linhaLimpa[2]);
-                    //mandar para o output sem F
+                    query5(fDatabase,firstDate(&linhaLimpa[7]),secondDate(&linhaLimpa[29]),airportName(&linhaLimpa[2]),false);
+                    
                 }
 
             break;
@@ -130,11 +196,11 @@ void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,Fl
         case '6':
 
             if(linhaLimpa[1] == 'F'){
-                    char * resultadoQuerie6 = query6(&linhaLimpa[3]);
-                    //mandar para o output das F
+                    query6(&linhaLimpa[3]);
+                    
                 }else {
-                    char * resultadoQuerie6 = query6(&linhaLimpa[2]);
-                    //mandar para o output sem F
+                    query6(&linhaLimpa[2]);
+                    
                 }
 
             break;
@@ -144,11 +210,11 @@ void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,Fl
         case '7':
 
             if(linhaLimpa[1] == 'F'){
-                    char * resultadoQuerie7 = query7(&linhaLimpa[3]);
-                    //mandar para o output das F
+                    query7(&linhaLimpa[3]);
+                    
                 }else {
-                    char * resultadoQuerie7 = query7(&linhaLimpa[2]);
-                    //mandar para o output sem F
+                    query7(&linhaLimpa[2]);
+                    
                 }
 
             break;
@@ -158,11 +224,31 @@ void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,Fl
         case '8':
 
             if(linhaLimpa[1] == 'F'){
-                    char * resultadoQuerie8 = query8(&linhaLimpa[3]);
-                    //mandar para o output das F
+                    char * aux = strdup(line);
+                    char * token = NULL;
+                    char * saveptr = aux;
+                    token = strtok_r(aux,"\n\0",&saveptr);
+                    TOKENIZE(token,saveptr);
+
+                    int tokenSize = tamanhoLinha(token);
+
+                    free(aux);
+
+                    query8(rDatabase,token,firstDateQ8(&linhaLimpa[4+tokenSize]),secondDateQ8(&linhaLimpa[15+tokenSize]),true);
+                    
                 }else {
-                    char * resultadoQuerie8 = query8(&linhaLimpa[2]);
-                    //mandar para o output sem F
+                    char * aux = strdup(line);
+                    char * token = NULL;
+                    char * saveptr = aux;
+                    token = strtok_r(aux,";\n\0",&saveptr);
+                    TOKENIZE(token,saveptr);
+
+                    int tokenSize = tamanhoLinha(token);
+
+                    free(aux);
+
+                    query8(rDatabase,token,firstDateQ8(&linhaLimpa[3+tokenSize]),secondDateQ8(&linhaLimpa[14+tokenSize]),false);
+                    
                 }
 
             break;
@@ -172,11 +258,11 @@ void readEntryFile(UsersDatabase * uDatabase,ReservationsDatabase * rDatabase,Fl
         case '9':
 
             if(linhaLimpa[1] == 'F'){
-                    char * resultadoQuerie9 = query9(&linhaLimpa[3]);
-                    //mandar para o output das F
+                    query9(&linhaLimpa[3]);
+                    
                 }else {
-                    char * resultadoQuerie9 = query9(&linhaLimpa[2]);
-                    //mandar para o output sem F
+                    query9(&linhaLimpa[2]);
+                    
                 }
 
             break;
