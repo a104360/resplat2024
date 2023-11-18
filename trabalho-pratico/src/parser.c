@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <ctype.h>
+#include <stdio.h>
 
 
 
@@ -310,11 +311,17 @@
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
     User * user = createUser();
+    if(!user){
+        fprintf(stderr,"Memory allocation for User failed");
+        if(token) free(token);
+        if(aux) free(aux);
+        return NULL;
+    }
 
     //check userId
     char * id = idCheck(token);
     if(!id){ free(aux); destroyUser(user); return NULL;}
-    setUserId(user,id);
+    setUserId(user,token);
     free(id);
     TOKENIZE(token,saveptr);
 

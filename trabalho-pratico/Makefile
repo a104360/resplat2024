@@ -2,7 +2,6 @@ CC = gcc
 IDIR = ../include
 DEPS = $(IDIR)/$(wildcard *.h)
 CFLAGS= -Wall -I$(IDIR) `pkg-config --libs --cflags glib-2.0`
-OPTIFLAGS = -O2
 EXE = programa-principal
 
 
@@ -21,13 +20,13 @@ OBJ= $(SOURCES:.c=.o)
 all: $(EXE) programa-testes
 
 $(EXE): $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) $(OPTIFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS) -g -Og
 
 %.o: %.c $(DEPS)
-	$(CC) -c -o $@ $< $(CFLAGS) $(OPTIFLAGS)
+	$(CC) -c -o $@ $< $(CFLAGS)
 
 programa-testes: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) $(OPTIFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS)
 
 run: $(EXE)
 	./$(EXE)
@@ -39,7 +38,7 @@ debug: $(EXE).debug
 	gdb $(EXE).debug
 
 grind: $(EXE).debug
-	valgrind --leak-check=full --show-reachable=no --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./$(EXE).debug
+	valgrind --leak-check=full --show-leak-kinds=all --log-file=valgrind-out.txt ./$(EXE).debug ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt
 
 clean:
-	rm -f $(EXE) programa-testes src/*.o $(EXE).debug valgrind-out.txt program
+	rm -f $(EXE) programa-testes src/*.o $(EXE).debug valgrind-out.txt

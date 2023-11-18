@@ -2,31 +2,38 @@
 #include "../include/interpreter.h"
 #include "../include/dataTypes.h"
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #define BUFFERSIZE 1000
 
 int main(int argc,char **argv){
-    
-    char * folder_path = argv[1];
-    char * filePath = malloc(sizeof(char) * 50);
+    if (argc < 2) {
+        fprintf(stderr, "Usage: %s <folder_path>\n", argv[0]);
+        return 1;
+    }
+    size_t argSize = 0;
+    argSize = strlen(argv[1]);
+    char * filePath = NULL;
+    filePath = malloc(argSize + 20);
 
-    strcpy(filePath,folder_path);
-    strncat(filePath,"/",2);
-
+    strncpy(filePath,argv[1],argSize);
 
 
     // Create Users Database
-    strcat(filePath,"users.csv");
+    strncat(filePath,"/users.csv",12);
+    filePath[argSize + 1 + 10 + 1] = '\0';
 
-    FILE * userFile = fopen(filePath,"r");
+    FILE * userFile = NULL;
+    userFile = fopen(filePath,"r");
 
     char * userData = malloc(sizeof(char) * BUFFERSIZE);
 
     if(!userData) { perror("Erro a alocar memoria na main"); return 1;}
 
-    memset(userData, '\0', strlen(userData));
+    memset(userData, '\0', BUFFERSIZE);
 
-    while(fgets(userData,strlen(userData),userFile)){
+    while(fgets(userData,BUFFERSIZE,userFile)){
 
         int tamanhoUserData = verTamanhoLinha(userData);
 
@@ -39,13 +46,14 @@ int main(int argc,char **argv){
         userCheck(userDataClean);
 
     }
-
+    
     fclose(userFile);
+    free(userData);
+    free(filePath);
 
-
-
+    /*
     // Create Reservations Database
-    strcpy(filePath,folder_path);
+    strcpy(filePath,argv[1]);
     strncat(filePath,"/",2);
 
     strcat(filePath,"reservations.csv");
@@ -77,7 +85,7 @@ int main(int argc,char **argv){
 
 
     //Create Flights Database
-    strcpy(filePath,folder_path);
+    strcpy(filePath,argv[1]);
     strncat(filePath,"/",2);
 
     strcat(filePath,"flights.csv");
@@ -108,7 +116,7 @@ int main(int argc,char **argv){
 
     // Create Passangers Database 
 
-    strcpy(filePath,folder_path);
+    strcpy(filePath,argv[1]);
     strncat(filePath,"/",2);
 
     strcat(filePath,"flights.csv");
@@ -143,6 +151,6 @@ int main(int argc,char **argv){
     //readEntryFile();
 
     // Free everything used
-
+*/
     return 0;
 }

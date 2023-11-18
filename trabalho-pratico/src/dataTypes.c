@@ -78,6 +78,7 @@ typedef struct passanger{
 
 
   void initUser(User * user){
+    if(!user) return;
     user->id = NULL;
     user->name = NULL;
     user->email = NULL;
@@ -93,7 +94,7 @@ typedef struct passanger{
 }
 
  User * createUser(){
-    User * u =malloc(sizeof(struct user));
+    User * u = malloc(sizeof(struct user));
     initUser(u);    
     return u;
 
@@ -117,10 +118,25 @@ typedef struct passanger{
 
 
 
-  void setUserId(User * user,const char * id){
-    if(user->id) free(user->id);
-    user->id =strdup(id);
+void setUserId(User * user, const char * id){
+    if (user == NULL) {
+        // Handle the error or return early based on your program's logic.
+        return;
+    }
+
+    // Free existing memory
+    if (user->id) {
+        free(user->id);
+        user->id = NULL;  // Set to NULL after freeing to avoid potential issues
+    }
+    if(id == NULL) return;
+    // Allocate new memory if id is not NULL
+    if (id) {
+        user->id = strdup(id);
+        // Check if strdup was successful, handle error if needed
+    }
 }
+
 
  char * getUserId(User * user){
     if(user->id){
@@ -133,7 +149,7 @@ typedef struct passanger{
 
   void setUserName(User * user,const char * name){
     if(user->name) free(user->name);
-    user->name =strdup(name);
+    if(name) user->name =strdup(name);
 }
 
  char * getUserName(User * user){
@@ -147,7 +163,7 @@ typedef struct passanger{
 
  void setUserEmail(User * user,const char * email){
     if(user->email) free(user->email);
-    user->email =strdup(email);
+    if(email) user->email =strdup(email);
 }
 
  char * getUserEmail(User * user){
@@ -160,7 +176,7 @@ typedef struct passanger{
 
  void setUserPhone(User * user,const char * line){
     if(user->phone_number) free(user->phone_number);
-    user->phone_number =strdup(line);
+    if(line) user->phone_number =strdup(line);
 }
  char * getUserPhone(User * user){
     if(user->phone_number){
@@ -187,7 +203,7 @@ typedef struct passanger{
 }
 
 
-  void setUserSex(User * user ,const char line){
+void setUserSex(User * user ,const char line){
     user->sex = (char) line;
 }
 
