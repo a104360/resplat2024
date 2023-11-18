@@ -1,6 +1,7 @@
 #include "../include/parser.h"
 #include "../include/interpreter.h"
 #include "../include/dataTypes.h"
+#include "../include/catalogs.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -9,7 +10,7 @@
 
 int main(int argc,char **argv){
     if (argc < 2) {
-        fprintf(stderr, "Usage: %s <folder_path>\n", argv[0]);
+        perror("Nao existe argumentos");
         return 1;
     }
     size_t argSize = 0;
@@ -27,13 +28,35 @@ int main(int argc,char **argv){
     FILE * userFile = NULL;
     userFile = fopen(filePath,"r");
 
+    FILE * userErrors = NULL;
+    char * filePathUErrors = NULL;
+    filePathUErrors = malloc(argSize + 20);
+    strncpy(filePathUErrors,"Resultados",14);
+    strncat(filePathUErrors,"/users_errors.csv",18);
+    userErrors = fopen(filePathUErrors,"a+");
+    if(!userErrors) {perror("Users errors file did not open\n"); return 1;}
+
     char * userData = malloc(sizeof(char) * BUFFERSIZE);
 
     if(!userData) { perror("Erro a alocar memoria na main"); return 1;}
 
     memset(userData, '\0', BUFFERSIZE);
 
+    //rewind(userFile);
+    fseek(userFile,115,SEEK_SET);
+    //fgets(userData,BUFFERSIZE,userFile);
+
+    //fgets(userData,BUFFERSIZE,userFile);
+    //fgets(userData,BUFFERSIZE,userFile);
+    //fgets(userData,BUFFERSIZE,userFile);
+    //fgets(userData,BUFFERSIZE,userFile);
+    //fgets(userData,BUFFERSIZE,userFile);
+
+    UsersDatabase uDatabase = initUsers();
+
     while(fgets(userData,BUFFERSIZE,userFile)){
+
+        User * uBuffer = NULL;
 
         int tamanhoUserData = verTamanhoLinha(userData);
 
@@ -43,8 +66,21 @@ int main(int argc,char **argv){
 
         userDataClean[tamanhoUserData] = '\0';
 
-        userCheck(userDataClean);
 
+        uBuffer = userCheck(userDataClean);
+
+        if(uBuffer != NULL){
+            char * idBuffer = getUserId(uBuffer);
+
+            g_hash_table_insert(uDatabase,idBuffer,uBuffer);
+
+            free(idBuffer);
+
+        }else{ 
+            fprintf(userErrors,"%s",userDataClean);
+        }
+        
+            uBuffer = NULL;
     }
     
     fclose(userFile);

@@ -8,8 +8,9 @@
 
 
 
+
 #define CHECKLEN(line) \
-    if(line[0] == '\0') return NULL;\
+    if(strlen(line)) return NULL;\
     char * aux = strdup(line);\
     return aux; \
 
@@ -227,10 +228,9 @@
 // format : LL (L is a letter)
  char * countryCheck(const char * line){
     if(!line) return NULL;
-    if(line[2] == '\0') return NULL;
-    if(line[3] == '\0'){
-        char * country = malloc(sizeof(char) * 2);
-        strcpy(country,line);
+    if(strlen(line) != 2) return NULL;
+    else{
+        char * country = strdup(line);
         return country;
     }
     return NULL;
@@ -310,7 +310,8 @@
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
-    User * user = createUser();
+    User * user = NULL;
+    user = createUser();
     if(!user){
         fprintf(stderr,"Memory allocation for User failed");
         if(token) free(token);

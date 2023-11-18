@@ -94,7 +94,8 @@ typedef struct passanger{
 }
 
  User * createUser(){
-    User * u = malloc(sizeof(struct user));
+    User * u = NULL;
+    u = malloc(sizeof(struct user));
     initUser(u);    
     return u;
 
@@ -140,7 +141,7 @@ void setUserId(User * user, const char * id){
 
  char * getUserId(User * user){
     if(user->id){
-        char * aux =strdup(user->id);
+        char * aux = strdup(user->id);
         return aux;
     }
     return NULL;

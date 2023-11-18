@@ -1,7 +1,7 @@
 CC = gcc
 IDIR = ../include
 DEPS = $(IDIR)/$(wildcard *.h)
-CFLAGS= -Wall -I$(IDIR) `pkg-config --libs --cflags glib-2.0`
+CFLAGS= -g -Wall -I$(IDIR) `pkg-config --libs --cflags glib-2.0`
 EXE = programa-principal
 
 
@@ -12,15 +12,12 @@ SOURCES = $(wildcard src/*.c)
 OBJ= $(SOURCES:.c=.o)
 
 
-
-
-
 .PHONY: all run time clean
 
 all: $(EXE) programa-testes
 
 $(EXE): $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS) -g -Og
+	$(CC) -o $@ $^ $(CFLAGS)	
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -32,7 +29,7 @@ run: $(EXE)
 	./$(EXE)
 
 $(EXE).debug: $(OBJ)
-	$(CC) -o $(EXE).debug $^ $(CFLAGS) -g -Og
+	$(CC) -o $(EXE).debug $^ $(CFLAGS)
 
 debug: $(EXE).debug
 	gdb $(EXE).debug
@@ -41,4 +38,4 @@ grind: $(EXE).debug
 	valgrind --leak-check=full --show-leak-kinds=all --log-file=valgrind-out.txt ./$(EXE).debug ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt
 
 clean:
-	rm -f $(EXE) programa-testes src/*.o $(EXE).debug valgrind-out.txt
+	rm -f $(EXE) programa-testes src/*.o $(EXE).debug valgrind-out.txt Resultados/*.csv
