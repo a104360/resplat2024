@@ -283,7 +283,7 @@ int getNumFlights(const UserFlightsDB * book){
     return book->numTravels;
 }
 
-Flight ** getFlightIdList(const UserFlightsDB * database){
+Flight ** getUserFlights(const UserFlightsDB * database){
     return database->flights;
 }
 
@@ -376,13 +376,20 @@ void checkAirports(gpointer key,gpointer value,gpointer flightData){
     Flight * flight = (Flight *) value;
     AirportDB * database = (AirportDB *) flightData;
     static int i = 0;
-    if(strcoll(database->aiport,getFlightOrigin(flight)) && 
-    compareTimes(getFlightSDepartureDate(flight),database->l)==true && 
-    compareTimes(database->f,getFlightSArrivalDate(flight))==true){
-        database->fList[i] = flight;
-        i++;
-        database->numFlights++;
-    }
+    if(database->f && database->l)
+        if(strcoll(database->aiport,getFlightOrigin(flight)) && 
+        compareTimes(getFlightSDepartureDate(flight),database->l)==true && 
+        compareTimes(database->f,getFlightSArrivalDate(flight))==true){
+            database->fList[i] = flight;
+            i++;
+            database->numFlights++;
+        }
+    if(database->f == NULL || database->f == NULL)
+        if(strcoll(database->aiport,getFlightOrigin(flight))){
+            database->fList[i] = flight;
+            i++;
+            database->numFlights++;
+        }
 }
 
 int getNumAirportFlights(AirportDB * db){

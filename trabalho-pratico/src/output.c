@@ -110,15 +110,15 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
         fprintf(outputFile, "end_date: %s\n", end_date);
         fprintf(outputFile, "includes_breakfast: %d\n", includes_breakfast);
         fprintf(outputFile, "nights: %d\n", nights);
-        fprintf(outputFile, "total_price: %d\n", total_price);
+        fprintf(outputFile, "total_price: %.3f\n", total_price);
     }
 }
 
 
 
-//      **** OUTPUTS PARA Q1 ****
 
 
+//*OUTPUTS PARA Q2
 void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
     
     commandAtual++;
@@ -131,7 +131,6 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
 
 
     if(!r1 && !f2){
-        fprintf(outputFile,"\0");
         fclose(outputFile);
         return;
     }
@@ -209,13 +208,13 @@ void outputQ4(bool f,Reservation ** rList,int max){
             fprintf(outputFile,"end_date : %s\n",timeToString(getReservEndDate(rList[i])));
             fprintf(outputFile,"user_id : %s\n",getReservUserId(rList[i]));
             fprintf(outputFile,"rating : %d\n",getReservRating(rList[i]));
-            fprintf(outputFile,"total_price : %.3f\n",getTotalSpentOnReserv(rList[i]));
+            fprintf(outputFile,"total_price : %.3f\n",getTotalSpentOnReserv(rList[i],-1));
         }
     }else{
         for(int i = 0;i < max;i++){
-            fprintf("%s;%s;%s;%s;%d;%.3f\n",getReservId(rList[i]),timeToString(getReservBeginDate(rList[i])),
+            fprintf(outputFile,"%s;%s;%s;%s;%d;%.3f\n",getReservId(rList[i]),timeToString(getReservBeginDate(rList[i])),
             timeToString(getReservEndDate(rList[i])),getReservUserId(rList[i]),
-            getReservRating(rList[i]),getTotalSpentOnReserv(rList[i]));
+            getReservRating(rList[i]),getTotalSpentOnReserv(rList[i],-1));
         }
     }
     fclose(outputFile);

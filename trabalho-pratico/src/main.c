@@ -22,7 +22,7 @@ int main(int argc,char **argv){
 
     char * userData = malloc(sizeof(char) * BUFFERSIZE);
 
-    if(!userData) { perror("Erro a alocar memoria na main"); return;}
+    if(!userData) { perror("Erro a alocar memoria na main"); return 1;}
 
     memset(userData, '\0', strlen(userData));
 
@@ -54,7 +54,7 @@ int main(int argc,char **argv){
 
     char * reservationData = malloc(sizeof(char) * BUFFERSIZE);
 
-    if(!reservationData) { perror("Erro a alocar memoria na main"); return;}
+    if(!reservationData) { perror("Erro a alocar memoria na main"); return 1;}
 
     memset(reservationData, '\0', strlen(reservationData));
 
@@ -86,7 +86,7 @@ int main(int argc,char **argv){
 
     char * flightData = malloc(sizeof(char) * BUFFERSIZE);
 
-    if(!flightData) { perror("Erro a alocar memoria na main"); return;}
+    if(!flightData) { perror("Erro a alocar memoria na main"); return 1;}
 
     memset(flightData, '\0', strlen(flightData));
 
@@ -117,7 +117,7 @@ int main(int argc,char **argv){
 
     char * passangersData = malloc(sizeof(char) * BUFFERSIZE);
 
-    if(!passangersData) { perror("Erro a alocar memoria na main"); return;}
+    if(!passangersData) { perror("Erro a alocar memoria na main"); return 1;}
 
     memset(passangersData, '\0', strlen(passangersData));
 

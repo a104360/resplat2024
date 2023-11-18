@@ -1,7 +1,9 @@
-#include <ctype.h>
-#include <stdio.h>
 #include "../include/dataTypes.h"
 #include "../include/time.h"
+#include <ctype.h>
+#include <stdio.h>
+#include <stdlib.h>
+
 
 void mergeF(Flight ** arr, int l, int m, int r) {
     int i, j, k;

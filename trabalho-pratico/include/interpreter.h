@@ -4,7 +4,7 @@
 #include "../include/dataStructs.h"
 
 
-int verTamanhoLinha(const char * );
+int verTamanhoLinha(const char *);
 
 char * limpaToken(char *);
 
@@ -16,8 +16,8 @@ Time * firstDateQ8(const char *);
 
 Time * secondDateQ8(const char *);
 
-char * airportName(const char * line);
+char * airportName(const char *);
 
-void readEntryFile(UsersDatabase uDatabase,ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * pDatabase,int agrc, char **argv);
+void readEntryFile(UsersDatabase,ReservationsDatabase,FlightsDatabase,PassangersDatabase *,int, char **);
 
 #endif

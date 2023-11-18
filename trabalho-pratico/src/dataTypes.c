@@ -296,7 +296,7 @@ void copyUser(User * dest,User * src){
     setUserPhone(dest,getUserPhone(src));
     setUserBday(dest,getUserBday(src));
     setUserSex(dest,getUserSex(src));
-    setUserPassaport(dest,getUserPassaport(src));
+    setUserPassport(dest,getUserPassport(src));
     setUserCountryCode(dest,getUserCountryCode(src));
     setUserAddress(dest,getUserAddress(src));
     setUserAccountCreation(dest,getUserAccountCreation(src));
@@ -803,7 +803,7 @@ void copyReservation(Reservation * dest,Reservation * src){
     setReservHotelName(dest,getReservHotelName(src));
     setReservHotelStars(dest,getReservHotelStars(src));
     setReservCityTax(dest,getReservCityTax(src));
-    setReservHotelAddress(dest,getReservAddsetReservHotelAddress(src));
+    setReservHotelAddress(dest,getReservHotelAddress(src));
     setReservBeginDate(dest,getReservBeginDate(src));
     setReservEndDate(dest,getReservEndDate(src));
     setReservPricePerNight(dest,getReservPricePerNight(src));

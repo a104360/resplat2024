@@ -1,11 +1,11 @@
 #include "../include/queries.h"
 #include "../include/dataTypes.h"
-#include "../include/catalogs.h"
 #include "../include/statistics.h"
 #include "../include/dataStructs.h"
 #include "../include/catalogs.h"
 #include "../include/sort.h"
 #include "../include/output.h"
+#include "../include/catalogs.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
@@ -13,7 +13,7 @@
 
 #define BUFFERSIZE 100
 
-void query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,FlightsDatabase * fDatabase,PassangersDatabase * pDatabase,const char * id,bool f){
+void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * pDatabase,const char * id,bool f){
     char * analisa = malloc(sizeof(char) * 4);
     strncpy(analisa,id,4);
     int flag = 0;
@@ -34,14 +34,14 @@ void query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,FlightsD
         char sex = getUserSex(user);
         int age = getUserAge(user);
         char * country_code = getUserCountryCode(user);
-        char * passaport = getUserPassaport(user);
+        char * passaport = getUserPassport(user);
 
-        UserFlightsDB * uFDatabase = getUserFlightsDB(*fDatabase,pDatabase,id);
+        UserFlightsDB * uFDatabase = getUserFlightsDB(fDatabase,pDatabase,id);
         char * number_of_fights = malloc(sizeof(char) * 10);
         snprintf(number_of_fights,10,"%d",getNumFlights(uFDatabase));
         destroyUserFlightsDB(uFDatabase);
 
-        UserReservsDB * uRDatabase = getUserReservsDB(*uDatabase,id);
+        UserReservsDB * uRDatabase = getUserReservsDB(uDatabase,id);
         char * number_of_reservations = malloc(sizeof(char) * 10);
         snprintf(number_of_reservations,10,"%d",getNumReservs(uRDatabase));
         destroyUserReservsDB(uRDatabase);
@@ -83,8 +83,6 @@ void query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,FlightsD
         free(destination);
         free(schedule_departure_date);
         free(schedule_arrival_date);
-        free(nPassangers);
-        free(delay);
 
 
         break;
@@ -117,7 +115,14 @@ void query1(UsersDatabase * uDatabase, ReservationsDatabase * rDatabase,FlightsD
 }
 
 void query2(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * passangers,
-const char * id,char * tipo,bool f){
+const char * line,bool F){
+    char * aux = strdup(line);
+    char * id = NULL;
+    char * tipo = NULL;
+    char * saveprt = NULL;
+    id = strtok_r(aux," ",&saveprt);
+    tipo = strtok_r(NULL,"\n\0",&saveprt);
+    if(aux) free(aux);
     User * user = lookupUser(uDatabase,id);
 
     if(getUserAccountStatus(user) == false){
@@ -127,59 +132,67 @@ const char * id,char * tipo,bool f){
     int flag = 0;
     if(!tipo) flag = 1;
     else{
-    if(strcool(tipo,"flight") == 0) flag = 2;
-        else if(strcool(tipo,"reservation") == 0) flag = 3;
+    if(strcoll(tipo,"flight") == 0) flag = 2;
+        else if(strcoll(tipo,"reservation") == 0) flag = 3;
     }
     switch (flag)
     {
     case 1: // SEM ARGUMENTOS
-        UserFlightsDB * uFDatabase = getUserFlightsDB(fDatabase,passangers,id);
-        UserReservsDB * uRDatabase = getUserReservsDB(rDatabase,id);
+        UserFlightsDB * uFDatabase1 = getUserFlightsDB(fDatabase,passangers,id);
+        UserReservsDB * uRDatabase1 = getUserReservsDB(rDatabase,id);
         
-        Reservation ** rList = getUserReservs(uRDatabase);
-        Flight ** fList = getUserFlights(uFDatabase);
+        Reservation ** rList1 = getUserReservs(uRDatabase1);
+        Flight ** fList1 = getUserFlights(uFDatabase1);
 
-        int r = getNumReservs(uRDatabase);
-        int f = getNumFlights(uFDatabase);
+        int r = getNumReservs(uRDatabase1);
+        int f = getNumFlights(uFDatabase1);
 
-        mergeSortF(fList,0,f);
-        mergeSortR(rList,0,r);
+        mergeSortF(fList1,0,f);
+        mergeSortR(rList1,0,r);
 
-        outputQ2(f,rList,r,fList,f);
+        outputQ2(f,rList1,r,fList1,f);
 
-        destroyUserReservsDB(uRDatabase);
-        for(int i = 0; i < r;i++) free(rList[i]);
-        for(int i = 0; i < f;i++) free(fList[i]);
-        destroyUserFlightsDB(uFDatabase);
+        destroyUserReservsDB(uRDatabase1);
+        for(int i = 0; i < r;i++) free(rList1[i]);
+        for(int i = 0; i < f;i++) free(fList1[i]);
+        destroyUserFlightsDB(uFDatabase1);
+
+        if(id) free(id);
+        if(tipo) free(tipo);
+        if(saveprt) free(saveprt);
 
         break;
 
     case 2: // FLIGHT
-        UserFlightsDB * uFDatabase = getUserFlightsDB(fDatabase,passangers,id);
+        UserFlightsDB * uFDatabase2 = getUserFlightsDB(fDatabase,passangers,id);
         
-        Flight ** fList = getUserFlights(uFDatabase);
+        Flight ** fList2 = getUserFlights(uFDatabase2);
 
-        mergeSortF(fList,0,getNumFlights(uFDatabase));
+        int max2 = getNumFlights(uFDatabase2);
 
-        outputQ2(f,NULL,0,fList,getNumFlights(uFDatabase));
+        mergeSortF(fList2,0,max2);
 
-        for(int i = 0; i < f;i++) free(fList[i]);
-        destroyUserFlightsDB(uFDatabase);
+        outputQ2(F,NULL,0,fList2,max2);
+
+        for(int i = 0; i < max2;i++) free(fList2[i]);
+        destroyUserFlightsDB(uFDatabase2);
 
         break;
 
     case 3: // RESERVATION
-        UserReservsDB * uRDatabase = getUserReservsDB(rDatabase,id);
+        UserReservsDB * uRDatabase3 = getUserReservsDB(rDatabase,id);
         
-        Reservation ** rList = getUserReservs(uRDatabase);
+        Reservation ** rList3 = getUserReservs(uRDatabase3);
 
-        mergeSortR(rList,0,getNumReservs(uRDatabase));
+        int max3 = getNumReservs(uRDatabase3);
 
-        outputQ2(f,rList,getNumReservs(uRDatabase),NULL,0);
+        mergeSortR(rList3,0,max3);
+
+        outputQ2(F,rList3,max3,NULL,0);
 
 
-        for(int i = 0; i < r;i++) free(rList[i]);       
-        destroyUserReservsDB(uRDatabase);
+        for(int i = 0; i < max3;i++) free(rList3[i]);       
+        destroyUserReservsDB(uRDatabase3);
         
         break;
     
@@ -219,7 +232,7 @@ void query4(ReservationsDatabase rDatabase,const char * id,bool f){
 }
 
 void query5(FlightsDatabase fDatabase,Time * ti,Time * tf,const char * id,bool f){
-    AirportDB * airportFlights = getAirportDb(fDatabase,id);
+    AirportDB * airportFlights = getAirportDB(fDatabase,id,ti,tf);
     Flight ** fList = getAirportFlights(airportFlights);
     int max = getNumAirportFlights(airportFlights);
     mergeSortF(fList,0,max);
@@ -254,7 +267,7 @@ void query8(ReservationsDatabase rDatabase,const char * id,Time * begin,Time * e
         total += getTotalSpentOnReserv(rList[i],days);
     }
 
-
+    outputQ8(total,f);
 
     return;
 }

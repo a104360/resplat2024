@@ -6,6 +6,7 @@
 #include "../include/dataTypes.h"
 #include "../include/dataStructs.h"
 #include "../include/catalogs.h"
+#include "../include/parser.h"
 
 #define BUFFERSIZE 1000
 #define TOKENIZE(token,saveptr) token = strtok_r(NULL," \n\0",&saveptr); 
@@ -182,10 +183,10 @@ void readEntryFile(UsersDatabase uDatabase,ReservationsDatabase rDatabase,Flight
         case '5':
 
             if(linhaLimpa[1] == 'F'){
-                    query5(fDatabase,firstDate(&linhaLimpa[7]),secondDate(&linhaLimpa[29]),airportName(&linhaLimpa[3]),true);
+                    query5(fDatabase,firstDateQ5(&linhaLimpa[7]),secondDateQ5(&linhaLimpa[29]),airportName(&linhaLimpa[3]),true);
                     
                 }else {
-                    query5(fDatabase,firstDate(&linhaLimpa[7]),secondDate(&linhaLimpa[29]),airportName(&linhaLimpa[2]),false);
+                    query5(fDatabase,firstDateQ5(&linhaLimpa[7]),secondDateQ5(&linhaLimpa[29]),airportName(&linhaLimpa[2]),false);
                     
                 }
 
@@ -224,26 +225,26 @@ void readEntryFile(UsersDatabase uDatabase,ReservationsDatabase rDatabase,Flight
         case '8':
 
             if(linhaLimpa[1] == 'F'){
-                    char * aux = strdup(line);
+                    char * aux = strdup(linhaLimpa);
                     char * token = NULL;
                     char * saveptr = aux;
                     token = strtok_r(aux,"\n\0",&saveptr);
                     TOKENIZE(token,saveptr);
 
-                    int tokenSize = tamanhoLinha(token);
+                    int tokenSize = verTamanhoLinha(token);
 
                     free(aux);
 
                     query8(rDatabase,token,firstDateQ8(&linhaLimpa[4+tokenSize]),secondDateQ8(&linhaLimpa[15+tokenSize]),true);
                     
                 }else {
-                    char * aux = strdup(line);
+                    char * aux = strdup(linhaLimpa);
                     char * token = NULL;
                     char * saveptr = aux;
                     token = strtok_r(aux,";\n\0",&saveptr);
                     TOKENIZE(token,saveptr);
 
-                    int tokenSize = tamanhoLinha(token);
+                    int tokenSize = verTamanhoLinha(token);
 
                     free(aux);
 
