@@ -13,13 +13,12 @@ SOURCES = $(wildcard src/*.c)
 OBJ= $(SOURCES:.c=.o)
 
 
-programa-principal: 
-	gcc $(CFLAGS) src/*.o -o programa-principal
+
 
 
 .PHONY: all run time clean
 
-all: $(EXE)
+all: $(EXE) programa-testes
 
 $(EXE): $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(OPTIFLAGS)
@@ -27,7 +26,7 @@ $(EXE): $(OBJ)
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(OPTIFLAGS)
 
-program: $(OBJ)
+programa-testes: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) $(OPTIFLAGS)
 
 run: $(EXE)
@@ -43,4 +42,4 @@ grind: $(EXE).debug
 	valgrind --leak-check=full --show-reachable=no --show-leak-kinds=all --track-origins=yes --verbose --log-file=valgrind-out.txt ./$(EXE).debug
 
 clean:
-	rm -f $(EXE) src/*.o $(EXE).debug valgrind-out.txt program
+	rm -f $(EXE) programa-testes src/*.o $(EXE).debug valgrind-out.txt program
