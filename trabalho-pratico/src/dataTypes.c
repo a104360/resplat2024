@@ -121,20 +121,16 @@ typedef struct passanger{
 
 void setUserId(User * user, const char * id){
     if (user == NULL) {
-        // Handle the error or return early based on your program's logic.
         return;
     }
 
-    // Free existing memory
     if (user->id) {
         free(user->id);
-        user->id = NULL;  // Set to NULL after freeing to avoid potential issues
+        user->id = NULL;
     }
     if(id == NULL) return;
-    // Allocate new memory if id is not NULL
     if (id) {
-        user->id = strdup(id);
-        // Check if strdup was successful, handle error if needed
+        user->id = strdup(id); 
     }
 }
 
@@ -871,12 +867,12 @@ size_t getPassangerSize(){
 
   void setPassangerFlightId(Passanger * passanger,const char * line){
     if(passanger->flight_id) free(passanger->flight_id);
-    passanger->flight_id =strdup(line);
+    passanger->flight_id = strdup(line);
 }
 
  char *getPassangerFlightId(Passanger * passanger){
     if(passanger->flight_id){
-        char * flight_id =strdup(passanger->flight_id);
+        char * flight_id = strdup(passanger->flight_id);
         return flight_id;
     }
     return NULL;
@@ -890,7 +886,7 @@ size_t getPassangerSize(){
 
  char *getPassangerUserId(Passanger * passanger){
     if(passanger->user_id){
-        char * user_id =strdup(passanger->user_id);
+        char * user_id = strdup(passanger->user_id);
         return user_id;
     }
     return NULL;

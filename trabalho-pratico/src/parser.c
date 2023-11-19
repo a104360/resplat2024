@@ -10,8 +10,12 @@
 
 
 #define CHECKLEN(line) \
-    if(strlen(line)) return NULL;\
+    if(strlen(line) > 0) return NULL;\
     char * aux = strdup(line);\
+    if(aux == NULL){\
+        perror("strdup memory allocation failed");\
+        return NULL;\
+    };\
     return aux; \
 
 #define ALLVAR(aux) for(int i = 0;aux[i] != '\0';aux[i] = tolower(aux[i]),i++);
@@ -68,11 +72,9 @@
 // Verifies the correctness of the year in the date string, following the determined format
  int yearCheck(const char * line){
     for(int i = 0; i < 5;i++){
-        if(i < 4){
-            if(line[i] > '9' && line[i] < '0') return false;
-        }
-        else if(line[i] != '/') return false;
+        if(line[i] > '9' && line[i] < '0') return false;
     }
+    if(line[4] != '/') return false;
     char * aux = malloc(sizeof(char) * 4);
     strncpy(aux,line,4);
     int n = atoi(aux);
@@ -81,13 +83,13 @@
 }
 
 // Verifies the correctness of the month in the date string, following the determined format
-// 0 <= tm.tm_mon <= 11
+// 01 <= time.mon <= 12
  int monthCheck(const char * line){
     if(line[5] != '1' && line[5] != '0') return false;
     if(line[5] == '0')
         if(line[6] > '9' && line[6] < '0') return false;
     if(line[5] == '1')
-        if(line[6] < '0' && line[6] > '2') return false;
+        if(line[6] > '2' && line[6] < '0') return false;
     if(line[7] != '/') return false;
     char * aux = malloc(sizeof(char)*2);
     aux[0] = line[5];
@@ -103,6 +105,7 @@
  int dayCheck(const char * line){
     if(line[8] < '0' || line[8] > '3') return false;
     if(line[9] < '0' && line[9] > '9') return false;
+    if(line[8] == '3' && line[9] > '1') return false;
     char * aux = malloc(sizeof(char) * 2);
     aux[0] = line[8];
     aux[1] = line[9]; 

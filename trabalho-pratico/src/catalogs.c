@@ -11,7 +11,7 @@
 
 // Init usersDatabase
 UsersDatabase initUsers(){
-    UsersDatabase users = g_hash_table_new_full(g_str_hash,g_str_equal,(GDestroyNotify)g_free,(GDestroyNotify)g_hash_table_destroy);
+    UsersDatabase users = g_hash_table_new_full(g_str_hash,g_str_equal,(GDestroyNotify)free,(GDestroyNotify)destroyUser);
     return users;
 }
 
@@ -41,7 +41,7 @@ void destroyUsers(UsersDatabase database){
 
 // Inits the flights database
 FlightsDatabase initFlights(){
-    FlightsDatabase flights = g_hash_table_new_full(g_str_hash,g_str_equal,(GDestroyNotify)g_free,(GDestroyNotify)g_hash_table_destroy);
+    FlightsDatabase flights = g_hash_table_new_full(g_str_hash,g_str_equal,(GDestroyNotify)free,(GDestroyNotify)destroyFlight);
     return flights;
 }
 
@@ -91,7 +91,7 @@ void destroyFlights(FlightsDatabase database){
 
 // Inits the reservations database
 ReservationsDatabase initReservations(){
-    ReservationsDatabase reservs = g_hash_table_new_full(g_str_hash,g_str_equal,(GDestroyNotify)g_free,(GDestroyNotify)g_hash_table_destroy);
+    ReservationsDatabase reservs = g_hash_table_new_full(g_str_hash,g_str_equal,(GDestroyNotify)free,(GDestroyNotify)destroyReservation);
     return reservs;
 }
 
@@ -448,12 +448,6 @@ void destroyAirport(AirportDB * db,int hashSize){
 
 
 
-
-
-// Destroys User, Reservation or Flight database
-void destroyDataBase(void * structs){
-    g_hash_table_destroy((GHashTable *) structs);
-}
 
 
 

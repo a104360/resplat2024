@@ -44,11 +44,11 @@ int getSec(Time * time){
 
   void destroyTime(Time *time) {
     initTime(time);
-    g_free(time);
+    free(time);
 }
 
  Time * createTime(){
-    Time * t = g_malloc(sizeof(struct time));
+    Time * t = malloc(sizeof(struct time));
     initTime(t);
     return t;
 }

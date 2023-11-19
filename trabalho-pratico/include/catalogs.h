@@ -16,6 +16,8 @@ void insertUser(void *,User *);
 
 User * lookupUser(void *,const char *);
 
+void destroyUsers(UsersDatabase);
+
 
 
 
@@ -26,6 +28,7 @@ void insertFlight(void *,Flight *);
 
 Flight * lookupFlight(void * ,const char *);
 
+void destroyFlights(FlightsDatabase);
 
 
 
@@ -39,7 +42,7 @@ void insertReserv(void *,Reservation *);
 
 Reservation * lookupReserv(void * ,const char * );
 
-
+void destroyReservs(ReservationsDatabase);
 
 
 
@@ -125,8 +128,6 @@ Flight ** getAirportFlights(AirportDB *);
 
 void destroyAirport(AirportDB * db,int hashSize);
 
-
-void destroyDataBase(void *);
 
 
 
