@@ -44,17 +44,17 @@ int getSec(Time * time){
 
   void destroyTime(Time *time) {
     initTime(time);
-    g_free(time);
+    free(time);
 }
 
  Time * createTime(){
-    Time * t = g_malloc(sizeof(struct time));
+    Time * t = malloc(sizeof(struct time));
     initTime(t);
     return t;
 }
 
 void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
-    if(!t) return;
+    if(t == NULL) return;
     t->year = year;
     t->mon = mon;
     t->mday = mday;

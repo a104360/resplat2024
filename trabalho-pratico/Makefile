@@ -35,7 +35,7 @@ debug: $(EXE).debug
 	gdb $(EXE).debug
 
 grind: $(EXE).debug
-	valgrind --leak-check=full --show-leak-kinds=all --log-file=valgrind-out.txt ./$(EXE).debug ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt
+	valgrind -s --leak-check=full --show-leak-kinds=all --log-file=valgrind-out.txt ./$(EXE).debug ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt
 
 clean:
 	rm -f $(EXE) programa-testes src/*.o $(EXE).debug valgrind-out.txt Resultados/*.csv

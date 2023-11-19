@@ -16,35 +16,35 @@ int main(int argc,char **argv){
     size_t argSize = 0;
     argSize = strlen(argv[1]);
     char * filePath = NULL;
-    filePath = malloc(argSize + 20);
-
+    filePath = malloc(strlen(argv[1]) + 20); // malloc
+    memset(filePath,'\0',argSize + 20);
     strncpy(filePath,argv[1],argSize);
 
 
     // Create Users Database
-    strncat(filePath,"/users.csv",12);
+    strncat(filePath,"/users.csv",12); // ?
     filePath[argSize + 1 + 10 + 1] = '\0';
 
     FILE * userFile = NULL;
-    userFile = fopen(filePath,"r");
+    userFile = fopen(filePath,"r"); // open
 
     FILE * userErrors = NULL;
     char * filePathUErrors = NULL;
-    filePathUErrors = malloc(argSize + 20);
+    filePathUErrors = malloc(strlen(argv[1]) + 20); // malloc
     strncpy(filePathUErrors,"Resultados",14);
-    strncat(filePathUErrors,"/users_errors.csv",18);
-    userErrors = fopen(filePathUErrors,"a+");
-    if(!userErrors) {perror("Users errors file did not open\n"); return 1;}
+    strncat(filePathUErrors,"/users_errors.csv",18); // ?
+    userErrors = fopen(filePathUErrors,"a"); // open
+    if(userErrors == NULL) {perror("Users errors file did not open\n"); return 1;}
 
-    char * userData = malloc(sizeof(char) * BUFFERSIZE);
+    char * userData = malloc(sizeof(char) * BUFFERSIZE); // malloc
 
-    if(!userData) { perror("Erro a alocar memoria na main"); return 1;}
+    if(userData == NULL) { perror("Erro a alocar memoria na main"); return 1;}
 
     memset(userData, '\0', BUFFERSIZE);
 
-    //fseek(userFile,115,SEEK_SET);
+    fseek(userFile,115,SEEK_SET);
 
-    UsersDatabase uDatabase = initUsers();
+    UsersDatabase uDatabase = initUsers(); // initDatabase
 
     while(fgets(userData,BUFFERSIZE,userFile)){
 
@@ -52,32 +52,37 @@ int main(int argc,char **argv){
 
         int tamanhoUserData = verTamanhoLinha(userData);
 
-        char userDataClean[tamanhoUserData +1];
+        char * userDataClean = malloc(sizeof(char) * (tamanhoUserData +1)); // malloc
 
         strncpy(userDataClean,userData,tamanhoUserData);
 
         userDataClean[tamanhoUserData] = '\0';
 
 
-        uBuffer = userCheck(userDataClean);
+        uBuffer = userCheck(userDataClean); // malloc
 
         if(uBuffer != NULL){
-            char * idBuffer = getUserId(uBuffer);
+            char * idBuffer = getUserId(uBuffer); // malloc
 
             g_hash_table_insert(uDatabase,idBuffer,uBuffer);
 
-            free(idBuffer);
+            free(idBuffer); // free
+
+            free(uBuffer); // free
 
         }else{ 
             fprintf(userErrors,"%s",userDataClean);
         }
         
-            uBuffer = NULL;
+        uBuffer = NULL;
+        free(userDataClean);// free
     }
     
-    fclose(userFile);
-    free(userData);
-    free(filePath);
+    fclose(userFile); // close
+    free(filePathUErrors);  // free
+    free(userData); // free
+    fclose(userErrors); // close
+    free(filePath); // free
 
     
     // Create Reservations Database
@@ -208,6 +213,6 @@ int main(int argc,char **argv){
     //readEntryFile();
 
     // Free everything used
-*/
+*/  destroyUsers(uDatabase); // destroy
     return 0;
 }
