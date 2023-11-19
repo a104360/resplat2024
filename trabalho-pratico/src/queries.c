@@ -14,6 +14,8 @@
 #define BUFFERSIZE 100
 
 void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * pDatabase,const char * id,bool f){
+    int rDatabaseSize = g_hash_table_size(rDatabase);
+    int fDatabaseSize = g_hash_table_size(fDatabase);
     char * analisa = malloc(sizeof(char) * 4);
     strncpy(analisa,id,4);
     int flag = 0;
@@ -39,12 +41,12 @@ void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatab
         UserFlightsDB * uFDatabase = getUserFlightsDB(fDatabase,pDatabase,id);
         char * number_of_fights = malloc(sizeof(char) * 10);
         snprintf(number_of_fights,10,"%d",getNumFlights(uFDatabase));
-        destroyUserFlightsDB(uFDatabase);
+        destroyUserFlightsDB(uFDatabase,fDatabaseSize);
 
         UserReservsDB * uRDatabase = getUserReservsDB(uDatabase,id);
         char * number_of_reservations = malloc(sizeof(char) * 10);
         snprintf(number_of_reservations,10,"%d",getNumReservs(uRDatabase));
-        destroyUserReservsDB(uRDatabase);
+        destroyUserReservsDB(uRDatabase,rDatabaseSize);
 
         char * total_spent = malloc(sizeof(char) * 10);
         snprintf(total_spent,10,"%.3f",getTotalSpentByUser((void **) getUserReservs(uRDatabase)));
@@ -71,7 +73,7 @@ void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatab
 
         FlightPassangers * book = getFlightPassangers(fDatabase,pDatabase,id);
         int nPassangers = getNumPassangers(book);
-        destroyFlightPassangers(book);
+        destroyFlightPassangers(book,fDatabaseSize);
 
         int delay = getFlightDelay(flight);
 
@@ -114,8 +116,10 @@ void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatab
     return;
 }
 
-void query2(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * passangers,
+void query2(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * pDatabase,
 const char * line,bool F){
+    int rDatabaseSize = g_hash_table_size(rDatabase);
+    int fDatabaseSize = g_hash_table_size(fDatabase);
     char * aux = strdup(line);
     char * id = NULL;
     char * tipo = NULL;
@@ -138,7 +142,7 @@ const char * line,bool F){
     switch (flag)
     {
     case 1: // SEM ARGUMENTOS
-        UserFlightsDB * uFDatabase1 = getUserFlightsDB(fDatabase,passangers,id);
+        UserFlightsDB * uFDatabase1 = getUserFlightsDB(fDatabase,pDatabase,id);
         UserReservsDB * uRDatabase1 = getUserReservsDB(rDatabase,id);
         
         Reservation ** rList1 = getUserReservs(uRDatabase1);
@@ -152,10 +156,10 @@ const char * line,bool F){
 
         outputQ2(f,rList1,r,fList1,f);
 
-        destroyUserReservsDB(uRDatabase1);
+        destroyUserReservsDB(uRDatabase1,rDatabaseSize);
         for(int i = 0; i < r;i++) free(rList1[i]);
         for(int i = 0; i < f;i++) free(fList1[i]);
-        destroyUserFlightsDB(uFDatabase1);
+        destroyUserFlightsDB(uFDatabase1,fDatabaseSize);
 
         if(id) free(id);
         if(tipo) free(tipo);
@@ -164,7 +168,7 @@ const char * line,bool F){
         break;
 
     case 2: // FLIGHT
-        UserFlightsDB * uFDatabase2 = getUserFlightsDB(fDatabase,passangers,id);
+        UserFlightsDB * uFDatabase2 = getUserFlightsDB(fDatabase,pDatabase,id);
         
         Flight ** fList2 = getUserFlights(uFDatabase2);
 
@@ -175,7 +179,7 @@ const char * line,bool F){
         outputQ2(F,NULL,0,fList2,max2);
 
         for(int i = 0; i < max2;i++) free(fList2[i]);
-        destroyUserFlightsDB(uFDatabase2);
+        destroyUserFlightsDB(uFDatabase2,fDatabaseSize);
 
         break;
 
@@ -192,7 +196,7 @@ const char * line,bool F){
 
 
         for(int i = 0; i < max3;i++) free(rList3[i]);       
-        destroyUserReservsDB(uRDatabase3);
+        destroyUserReservsDB(uRDatabase3,rDatabaseSize);
         
         break;
     
@@ -207,7 +211,7 @@ const char * line,bool F){
 
 // Average rating of an hotel
 void query3(ReservationsDatabase rDatabase,const char * id,bool f){
-    double n = averageRating(rDatabase,id);
+    double n = averageRating(rDatabase,id,g_hash_table_size(rDatabase));
 
     outputQ3(f,n);
 
@@ -215,6 +219,7 @@ void query3(ReservationsDatabase rDatabase,const char * id,bool f){
 }
 
 void query4(ReservationsDatabase rDatabase,const char * id,bool f){
+    int rDatabaseSize = g_hash_table_size(rDatabase);
     HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id,NULL,NULL);
     Reservation ** rList = getAllHotelReservs(hDatabase);
     mergeSortR(rList,0,getNumReservas(hDatabase));
@@ -226,12 +231,13 @@ void query4(ReservationsDatabase rDatabase,const char * id,bool f){
     }
     free(rList);
 
-    destroyHotelDatabase(hDatabase);
+    destroyHotelDatabase(hDatabase,rDatabaseSize);
 
     return;
 }
 
 void query5(FlightsDatabase fDatabase,Time * ti,Time * tf,const char * id,bool f){
+    int fDatabaseSize = g_hash_table_size(fDatabase);
     AirportDB * airportFlights = getAirportDB(fDatabase,id,ti,tf);
     Flight ** fList = getAirportFlights(airportFlights);
     int max = getNumAirportFlights(airportFlights);
@@ -243,7 +249,7 @@ void query5(FlightsDatabase fDatabase,Time * ti,Time * tf,const char * id,bool f
         free(fList[i]);
     }
     free(fList);
-    destroyAirport(airportFlights);
+    destroyAirport(airportFlights,fDatabaseSize);
 }
 
 void query6(){
@@ -255,6 +261,7 @@ void query7(){
 }
 
 void query8(ReservationsDatabase rDatabase,const char * id,Time * begin,Time * end,bool f){
+    int rDatabaseSize = g_hash_table_size(rDatabase);
     HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id,begin,end);
     
     Reservation ** rList = getAllHotelReservs(hDatabase);
@@ -268,6 +275,10 @@ void query8(ReservationsDatabase rDatabase,const char * id,Time * begin,Time * e
     }
 
     outputQ8(total,f);
+
+    free(rList);
+
+    destroyHotelDatabase(hDatabase,rDatabaseSize);
 
     return;
 }

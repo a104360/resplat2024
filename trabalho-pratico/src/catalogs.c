@@ -26,6 +26,12 @@ User * lookupUser(void * table ,const char * id){
     return user;
 }
 
+// Destroys usersDatabase
+void destroyUsers(UsersDatabase database){
+    g_hash_table_destroy(database);
+}
+
+
 
 
 
@@ -51,7 +57,9 @@ Flight * lookupFlight(void * table ,const char * id){
 }
 
 
-
+void destroyFlights(FlightsDatabase database){
+    g_hash_table_destroy(database);
+}
 
 
 
@@ -98,7 +106,9 @@ Reservation * lookupReserv(void * table,const char * reservId){
     return reserv;
 }
 
-
+void destroyReservs(ReservationsDatabase database){
+    g_hash_table_destroy(database);
+}
 
 
 
@@ -187,13 +197,18 @@ void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
     }
 }
 
-void destroyHotelDatabase(HotelDatabase * hotel){
+void destroyHotelDatabase(HotelDatabase * hotel, int hashSize){
     free(hotel->hotel_id);
-    for(int i = 0;i < hotel->numReservas;i++){
-        free(hotel->_hotelReservs[i]);
+    for(int i = 0;i < hashSize;i++){
+        if(hotel->_hotelReservs[i]) free(hotel->_hotelReservs[i]);
+        hotel->_hotelReservs[i] = NULL;
     }
     free(hotel->_hotelReservs);
+    hotel->_hotelReservs = NULL;
+    destroyTime(hotel->begin);
+    destroyTime(hotel->end);
     free(hotel);
+    hotel = NULL;
 }
 
 //                                  *** End block ***
@@ -240,16 +255,22 @@ void allUserReservs(gpointer key ,gpointer value,gpointer userData){
 }
 
 
-void destroyUserReservsDB(UserReservsDB * database){
-    for(int i = 0;i < database->size;i++){
+void destroyUserReservsDB(UserReservsDB * database, int hashSize){
+    for(int i = 0;i < hashSize;i++){
         free(database->_userReservs[i]);
+        database->_userReservs[i] = NULL;
     }
     free(database->_userReservs);
+    database->_userReservs = NULL;
     free(database->userId);
+    database->userId = NULL;
     free(database);
+    database = NULL;
 }
 
 //                                  *** End block ***
+
+
 
 
 
@@ -287,13 +308,17 @@ Flight ** getUserFlights(const UserFlightsDB * database){
     return database->flights;
 }
 
-void destroyUserFlightsDB(UserFlightsDB * database){
+void destroyUserFlightsDB(UserFlightsDB * database,int hashSize){
     free(database->passangers);
-    for(int i = 0;i < database->numTravels;i++){
+    database->passangers = NULL;
+    for(int i = 0;i < hashSize;i++){
         free(database->flights[i]);
+        database->flights[i] = NULL;
     }
     free(database->flights);
+    database->flights = NULL;
     free(database);
+    database = NULL;
 }
 
 
@@ -338,20 +363,24 @@ Passanger ** getFlightPassangersBook(const FlightPassangers * database){
     return database->list;
 }
 
-void destroyFlightPassangers(FlightPassangers * database){
+void destroyFlightPassangers(FlightPassangers * database,int hashSize){
+    if(database->allPassangers) free(database->allPassangers);
     database->allPassangers = NULL;
-    for(int i = 0;i < database->numPassangers;i++){
-        free(database->list[i]);
+    for(int i = 0;i < hashSize;i++){
+        if(database->list[i]) free(database->list[i]);
+        database->list[i] = NULL;
     }
-    free(database->list);
-    free(database);
+    if(database->list)free(database->list);
+    database->list = NULL;
+    if(database) free(database);
+    database = NULL;
 }
 
 
 
 typedef struct airportDB{
     Flight ** fList;
-    char * aiport;
+    char * airport;
     Time * f;
     Time * l;
     int numFlights;
@@ -377,7 +406,7 @@ void checkAirports(gpointer key,gpointer value,gpointer flightData){
     AirportDB * database = (AirportDB *) flightData;
     static int i = 0;
     if(database->f && database->l)
-        if(strcoll(database->aiport,getFlightOrigin(flight)) && 
+        if(strcoll(database->airport,getFlightOrigin(flight)) && 
         compareTimes(getFlightSDepartureDate(flight),database->l)==true && 
         compareTimes(database->f,getFlightSArrivalDate(flight))==true){
             database->fList[i] = flight;
@@ -385,7 +414,7 @@ void checkAirports(gpointer key,gpointer value,gpointer flightData){
             database->numFlights++;
         }
     if(database->f == NULL || database->f == NULL)
-        if(strcoll(database->aiport,getFlightOrigin(flight))){
+        if(strcoll(database->airport,getFlightOrigin(flight))){
             database->fList[i] = flight;
             i++;
             database->numFlights++;
@@ -400,15 +429,21 @@ Flight ** getAirportFlights(AirportDB * db){
     return db->fList;
 }
 
-void destroyAirport(AirportDB * db){
-    free(db->aiport);
-    free(db->f);
-    free(db->l);
-    for(int i = 0;i < db->numFlights;i++){
-        free(db->fList[i]);
+void destroyAirport(AirportDB * db,int hashSize){
+    if(db->airport) free(db->airport);
+    db->airport = NULL;
+    if(db->f) destroyTime(db->f);
+    db->f = NULL;
+    if(db->l) destroyTime(db->l);
+    db->l = NULL;
+    for(int i = 0;i < hashSize;i++){
+        if(db->fList[i]) free(db->fList[i]);
+        db->fList[i] = NULL;
     }
-    free(db->fList);
-    free(db);
+    if(db->fList) free(db->fList);
+    db->fList = NULL;
+    if(db) free(db);
+    db = NULL;
 }
 
 

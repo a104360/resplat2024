@@ -83,12 +83,12 @@ typedef struct passanger{
     user->name = NULL;
     user->email = NULL;
     user->phone_number = NULL;
-    setTime(user->birth_date,0,0,0,0,0,0);
+    user->birth_date = createTime();
     user->sex = '\0';
     user->passport = NULL;
     user->country_code = NULL;
     user->address = NULL;
-    setTime(user->account_creation,0,0,0,0,0,0);
+    user->account_creation = createTime();
     user->pay_method = NULL;
     user->account_status = false;
 }

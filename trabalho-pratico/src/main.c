@@ -16,8 +16,8 @@ int main(int argc,char **argv){
     size_t argSize = 0;
     argSize = strlen(argv[1]);
     char * filePath = NULL;
-    filePath = malloc(argSize + 20);
-
+    filePath = malloc(strlen(argv[1]) + 20);
+    memset(filePath,'\0',argSize + 20);
     strncpy(filePath,argv[1],argSize);
 
 
@@ -30,10 +30,10 @@ int main(int argc,char **argv){
 
     FILE * userErrors = NULL;
     char * filePathUErrors = NULL;
-    filePathUErrors = malloc(argSize + 20);
+    filePathUErrors = malloc(strlen(argv[1]) + 20);
     strncpy(filePathUErrors,"Resultados",14);
     strncat(filePathUErrors,"/users_errors.csv",18);
-    userErrors = fopen(filePathUErrors,"a+");
+    userErrors = fopen(filePathUErrors,"a");
     if(!userErrors) {perror("Users errors file did not open\n"); return 1;}
 
     char * userData = malloc(sizeof(char) * BUFFERSIZE);
@@ -84,7 +84,9 @@ int main(int argc,char **argv){
     }
     
     fclose(userFile);
+    free(filePathUErrors);  
     free(userData);
+    fclose(userErrors);
     free(filePath);
 
     /*
@@ -187,6 +189,6 @@ int main(int argc,char **argv){
     //readEntryFile();
 
     // Free everything used
-*/
+*/  destroyDataBase(uDatabase);
     return 0;
 }

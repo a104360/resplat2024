@@ -27,11 +27,11 @@ double getTotalSpentOnReserv(void * userReservs,int n){
     return total;
 }
 
-double averageRating(void * reservations, const char * id){
+double averageRating(void * reservations, const char * id,int hashSize){
     HotelDatabase * hotelDB = getHotelDataBase(reservations,id,NULL,NULL);
     int sumRatings = getSumRatings(hotelDB);
     int n = getNumReservas(hotelDB);
-    destroyHotelDatabase(hotelDB);
+    destroyHotelDatabase(hotelDB,hashSize);
     return sumRatings / n;
 }
 

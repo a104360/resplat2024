@@ -60,7 +60,7 @@ HotelDatabase * getHotelDataBase(void *,const char *,Time *,Time *);
 
 void allHotelReservs(gpointer , gpointer , gpointer );
 
-void destroyHotelDatabase(HotelDatabase *);
+void destroyHotelDatabase(HotelDatabase *,int);
 
 
 
@@ -82,7 +82,7 @@ int getNumReservs(const UserReservsDB *);
 
 void allUserReservs(gpointer,gpointer,gpointer);
 
-void destroyUserReservsDB(UserReservsDB *);
+void destroyUserReservsDB(UserReservsDB *,int);
 
 
 
@@ -95,7 +95,7 @@ Flight ** getUserFlights(const UserFlightsDB *);
 
 int getNumFlights(const UserFlightsDB *);
 
-void destroyUserFlightsDB(UserFlightsDB *);
+void destroyUserFlightsDB(UserFlightsDB *,int);
 
 
 
@@ -108,7 +108,7 @@ int getNumPassangers(const FlightPassangers *);
 
 Passanger ** getFlightPassangersBook(const FlightPassangers *);
 
-void destroyFlightPassangers(FlightPassangers *);
+void destroyFlightPassangers(FlightPassangers *,int);
 
 
 
@@ -123,7 +123,7 @@ int getNumAirportFlights(AirportDB *);
 
 Flight ** getAirportFlights(AirportDB *);
 
-void destroyAirport(AirportDB * db);
+void destroyAirport(AirportDB * db,int hashSize);
 
 
 void destroyDataBase(void *);

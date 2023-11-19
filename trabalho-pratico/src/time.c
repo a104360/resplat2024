@@ -54,7 +54,7 @@ int getSec(Time * time){
 }
 
 void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
-    if(!t) return;
+    if(t == NULL) return;
     t->year = year;
     t->mon = mon;
     t->mday = mday;
