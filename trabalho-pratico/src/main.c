@@ -84,22 +84,35 @@ int main(int argc,char **argv){
     fclose(userErrors); // close
     free(filePath); // free
 
-    /*
+    
     // Create Reservations Database
-    strcpy(filePath,argv[1]);
-    strncat(filePath,"/",2);
+    strncpy(filePath,argv[1],argSize);
+    strncat(filePath,"/reservations.csv",19);
 
-    strcat(filePath,"reservations.csv");
+    filePath[argSize + 1 + 17 + 1] = '\0';
 
-    FILE * reservationFile = fopen(filePath,"r");
+    FILE * reservationsFile = NULL;
+    reservationsFile = fopen(filePath,"r");
+
+    FILE * reservationsErrors = NULL;
+    char * filePathRErrors = NULL;
+    filePathRErrors = malloc(argSize + 27);
+    strncpy(filePathRErrors,"Resultados",14);
+    strncat(filePathRErrors,"/reservations_errors.csv",25);
+    reservationsErrors = fopen(filePathRErrors,"a+");
+    if(!reservationsErrors) {perror("Reservations errors file did not open\n"); return 1;}
 
     char * reservationData = malloc(sizeof(char) * BUFFERSIZE);
 
     if(!reservationData) { perror("Erro a alocar memoria na main"); return 1;}
 
-    memset(reservationData, '\0', strlen(reservationData));
+    memset(reservationData, '\0', BUFFERSIZE);
 
-    while(fgets(reservationData,strlen(reservationData),reservationFile)){
+    ReservationsDatabase rDatabase = initReservations();
+
+    while(fgets(reservationData,strlen(reservationData),reservationsFile)){
+
+        Reservation * rBuffer = NULL;
 
         int tamanhoReservationData = verTamanhoLinha(reservationData);
 
@@ -109,14 +122,30 @@ int main(int argc,char **argv){
 
         reservationDataClean[tamanhoReservationData] = '\0';
 
+        rBuffer = reservationCheck(reservationDataClean);
+
         reservationCheck(reservationDataClean);
 
+    if(rBuffer != NULL){
+            char * idBuffer = getReservId(rBuffer);
+
+            g_hash_table_insert(rDatabase,idBuffer,rBuffer);
+
+            free(idBuffer);
+
+        }else{ 
+            fprintf(reservationsErrors,"%s",reservationDataClean);
+        }
+        
+            rBuffer = NULL;
     }
+    
+    fclose(reservationsFile);
+    free(reservationData);
+    free(filePath);
 
-    fclose(reservationFile);
 
-
-
+/*
     //Create Flights Database
     strcpy(filePath,argv[1]);
     strncat(filePath,"/",2);
