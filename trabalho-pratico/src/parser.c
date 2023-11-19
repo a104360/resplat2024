@@ -10,7 +10,7 @@
 
 
 #define CHECKLEN(line) \
-    if(strlen(line) > 0) return NULL;\
+    if(strlen(line) < 1) return NULL;\
     char * aux = strdup(line);\
     if(aux == NULL){\
         perror("strdup memory allocation failed");\
@@ -240,10 +240,12 @@
 }
 
 // active vs inactive (all varitations)
- bool accStatusCheck(const char * line){
+bool accStatusCheck(const char * line){
     char * aux = strdup(line);
-    ALLVAR(aux);
-    if(!strcoll(line,"active") || !strcoll(line,"inactive")) return true;
+    if(aux == NULL) return false;
+    int gap = 'a' - 'A';
+    for(int i = 0; i < 6;i++){ if(aux[i] < 'a'){ aux[i] += gap;}}
+    if(strcoll(line,"active") == 0 || strcoll(line,"inactive") == 0) return true;
     return false;
 }
 

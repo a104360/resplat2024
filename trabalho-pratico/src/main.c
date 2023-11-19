@@ -42,9 +42,12 @@ int main(int argc,char **argv){
 
     memset(userData, '\0', BUFFERSIZE);
 
-    fseek(userFile,115,SEEK_SET);
 
     UsersDatabase uDatabase = initUsers(); // initDatabase
+
+    fgets(userData,BUFFERSIZE,userFile);
+
+    fprintf(userErrors,"%s",userData);
 
     while(fgets(userData,BUFFERSIZE,userFile)){
 

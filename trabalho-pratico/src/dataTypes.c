@@ -102,7 +102,7 @@ typedef struct passanger{
 }
   void destroyUser(User *user) {
     if(user) {
-        if(user->id) free(user->id);
+        if(getUserId(user) != NULL) free(user->id);
         if(user->name) free(user->name);
         if(user->email) free(user->email);
         if(user->phone_number) free(user->phone_number);
@@ -345,10 +345,10 @@ void copyUser(User * dest,User * src){
     flight->total_seats = 0;
     flight->origin = NULL;
     flight->destination = NULL;
-    setTime(flight->schedule_departure_date,0,0,0,0,0,0);
-    setTime(flight->schedule_arrival_date,0,0,0,0,0,0);
-    setTime(flight->real_departure_date,0,0,0,0,0,0);
-    setTime(flight->real_arrival_date,0,0,0,0,0,0);
+    flight->schedule_departure_date = createTime();
+    flight->schedule_arrival_date = createTime();
+    flight->real_departure_date = createTime();
+    flight->real_arrival_date = createTime();
     flight->pilot = NULL;
     flight->copilot = NULL;
     flight->notes = NULL;
@@ -608,8 +608,8 @@ void copyFlight(Flight * dest,Flight * src){
     reservation->hotel_stars = 0;
     reservation->city_tax = 0.0;
     reservation->address = NULL;
-    setTime(reservation->begin_date,0,0,0,0,0,0);
-    setTime(reservation->end_date,0,0,0,0,0,0);
+    reservation->begin_date = createTime();
+    reservation->end_date = createTime();
     reservation->price_per_night = 0.0;
     reservation->includes_breakfast = false;
     reservation->room_details = NULL;
