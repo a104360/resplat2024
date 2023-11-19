@@ -84,7 +84,7 @@ int main(int argc,char **argv){
     fclose(userErrors); // close
     free(filePath); // free
 
-    
+/*    
     // Create Reservations Database
     strncpy(filePath,argv[1],argSize);
     strncat(filePath,"/reservations.csv",19);
@@ -144,7 +144,7 @@ int main(int argc,char **argv){
     free(reservationData);
     free(filePath);
 
-
+*/
 /*
     //Create Flights Database
     strcpy(filePath,argv[1]);
