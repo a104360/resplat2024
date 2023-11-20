@@ -87,7 +87,7 @@ int main(int argc,char **argv){
     fclose(userErrors); // close
     free(filePath); // free
 
-/*    
+  
     // Create Reservations Database
     strncpy(filePath,argv[1],argSize);
     strncat(filePath,"/reservations.csv",19);
@@ -143,19 +143,28 @@ int main(int argc,char **argv){
             rBuffer = NULL;
     }
     
-    fclose(reservationsFile);
-    free(reservationData);
-    free(filePath);
+    fclose(reservationsFile); // close
+    free(filePathRErrors);  // free
+    free(reservationData); // free
+    fclose(reservationsErrors); // close
+    free(filePath); // free
 
-*/
-/*
+
+
     //Create Flights Database
-    strcpy(filePath,argv[1]);
-    strncat(filePath,"/",2);
+    strncpy(filePath,argv[1],argSize);
+    strncat(filePath,"/flights.csv",14);
 
-    strcat(filePath,"flights.csv");
+    FILE * flightFile = NULL;
+    flightFile = fopen(filePath,"r");
 
-    FILE * flightFile = fopen(filePath,"r");
+    FILE * flightsErrors = NULL;
+    char * filePathFErrors = NULL;
+    filePathFErrors = malloc(argSize + 27);
+    strncpy(filePathFErrors,"Resultados",14);
+    strncat(filePathFErrors,"/flights_errors.csv",25);
+    flightsErrors = fopen(filePathFErrors,"a+");
+    if(!flightsErrors) {perror("Flights errors file did not open\n"); return 1;}
 
     char * flightData = malloc(sizeof(char) * BUFFERSIZE);
 
@@ -163,7 +172,11 @@ int main(int argc,char **argv){
 
     memset(flightData, '\0', strlen(flightData));
 
+    FlightsDatabase fDatabase = initFlights();
+
     while(fgets(flightData,strlen(flightData),flightFile)){
+
+        Reservation * fBuffer = NULL;
 
         int tamanhoFlightData = verTamanhoLinha(flightData);
 
@@ -173,26 +186,54 @@ int main(int argc,char **argv){
 
         flightDataClean[tamanhoFlightData] = '\0';
 
+        fBuffer = fligthCheck(flightDataClean);
+
         fligthCheck(flightDataClean);
+
+        if(fBuffer != NULL){
+            char * idBuffer = getFlightId(fBuffer);
+
+            g_hash_table_insert(fDatabase,idBuffer,fBuffer);
+
+            free(idBuffer);
+
+        }else{ 
+            fprintf(reservationsErrors,"%s",flightDataClean);
+        }
+        
+            fBuffer = NULL;
 
     }
 
-    fclose(flightFile);
+    fclose(flightFile); // close
+    free(filePathFErrors);  // free
+    free(flightData); // free
+    fclose(flightsErrors); // close
+    free(filePath); // free
 
     // Create Passangers Database 
+/*
+    strncpy(filePath,argv[1],argSize);
+    strncat(filePath,"/passangers.csv",17);
 
-    strcpy(filePath,argv[1]);
-    strncat(filePath,"/",2);
+    FILE * passangersFile = NULL;
+    passangersFile = fopen(filePath,"r");
 
-    strcat(filePath,"flights.csv");
-
-    FILE * passangersFile = fopen(filePath,"r");
+    FILE * passangersErrors = NULL;
+    char * filePathPErrors = NULL;
+    filePathPErrors = malloc(argSize + 27);
+    strncpy(filePathPErrors,"Resultados",14);
+    strncat(filePathPErrors,"/passangers_errors.csv",25);
+    passangersErrors = fopen(filePathPErrors,"a+");
+    if(!passangersErrors) {perror("Passangers errors file did not open\n"); return 1;}
 
     char * passangersData = malloc(sizeof(char) * BUFFERSIZE);
 
     if(!passangersData) { perror("Erro a alocar memoria na main"); return 1;}
 
     memset(passangersData, '\0', strlen(passangersData));
+
+    PassangersDatabase * pDatabase = initPassangers();
 
     while(fgets(passangersData,strlen(passangersData),passangersFile)){
 
@@ -209,13 +250,13 @@ int main(int argc,char **argv){
     }
 
     fclose(passangersFile);
-
+*/
 
     // Read and execute commands, freeing after used
     
     //readEntryFile();
 
     // Free everything used
-*/  destroyUsers(uDatabase); // destroy
+    destroyUsers(uDatabase); // destroy
     return 0;
 }
