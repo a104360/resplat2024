@@ -85,6 +85,7 @@
     int n = 0; 
     n = atoi(aux);
     free(aux);
+    aux = NULL;
     return n;
 }
 
@@ -107,6 +108,7 @@
     int n = 0; 
     n = atoi(aux);
     free(aux);
+    aux = NULL;
     return n;
 }
 
@@ -127,6 +129,7 @@
     int n = 0; 
     n = atoi(aux);
     free(aux);
+    aux = NULL;
     return n;
 }
 
@@ -176,6 +179,7 @@
             int n = 0; 
             n = atoi(aux);
             free(aux);
+            aux = NULL;
             return n;
         }
     }
@@ -190,6 +194,7 @@
         int n = 0; 
         n = atoi(aux);
         free(aux);
+        aux = NULL;
         return n;
     }
     return -2;
@@ -209,6 +214,7 @@
         int n = 0; 
         n = atoi(aux);
         free(aux);
+        aux = NULL;
         return n;
     }
     return -2;
@@ -228,6 +234,7 @@
         int n = 0; 
         n = atoi(aux);
         free(aux);
+        aux = NULL;
         return n;
     }
     return -2;
@@ -332,9 +339,11 @@ char * accStatusCheck(const char * line){
     ALLVAR(aux);
     if(!strcoll(aux,"TRUE") || !strcoll(aux,"T") || !strcoll(aux,"1")){ 
         free(aux);
+        aux = NULL;
         return true;
     }
     free(aux);
+    aux = NULL;
     return false;
 }
 
@@ -358,12 +367,14 @@ char * accStatusCheck(const char * line){
         fprintf(stderr,"Memory allocation for User failed");
         if(token) free(token);
         if(aux) free(aux);
+        aux = NULL;
         return NULL;
     }
 
     //check userId
     char * id = idCheck(token);
-    if(!id){ free(aux); destroyUser(user); return NULL;}
+    if(!id){ free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
     setUserId(user,token);
     free(id);
     id = NULL;
@@ -371,7 +382,8 @@ char * accStatusCheck(const char * line){
 
     //check userName
     char * name = nameCheck(token);
-    if(!name){ free(aux); destroyUser(user); return NULL;}
+    if(!name){ free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
     setUserName(user,name);
     free(name);
     name = NULL;
@@ -379,7 +391,8 @@ char * accStatusCheck(const char * line){
 
     //check userEmail
     char * email = emailCheck(token);
-    if(!email) { free(aux); destroyUser(user); return NULL;}
+    if(!email) { free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
     setUserEmail(user,email);
     free(email);
     email = NULL;
@@ -387,7 +400,8 @@ char * accStatusCheck(const char * line){
 
     //check userPhone
     char * phone = phoneNumberCheck(token);
-    if(!phone) { free(aux); destroyUser(user); return NULL;}
+    if(!phone) { free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
     setUserPhone(user,token);
     free(phone);
     phone = NULL;
@@ -395,21 +409,24 @@ char * accStatusCheck(const char * line){
     
     //check userBday
     Time * userBday = dateCheck(token);
-    if(userBday == NULL) { free(aux); destroyUser(user); return NULL;}
+    if(userBday == NULL) { free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
     setUserBday(user,userBday);
     //destroyTime(userBday);
     TOKENIZE(token,saveptr);
 
     //check userSex
     char sex = sexCheck(token);
-    if(sex == '\0') { free(aux); destroyUser(user); return NULL;}
+    if(sex == '\0') { free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
     setUserSex(user,(char) sex);
     sex = '\0';
     TOKENIZE(token,saveptr);
 
     //check userPassaport
     char * passaport = passaportCheck(token);
-    if(!passaport) { free(aux); destroyUser(user); return NULL;}
+    if(!passaport) { free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
     setUserPassport(user,passaport);
     free(passaport);
     passaport = NULL;
@@ -417,7 +434,8 @@ char * accStatusCheck(const char * line){
 
     //check userCountryCode
     char * countryCode = countryCheck(token);
-    if(!countryCode) { free(aux); destroyUser(user); return NULL;}
+    if(!countryCode) { free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
     setUserCountryCode(user,countryCode);
     free(countryCode);
     countryCode = NULL;
@@ -425,7 +443,8 @@ char * accStatusCheck(const char * line){
 
     //check userAdress
     char * address = addressCheck(token);
-    if(!address) { free(aux); destroyUser(user); return NULL;}
+    if(!address) { free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
     setUserAddress(user,address);
     free(address);
     address = NULL;
@@ -433,7 +452,8 @@ char * accStatusCheck(const char * line){
 
     //check userAccountCreation time
     Time * userAccountCreation = dateCheck(token);
-    if(!userAccountCreation && compareTimes(userBday,userAccountCreation) == false) { free(aux); destroyUser(user); return NULL;}
+    if(!userAccountCreation && compareTimes(userBday,userAccountCreation) == false) { free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
     setUserAccountCreation(user,userAccountCreation);
     destroyTime(userAccountCreation);
     destroyTime(userBday);
@@ -443,7 +463,8 @@ char * accStatusCheck(const char * line){
 
     //check userPayMethod
     char * payMethod = pay_methodCheck(token);
-    if(!payMethod) { free(aux); destroyUser(user); return NULL;}
+    if(!payMethod) { free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
     setUserPayMethod(user,payMethod);
     free(payMethod);
     payMethod = NULL;
@@ -451,12 +472,15 @@ char * accStatusCheck(const char * line){
 
     //check user accountStatus
     char * accStatus = accStatusCheck(token);
-    if(accStatus == NULL) { free(aux); destroyUser(user); return NULL;}
+    if(accStatus == NULL) { free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
     bool accStat = false;
     if(strcoll(accStatus,"active") == 0) accStat = true;
     setUserAccountStatus(user,accStat);
     free(accStatus);
+    accStatus = NULL;
     free(aux);
+    aux = NULL;
     return user;
 }
 
@@ -468,65 +492,84 @@ char * accStatusCheck(const char * line){
     Reservation * reservation = createReservation();
 
     char * reservationId = idCheck(token);
-    if(!reservationId){ free(aux); destroyReservation(reservation); return NULL;}
+    if(!reservationId){ free(aux);
+    aux = NULL; destroyReservation(reservation); return NULL;}
     setReservId(reservation,reservationId);
     free(reservationId);
+    reservationId = NULL;
     TOKENIZE(token,saveptr);
 
     char * reservationUserId = idCheck(token);
-    if(!reservationUserId){ free(aux); destroyReservation(reservation); return NULL;}
+    if(!reservationUserId){ free(aux);
+    aux = NULL; destroyReservation(reservation); return NULL;}
     setReservUserId(reservation,reservationUserId);
     free(reservationUserId);
+    reservationUserId = NULL;
     TOKENIZE(token,saveptr);
 
     char * reservationHotelId = idCheck(token);
-    if(!reservationHotelId){ free(aux); destroyReservation(reservation); NULL;}
+    if(!reservationHotelId){ free(aux);
+    aux = NULL; destroyReservation(reservation); NULL;}
     setReservHotelId(reservation,reservationHotelId);
     free(reservationHotelId);
+    reservationHotelId = NULL;
     TOKENIZE(token,saveptr);
 
     char * reservationHotelName = nameCheck(token);
-    if(!reservationHotelName){ free(aux); destroyReservation(reservation); NULL;}
+    if(!reservationHotelName){ free(aux);
+    aux = NULL; destroyReservation(reservation); NULL;}
     setReservHotelName(reservation,reservationHotelName);
     free(reservationHotelName);
+    reservationHotelName = NULL;
     TOKENIZE(token,saveptr);
 
     unsigned int reservationHotelStars = hotelStarsCheck(token);
-    if(!reservationHotelStars){ free(aux); destroyReservation(reservation); NULL;}
+    if(!reservationHotelStars){ free(aux);
+    aux = NULL; destroyReservation(reservation); NULL;}
     setReservHotelStars(reservation,reservationHotelStars);
     TOKENIZE(token,saveptr);
 
     double reservationTax = taxCheck(token);
-    if(!reservationTax){ free(aux); destroyReservation(reservation) ;return NULL;}
+    if(!reservationTax){ free(aux);
+    aux = NULL; destroyReservation(reservation) ;return NULL;}
     setReservCityTax(reservation,reservationTax);
     TOKENIZE(token,saveptr);
 
     char * reservationAdress = addressCheck(token);
-    if(!reservationAdress){ free(aux); destroyReservation(reservation) ;return NULL;}
+    if(!reservationAdress){ free(aux);
+    aux = NULL; destroyReservation(reservation) ;return NULL;}
     setReservHotelAddress(reservation,reservationAdress);
     free(reservationAdress);
+    reservationAdress = NULL;
     TOKENIZE(token,saveptr);
 
     Time * beginDate = dateCheck(token);
-    if(!beginDate){ free(aux); destroyReservation(reservation); return NULL;}
+    if(!beginDate){ free(aux);
+    aux = NULL; destroyReservation(reservation); return NULL;}
     setReservBeginDate(reservation, beginDate);
     TOKENIZE(token,saveptr);
 
     Time * endDate = dateCheck(token);
-    if(!endDate){ free(aux); destroyReservation(reservation); return NULL;}
+    if(!endDate){ free(aux);
+    aux = NULL; destroyReservation(reservation); return NULL;}
     setReservEndDate(reservation, endDate);
-    if(!compareTimes(beginDate,endDate)){ destroyTime(beginDate); destroyTime(endDate); free(aux); destroyReservation(reservation); return NULL;}
+    if(!compareTimes(beginDate,endDate)){ destroyTime(beginDate); destroyTime(endDate); free(aux);
+    aux = NULL; destroyReservation(reservation); return NULL;}
     destroyTime(endDate);
+    endDate = NULL;
     destroyTime(beginDate);
+    beginDate = NULL; 
     TOKENIZE(token,saveptr);
 
     double pricePerNight = pricePNightCheck(token);
-    if(!pricePerNight){ free(aux); destroyReservation(reservation); return NULL;}
+    if(!pricePerNight){ free(aux);
+    aux = NULL; destroyReservation(reservation); return NULL;}
     setReservPricePerNight(reservation, pricePerNight);
     TOKENIZE(token,saveptr);
 
     bool includesBreakfast = breakfastCheck(token);
-    if(!includesBreakfast){ free(aux); destroyReservation(reservation); return NULL;}
+    if(!includesBreakfast){ free(aux);
+    aux = NULL; destroyReservation(reservation); return NULL;}
     setReservBreakfast(reservation, includesBreakfast);
     //free(includesBreakfast);
     TOKENIZE(token,saveptr);
@@ -536,7 +579,8 @@ char * accStatusCheck(const char * line){
     TOKENIZE(token,saveptr);
     
     unsigned int rating = reviewCheck(token);
-    if(!rating){ free(aux); destroyReservation(reservation); return NULL;}
+    if(!rating){ free(aux);
+    aux = NULL; destroyReservation(reservation); return NULL;}
     setReservRating(reservation,rating);
     TOKENIZE(token,saveptr);
 
@@ -544,6 +588,7 @@ char * accStatusCheck(const char * line){
     setReservComment(reservation,token);
     
     free(aux);
+    aux = NULL;
     return reservation;
 }
 
@@ -555,84 +600,109 @@ char * accStatusCheck(const char * line){
     Flight * flight = createFlight();
 
     char * flightId = idCheck(token);
-    if(!flightId){ free(aux); destroyFlight(flight); return NULL;}
+    if(!flightId){ free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     setFlightId(flight,flightId);
     free(flightId);
+    flightId = NULL;
     TOKENIZE(token,saveptr);
 
     char * airline = nameCheck(token);
-    if(!airline){ free(aux); destroyFlight(flight); return NULL;}
+    if(!airline){ free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     setFlightAirline(flight,airline);
     free(airline);
+    airline = NULL;
     TOKENIZE(token,saveptr);
 
     char * planeModel = nameCheck(token);
-    if(!planeModel){ free(planeModel); free(aux); destroyFlight(flight); return NULL;}
+    if(!planeModel){ free(planeModel); free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     setFlightPlaneModel(flight,planeModel);
     free(planeModel);
+    planeModel = NULL;
     TOKENIZE(token,saveptr);
 
     unsigned int totalSeats = seatsCheck(token);
-    if(!totalSeats){ free(aux); destroyFlight(flight); return NULL;}
+    if(!totalSeats){ free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     setFlightTotalSeats(flight,totalSeats);
     TOKENIZE(token,saveptr);
 
     //Origin
-    if(strlen(token)!=3){ free(aux); destroyFlight(flight); return NULL;}
+    if(strlen(token)!=3){ free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     char * origin = g_strdup(token);
     setFlightOrigin(flight,origin);
     TOKENIZE(token,saveptr);
 
     //Destination
-    if(!airportCheck(origin,token) && strlen(token)){ free(origin); free(aux); destroyFlight(flight); return NULL;}
+    if(!airportCheck(origin,token) && strlen(token)){ free(origin); free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     free(origin);
+    origin = NULL;
     setFlightDestination(flight,token);
     TOKENIZE(token,saveptr);
     
     Time * sDepartDate = dateCheck(token);
-    if(!sDepartDate){ free(aux); destroyFlight(flight); return NULL;}
+    if(!sDepartDate){ free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     setFlightSDepartureDate(flight,sDepartDate);
     TOKENIZE(token,saveptr);
 
     Time * sArrivalDate = dateCheck(token);
-    if(!sArrivalDate){ free(aux); destroyFlight(flight); return NULL;}
+    if(!sArrivalDate){ free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     setFlightSArrivalDate(flight,sArrivalDate);
 
     //sDepartDate before sArrivalDate
-    if(compareTimes(sDepartDate,sArrivalDate) == false){ destroyTime(sArrivalDate); destroyTime(sDepartDate); free(aux); destroyFlight(flight); return NULL;}
+    if(compareTimes(sDepartDate,sArrivalDate) == false){ destroyTime(sArrivalDate); destroyTime(sDepartDate); free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     destroyTime(sArrivalDate);
+    sArrivalDate = NULL;
     destroyTime(sDepartDate);
+    sDepartDate = NULL;
     TOKENIZE(token,saveptr);
 
     Time * rDepartDate = dateCheck(token);
-    if(!rDepartDate){ free(aux); destroyFlight(flight); return NULL;}
+    if(!rDepartDate){ free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     setFlightRDepartureDate(flight,rDepartDate);
     TOKENIZE(token,saveptr);
 
     Time * rArrivalDate = dateCheck(token);
-    if(!rArrivalDate){ free(aux); destroyFlight(flight); return NULL;}
+    if(!rArrivalDate){ free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     setFlightRArrivalDate(flight,rArrivalDate);
 
     //rDepartDate before rArrivalDate
-    if(compareTimes(rDepartDate,rArrivalDate) == false){ free(rArrivalDate); free(rDepartDate); free(aux); destroyFlight(flight); return NULL;}
+    if(compareTimes(rDepartDate,rArrivalDate) == false){ free(rArrivalDate); free(rDepartDate); free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     destroyTime(rArrivalDate);
+    rArrivalDate = NULL;
     destroyTime(rDepartDate);
+    rDepartDate = NULL;
     TOKENIZE(token,saveptr);
 
     char * pilot = nameCheck(token);
-    if(!pilot){ free(pilot); free(aux); destroyFlight(flight); return NULL;}
+    if(!pilot){ free(pilot); free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     setFlightPilot(flight,pilot);
     free(pilot);
+    pilot = NULL;
     TOKENIZE(token,saveptr);
 
     char * copilot = nameCheck(token);
-    if(!copilot){ free(copilot); free(aux); destroyFlight(flight); return NULL;}
+    if(!copilot){ free(copilot); free(aux);
+    aux = NULL; destroyFlight(flight); return NULL;}
     setFlightCopilot(flight,copilot);
     free(copilot);
+    copilot = NULL;
     TOKENIZE(token,saveptr);
 
     setFlightNotes(flight,token);
     free(aux);
+    aux = NULL;
     return flight;
 
 }
@@ -645,16 +715,21 @@ char * accStatusCheck(const char * line){
     Passanger * passanger = createPassanger();
 
     char * passangerFlightId = idCheck(token);
-    if(!passangerFlightId){ free(aux); destroyPassanger(passanger); return NULL;}
+    if(!passangerFlightId){ free(aux);
+    aux = NULL; destroyPassanger(passanger); return NULL;}
     setPassangerFlightId(passanger,passangerFlightId);
     free(passangerFlightId);
+    passangerFlightId = NULL;
     TOKENIZE(token,saveptr);
 
     char * passangerUserId = idCheck(token);
-    if(!passangerUserId){ free(aux); destroyPassanger(passanger); return NULL;}
+    if(!passangerUserId){ free(aux);
+    aux = NULL; destroyPassanger(passanger); return NULL;}
     setPassangerUserId(passanger,passangerUserId);
     free(passangerUserId);
+    passangerUserId = NULL;
 
     free(aux);
+    aux = NULL;
     return passanger;
 }

@@ -41,6 +41,7 @@ Time * firstDateQ5(const char * line){
     Time * firstDate = dateCheck(tokenLimpo);
 
     free(aux);
+    aux = NULL;
 
     return firstDate;
 }
@@ -52,6 +53,7 @@ Time * secondDateQ5(const char * line){
     Time * secondDate = dateCheck(tokenLimpo);
 
     free(aux);
+    aux = NULL;
 
     return secondDate;
 }
@@ -62,6 +64,7 @@ Time * firstDateQ8(const char * line){
     Time * firstDate = dateCheck(aux);
 
     free(aux);
+    aux = NULL;
 
     return firstDate;
 }
@@ -72,6 +75,7 @@ Time * secondDateQ8(const char * line){
     Time * secondDate = dateCheck(aux);
 
     free(aux);
+    aux = NULL;
 
     return secondDate;
 }
@@ -84,6 +88,7 @@ char * airportName(const char * line){
     token = strtok_r(aux," \n\0",&saveptr);
 
     free(aux);
+    aux = NULL;
     return token;
 }
 
@@ -234,6 +239,7 @@ void readEntryFile(UsersDatabase uDatabase,ReservationsDatabase rDatabase,Flight
                     int tokenSize = verTamanhoLinha(token);
 
                     free(aux);
+                    aux = NULL;
 
                     query8(rDatabase,token,firstDateQ8(&linhaLimpa[4+tokenSize]),secondDateQ8(&linhaLimpa[15+tokenSize]),true);
                     
@@ -247,6 +253,7 @@ void readEntryFile(UsersDatabase uDatabase,ReservationsDatabase rDatabase,Flight
                     int tokenSize = verTamanhoLinha(token);
 
                     free(aux);
+                    aux = NULL;
 
                     query8(rDatabase,token,firstDateQ8(&linhaLimpa[3+tokenSize]),secondDateQ8(&linhaLimpa[14+tokenSize]),false);
                     

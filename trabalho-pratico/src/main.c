@@ -16,7 +16,7 @@ int main(int argc,char **argv){
     size_t argSize = 0;
     argSize = strlen(argv[1]);
     char * filePath = NULL;
-    filePath = malloc(strlen(argv[1]) + 20); // malloc
+    filePath = malloc(argSize + 20); // malloc
     memset(filePath,'\0',argSize + 20);
     strncpy(filePath,argv[1],argSize);
 
@@ -71,6 +71,7 @@ int main(int argc,char **argv){
             insertUser(uDatabase,uBuffer);
 
             free(idBuffer); // free
+            idBuffer = NULL;
 
             free(uBuffer); // free
 
@@ -80,14 +81,19 @@ int main(int argc,char **argv){
         
         uBuffer = NULL;
         free(userDataClean);// free
+        userDataClean = NULL;
     }
     
     fclose(userFile); // close
+    userFile = NULL;
     free(filePathUErrors);  // free
+    filePathUErrors = NULL;
     free(userData); // free
+    userData = NULL;
     fclose(userErrors); // close
-    free(filePath); // free
+    userErrors = NULL;
 
+    memset(filePath,'\0',argSize + 20);
   
     // Create Reservations Database
     strncpy(filePath,argv[1],argSize);
@@ -137,7 +143,9 @@ int main(int argc,char **argv){
             insertReserv(rDatabase,rBuffer);
 
             free(idBuffer);
+            idBuffer = NULL;
             free(rBuffer);
+            rBuffer = NULL;
 
         }else{ 
             fprintf(reservationsErrors,"%s",reservationDataClean);
@@ -147,12 +155,17 @@ int main(int argc,char **argv){
     }
     
     fclose(reservationsFile); // close
+    reservationsFile = NULL;
     free(filePathRErrors);  // free
+    filePathRErrors = NULL;
     free(reservationData); // free
+    reservationData = NULL;
     fclose(reservationsErrors); // close
-    free(filePath); // free
+    reservationsErrors = NULL;
+    //free(filePath); // free
 
-
+    memset(filePath,'\0',argSize + 20);
+  
 
     //Create Flights Database
     strncpy(filePath,argv[1],argSize);
@@ -200,8 +213,10 @@ int main(int argc,char **argv){
             insertFlight(fDatabase,fBuffer);
 
             free(idBuffer);
+            idBuffer = NULL;
 
             free(fBuffer);
+            fBuffer = NULL;
 
         }else{ 
             fprintf(reservationsErrors,"%s",flightDataClean);
@@ -212,10 +227,15 @@ int main(int argc,char **argv){
     }
 
     fclose(flightFile); // close
+    flightFile = NULL;
     free(filePathFErrors);  // free
+    filePathFErrors = NULL;
     free(flightData); // free
+    flightData = NULL;
     fclose(flightsErrors); // close
+    flightsErrors = NULL;
     free(filePath); // free
+    filePath = NULL;
 
     // Create Passangers Database 
 /*
@@ -263,6 +283,7 @@ int main(int argc,char **argv){
     //readEntryFile();
 
     // Free everything used
+    //free(filePath); // free
     destroyUsers(uDatabase); // destroy
     destroyFlights(fDatabase);
     destroyReservs(rDatabase);

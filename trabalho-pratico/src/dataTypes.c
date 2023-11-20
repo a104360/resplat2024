@@ -104,33 +104,31 @@ typedef struct passanger{
 }
   void destroyUser(User *user) {
     if(user) {
-        if(getUserId(user) != NULL) free(user->id);
-        if(user->name) free(user->name);
-        if(user->email) free(user->email);
-        if(user->phone_number) free(user->phone_number);
+        if(user->id) user->id = NULL;//free(user->id);
+        if(user->name) user->name = NULL;//free(user->name);
+        if(user->email) user->email = NULL;//free(user->email);
+        if(user->phone_number) user->phone_number = NULL;//free(user->phone_number);
         if(user->sex) user->sex = '\0';
-        if(user->passport) free(user->passport);
-        if(user->country_code) free(user->country_code);
-        if(user->address) free(user->address);
-        if(user->pay_method) free(user->pay_method);
+        if(user->passport) user->passport = NULL;//free(user->passport);
+        if(user->country_code) user->country_code = NULL;//free(user->country_code);
+        if(user->address) user->address = NULL;//free(user->address);
+        if(user->pay_method) user->pay_method = NULL;//free(user->pay_method);
         if(user->account_creation) destroyTime(user->account_creation);
         if(user->birth_date) destroyTime(user->birth_date);
-        free(user);
+        user = NULL;//free(user);
     }
 }
 
 
 
 void setUserId(User * user, const char * id){
-    if (user == NULL) {
-        return;
-    }
+    if(id == NULL) return;
+    if (user == NULL) return;
 
-    if (user->id) {
+    if (user->id != NULL) {
         free(user->id);
         user->id = NULL;
     }
-    if(id == NULL) return;
     if (id) {
         user->id = strdup(id); 
     }
@@ -147,7 +145,11 @@ void setUserId(User * user, const char * id){
 
 
   void setUserName(User * user,const char * name){
-    if(user->name) free(user->name);
+    if(name == NULL) return;
+    if(user->name) {
+        free(user->name);
+        user->name = NULL;
+    }
     if(name) user->name =strdup(name);
 }
 
@@ -161,29 +163,36 @@ void setUserId(User * user, const char * id){
 
 
  void setUserEmail(User * user,const char * email){
-    if(user->email) free(user->email);
-    if(email) user->email =strdup(email);
+    if(email == NULL) return;
+    if(user->email) {
+        free(user->email);
+        user->email = NULL;
+    }
+    user->email =strdup(email);
 }
 
  char * getUserEmail(User * user){
     if(user->email){
-        char * aux =strdup(user->email);
+        char * aux = strdup(user->email);
         return aux;
     }
     return NULL;
 }
 
  void setUserPhone(User * user,const char * line){
-    if(!line || !user) return;
+    if(line == NULL) return;
+    if(user == NULL) return;
     if(user->phone_number != NULL){free(user->phone_number); user->phone_number = NULL;}
     char * number = strdup(line);
-    if(!number) return;
+    if(number == NULL) return;
     user->phone_number = number;
 }
 
+/*
 void setUserPhone2(User * user, const char * line){
     if(user->phone_number != NULL) 
         free(user->phone_number);
+        user->phone_number = NULL;
 
     // Pass 'phone' instead of 'token'
     char * phone = phoneNumberCheck(line);
@@ -195,6 +204,7 @@ void setUserPhone2(User * user, const char * line){
     user->phone_number = strdup(phone);
     free(phone);
 }
+*/
 
  char * getUserPhone(User * user){
     if(user->phone_number){
@@ -231,7 +241,12 @@ void setUserSex(User * user ,const char line){
 
 
   void setUserPassport(User * user ,const char * line){
-    if(user->passport) free(user->passport);
+    if(user == NULL) return;
+    if(line == NULL) return;
+    if(user->passport){
+        free(user->passport);
+        user->passport = NULL;
+    }
     user->passport =strdup(line);
 }
 
@@ -245,7 +260,12 @@ void setUserSex(User * user ,const char line){
 
 
  void setUserCountryCode(User * user ,const char * line){
-    if(user->country_code) free(user->country_code);
+    if(user == NULL) return;
+    if(line == NULL) return;
+    if(user->country_code) {
+        free(user->country_code);
+        user->country_code = NULL;
+    }
     user->country_code =strdup(line);
 }
 
@@ -259,7 +279,12 @@ void setUserSex(User * user ,const char line){
 
 
  void setUserAddress(User * user ,const char * line){
-    if(user->address) free(user->address);
+    if(user == NULL) return;
+    if(line == NULL) return;
+    if(user->address) {
+        free(user->address);
+        user->address = NULL;
+    }
     user->address =strdup(line);
 }
 
@@ -272,8 +297,10 @@ void setUserSex(User * user ,const char line){
 }
 
 
-  void setUserAccountCreation(User * user ,Time *tempo){
-    if(!user->account_creation) user->account_creation = createTime();
+void setUserAccountCreation(User * user ,Time *tempo){
+    if(user == NULL) return;
+    if(tempo == NULL) return;
+    if(user->account_creation == NULL) user->account_creation = createTime();
     copyTime(user->account_creation,tempo);
 }
 
@@ -287,9 +314,14 @@ void setUserSex(User * user ,const char line){
 }
 
 
-  void setUserPayMethod(User * user ,const char * line){
-    if(user->pay_method) free(user->pay_method);
-    user->pay_method =strdup(line);
+void setUserPayMethod(User * user ,const char * line){
+    if(user == NULL) return;
+    if(line == NULL) return;
+    if(user->pay_method) {
+        free(user->pay_method);
+        user->pay_method = NULL;
+    }
+    user->pay_method = strdup(line);
 }
 
  char * getUserPayMethod(User * user){
@@ -302,6 +334,7 @@ void setUserSex(User * user ,const char line){
 
 
   void setUserAccountStatus(User * user ,const bool status){
+    if(user == NULL) return;
     user->account_status = status;
 
 }
@@ -324,17 +357,27 @@ int getUserAge(User * user){
 }
 
 void copyUser(User * dest,User * src){
-    setUserId(dest,getUserId(src));
-    setUserName(dest,getUserName(src));
-    setUserEmail(dest,getUserEmail(src));
-    setUserPhone(dest,getUserPhone(src));
-    setUserBday(dest,getUserBday(src));
+    char * uId = getUserId(src);
+    char * uName = getUserName(src);
+    char * uEmail = getUserEmail(src);
+    char * uPhone = getUserPhone(src);
+    char * uPassport = getUserPassport(src);
+    char * uCountry = getUserCountryCode(src);
+    char * uAddress = getUserAddress(src);
+    char * uPay = getUserPayMethod(src);
+    Time * bDay = getUserBday(src);
+    Time * accCreation = getUserAccountCreation(src);
+    setUserId(dest,uId);
+    setUserName(dest,uName);
+    setUserEmail(dest,uEmail);
+    setUserPhone(dest,uPhone);
+    setUserBday(dest,bDay);
     setUserSex(dest,getUserSex(src));
-    setUserPassport(dest,getUserPassport(src));
-    setUserCountryCode(dest,getUserCountryCode(src));
-    setUserAddress(dest,getUserAddress(src));
-    setUserAccountCreation(dest,getUserAccountCreation(src));
-    setUserPayMethod(dest,getUserPayMethod(src));
+    setUserPassport(dest,uPassport);
+    setUserCountryCode(dest,uCountry);
+    setUserAddress(dest,uAddress);
+    setUserAccountCreation(dest,accCreation);
+    setUserPayMethod(dest,uPay);
     setUserAccountStatus(dest,getUserAccountStatus(src));
 }
 
@@ -377,19 +420,19 @@ void copyUser(User * dest,User * src){
 
   void destroyFlight(Flight * f) {
     if (f != NULL) {
-        if(f->id) free(f->id); 
-        if(f->airline) free(f->airline); 
-        if(f->plane_model) free(f->plane_model); 
-        if(f->origin) free(f->origin); 
-        if(f->destination) free(f->destination); 
+        if(f->id) f->id = NULL; //free(f->id); 
+        if(f->airline) f->airline = NULL; //free(f->airline); 
+        if(f->plane_model) f->plane_model = NULL; //free(f->plane_model); 
+        if(f->origin) f->origin = NULL; //free(f->origin); 
+        if(f->destination) f->destination = NULL; //free(f->destination); 
         if(f->schedule_departure_date) destroyTime(f->schedule_departure_date); 
         if(f->schedule_arrival_date) destroyTime(f->schedule_arrival_date); 
         if(f->real_departure_date) destroyTime(f->real_departure_date); 
         if(f->real_arrival_date) destroyTime(f->real_arrival_date); 
-        if(f->pilot) free(f->pilot); 
-        if(f->copilot) free(f->copilot); 
-        if(f->notes) free(f->notes); 
-        free(f); 
+        if(f->pilot) f->pilot = NULL; //free(f->pilot); 
+        if(f->copilot) f->copilot = NULL; //free(f->copilot); 
+        if(f->notes) f->notes = NULL; //free(f->notes); 
+        f = NULL;//free(f); 
     }
 }
 

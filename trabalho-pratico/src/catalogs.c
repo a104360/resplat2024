@@ -199,6 +199,7 @@ void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
 
 void destroyHotelDatabase(HotelDatabase * hotel, int hashSize){
     free(hotel->hotel_id);
+    hotel->hotel_id = NULL;
     for(int i = 0;i < hashSize;i++){
         if(hotel->_hotelReservs[i]) free(hotel->_hotelReservs[i]);
         hotel->_hotelReservs[i] = NULL;
@@ -310,6 +311,7 @@ Flight ** getUserFlights(const UserFlightsDB * database){
 
 void destroyUserFlightsDB(UserFlightsDB * database,int hashSize){
     free(database->passangers);
+    database->passangers;
     database->passangers = NULL;
     for(int i = 0;i < hashSize;i++){
         free(database->flights[i]);
