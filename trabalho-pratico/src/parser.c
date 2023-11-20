@@ -5,15 +5,16 @@
 #include <stdlib.h>
 #include <ctype.h>
 #include <stdio.h>
+#include <glib.h>
 
 
 
 
 #define CHECKLEN(line) \
     if(strlen(line) < 1) return NULL;\
-    char * aux = strdup(line);\
+    char * aux = g_strdup(line);\
     if(aux == NULL){\
-        perror("strdup memory allocation failed");\
+        perror("g_strdup memory allocation failed");\
         return NULL;\
     };\
     return aux; \
@@ -63,7 +64,7 @@
 
  char * pay_methodCheck(const char * line){
     if(line[0] == '\0') return NULL;
-    char * aux = strdup(line);
+    char * aux = g_strdup(line);
     for(int i = 0;aux[i] != '\0';aux[i] = tolower(aux[i]),i++);
     return aux;
 }
@@ -71,13 +72,18 @@
 
 // Verifies the correctness of the year in the date string, following the determined format
  int yearCheck(const char * line){
+    if(!line) return 0;
     for(int i = 0; i < 5;i++){
         if(line[i] > '9' && line[i] < '0') return false;
     }
     if(line[4] != '/') return false;
-    char * aux = malloc(sizeof(char) * 4);
+    char * aux = NULL;
+    aux = g_malloc(sizeof(char) * 5);
+    memset(aux,'\0',5);
     strncpy(aux,line,4);
-    int n = atoi(aux);
+    aux[4] = '\0';
+    int n = 0; 
+    n = atoi(aux);
     free(aux);
     return n;
 }
@@ -85,16 +91,21 @@
 // Verifies the correctness of the month in the date string, following the determined format
 // 01 <= time.mon <= 12
  int monthCheck(const char * line){
+    if(!line) return 0;
     if(line[5] != '1' && line[5] != '0') return false;
     if(line[5] == '0')
         if(line[6] > '9' && line[6] < '0') return false;
     if(line[5] == '1')
         if(line[6] > '2' && line[6] < '0') return false;
     if(line[7] != '/') return false;
-    char * aux = malloc(sizeof(char)*2);
+    char * aux = NULL;
+    aux = g_malloc(sizeof(char) * 3);
+    memset(aux,'\0',3);
     aux[0] = line[5];
     aux[1] = line[6];
-    int n = atoi(aux);
+    aux[2] = '\0';
+    int n = 0; 
+    n = atoi(aux);
     free(aux);
     return n;
 }
@@ -103,18 +114,25 @@
 // 0 -> false
 // otherwise -> 1 <= tm.tm_mday <= 31 (true)
  int dayCheck(const char * line){
+    if(!line) return 0;
     if(line[8] < '0' || line[8] > '3') return false;
     if(line[9] < '0' && line[9] > '9') return false;
     if(line[8] == '3' && line[9] > '1') return false;
-    char * aux = malloc(sizeof(char) * 2);
+    char * aux = NULL;
+    aux = g_malloc(sizeof(char) * 3);
+    memset(aux,'\0',3);
     aux[0] = line[8];
     aux[1] = line[9]; 
-    int n = atoi(aux);
+    aux[2] = '\0';
+    int n = 0; 
+    n = atoi(aux);
+    free(aux);
     return n;
 }
 
 // format : nnnn/nn/nn (0 <= n <= 9)
  Time * dateCheck(const char * line){
+    if(!line) return 0;
     Time * date = createTime();
     if(!date) return NULL;
     switch (line[10])
@@ -145,23 +163,32 @@
 
 // format : nnnn/nn/nn nn:nn:nn | dateCheck && [0,23]:
  int hourCheck(const char * line){
+    if(!line) return 0;
     if(line[11] == '2'){
         if(line[12] < '0' && line[12] > '3') return -1;
         else{
-            char * aux = malloc(sizeof(char) * 2);
+            char * aux = NULL;
+            aux = g_malloc(sizeof(char) * 3);
+            memset(aux,'\0',3);
             aux[0] = '2';
             aux[1] = line[12];
-            int n = atoi(aux);
+            aux[2] = '\0';
+            int n = 0; 
+            n = atoi(aux);
             free(aux);
             return n;
         }
     }
     if(line[11] < '0' && line[11] > '1' && line[12] < '0' && line[12] > '9') return -1;
     else {
-        char * aux = malloc(sizeof(char) * 2);
+        char * aux = NULL;
+        aux = g_malloc(sizeof(char) * 3);
+        memset(aux,'\0',3);
         aux[0] = line[11];
-        aux[2] = line[12];
-        int n = atoi(aux);
+        aux[1] = line[12];
+        aux[2] = '\0';
+        int n = 0; 
+        n = atoi(aux);
         free(aux);
         return n;
     }
@@ -170,12 +197,17 @@
 
 // 0 <= min <= 59
  int minuteCheck(const char * line){
+    if(!line) return 0;
     if(line[14] < '0' && line[14] > '5' && line[15] < '0' && line[15] > '9') return -1;
     else {
-        char * aux = malloc(sizeof(char) * 2);
+        char * aux = NULL;
+        aux = g_malloc(sizeof(char) * 3);
+        memset(aux,'\0',3);
         aux[0] = line[14];
         aux[1] = line[15];
-        int n = atoi(aux);
+        aux[2] = '\0';
+        int n = 0; 
+        n = atoi(aux);
         free(aux);
         return n;
     }
@@ -184,12 +216,17 @@
 
 // 0 <= sec <= 59
  int secondsCheck(const char * line){
+    if(!line) return 0;
     if(line[17] < '0' && line[17] > '5' && line[18] < '0' && line[18] > '9') return -1;
     else {
-        char * aux = malloc(sizeof(char) * 2);
+        char * aux = NULL;
+        aux = g_malloc(sizeof(char) * 3);
+        memset(aux,'\0',3);
         aux[0] = line[17];
         aux[1] = line[18];
-        int n = atoi(aux);
+        aux[2] = '\0';
+        int n = 0; 
+        n = atoi(aux);
         free(aux);
         return n;
     }
@@ -223,8 +260,7 @@
     int tdl = 0;
     for(i += 1;i < len;tdl++,i++);
     if(tdl < 2) return NULL;
-    char * email = malloc(sizeof(strlen(line)));
-    strcpy(email,line);
+    char * email = g_strdup(line);
     return email;
 }
 
@@ -233,7 +269,7 @@
     if(!line) return NULL;
     if(strlen(line) != 2) return NULL;
     else{
-        char * country = strdup(line);
+        char * country = g_strdup(line);
         return country;
     }
     return NULL;
@@ -242,7 +278,7 @@
 // active vs inactive (all varitations)
 char * accStatusCheck(const char * line){
     if(!line) return NULL;
-    char * aux = strdup(line);
+    char * aux = g_strdup(line);
     if(aux == NULL) return NULL;
     int gap = 'a' - 'A';
     for(int i = 0; i < 6;i++){ if(aux[i] < 'a'){ aux[i] += gap;}}
@@ -259,7 +295,7 @@ char * accStatusCheck(const char * line){
 // length == 3 && all variations
  bool airportCheck(const char * departure,const char * arrival){
     if(strlen(departure) != 3 || strlen(arrival) != 3) return false;
-    char * d = strdup(departure), * a = strdup(arrival);
+    char * d = g_strdup(departure), * a = g_strdup(arrival);
     ALLVAR(d);
     ALLVAR(a);
     if(!strcoll(d,a)) return false;
@@ -292,7 +328,7 @@ char * accStatusCheck(const char * line){
 
 // bool breakfast : if(false){"f","false",0,""} else {"t","true","1"}
  bool breakfastCheck(const char * line){
-    char * aux = strdup(line);
+    char * aux = g_strdup(line);
     ALLVAR(aux);
     if(!strcoll(aux,"TRUE") || !strcoll(aux,"T") || !strcoll(aux,"1")){ 
         free(aux);
@@ -312,7 +348,7 @@ char * accStatusCheck(const char * line){
 
 
  User * userCheck(const char * line){
-    char * aux = strdup(line);
+    char * aux = g_strdup(line);
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
@@ -425,7 +461,7 @@ char * accStatusCheck(const char * line){
 }
 
  Reservation * reservationCheck(const char * line){
-    char * aux = strdup(line);
+    char * aux = g_strdup(line);
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
@@ -512,7 +548,7 @@ char * accStatusCheck(const char * line){
 }
 
  Flight * fligthCheck(const char * line){
-    char * aux = strdup(line);
+    char * aux = g_strdup(line);
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
@@ -543,7 +579,7 @@ char * accStatusCheck(const char * line){
 
     //Origin
     if(strlen(token)!=3){ free(aux); destroyFlight(flight); return NULL;}
-    char * origin = strdup(token);
+    char * origin = g_strdup(token);
     setFlightOrigin(flight,origin);
     TOKENIZE(token,saveptr);
 
@@ -602,7 +638,7 @@ char * accStatusCheck(const char * line){
 }
 
  Passanger * passangerCheck(const char * line){
-    char * aux = strdup(line);
+    char * aux = g_strdup(line);
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
