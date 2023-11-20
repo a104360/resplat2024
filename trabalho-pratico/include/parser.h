@@ -40,7 +40,7 @@ char * emailCheck(const char * );
 
 char * countryCheck(const char * );
 
-bool accStatusCheck(const char * );
+char * accStatusCheck(const char * );
 
 unsigned int seatsCheck(const char *);
 

@@ -240,13 +240,14 @@
 }
 
 // active vs inactive (all varitations)
-bool accStatusCheck(const char * line){
+char * accStatusCheck(const char * line){
+    if(!line) return NULL;
     char * aux = strdup(line);
-    if(aux == NULL) return false;
+    if(aux == NULL) return NULL;
     int gap = 'a' - 'A';
     for(int i = 0; i < 6;i++){ if(aux[i] < 'a'){ aux[i] += gap;}}
-    if(strcoll(line,"active") == 0 || strcoll(line,"inactive") == 0) return true;
-    return false;
+    if(strcoll(aux,"active") == 0 || strcoll(aux,"inactive") == 0) return aux;
+    return NULL;
 }
 
 // total_seats must not be less than the number of passangers
@@ -329,6 +330,7 @@ bool accStatusCheck(const char * line){
     if(!id){ free(aux); destroyUser(user); return NULL;}
     setUserId(user,token);
     free(id);
+    id = NULL;
     TOKENIZE(token,saveptr);
 
     //check userName
@@ -336,6 +338,7 @@ bool accStatusCheck(const char * line){
     if(!name){ free(aux); destroyUser(user); return NULL;}
     setUserName(user,name);
     free(name);
+    name = NULL;
     TOKENIZE(token,saveptr);
 
     //check userEmail
@@ -343,13 +346,15 @@ bool accStatusCheck(const char * line){
     if(!email) { free(aux); destroyUser(user); return NULL;}
     setUserEmail(user,email);
     free(email);
+    email = NULL;
     TOKENIZE(token,saveptr);
 
     //check userPhone
     char * phone = phoneNumberCheck(token);
     if(!phone) { free(aux); destroyUser(user); return NULL;}
-    setUserPhone(user,phone);
+    setUserPhone(user,token);
     free(phone);
+    phone = NULL;
     TOKENIZE(token,saveptr);
     
     //check userBday
@@ -371,6 +376,7 @@ bool accStatusCheck(const char * line){
     if(!passaport) { free(aux); destroyUser(user); return NULL;}
     setUserPassport(user,passaport);
     free(passaport);
+    passaport = NULL;
     TOKENIZE(token,saveptr);
 
     //check userCountryCode
@@ -378,13 +384,15 @@ bool accStatusCheck(const char * line){
     if(!countryCode) { free(aux); destroyUser(user); return NULL;}
     setUserCountryCode(user,countryCode);
     free(countryCode);
+    countryCode = NULL;
     TOKENIZE(token,saveptr);
 
     //check userAdress
-    char * adress = addressCheck(token);
-    if(!adress) { free(aux); destroyUser(user); return NULL;}
-    setUserAddress(user,adress);
-    free(adress);
+    char * address = addressCheck(token);
+    if(!address) { free(aux); destroyUser(user); return NULL;}
+    setUserAddress(user,address);
+    free(address);
+    address = NULL;
     TOKENIZE(token,saveptr);
 
     //check userAccountCreation time
@@ -393,6 +401,8 @@ bool accStatusCheck(const char * line){
     setUserAccountCreation(user,userAccountCreation);
     destroyTime(userAccountCreation);
     destroyTime(userBday);
+    userAccountCreation = NULL;
+    userBday = NULL;
     TOKENIZE(token,saveptr);
 
     //check userPayMethod
@@ -400,13 +410,16 @@ bool accStatusCheck(const char * line){
     if(!payMethod) { free(aux); destroyUser(user); return NULL;}
     setUserPayMethod(user,payMethod);
     free(payMethod);
+    payMethod = NULL;
     TOKENIZE(token,saveptr);
 
     //check user accountStatus
-    bool accStatus = accStatusCheck(token);
-    if(accStatus == false) { free(aux); destroyUser(user); return NULL;}
-    setUserAccountStatus(user,accStatus);
-    
+    char * accStatus = accStatusCheck(token);
+    if(accStatus == NULL) { free(aux); destroyUser(user); return NULL;}
+    bool accStat = false;
+    if(strcoll(accStatus,"active") == 0) accStat = true;
+    setUserAccountStatus(user,accStat);
+    free(accStatus);
     free(aux);
     return user;
 }

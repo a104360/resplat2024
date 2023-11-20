@@ -67,7 +67,8 @@ int main(int argc,char **argv){
         if(uBuffer != NULL){
             char * idBuffer = getUserId(uBuffer); // malloc
 
-            g_hash_table_insert(uDatabase,idBuffer,uBuffer);
+            //g_hash_table_insert(uDatabase,idBuffer,uBuffer);
+            insertUser(uDatabase,uBuffer);
 
             free(idBuffer); // free
 
@@ -127,14 +128,16 @@ int main(int argc,char **argv){
 
         rBuffer = reservationCheck(reservationDataClean);
 
-        reservationCheck(reservationDataClean);
+        //reservationCheck(reservationDataClean);
 
     if(rBuffer != NULL){
             char * idBuffer = getReservId(rBuffer);
 
-            g_hash_table_insert(rDatabase,idBuffer,rBuffer);
+            //g_hash_table_insert(rDatabase,idBuffer,rBuffer);
+            insertReserv(rDatabase,rBuffer);
 
             free(idBuffer);
+            free(rBuffer);
 
         }else{ 
             fprintf(reservationsErrors,"%s",reservationDataClean);
@@ -176,7 +179,7 @@ int main(int argc,char **argv){
 
     while(fgets(flightData,strlen(flightData),flightFile)){
 
-        Reservation * fBuffer = NULL;
+        Flight * fBuffer = NULL;
 
         int tamanhoFlightData = verTamanhoLinha(flightData);
 
@@ -188,14 +191,17 @@ int main(int argc,char **argv){
 
         fBuffer = fligthCheck(flightDataClean);
 
-        fligthCheck(flightDataClean);
+        //fligthCheck(flightDataClean);
 
         if(fBuffer != NULL){
             char * idBuffer = getFlightId(fBuffer);
 
-            g_hash_table_insert(fDatabase,idBuffer,fBuffer);
+            //g_hash_table_insert(fDatabase,idBuffer,fBuffer);
+            insertFlight(fDatabase,fBuffer);
 
             free(idBuffer);
+
+            free(fBuffer);
 
         }else{ 
             fprintf(reservationsErrors,"%s",flightDataClean);
@@ -258,5 +264,7 @@ int main(int argc,char **argv){
 
     // Free everything used
     destroyUsers(uDatabase); // destroy
+    destroyFlights(fDatabase);
+    destroyReservs(rDatabase);
     return 0;
 }

@@ -3,9 +3,11 @@
 #include <string.h>
 #include <glib.h>
 #include <stddef.h>
+#include <stdio.h>
 #include "../include/dataTypes.h"
 #include "../include/catalogs.h"
 #include "../include/time.h"
+#include "../include/parser.h"
 
 
 
@@ -172,9 +174,28 @@ void setUserId(User * user, const char * id){
 }
 
  void setUserPhone(User * user,const char * line){
-    if(user->phone_number) free(user->phone_number);
-    if(line) user->phone_number =strdup(line);
+    if(!line || !user) return;
+    if(user->phone_number != NULL){free(user->phone_number); user->phone_number = NULL;}
+    char * number = strdup(line);
+    if(!number) return;
+    user->phone_number = number;
 }
+
+void setUserPhone2(User * user, const char * line){
+    if(user->phone_number != NULL) 
+        free(user->phone_number);
+
+    // Pass 'phone' instead of 'token'
+    char * phone = phoneNumberCheck(line);
+    if(!phone) {
+        fprintf(stderr, "Error checking phone number\n");
+        return;  // or handle the error appropriately
+    }
+
+    user->phone_number = strdup(phone);
+    free(phone);
+}
+
  char * getUserPhone(User * user){
     if(user->phone_number){
         char * aux =strdup(user->phone_number);

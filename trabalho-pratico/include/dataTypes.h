@@ -63,6 +63,7 @@ void setUserEmail(User *, const char *);
 char * getUserEmail(User *);
 
 void setUserPhone(User *,const char *);
+void setUserPhone2(User *,const char *);
 char * getUserPhone(User *);
 
 void setUserBday(User *,Time *);
