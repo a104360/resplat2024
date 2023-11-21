@@ -287,9 +287,12 @@ char * accStatusCheck(const char * line){
     if(!line) return NULL;
     char * aux = strdup(line);
     if(aux == NULL) return NULL;
-    int gap = 'a' - 'A';
-    for(int i = 0; i < 6;i++){ if(aux[i] < 'a'){ aux[i] += gap;}}
-    if(strcoll(aux,"active") == 0 || strcoll(aux,"inactive") == 0) return aux;
+    if(tolower(aux[0]) == 'a' || tolower(aux[0]) == 'i'){
+        for(int i = 0; i < strlen(aux); i++){
+            aux[i] = tolower(aux[i]);
+        }
+    }
+    if(strcmp(aux,"active") == 0 || strcmp(aux,"inactive") == 0){ return aux;}
     return NULL;
 }
 
@@ -475,7 +478,7 @@ char * accStatusCheck(const char * line){
     if(accStatus == NULL) { free(aux);
     aux = NULL; destroyUser(user); return NULL;}
     bool accStat = false;
-    if(strcoll(accStatus,"active") == 0) accStat = true;
+    if(strcmp(accStatus,"active") == 0) accStat = true;
     setUserAccountStatus(user,accStat);
     free(accStatus);
     accStatus = NULL;
