@@ -506,6 +506,13 @@ char * accStatusCheck(const char * line){
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
     Reservation * reservation = createReservation();
+    if(reservation == NULL){
+        fprintf(stderr,"Memory allocation for User failed");
+        if(token) free(token);
+        if(aux) free(aux);
+        aux = NULL;
+        return NULL;
+    }
 
     char * reservationId = idCheck(token);
     if(!reservationId){ free(aux);
