@@ -247,7 +247,7 @@ int main(int argc,char **argv){
     filePath = NULL;
 
     // Create Passangers Database 
-/*
+
     strncpy(filePath,argv[1],argSize);
     strncat(filePath,"/passangers.csv",17);
 
@@ -270,7 +270,9 @@ int main(int argc,char **argv){
 
     PassangersDatabase * pDatabase = initPassangers();
 
-    while(fgets(passangersData,strlen(passangersData),passangersFile)){
+    while(fgets(passangersData,BUFFERSIZE,passangersFile)){
+
+        Passanger * pBuffer = NULL;
 
         int tamanhoPassangersData = verTamanhoLinha(passangersData);
 
@@ -280,12 +282,39 @@ int main(int argc,char **argv){
 
         passangersDataClean[tamanhoPassangersData] = '\0';
 
-        passangerCheck(passangersDataClean);
+        pBuffer = passangerCheck(passangersDataClean);
+
+        if(pBuffer != NULL){
+            char * idBuffer = getPassangerUserId(pBuffer);
+
+            insertPassanger(pDatabase,pBuffer);
+
+            free(idBuffer);
+            idBuffer = NULL;
+
+            free(pBuffer);
+            pBuffer = NULL;
+
+        }else{ 
+            fprintf(passangersErrors,"%s",passangersDataClean);
+        }
+        
+            pBuffer = NULL;
 
     }
 
-    fclose(passangersFile);
-*/
+    fclose(passangersFile); // close
+    passangersFile = NULL;
+    free(filePathPErrors);  // free
+    filePathPErrors = NULL;
+    free(passangersData); // free
+    passangersData = NULL;
+    fclose(passangersErrors); // close
+    passangersErrors = NULL;
+    free(filePath); // free
+    filePath = NULL;
+
+
 
     // Read and execute commands, freeing after used
     
