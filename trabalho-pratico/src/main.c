@@ -246,6 +246,7 @@ int main(int argc,char **argv){
     free(filePath); // free
     filePath = NULL;
 
+/*
     // Create Passangers Database 
 
     strncpy(filePath,argv[1],argSize);
@@ -314,7 +315,7 @@ int main(int argc,char **argv){
     free(filePath); // free
     filePath = NULL;
 
-
+*/
 
     // Read and execute commands, freeing after used
     
