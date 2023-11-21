@@ -379,6 +379,16 @@ void copyUser(User * dest,User * src){
     setUserAccountCreation(dest,accCreation);
     setUserPayMethod(dest,uPay);
     setUserAccountStatus(dest,getUserAccountStatus(src));
+    free(uId);
+    free(uName);
+    free(uEmail);
+    free(uPhone);
+    free(uPassport);
+    free(uCountry);
+    free(uAddress);
+    free(uPay);
+    free(bDay);
+    free(accCreation);
 }
 
 // *** End of user functions ***
@@ -420,19 +430,28 @@ void copyUser(User * dest,User * src){
 
   void destroyFlight(Flight * f) {
     if (f != NULL) {
-        if(f->id) f->id = NULL; //free(f->id); 
-        if(f->airline) f->airline = NULL; //free(f->airline); 
-        if(f->plane_model) f->plane_model = NULL; //free(f->plane_model); 
-        if(f->origin) f->origin = NULL; //free(f->origin); 
-        if(f->destination) f->destination = NULL; //free(f->destination); 
+        if(f->id) f->id = NULL; 
+            //free(f->id); 
+        if(f->airline) f->airline = NULL; 
+            //free(f->airline); 
+        if(f->plane_model) f->plane_model = NULL; 
+            //free(f->plane_model); 
+        if(f->origin) f->origin = NULL; 
+            //free(f->origin); 
+        if(f->destination) f->destination = NULL; 
+            //free(f->destination); 
         if(f->schedule_departure_date) destroyTime(f->schedule_departure_date); 
         if(f->schedule_arrival_date) destroyTime(f->schedule_arrival_date); 
         if(f->real_departure_date) destroyTime(f->real_departure_date); 
         if(f->real_arrival_date) destroyTime(f->real_arrival_date); 
-        if(f->pilot) f->pilot = NULL; //free(f->pilot); 
-        if(f->copilot) f->copilot = NULL; //free(f->copilot); 
-        if(f->notes) f->notes = NULL; //free(f->notes); 
-        f = NULL;//free(f); 
+        if(f->pilot) f->pilot = NULL; 
+            //free(f->pilot); 
+        if(f->copilot) f->copilot = NULL; 
+            //free(f->copilot); 
+        if(f->notes) f->notes = NULL; 
+            //free(f->notes); 
+        f = NULL;
+        //free(f); 
     }
 }
 
@@ -442,8 +461,11 @@ size_t getFlightSize(){
 
 
   void setFlightId(Flight * flight,const char * line){
-    if(flight->id) free(flight->id);
-    flight->id =strdup(line);
+    if(flight->id) {
+        free(flight->id);
+        flight->id = NULL;
+    }
+    flight->id = strdup(line);
 }
 
  char *getFlightId(Flight * flight){
@@ -456,8 +478,11 @@ size_t getFlightSize(){
 
   
   void setFlightAirline(Flight * flight,const char * line){
-    if(flight->airline) free(flight->airline);
-    flight->airline =strdup(line);
+    if(flight->airline) {
+        free(flight->airline);
+        flight->airline = NULL;
+    }
+    flight->airline = strdup(line);
 }
 
  char *getFlightAirline(Flight * flight){
@@ -470,7 +495,10 @@ size_t getFlightSize(){
 
 
   void setFlightPlaneModel(Flight * flight,const char * line){
-    if(flight->plane_model) free(flight->plane_model);
+    if(flight->plane_model) {
+        free(flight->plane_model);
+        flight->plane_model = NULL;
+    }
     flight->plane_model =strdup(line);
 }
 
@@ -493,7 +521,10 @@ size_t getFlightSize(){
 
 
   void setFlightOrigin(Flight * flight,const char * line){
-    if(flight->origin) free(flight->origin);
+    if(flight->origin) {
+        free(flight->origin);
+        flight->origin;
+    }
     flight->origin =strdup(line);
 }
 
@@ -507,7 +538,10 @@ size_t getFlightSize(){
 
 
   void setFlightDestination(Flight * flight,const char * line){
-    if(flight->destination) free(flight->destination);
+    if(flight->destination) {
+        free(flight->destination);
+        flight->destination;
+    }
     flight->destination =strdup(line);
 }
 
@@ -521,7 +555,7 @@ size_t getFlightSize(){
 
 
   void setFlightSDepartureDate(Flight * flight,Time * tempo){
-    if(!flight->schedule_departure_date) flight->schedule_departure_date = createTime();
+    if(flight->schedule_departure_date == NULL) flight->schedule_departure_date = createTime();
     copyTime(flight->schedule_departure_date,tempo);
 }
 
@@ -536,7 +570,7 @@ size_t getFlightSize(){
 
 
   void setFlightSArrivalDate(Flight * flight,Time * tempo){
-    if(!flight->schedule_arrival_date) flight->schedule_arrival_date = createTime();
+    if(flight->schedule_arrival_date == NULL) flight->schedule_arrival_date = createTime();
     copyTime(flight->schedule_arrival_date,tempo);
 }
 
@@ -551,7 +585,7 @@ size_t getFlightSize(){
 
 
   void setFlightRDepartureDate(Flight * flight, Time * tempo){
-    if(!flight->real_departure_date) flight->real_departure_date = createTime();
+    if(flight->real_departure_date == NULL) flight->real_departure_date = createTime();
     copyTime(flight->real_departure_date,tempo);
 }
 
@@ -566,7 +600,7 @@ size_t getFlightSize(){
 
 
   void setFlightRArrivalDate(Flight * flight,Time * tempo){
-    if(!flight->real_arrival_date) flight->real_arrival_date = createTime();
+    if(flight->real_arrival_date == NULL) flight->real_arrival_date = createTime();
     copyTime(flight->real_arrival_date,tempo);
 }
 
@@ -581,7 +615,10 @@ size_t getFlightSize(){
 
 
   void setFlightPilot(Flight * flight,const char * line){
-    if(flight->pilot) free(flight->pilot);
+    if(flight->pilot) {
+        free(flight->pilot);
+        flight->pilot;
+    }
     flight->pilot =strdup(line);
 }
 
@@ -595,7 +632,10 @@ size_t getFlightSize(){
 
 
   void setFlightCopilot(Flight * flight,const char * line){
-    if(flight->copilot) free(flight->copilot);
+    if(flight->copilot) {
+        free(flight->copilot);
+        flight->copilot;
+    }
     flight->copilot =strdup(line);
 }
 
@@ -609,7 +649,10 @@ size_t getFlightSize(){
 
 
   void setFlightNotes(Flight * flight,const char * line){
-    if(flight->notes) free(flight->notes);
+    if(flight->notes) {
+        free(flight->notes);
+        flight->notes;
+    }
     flight->notes =strdup(line);
 }
 
@@ -632,19 +675,59 @@ int getFlightDelay(Flight * flight){
 
 
 void copyFlight(Flight * dest,Flight * src){
-    setFlightId(dest,getFlightId(src));
-    setFlightAirline(dest,getFlightAirline(src));
-    setFlightPlaneModel(dest,getFlightPlaneModel(src));
+    char * flightId = getFlightId(src);
+    char * flightAirline = getFlightAirline(src);
+    char * flightPlaneModel = getFlightPlaneModel(src);
+    char * flightOrigin = getFlightOrigin(src);
+    char * flightDestination = getFlightDestination(src);
+    char * flightPilot = getFlightPilot(src);
+    char * flightCopilot = getFlightCopilot(src);
+    char * flightNotes = getFlightNotes(src);
+    Time * flightSDepartureDate = getFlightSDepartureDate(src);
+    Time * flightSArrivalDate = getFlightSArrivalDate(src);
+    Time * flightRDepartureDate = getFlightRDepartureDate(src);
+    Time * flightRArrivalDate = getFlightRArrivalDate(src);
+
+
+    setFlightId(dest,flightId);
+    setFlightAirline(dest,flightAirline);
+    setFlightPlaneModel(dest,flightPlaneModel);
     setFlightTotalSeats(dest,getFlightTotalSeats(src));
-    setFlightOrigin(dest,getFlightOrigin(src));
-    setFlightDestination(dest,getFlightDestination(src));
-    setFlightSDepartureDate(dest,getFlightSDepartureDate(src));
-    setFlightSArrivalDate(dest,getFlightSArrivalDate(src));
-    setFlightRDepartureDate(dest,getFlightRDepartureDate(src));
-    setFlightRArrivalDate(dest,getFlightRArrivalDate(src));
-    setFlightPilot(dest,getFlightPilot(src));
-    setFlightCopilot(dest,getFlightCopilot(src));
-    setFlightNotes(dest,getFlightNotes(src));
+    setFlightOrigin(dest,flightOrigin);
+    setFlightDestination(dest,flightDestination);
+    setFlightSDepartureDate(dest,flightSDepartureDate);
+    setFlightSArrivalDate(dest,flightSArrivalDate);
+    setFlightRDepartureDate(dest,flightRDepartureDate);
+    setFlightRArrivalDate(dest,flightRArrivalDate);
+    setFlightPilot(dest,flightPilot);
+    setFlightCopilot(dest,flightCopilot);
+    setFlightNotes(dest,flightNotes);
+
+
+    free(flightId);
+    flightId = NULL;
+    free(flightAirline);
+    flightAirline = NULL;
+    free(flightPlaneModel);
+    flightPlaneModel = NULL;
+    free(flightOrigin);
+    flightOrigin = NULL;
+    free(flightDestination);
+    flightDestination = NULL;
+    free(flightPilot);
+    flightPilot = NULL;
+    free(flightCopilot);
+    flightCopilot = NULL;
+    free(flightNotes);
+    flightNotes = NULL;
+    free(flightSDepartureDate);
+    flightSDepartureDate = NULL;
+    free(flightSArrivalDate);
+    flightSArrivalDate = NULL;
+    free(flightRDepartureDate);
+    flightRDepartureDate = NULL;
+    free(flightRArrivalDate);
+    flightRArrivalDate = NULL;
 }
 
 
@@ -659,7 +742,7 @@ void copyFlight(Flight * dest,Flight * src){
 
 // *** Reservation related functions ***
  Reservation * createReservation(){
-    Reservation * r =malloc(sizeof(struct reservation));
+    Reservation * r = malloc(sizeof(struct reservation));
     initReservation(r);
     return r;
 }
@@ -701,7 +784,10 @@ size_t getReservSize(){
 }
 
   void setReservId(Reservation * reserv,const char * line){
-    if(reserv->id) free(reserv->id);
+    if(reserv->id){
+        free(reserv->id);
+        reserv->id = NULL;
+    }
     reserv->id =strdup(line);
 }
 
@@ -715,7 +801,10 @@ size_t getReservSize(){
 
 
   void setReservUserId(Reservation * reserv,const char * line){
-    if(reserv->user_id) free(reserv->user_id);
+    if(reserv->user_id){
+        free(reserv->user_id);
+        reserv->user_id = NULL;
+    }
     reserv->user_id =strdup(line);
 }
 
@@ -729,7 +818,10 @@ size_t getReservSize(){
 
 
   void setReservHotelId(Reservation * reserv,const char * line){
-    if(reserv->hotel_id) free(reserv->hotel_id);
+    if(reserv->hotel_id){
+        free(reserv->hotel_id);
+        reserv->hotel_id = NULL;
+    }
     reserv->hotel_id =strdup(line);
 }
 
@@ -743,7 +835,10 @@ size_t getReservSize(){
 
 
   void setReservHotelName(Reservation * reserv,const char * line){
-    if(reserv->hotel_name) free(reserv->hotel_name);
+    if(reserv->hotel_name){
+        free(reserv->hotel_name);
+        reserv->hotel_name = NULL;
+    }
     reserv->hotel_name =strdup(line);
 }
 
@@ -775,7 +870,10 @@ size_t getReservSize(){
 
 
   void setReservHotelAddress(Reservation * reserv,const char * line){
-    if(reserv->address) free(reserv->address);
+    if(reserv->address){
+        free(reserv->address);
+        reserv->address = NULL;
+    }
     reserv->address =strdup(line);
 }
 
@@ -788,12 +886,12 @@ size_t getReservSize(){
 }
 
 
-  void setReservBeginDate(Reservation * reserv,Time * tempo){
-    if(!reserv->begin_date) reserv->begin_date = createTime();
+void setReservBeginDate(Reservation * reserv,Time * tempo){
+    if(reserv->begin_date == NULL) reserv->begin_date = createTime();
     copyTime(reserv->begin_date,tempo);
 }
 
- Time * getReservBeginDate(Reservation * reserv){
+Time * getReservBeginDate(Reservation * reserv){
     if(reserv->begin_date){
         Time * tempo = createTime();
         copyTime(tempo,reserv->begin_date);
@@ -803,8 +901,8 @@ size_t getReservSize(){
 }
 
 
-  void setReservEndDate(Reservation * reserv,Time * tempo){
-    if(!reserv->end_date) reserv->end_date = createTime();
+void setReservEndDate(Reservation * reserv,Time * tempo){
+    if(reserv->end_date == NULL) reserv->end_date = createTime();
     copyTime(reserv->end_date,tempo);
 }
 
@@ -837,7 +935,10 @@ size_t getReservSize(){
 
 
   void setReservRoomDetails(Reservation * reserv,const char * line){
-    if(reserv->room_details) free(reserv->room_details);
+    if(reserv->room_details){
+        free(reserv->room_details);
+        reserv->room_details = NULL;
+    }
     reserv->room_details =strdup(line);
 }
 
@@ -860,8 +961,11 @@ size_t getReservSize(){
 
 
   void setReservComment(Reservation * reserv,const char * line){
-    if(reserv->comment) free(reserv->comment);
-    reserv->comment =strdup(line);
+    if(reserv->comment) {
+        free(reserv->comment);
+        reserv->comment = NULL;
+    }
+    reserv->comment = strdup(line);
 }
 
  char *getReservComment(Reservation * reserv){
@@ -874,6 +978,17 @@ size_t getReservSize(){
 
 
 void copyReservation(Reservation * dest,Reservation * src){
+    char * reservId = getReservId(src);
+    char * reservUserId = getReservUserId(src);
+    char * reservHotelId = getReservHotelId(src);
+    char * reservHotelName = getReservHotelName(src);
+    char * reservHotelAddress = getReservHotelAddress(src);
+    char * reservRoomDetails = getReservRoomDetails(src);
+    char * reservComment = getReservComment(src);
+    Time * reservBeginDate = getReservBeginDate(src);
+    Time * reservEndDate = getReservEndDate(src);
+
+
     setReservId(dest,getReservId(src));
     setReservUserId(dest,getReservUserId(src));
     setReservHotelId(dest,getReservHotelId(src));
@@ -888,6 +1003,26 @@ void copyReservation(Reservation * dest,Reservation * src){
     setReservRoomDetails(dest,getReservRoomDetails(src));
     setReservRating(dest,getReservRating(src));
     setReservComment(dest,getReservComment(src));
+
+
+    free(reservId);
+    reservId = NULL;
+    free(reservUserId);
+    reservUserId = NULL;
+    free(reservHotelId);
+    reservHotelId = NULL;
+    free(reservHotelName);
+    reservHotelName = NULL;
+    free(reservHotelAddress);
+    reservHotelAddress = NULL;
+    free(reservRoomDetails);
+    reservRoomDetails = NULL;
+    free(reservComment);
+    reservComment = NULL;
+    free(reservBeginDate);
+    reservBeginDate = NULL;
+    free(reservEndDate);
+    reservEndDate = NULL;
 }
 
 
@@ -918,8 +1053,14 @@ void copyReservation(Reservation * dest,Reservation * src){
 
   void destroyPassanger(Passanger * p) {
     if (p) {
-        if(p->flight_id) free(p->flight_id); 
-        if(p->user_id) free(p->user_id); 
+        if(p->flight_id){
+            free(p->flight_id); 
+            p->flight_id = NULL;
+        }
+        if(p->user_id){
+            free(p->user_id); 
+            p->user_id = NULL;
+        }
         free(p); 
     }
 }
@@ -930,7 +1071,10 @@ size_t getPassangerSize(){
 
 
   void setPassangerFlightId(Passanger * passanger,const char * line){
-    if(passanger->flight_id) free(passanger->flight_id);
+    if(passanger->flight_id){
+        free(passanger->flight_id);
+        passanger->flight_id = NULL;
+    }
     passanger->flight_id = strdup(line);
 }
 
@@ -944,7 +1088,10 @@ size_t getPassangerSize(){
 
 
   void setPassangerUserId(Passanger * passanger,const char * line){
-    if(passanger->user_id) free(passanger->user_id);
+    if(passanger->user_id){
+        free(passanger->user_id);
+        passanger->user_id = NULL;
+    }
     passanger->user_id = strdup(line);
 }
 
@@ -958,8 +1105,16 @@ size_t getPassangerSize(){
 
 
 void copyPassanger(Passanger * dest,Passanger * src){
-    setPassangerFlightId(dest,getPassangerFlightId(src));
-    setPassangerUserId(dest,getPassangerUserId(src));
+    char * passangerFlightId = getPassangerFlightId(src);
+    char * passangerUserId = getPassangerUserId(src);
+
+    setPassangerFlightId(dest,passangerFlightId);
+    setPassangerUserId(dest,passangerUserId);
+
+    free(passangerFlightId);
+    passangerFlightId = NULL;
+    free(passangerUserId);
+    passangerUserId = NULL;
 }
 
 

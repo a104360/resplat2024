@@ -8,8 +8,14 @@ double getTotalSpentByUser(void ** userReservs){
     Reservation ** list = (Reservation **) userReservs; 
     int total = 0;
     for(int i = 0;list[i];i++){
-        int dayDiff = numberOfDays(getReservBeginDate(list[i]),getReservEndDate(list[i]));
+        Time * reservBeginDate = getReservBeginDate(list[i]);
+        Time * reservEndDate = getReservEndDate(list[i]);
+        int dayDiff = numberOfDays(reservBeginDate,reservEndDate);
         total += (getReservPricePerNight(list[i]) * dayDiff) + ((dayDiff / 100) * getReservCityTax(list[i]));
+        free(reservBeginDate);
+        reservBeginDate = NULL;
+        free(reservEndDate);
+        reservEndDate = NULL;
     }
     return total;
 }
@@ -21,8 +27,14 @@ double getTotalSpentOnReserv(void * userReservs,int n){
     double iva = getReservCityTax(list);
     if(n > -1) total = (p * n) + (((p * n)/ 100) * iva);
     else{
-        int dayDiff = numberOfDays(getReservBeginDate(list),getReservEndDate(list));
+        Time * reservBeginDate = getReservBeginDate(list);
+        Time * reservEndDate = getReservEndDate(list);
+        int dayDiff = numberOfDays(reservBeginDate,reservEndDate);
         total = (p * dayDiff) + (((p * dayDiff)/100) * iva);
+        free(reservBeginDate);
+        reservBeginDate = NULL;
+        free(reservEndDate);
+        reservEndDate = NULL;
     }
     return total;
 }
@@ -32,6 +44,7 @@ double averageRating(void * reservations, const char * id,int hashSize){
     int sumRatings = getSumRatings(hotelDB);
     int n = getNumReservas(hotelDB);
     destroyHotelDatabase(hotelDB,hashSize);
+    hotelDB = NULL;
     return sumRatings / n;
 }
 
