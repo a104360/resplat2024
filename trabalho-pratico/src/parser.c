@@ -138,7 +138,7 @@
 
 // format : nnnn/nn/nn (0 <= n <= 9)
  Time * dateCheck(const char * line){
-    if(line == NULL || (line[4] != '/' && line[7] != '/')) return 0;
+    if(line == NULL || (line[4] != '/' && line[7] != '/')) return NULL;
     Time * date = createTime();
     if(date == NULL) return NULL;
     switch (line[10])
@@ -148,12 +148,22 @@
         return date;
         break;
         
-    default:
+    case ' ':
+        if(line[13] != ':' || line[16] != ':') {
+            destroyTime(date);
+            return NULL;
+        }
         setTime(date,yearCheck(line),monthCheck(line),dayCheck(line),hourCheck(line),minuteCheck(line),secondsCheck(line));
         return date;
         break;
+    default:
+        free(date);
+        date = NULL;
+        return NULL;
+        break;
     }
     free(date);
+    date = NULL;
     return NULL;
 }
 
