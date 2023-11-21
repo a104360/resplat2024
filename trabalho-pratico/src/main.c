@@ -247,6 +247,7 @@ int main(int argc,char **argv){
     //free(filePath); // free
     //filePath = NULL;
 
+/*
     // Create Passangers Database 
 
     memset(filePath,'\0',argSize + 20);
@@ -325,7 +326,7 @@ int main(int argc,char **argv){
     free(filePath); // free
     filePath = NULL;
 
-
+*/
 
     // Read and execute commands, freeing after used
 
