@@ -12,9 +12,9 @@
 
 #define CHECKLEN(line) \
     if(strlen(line) < 1) return NULL;\
-    char * aux = g_strdup(line);\
+    char * aux = strdup(line);\
     if(aux == NULL){\
-        perror("g_strdup memory allocation failed");\
+        perror("strdup memory allocation failed");\
         return NULL;\
     };\
     return aux; \
@@ -64,7 +64,7 @@
 
  char * pay_methodCheck(const char * line){
     if(line[0] == '\0') return NULL;
-    char * aux = g_strdup(line);
+    char * aux = strdup(line);
     for(int i = 0;aux[i] != '\0';aux[i] = tolower(aux[i]),i++);
     return aux;
 }
@@ -78,7 +78,7 @@
     }
     if(line[4] != '/') return false;
     char * aux = NULL;
-    aux = g_malloc(sizeof(char) * 5);
+    aux = malloc(sizeof(char) * 5);
     memset(aux,'\0',5);
     strncpy(aux,line,4);
     aux[4] = '\0';
@@ -100,7 +100,7 @@
         if(line[6] > '2' && line[6] < '0') return false;
     if(line[7] != '/') return false;
     char * aux = NULL;
-    aux = g_malloc(sizeof(char) * 3);
+    aux = malloc(sizeof(char) * 3);
     memset(aux,'\0',3);
     aux[0] = line[5];
     aux[1] = line[6];
@@ -121,7 +121,7 @@
     if(line[9] < '0' && line[9] > '9') return false;
     if(line[8] == '3' && line[9] > '1') return false;
     char * aux = NULL;
-    aux = g_malloc(sizeof(char) * 3);
+    aux = malloc(sizeof(char) * 3);
     memset(aux,'\0',3);
     aux[0] = line[8];
     aux[1] = line[9]; 
@@ -171,7 +171,7 @@
         if(line[12] < '0' && line[12] > '3') return -1;
         else{
             char * aux = NULL;
-            aux = g_malloc(sizeof(char) * 3);
+            aux = malloc(sizeof(char) * 3);
             memset(aux,'\0',3);
             aux[0] = '2';
             aux[1] = line[12];
@@ -186,7 +186,7 @@
     if(line[11] < '0' && line[11] > '1' && line[12] < '0' && line[12] > '9') return -1;
     else {
         char * aux = NULL;
-        aux = g_malloc(sizeof(char) * 3);
+        aux = malloc(sizeof(char) * 3);
         memset(aux,'\0',3);
         aux[0] = line[11];
         aux[1] = line[12];
@@ -206,7 +206,7 @@
     if(line[14] < '0' && line[14] > '5' && line[15] < '0' && line[15] > '9') return -1;
     else {
         char * aux = NULL;
-        aux = g_malloc(sizeof(char) * 3);
+        aux = malloc(sizeof(char) * 3);
         memset(aux,'\0',3);
         aux[0] = line[14];
         aux[1] = line[15];
@@ -226,7 +226,7 @@
     if(line[17] < '0' && line[17] > '5' && line[18] < '0' && line[18] > '9') return -1;
     else {
         char * aux = NULL;
-        aux = g_malloc(sizeof(char) * 3);
+        aux = malloc(sizeof(char) * 3);
         memset(aux,'\0',3);
         aux[0] = line[17];
         aux[1] = line[18];
@@ -267,7 +267,7 @@
     int tdl = 0;
     for(i += 1;i < len;tdl++,i++);
     if(tdl < 2) return NULL;
-    char * email = g_strdup(line);
+    char * email = strdup(line);
     return email;
 }
 
@@ -276,7 +276,7 @@
     if(!line) return NULL;
     if(strlen(line) != 2) return NULL;
     else{
-        char * country = g_strdup(line);
+        char * country = strdup(line);
         return country;
     }
     return NULL;
@@ -285,7 +285,7 @@
 // active vs inactive (all varitations)
 char * accStatusCheck(const char * line){
     if(!line) return NULL;
-    char * aux = g_strdup(line);
+    char * aux = strdup(line);
     if(aux == NULL) return NULL;
     int gap = 'a' - 'A';
     for(int i = 0; i < 6;i++){ if(aux[i] < 'a'){ aux[i] += gap;}}
@@ -302,7 +302,7 @@ char * accStatusCheck(const char * line){
 // length == 3 && all variations
  bool airportCheck(const char * departure,const char * arrival){
     if(strlen(departure) != 3 || strlen(arrival) != 3) return false;
-    char * d = g_strdup(departure), * a = g_strdup(arrival);
+    char * d = strdup(departure), * a = strdup(arrival);
     ALLVAR(d);
     ALLVAR(a);
     if(!strcoll(d,a)) return false;
@@ -335,7 +335,7 @@ char * accStatusCheck(const char * line){
 
 // bool breakfast : if(false){"f","false",0,""} else {"t","true","1"}
  bool breakfastCheck(const char * line){
-    char * aux = g_strdup(line);
+    char * aux = strdup(line);
     ALLVAR(aux);
     if(!strcoll(aux,"TRUE") || !strcoll(aux,"T") || !strcoll(aux,"1")){ 
         free(aux);
@@ -357,7 +357,7 @@ char * accStatusCheck(const char * line){
 
 
  User * userCheck(const char * line){
-    char * aux = g_strdup(line);
+    char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
@@ -485,7 +485,7 @@ char * accStatusCheck(const char * line){
 }
 
  Reservation * reservationCheck(const char * line){
-    char * aux = g_strdup(line);
+    char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
@@ -593,7 +593,7 @@ char * accStatusCheck(const char * line){
 }
 
  Flight * fligthCheck(const char * line){
-    char * aux = g_strdup(line);
+    char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
@@ -632,7 +632,7 @@ char * accStatusCheck(const char * line){
     //Origin
     if(strlen(token)!=3){ free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
-    char * origin = g_strdup(token);
+    char * origin = strdup(token);
     setFlightOrigin(flight,origin);
     TOKENIZE(token,saveptr);
 
@@ -708,7 +708,7 @@ char * accStatusCheck(const char * line){
 }
 
  Passanger * passangerCheck(const char * line){
-    char * aux = g_strdup(line);
+    char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);

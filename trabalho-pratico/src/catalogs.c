@@ -11,7 +11,7 @@
 
 // Init usersDatabase
 UsersDatabase initUsers(){
-    UsersDatabase users = g_hash_table_new_full(g_str_hash,g_str_equal,(GDestroyNotify)free,(GDestroyNotify)destroyUser);
+    UsersDatabase users = g_hash_table_new(g_str_hash,g_str_equal);
     return users;
 }
 
@@ -41,7 +41,7 @@ void destroyUsers(UsersDatabase database){
 
 // Inits the flights database
 FlightsDatabase initFlights(){
-    FlightsDatabase flights = g_hash_table_new_full(g_str_hash,g_str_equal,(GDestroyNotify)free,(GDestroyNotify)destroyFlight);
+    FlightsDatabase flights = g_hash_table_new(g_str_hash,g_str_equal);
     return flights;
 }
 
@@ -91,7 +91,7 @@ void destroyFlights(FlightsDatabase database){
 
 // Inits the reservations database
 ReservationsDatabase initReservations(){
-    ReservationsDatabase reservs = g_hash_table_new_full(g_str_hash,g_str_equal,(GDestroyNotify)free,(GDestroyNotify)destroyReservation);
+    ReservationsDatabase reservs = g_hash_table_new(g_str_hash,g_str_equal);
     return reservs;
 }
 
@@ -311,7 +311,6 @@ Flight ** getUserFlights(const UserFlightsDB * database){
 
 void destroyUserFlightsDB(UserFlightsDB * database,int hashSize){
     free(database->passangers);
-    database->passangers;
     database->passangers = NULL;
     for(int i = 0;i < hashSize;i++){
         free(database->flights[i]);

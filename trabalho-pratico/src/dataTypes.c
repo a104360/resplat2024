@@ -104,18 +104,44 @@ typedef struct passanger{
 }
   void destroyUser(User *user) {
     if(user) {
-        if(user->id) user->id = NULL;//free(user->id);
-        if(user->name) user->name = NULL;//free(user->name);
-        if(user->email) user->email = NULL;//free(user->email);
-        if(user->phone_number) user->phone_number = NULL;//free(user->phone_number);
+        if(user->id != NULL){ //user->id = NULL;
+            free(user->id);
+            user->id = NULL;
+        }
+        if(user->name != NULL){ //user->name = NULL;
+            free(user->name);
+            user->name = NULL;
+        }
+        if(user->email != NULL){ //user->email = NULL;
+            free(user->email);
+            user->email = NULL;
+        }
+        if(user->phone_number != NULL){ //user->phone_number = NULL;
+            free(user->phone_number);
+            user->phone_number = NULL;
+        }
         if(user->sex) user->sex = '\0';
-        if(user->passport) user->passport = NULL;//free(user->passport);
-        if(user->country_code) user->country_code = NULL;//free(user->country_code);
-        if(user->address) user->address = NULL;//free(user->address);
-        if(user->pay_method) user->pay_method = NULL;//free(user->pay_method);
-        if(user->account_creation) destroyTime(user->account_creation);
-        if(user->birth_date) destroyTime(user->birth_date);
-        user = NULL;//free(user);
+        if(user->passport != NULL){ //user->passport = NULL;
+            free(user->passport);
+            user->passport = NULL;
+        }
+        if(user->country_code != NULL){ //user->country_code = NULL;
+            free(user->country_code);
+            user->country_code = NULL;
+        }
+        if(user->address != NULL){ //user->address = NULL;
+            free(user->address);
+            user->address = NULL;
+        }
+        if(user->pay_method != NULL){ //user->pay_method = NULL;
+            free(user->pay_method);
+            user->pay_method = NULL;
+        }
+        if(user->account_creation != NULL) destroyTime(user->account_creation);
+        if(user->birth_date != NULL) destroyTime(user->birth_date);
+        //user = NULL;
+            free(user);
+            user = NULL;
     }
 }
 
@@ -164,15 +190,15 @@ void setUserId(User * user, const char * id){
 
  void setUserEmail(User * user,const char * email){
     if(email == NULL) return;
-    if(user->email) {
+    if(user->email != NULL) {
         free(user->email);
         user->email = NULL;
     }
-    user->email =strdup(email);
+    user->email = strdup(email);
 }
 
  char * getUserEmail(User * user){
-    if(user->email){
+    if(user->email != NULL){
         char * aux = strdup(user->email);
         return aux;
     }
@@ -523,7 +549,7 @@ size_t getFlightSize(){
   void setFlightOrigin(Flight * flight,const char * line){
     if(flight->origin) {
         free(flight->origin);
-        flight->origin;
+        flight->origin = NULL;
     }
     flight->origin =strdup(line);
 }
@@ -540,7 +566,7 @@ size_t getFlightSize(){
   void setFlightDestination(Flight * flight,const char * line){
     if(flight->destination) {
         free(flight->destination);
-        flight->destination;
+        flight->destination = NULL;
     }
     flight->destination =strdup(line);
 }
@@ -617,7 +643,7 @@ size_t getFlightSize(){
   void setFlightPilot(Flight * flight,const char * line){
     if(flight->pilot) {
         free(flight->pilot);
-        flight->pilot;
+        flight->pilot = NULL;
     }
     flight->pilot =strdup(line);
 }
@@ -634,7 +660,7 @@ size_t getFlightSize(){
   void setFlightCopilot(Flight * flight,const char * line){
     if(flight->copilot) {
         free(flight->copilot);
-        flight->copilot;
+        flight->copilot = NULL;
     }
     flight->copilot =strdup(line);
 }
@@ -651,7 +677,7 @@ size_t getFlightSize(){
   void setFlightNotes(Flight * flight,const char * line){
     if(flight->notes) {
         free(flight->notes);
-        flight->notes;
+        flight->notes = NULL;
     }
     flight->notes =strdup(line);
 }
