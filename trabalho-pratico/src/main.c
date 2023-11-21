@@ -186,11 +186,11 @@ int main(int argc,char **argv){
 
     if(!flightData) { perror("Erro a alocar memoria na main"); return 1;}
 
-    memset(flightData, '\0', strlen(flightData));
+    memset(flightData, '\0', BUFFERSIZE);
 
     FlightsDatabase fDatabase = initFlights();
 
-    while(fgets(flightData,strlen(flightData),flightFile)){
+    while(fgets(flightData,BUFFERSIZE,flightFile)){
 
         Flight * fBuffer = NULL;
 
@@ -219,7 +219,7 @@ int main(int argc,char **argv){
             fBuffer = NULL;
 
         }else{ 
-            fprintf(reservationsErrors,"%s",flightDataClean);
+            fprintf(flightsErrors,"%s",flightDataClean);
         }
         
             fBuffer = NULL;

@@ -675,6 +675,7 @@ size_t getFlightSize(){
 
 
   void setFlightNotes(Flight * flight,const char * line){
+    if(line == NULL) return;
     if(flight->notes) {
         free(flight->notes);
         flight->notes = NULL;

@@ -11,7 +11,7 @@
 
 
 #define CHECKLEN(line) \
-    if(strlen(line) < 1) return NULL;\
+    if(strlen(line) < 1 || line == NULL) return NULL;\
     char * aux = strdup(line);\
     if(aux == NULL){\
         perror("strdup memory allocation failed");\
@@ -34,15 +34,18 @@
 
 
  char * idCheck(const char * line){
+    if(line == NULL) return NULL; 
     CHECKLEN(line);
 }
 
 // Free necessary
  char * nameCheck(const char * line){
+    if(line == NULL) return NULL; 
     CHECKLEN(line);
 }
 
  char * phoneNumberCheck(const char * line){
+    if(line == NULL) return NULL; 
     CHECKLEN(line);
 }
 
@@ -135,9 +138,9 @@
 
 // format : nnnn/nn/nn (0 <= n <= 9)
  Time * dateCheck(const char * line){
-    if(!line) return 0;
+    if(line == NULL || (line[4] != '/' && line[7] != '/')) return 0;
     Time * date = createTime();
-    if(!date) return NULL;
+    if(date == NULL) return NULL;
     switch (line[10])
     {
     case '\0':
@@ -284,7 +287,7 @@
 
 // active vs inactive (all varitations)
 char * accStatusCheck(const char * line){
-    if(!line) return NULL;
+    if(line == NULL) return NULL;
     char * aux = strdup(line);
     if(aux == NULL) return NULL;
     if(tolower(aux[0]) == 'a' || tolower(aux[0]) == 'i'){
