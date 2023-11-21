@@ -171,8 +171,8 @@ char * getReservHotelName(Reservation *);
 void setReservHotelStars(Reservation *,const unsigned int);
 unsigned int getReservHotelStars(Reservation *);
 
-void setReservCityTax(Reservation *,const double);
-double getReservCityTax(Reservation *);
+void setReservCityTax(Reservation *,const int);
+int getReservCityTax(Reservation * );
 
 void setReservHotelAddress(Reservation *,const char *);
 char *getReservHotelAddress(Reservation *);

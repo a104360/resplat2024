@@ -1,6 +1,7 @@
 #ifndef PARSER_H
 #define PARSER_H
 #include <stdbool.h>
+#include "../include/catalogs.h"
 #include "../include/dataTypes.h"
 
 
@@ -48,18 +49,18 @@ bool airportCheck(const char * ,const char * );
 
 unsigned int hotelStarsCheck(const char *);
 
-double taxCheck(const char * );
+int taxCheck(const char * );
 
 double pricePNightCheck(const char * );
 
-bool breakfastCheck(const char * );
+int breakfastCheck(const char * );
 
 unsigned int reviewCheck(const char *);
 
 
 User * userCheck(const char *);
 
-Reservation * reservationCheck(const char *);
+Reservation * reservationCheck(const char *,UsersDatabase);
 
 Flight * fligthCheck(const char *);
 

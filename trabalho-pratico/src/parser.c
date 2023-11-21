@@ -1,5 +1,6 @@
 #include "../include/parser.h"
 #include "../include/dataTypes.h"
+#include "../include/catalogs.h"
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -320,13 +321,16 @@ char * accStatusCheck(const char * line){
 
 // int stars : 1 <= starts <= 5
  unsigned int hotelStarsCheck(const char * line){
+    if(line[1] != '\0') return 0;
     if((int) line[0] >= '1' && (int) line[0] <= '5') return (int) line[0] - '0';
-    return false;
+    return 0;
 }
 
 // int tax : 0 <= tax
 // if invalid, functions returns -1
- double taxCheck(const char * line){
+int taxCheck(const char * line){
+    if(line[0] == '-') return -1;
+    for(int i = 0;line[i] != '\0';i++) if(line[i] == '.' || line[i] == ',') return -1;
     double n = atof(line);
     if(n < 0) return -1;
     return n;
@@ -335,23 +339,29 @@ char * accStatusCheck(const char * line){
 // int price : 0 < price
 // if invalid, functions returns -1
  double pricePNightCheck(const char * line){
+    if(line[0] == '-') return -1;
     double n = atof(line);
     if(n <= 0) return -1;
     return n;
 }
 
 // bool breakfast : if(false){"f","false",0,""} else {"t","true","1"}
- bool breakfastCheck(const char * line){
+int breakfastCheck(const char * line){
     char * aux = strdup(line);
     ALLVAR(aux);
-    if(!strcoll(aux,"TRUE") || !strcoll(aux,"T") || !strcoll(aux,"1")){ 
+    if(!strcoll(aux,"true") || !strcoll(aux,"t") || !strcoll(aux,"1")){ 
         free(aux);
         aux = NULL;
-        return true;
+        return 1;
+    }
+    if(!strcoll(aux,"false") || !strcoll(aux,"f") || !strcoll(aux,"0")){ 
+        free(aux);
+        aux = NULL;
+        return 0;
     }
     free(aux);
     aux = NULL;
-    return false;
+    return 2;
 }
 
 // int rating : 1 <= rating <= 5
@@ -491,7 +501,7 @@ char * accStatusCheck(const char * line){
     return user;
 }
 
- Reservation * reservationCheck(const char * line){
+ Reservation * reservationCheck(const char * line,UsersDatabase uDatabase){
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
@@ -506,24 +516,22 @@ char * accStatusCheck(const char * line){
     }
 
     char * reservationId = idCheck(token);
-    if(!reservationId){ free(aux);
+    if(reservationId == NULL){ free(aux);
     aux = NULL; destroyReservation(reservation); return NULL;}
-    setReservId(reservation,reservationId);
+    setReservId(reservation,token);
     free(reservationId);
     reservationId = NULL;
     TOKENIZE(token,saveptr);
-
-    char * reservationUserId = idCheck(token);
-    if(!reservationUserId){ free(aux);
+    User * temp = lookupUser(uDatabase,token);
+    
+    if(temp == NULL){ free(aux);
     aux = NULL; destroyReservation(reservation); return NULL;}
-    setReservUserId(reservation,reservationUserId);
-    free(reservationUserId);
-    reservationUserId = NULL;
+    setReservUserId(reservation,token);
     TOKENIZE(token,saveptr);
 
     char * reservationHotelId = idCheck(token);
     if(!reservationHotelId){ free(aux);
-    aux = NULL; destroyReservation(reservation); NULL;}
+    aux = NULL; destroyReservation(reservation); return NULL;}
     setReservHotelId(reservation,reservationHotelId);
     free(reservationHotelId);
     reservationHotelId = NULL;
@@ -531,7 +539,7 @@ char * accStatusCheck(const char * line){
 
     char * reservationHotelName = nameCheck(token);
     if(!reservationHotelName){ free(aux);
-    aux = NULL; destroyReservation(reservation); NULL;}
+    aux = NULL; destroyReservation(reservation); return NULL;}
     setReservHotelName(reservation,reservationHotelName);
     free(reservationHotelName);
     reservationHotelName = NULL;
@@ -539,12 +547,12 @@ char * accStatusCheck(const char * line){
 
     unsigned int reservationHotelStars = hotelStarsCheck(token);
     if(!reservationHotelStars){ free(aux);
-    aux = NULL; destroyReservation(reservation); NULL;}
+    aux = NULL; destroyReservation(reservation); return NULL;}
     setReservHotelStars(reservation,reservationHotelStars);
     TOKENIZE(token,saveptr);
 
-    double reservationTax = taxCheck(token);
-    if(!reservationTax){ free(aux);
+    int reservationTax = taxCheck(token);
+    if(reservationTax < 0){ free(aux);
     aux = NULL; destroyReservation(reservation) ;return NULL;}
     setReservCityTax(reservation,reservationTax);
     TOKENIZE(token,saveptr);
@@ -576,7 +584,7 @@ char * accStatusCheck(const char * line){
     TOKENIZE(token,saveptr);
 
     double pricePerNight = pricePNightCheck(token);
-    if(!pricePerNight){ free(aux);
+    if(pricePerNight < 0){ free(aux);
     aux = NULL; destroyReservation(reservation); return NULL;}
     setReservPricePerNight(reservation, pricePerNight);
     bool includesBreakfast = false;
@@ -587,7 +595,7 @@ char * accStatusCheck(const char * line){
         TOKENIZE(token,saveptr);
         
         unsigned int rating = reviewCheck(token);
-        if(!rating){ free(aux);
+        if(rating == 0){ free(aux);
         aux = NULL; destroyReservation(reservation); return NULL;}
         setReservRating(reservation,rating);
         TOKENIZE(token,saveptr);
@@ -602,12 +610,13 @@ char * accStatusCheck(const char * line){
     TOKENIZE(token,saveptr);
 
 
-    /*bool includesBreakfast = breakfastCheck(token);
-    if(includesBreakfast){ free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}*/
-    //setReservBreakfast(reservation, includesBreakfast);
+    int n = breakfastCheck(token);
+    if(n == 2) { free(aux);
+    aux = NULL; destroyReservation(reservation); return NULL;}
+    if(n == 1) includesBreakfast = true;
+    setReservBreakfast(reservation, includesBreakfast);
     //free(includesBreakfast);
-    //TOKENIZE(token,saveptr);
+    TOKENIZE(token,saveptr);
 
     //RoomDetails
     setReservRoomDetails(reservation,token);

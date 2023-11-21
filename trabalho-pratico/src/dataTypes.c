@@ -50,7 +50,7 @@ typedef struct reservation{
     char * hotel_id;
     char * hotel_name;
     unsigned int hotel_stars;
-    double city_tax;
+    int city_tax;
     char * address;
     struct time * begin_date;
     struct time * end_date;
@@ -841,6 +841,7 @@ size_t getReservSize(){
 
  char *getReservId(Reservation * reserv){
     if(reserv == NULL) return NULL;
+    if(reserv->id == NULL) return NULL;
     if(reserv->id != NULL){
         char * id = strdup(reserv->id);
         return id;
@@ -909,11 +910,11 @@ size_t getReservSize(){
 }
 
 
-  void setReservCityTax(Reservation * reserv,const double n){
+  void setReservCityTax(Reservation * reserv,const int n){
     reserv->city_tax = n;
 }
 
- double getReservCityTax(Reservation * reserv){
+ int getReservCityTax(Reservation * reserv){
     return reserv->city_tax;
 }
 
