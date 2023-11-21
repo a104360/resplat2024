@@ -120,13 +120,17 @@ int main(int argc,char **argv){
 
     ReservationsDatabase rDatabase = initReservations();
 
-    while(fgets(reservationData,strlen(reservationData),reservationsFile)){
+    fgets(reservationData,BUFFERSIZE,reservationsFile);
+
+    fprintf(reservationsErrors,"%s",reservationData);
+
+    while(fgets(reservationData,BUFFERSIZE,reservationsFile)){
 
         Reservation * rBuffer = NULL;
 
         int tamanhoReservationData = verTamanhoLinha(reservationData);
 
-        char reservationDataClean[tamanhoReservationData +1];
+        char * reservationDataClean = malloc(sizeof(char) * (tamanhoReservationData +1));
 
         strncpy(reservationDataClean,reservationData,tamanhoReservationData);
 
@@ -152,6 +156,8 @@ int main(int argc,char **argv){
         }
         
             rBuffer = NULL;
+            free(reservationDataClean);
+            reservationDataClean = NULL;
     }
     
     fclose(reservationsFile); // close
