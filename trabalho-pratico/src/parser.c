@@ -281,8 +281,8 @@ char * accStatusCheck(const char * line){
     char * aux = g_strdup(line);
     if(aux == NULL) return NULL;
     int gap = 'a' - 'A';
-    for(int i = 0; i < strlen(aux);i++){ if(aux[i] < 'a'){ aux[i] += gap;}}
-    if(strcmp(aux,"active") || strcmp(aux,"inactive")) return aux;
+    for(int i = 0; i <= strlen(aux);i++){ if(aux[i] < 'a'){ aux[i] += gap;}}
+    if(strcmp(aux,"active") == 0 || strcmp(aux,"inactive") == 0) return aux;
     return NULL;
 }
 
