@@ -616,7 +616,7 @@ char * accStatusCheck(const char * line){
     Flight * flight = createFlight();
 
     char * flightId = idCheck(token);
-    if(!flightId){ free(aux);
+    if(!flightId || saveptr[0] == ';'){ free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     setFlightId(flight,flightId);
     free(flightId);
@@ -624,7 +624,7 @@ char * accStatusCheck(const char * line){
     TOKENIZE(token,saveptr);
 
     char * airline = nameCheck(token);
-    if(!airline){ free(aux);
+    if(!airline || saveptr[0] == ';'){ free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     setFlightAirline(flight,airline);
     free(airline);
@@ -632,7 +632,7 @@ char * accStatusCheck(const char * line){
     TOKENIZE(token,saveptr);
 
     char * planeModel = nameCheck(token);
-    if(!planeModel){ free(planeModel); free(aux);
+    if(!planeModel || saveptr[0] == ';'){ free(planeModel); free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     setFlightPlaneModel(flight,planeModel);
     free(planeModel);
@@ -640,20 +640,20 @@ char * accStatusCheck(const char * line){
     TOKENIZE(token,saveptr);
 
     unsigned int totalSeats = seatsCheck(token);
-    if(!totalSeats){ free(aux);
+    if(!totalSeats || saveptr[0] == ';'){ free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     setFlightTotalSeats(flight,totalSeats);
     TOKENIZE(token,saveptr);
 
     //Origin
-    if(strlen(token)!=3){ free(aux);
+    if(strlen(token)!=3 || saveptr[0] == ';'){ free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     char * origin = strdup(token);
     setFlightOrigin(flight,origin);
     TOKENIZE(token,saveptr);
 
     //Destination
-    if(!airportCheck(origin,token) && strlen(token)){ free(origin); free(aux);
+    if((!airportCheck(origin,token) && strlen(token)) || saveptr[0] == ';'){ free(origin); free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     free(origin);
     origin = NULL;
@@ -661,18 +661,18 @@ char * accStatusCheck(const char * line){
     TOKENIZE(token,saveptr);
     
     Time * sDepartDate = dateCheck(token);
-    if(!sDepartDate){ free(aux);
+    if(!sDepartDate || saveptr[0] == ';'){ free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     setFlightSDepartureDate(flight,sDepartDate);
     TOKENIZE(token,saveptr);
 
     Time * sArrivalDate = dateCheck(token);
-    if(!sArrivalDate){ free(aux);
+    if(!sArrivalDate || saveptr[0] == ';'){ free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     setFlightSArrivalDate(flight,sArrivalDate);
 
     //sDepartDate before sArrivalDate
-    if(compareTimes(sDepartDate,sArrivalDate) == false){ destroyTime(sArrivalDate); destroyTime(sDepartDate); free(aux);
+    if(compareTimes(sDepartDate,sArrivalDate) == false || saveptr[0] == ';'){ destroyTime(sArrivalDate); destroyTime(sDepartDate); free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     destroyTime(sArrivalDate);
     sArrivalDate = NULL;
@@ -681,18 +681,18 @@ char * accStatusCheck(const char * line){
     TOKENIZE(token,saveptr);
 
     Time * rDepartDate = dateCheck(token);
-    if(!rDepartDate){ free(aux);
+    if(!rDepartDate || saveptr[0] == ';'){ free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     setFlightRDepartureDate(flight,rDepartDate);
     TOKENIZE(token,saveptr);
 
     Time * rArrivalDate = dateCheck(token);
-    if(!rArrivalDate){ free(aux);
+    if(!rArrivalDate || saveptr[0] == ';'){ free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     setFlightRArrivalDate(flight,rArrivalDate);
 
     //rDepartDate before rArrivalDate
-    if(compareTimes(rDepartDate,rArrivalDate) == false){ free(rArrivalDate); free(rDepartDate); free(aux);
+    if(compareTimes(rDepartDate,rArrivalDate) == false || saveptr[0] == ';'){ free(rArrivalDate); free(rDepartDate); free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     destroyTime(rArrivalDate);
     rArrivalDate = NULL;
@@ -701,7 +701,7 @@ char * accStatusCheck(const char * line){
     TOKENIZE(token,saveptr);
 
     char * pilot = nameCheck(token);
-    if(!pilot){ free(pilot); free(aux);
+    if(pilot == NULL || saveptr[0] == ';'){ free(pilot); free(aux);
     aux = NULL; destroyFlight(flight); return NULL;}
     setFlightPilot(flight,pilot);
     free(pilot);
@@ -716,7 +716,9 @@ char * accStatusCheck(const char * line){
     copilot = NULL;
     TOKENIZE(token,saveptr);
 
-    setFlightNotes(flight,token);
+
+    if(token) setFlightNotes(flight,token);
+    
     free(aux);
     aux = NULL;
     return flight;

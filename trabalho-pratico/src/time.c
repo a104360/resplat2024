@@ -77,24 +77,30 @@ void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
 // ** If the first time happened first returns true **
  bool compareTimes(Time *t1,Time*t2){
     if(t2 == NULL || t1 == NULL) return false; 
-    if(t1->year != t2->year)
+    if(t1->year != t2->year){
         if(t1->year > t2->year) return false;
-
-    if(t1->mon != t2->mon)
+        else return true;
+    }
+    if(t1->mon != t2->mon){
         if(t1->mon > t2->mon) return false;
-    
-    if(t1->mday != t2->mday)
+        else return true;
+    }
+    if(t1->mday != t2->mday){
         if(t1->mday > t2->mday) return false;
-    
-    if(t1->hour != t2->hour)
+        else return true;
+    }
+    if(t1->hour != t2->hour){
         if(t1->hour > t2->hour) return false;
-
-    if(t1->min != t2->min)
+        else return true;
+    }
+    if(t1->min != t2->min){
         if(t1->min > t2->min) return false;
-    
-    if(t1->sec != t2->sec)
+        else return true;
+    }
+    if(t1->sec != t2->sec){
         if(t1->sec > t2->sec) return false;
-    
+        else return true;
+    }
     return true;
 }
 
