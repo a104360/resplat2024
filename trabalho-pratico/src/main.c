@@ -141,7 +141,8 @@ int main(int argc,char **argv){
         //reservationCheck(reservationDataClean);
 
     if(rBuffer != NULL){
-            char * idBuffer = getReservId(rBuffer);
+            char * idBuffer = NULL;
+            if(rBuffer != NULL) getReservId(rBuffer);
 
             //g_hash_table_insert(rDatabase,idBuffer,rBuffer);
             insertReserv(rDatabase,rBuffer);

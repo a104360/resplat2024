@@ -80,15 +80,12 @@
         if(line[i] > '9' && line[i] < '0') return false;
     }
     if(line[4] != '/') return false;
-    char * aux = NULL;
-    aux = malloc(sizeof(char) * 5);
+    char aux[5];
     memset(aux,'\0',5);
     strncpy(aux,line,4);
     aux[4] = '\0';
     int n = 0; 
     n = atoi(aux);
-    free(aux);
-    aux = NULL;
     return n;
 }
 
@@ -102,16 +99,13 @@
     if(line[5] == '1')
         if(line[6] > '2' && line[6] < '0') return false;
     if(line[7] != '/') return false;
-    char * aux = NULL;
-    aux = malloc(sizeof(char) * 3);
+    char aux[3];
     memset(aux,'\0',3);
     aux[0] = line[5];
     aux[1] = line[6];
     aux[2] = '\0';
     int n = 0; 
     n = atoi(aux);
-    free(aux);
-    aux = NULL;
     return n;
 }
 
@@ -123,16 +117,13 @@
     if(line[8] < '0' || line[8] > '3') return false;
     if(line[9] < '0' && line[9] > '9') return false;
     if(line[8] == '3' && line[9] > '1') return false;
-    char * aux = NULL;
-    aux = malloc(sizeof(char) * 3);
+    char aux[3];
     memset(aux,'\0',3);
     aux[0] = line[8];
     aux[1] = line[9]; 
     aux[2] = '\0';
     int n = 0; 
     n = atoi(aux);
-    free(aux);
-    aux = NULL;
     return n;
 }
 
@@ -588,14 +579,35 @@ char * accStatusCheck(const char * line){
     if(!pricePerNight){ free(aux);
     aux = NULL; destroyReservation(reservation); return NULL;}
     setReservPricePerNight(reservation, pricePerNight);
+    bool includesBreakfast = false;
+    if(saveptr[0] == ';') {
+        setReservBreakfast(reservation, includesBreakfast);
+        //RoomDetails
+        setReservRoomDetails(reservation,token);
+        TOKENIZE(token,saveptr);
+        
+        unsigned int rating = reviewCheck(token);
+        if(!rating){ free(aux);
+        aux = NULL; destroyReservation(reservation); return NULL;}
+        setReservRating(reservation,rating);
+        TOKENIZE(token,saveptr);
+
+        //Comment
+        setReservComment(reservation,token);
+        
+        free(aux);
+        aux = NULL;
+        return reservation;
+    }
     TOKENIZE(token,saveptr);
 
-    bool includesBreakfast = breakfastCheck(token);
-    if(!includesBreakfast){ free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}
-    setReservBreakfast(reservation, includesBreakfast);
+
+    /*bool includesBreakfast = breakfastCheck(token);
+    if(includesBreakfast){ free(aux);
+    aux = NULL; destroyReservation(reservation); return NULL;}*/
+    //setReservBreakfast(reservation, includesBreakfast);
     //free(includesBreakfast);
-    TOKENIZE(token,saveptr);
+    //TOKENIZE(token,saveptr);
 
     //RoomDetails
     setReservRoomDetails(reservation,token);

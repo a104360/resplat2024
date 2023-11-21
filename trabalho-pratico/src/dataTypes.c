@@ -793,15 +793,36 @@ void copyFlight(Flight * dest,Flight * src){
 
   void destroyReservation(Reservation * r) {
     if (r != NULL) {
-        if(r->id) free(r->id); 
-        if(r->user_id) free(r->user_id); 
-        if(r->hotel_id) free(r->hotel_id); 
-        if(r->hotel_name) free(r->hotel_name); 
-        if(r->address) free(r->address); 
+        if(r->id) {
+            free(r->id);
+            r->id = NULL;
+        } 
+        if(r->user_id) {
+            free(r->user_id);
+            r->user_id = NULL;
+        } 
+        if(r->hotel_id) {
+            free(r->hotel_id);
+            r->hotel_id = NULL;
+        } 
+        if(r->hotel_name) {
+            free(r->hotel_name);
+            r->hotel_name = NULL;
+        } 
+        if(r->address) {
+            free(r->address);
+            r->address = NULL;
+        } 
         if(r->begin_date) destroyTime(r->begin_date); 
         if(r->end_date) destroyTime(r->end_date); 
-        if(r->room_details) free(r->room_details); 
-        if(r->comment) free(r->comment); 
+        if(r->room_details) {
+            free(r->room_details);
+            r->room_details = NULL;
+        } 
+        if(r->comment) {
+            free(r->comment);
+            r->comment = NULL;
+        } 
         free(r); 
     }
 }
@@ -815,12 +836,13 @@ size_t getReservSize(){
         free(reserv->id);
         reserv->id = NULL;
     }
-    reserv->id =strdup(line);
+    reserv->id = strdup(line);
 }
 
  char *getReservId(Reservation * reserv){
-    if(reserv->id){
-        char * id =strdup(reserv->id);
+    if(reserv == NULL) return NULL;
+    if(reserv->id != NULL){
+        char * id = strdup(reserv->id);
         return id;
     }
     return NULL;
@@ -988,6 +1010,7 @@ void setReservEndDate(Reservation * reserv,Time * tempo){
 
 
   void setReservComment(Reservation * reserv,const char * line){
+    if(line == NULL) return;
     if(reserv->comment) {
         free(reserv->comment);
         reserv->comment = NULL;
