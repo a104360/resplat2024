@@ -94,7 +94,7 @@ Passanger ** getAllPassangers(const PassangersDatabase * database){
 
 void destroyPassangersDB(PassangersDatabase * database){
     for(int i = 0;i < database->numPassangers;i++){
-        destroyPassanger(database->passangers[i]);
+        database->passangers[i] = NULL;
     }
     free(database->passangers);
     database->passangers = NULL;
