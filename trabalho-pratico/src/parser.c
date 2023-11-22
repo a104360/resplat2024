@@ -33,39 +33,49 @@
 */
 
 
-
+//Check if an id is correct
+//cannot be NULL
  char * idCheck(const char * line){
     if(line == NULL) return NULL; 
     CHECKLEN(line);
 }
 
+//Check if a name is correct
+//cannot be NULL
 // Free necessary
  char * nameCheck(const char * line){
     if(line == NULL) return NULL; 
     CHECKLEN(line);
 }
 
+//Check if a number is correct
+//cannot be NULL
  char * phoneNumberCheck(const char * line){
     if(line == NULL) return NULL; 
     CHECKLEN(line);
 }
 
+//Check if the sex is valid (M or F)
  char sexCheck(const char * line){
     if(line[0] == 'M') return 'M';
     if(line[0] == 'F') return 'F';
     return '\0';
 }
 
+//Check if userpassport is valid 
+//cannot be NULL
 // Free necessary
  char * passaportCheck(const char * line){
     CHECKLEN(line);
 }
 
+//Check if an address is valid
 // Free necessary
  char * addressCheck(const char * line){
     CHECKLEN(line);
 }
 
+//Check if the payment method is valid
  char * pay_methodCheck(const char * line){
     if(line[0] == '\0') return NULL;
     char * aux = strdup(line);
@@ -128,6 +138,7 @@
     return n;
 }
 
+//Check if dates are valid
 // format : nnnn/nn/nn (0 <= n <= 9)
  Time * dateCheck(const char * line){
     if(line == NULL || (line[4] != '/' && line[7] != '/')) return NULL;
@@ -159,6 +170,7 @@
     return NULL;
 }
 
+
 // starting dates cannot be after finishing dates
  bool datesCheck(const char * start, const char * end){
     if(!dateCheck(start) || !dateCheck(end)) return false;
@@ -169,6 +181,7 @@
     return true;
 }
 
+//datecheck aux
 // format : nnnn/nn/nn nn:nn:nn | dateCheck && [0,23]:
  int hourCheck(const char * line){
     if(!line) return 0;
@@ -205,6 +218,7 @@
     return -2;
 }
 
+//datecheck aux
 // 0 <= min <= 59
  int minuteCheck(const char * line){
     if(!line) return 0;
@@ -225,6 +239,7 @@
     return -2;
 }
 
+//datecheck aux
 // 0 <= sec <= 59
  int secondsCheck(const char * line){
     if(!line) return 0;
@@ -372,7 +387,7 @@ int breakfastCheck(const char * line){
 
 // *** The next 4 functions receive the full line ***  
 
-
+//Recieves a user and checks if the user is valid using the previus functions
  User * userCheck(const char * line){
     char * aux = strdup(line);
     char * token = NULL;
@@ -501,6 +516,8 @@ int breakfastCheck(const char * line){
     return user;
 }
 
+
+//Recieves a reservation and checks whether the reservation is valid using the previus functions
  Reservation * reservationCheck(const char * line,UsersDatabase uDatabase){
     char * aux = strdup(line);
     char * token = NULL;
@@ -636,6 +653,8 @@ int breakfastCheck(const char * line){
     return reservation;
 }
 
+
+//Recieves a flight and checks if the flight is valid using the previus functions
  Flight * fligthCheck(const char * line){
     char * aux = strdup(line);
     char * token = NULL;
@@ -753,6 +772,8 @@ int breakfastCheck(const char * line){
 
 }
 
+
+//Recieves a passanger and checks if the passanger is valid using the previus functions
  Passanger * passangerCheck(const char * line,UsersDatabase uDatabase,FlightsDatabase fDatabase){
     char * aux = strdup(line);
     char * token = NULL;
@@ -761,27 +782,15 @@ int breakfastCheck(const char * line){
     Passanger * passanger = createPassanger();
 
 
-    /*char * passangerFlightId = idCheck(token);
-    if(passangerFlightId == NULL){ free(aux);
-    aux = NULL; destroyPassanger(passanger); return NULL;}
-    free(passangerFlightId);
-    passangerFlightId = NULL;*/
     Flight * fTemp = lookupFlight(fDatabase,token);
     if(fTemp == NULL){ free(aux);
     aux = NULL; destroyPassanger(passanger); return NULL;}
-    //destroyFlight(fTemp);
     setPassangerFlightId(passanger,token);
     TOKENIZE(token,saveptr);
 
-    /*char * passangerUserId = idCheck(token);
-    if(!passangerUserId){ free(aux);
-    aux = NULL; destroyPassanger(passanger); return NULL;}
-    free(passangerUserId);
-    passangerUserId = NULL;*/
     User * uTemp = lookupUser(uDatabase,token);
     if(uTemp == NULL){ free(aux);
     aux = NULL; destroyPassanger(passanger); return NULL;}
-    //destroyUser(uTemp);
 
     setPassangerUserId(passanger,token);
     free(aux);
