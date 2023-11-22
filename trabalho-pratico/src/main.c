@@ -328,13 +328,16 @@ int main(int argc,char **argv){
 
 
     // Read and execute commands, freeing after used
-    
-    //readEntryFile();
+
+
+
+    readEntryFile(uDatabase,rDatabase,fDatabase,pDatabase,argc,argv);
 
     // Free everything used
     //free(filePath); // free
-    destroyUsers(uDatabase); // destroy
+    destroyUsers(uDatabase);
     destroyFlights(fDatabase);
     destroyReservs(rDatabase);
+    destroyPassangersDB(pDatabase);
     return 0;
 }

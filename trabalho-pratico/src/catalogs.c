@@ -2,34 +2,60 @@
 #include "../include/dataTypes.h"
 #include "../include/dataStructs.h"
 #include "../include/time.h"
+#include <stdio.h>
 #include <glib.h>
 
 
 #define BUFFERSIZE 1000
 
 
-
 // Init usersDatabase
 UsersDatabase initUsers(){
-    UsersDatabase users = g_hash_table_new(g_str_hash,g_str_equal);
+    UsersDatabase users = g_hash_table_new(g_str_hash, g_str_equal);
+    if (users == NULL) {
+        g_error("Failed to allocate memory for UsersDatabase");
+        return NULL;
+    }
     return users;
 }
 
 // Insert User
-void insertUser(void * table,User * user){
-    g_hash_table_insert((UsersDatabase) table,(gpointer) getUserId(user),(gpointer) user);
+void insertUser(void *table, User *user){
+    if (table == NULL || user == NULL) {
+        // Handle invalid input
+        g_error("Invalid input in insertUser function");
+        return;
+    }
+    if(getUserId(user) == NULL) return;
+    if (!g_hash_table_insert((UsersDatabase) table,(gpointer) getUserId(user),(gpointer) user)) {
+        // Handle insertion failure
+        g_error("Failed to insert user into UsersDatabase");
+    }
 }
 
 // Returns the user that is supposed to be identified by the ID, that is on the TABLE
-User * lookupUser(void * table ,const char * id){
-    User * user = g_hash_table_lookup((UsersDatabase) table,(gconstpointer) id);
+User *lookupUser(void *table, const char *id){
+    if (table == NULL || id == NULL) {
+        // Handle invalid input
+        g_error("Invalid input in lookupUser function");
+        return NULL;
+    }
+
+    User *user = g_hash_table_lookup((UsersDatabase) table, (gconstpointer) id);
     return user;
 }
 
 // Destroys usersDatabase
 void destroyUsers(UsersDatabase database){
-    g_hash_table_destroy(database);
+    if (database != NULL) {
+        g_hash_table_remove_all(database);
+        g_hash_table_destroy(database);
+    } else {
+        // Handle trying to destroy a NULL hash table
+        g_error("Attempted to destroy a NULL UsersDatabase");
+    }
 }
+
 
 
 
@@ -169,7 +195,7 @@ HotelDatabase * getHotelDataBase(void * dataStruct,const char * hotelId,Time * b
     reservs->end = end;
     reservs->numReservas = 0;
     reservs->sumRatings = 0;
-    reservs->_hotelReservs = malloc(getReservSize() * g_hash_table_size((GHashTable *) dataStruct));
+    reservs->_hotelReservs = malloc(sizeof(Reservation *) * g_hash_table_size((GHashTable *) dataStruct));
     g_hash_table_foreach((GHashTable *)dataStruct,allHotelReservs,reservs);
     return reservs;
 }
@@ -201,7 +227,6 @@ void destroyHotelDatabase(HotelDatabase * hotel, int hashSize){
     free(hotel->hotel_id);
     hotel->hotel_id = NULL;
     for(int i = 0;i < hashSize;i++){
-        if(hotel->_hotelReservs[i]) free(hotel->_hotelReservs[i]);
         hotel->_hotelReservs[i] = NULL;
     }
     free(hotel->_hotelReservs);
@@ -229,7 +254,7 @@ UserReservsDB * getUserReservsDB(void * table,const char * userId){
     UserReservsDB * reservs = malloc(sizeof(struct userReservsDB));
     reservs->userId = strdup(userId);
     reservs->size = 0;
-    reservs->_userReservs = malloc(getReservSize() * g_hash_table_size((UsersDatabase) table));
+    reservs->_userReservs = malloc(sizeof(Reservation *) * g_hash_table_size((UsersDatabase) table));
     g_hash_table_foreach((UsersDatabase) table,allUserReservs,reservs);
     return reservs;
 }
@@ -258,7 +283,7 @@ void allUserReservs(gpointer key ,gpointer value,gpointer userData){
 
 void destroyUserReservsDB(UserReservsDB * database, int hashSize){
     for(int i = 0;i < hashSize;i++){
-        free(database->_userReservs[i]);
+
         database->_userReservs[i] = NULL;
     }
     free(database->_userReservs);
@@ -289,7 +314,7 @@ UserFlightsDB * getUserFlightsDB(void * fDatabase,void * travels,const char * us
     FlightsDatabase allFlights = (FlightsDatabase) fDatabase;
     UserFlightsDB * book = malloc(sizeof(struct userFlightsDB));
     book->passangers = (PassangersDatabase *) travels;
-    book->flights = malloc(getFlightSize() * g_hash_table_size((GHashTable *) allFlights));
+    book->flights = malloc(sizeof(Flight *) * g_hash_table_size((GHashTable *) allFlights));
     book->numTravels = 0; 
     int max = getNumAllPassangers(book->passangers);
     Passanger ** list = getAllPassangers(book->passangers); 
@@ -313,7 +338,6 @@ void destroyUserFlightsDB(UserFlightsDB * database,int hashSize){
     free(database->passangers);
     database->passangers = NULL;
     for(int i = 0;i < hashSize;i++){
-        free(database->flights[i]);
         database->flights[i] = NULL;
     }
     free(database->flights);
@@ -343,10 +367,15 @@ FlightPassangers * getFlightPassangers(void * fDatabase,void * travels,const cha
     FlightsDatabase allFlights = (FlightsDatabase) fDatabase;
     FlightPassangers * book = malloc(sizeof(struct flightPassangers));
     book->allPassangers = (PassangersDatabase *) travels;
-    book->list = malloc(getPassangerSize() * g_hash_table_size((GHashTable *) allFlights));
+    book->list = malloc(sizeof(Passanger *) * g_hash_table_size((GHashTable *) allFlights));
     book->numPassangers = 0; 
     int max = getNumAllPassangers(book->allPassangers);
     Passanger ** pList = getAllPassangers(book->allPassangers); 
+    if(pList == NULL){
+        fprintf(stderr, "Error: Memory allocation failed for book->list.\n");
+        book->list = NULL;
+        return book;
+    }
     for(int passangersList = 0;passangersList < max;passangersList++){
         if(strcoll(getPassangerFlightId(pList[passangersList]),flightId) == 0){
             book->list[book->numPassangers] = lookupPassangerFID(book->allPassangers,getPassangerFlightId(pList[passangersList]));
@@ -368,10 +397,9 @@ void destroyFlightPassangers(FlightPassangers * database,int hashSize){
     if(database->allPassangers) free(database->allPassangers);
     database->allPassangers = NULL;
     for(int i = 0;i < hashSize;i++){
-        if(database->list[i]) free(database->list[i]);
         database->list[i] = NULL;
     }
-    if(database->list)free(database->list);
+    if(database->list) free(database->list);
     database->list = NULL;
     if(database) free(database);
     database = NULL;
@@ -394,7 +422,7 @@ AirportDB * getAirportDB(FlightsDatabase fDatabase,const char * airport,Time * b
     aList->numFlights = 0;
     aList->f = begin;
     aList->l = end;
-    aList->fList = malloc(getFlightSize() * max);
+    aList->fList = malloc(sizeof(Flight *) * max);
     g_hash_table_foreach(fDatabase,checkAirports,aList);
     return aList;
 }
@@ -438,7 +466,6 @@ void destroyAirport(AirportDB * db,int hashSize){
     if(db->l) destroyTime(db->l);
     db->l = NULL;
     for(int i = 0;i < hashSize;i++){
-        if(db->fList[i]) free(db->fList[i]);
         db->fList[i] = NULL;
     }
     if(db->fList) free(db->fList);

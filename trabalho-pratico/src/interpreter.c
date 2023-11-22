@@ -93,6 +93,7 @@ char * airportName(const char * line){
 }
 
 void readEntryFile(UsersDatabase uDatabase,ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * pDatabase,int agrc, char **argv){
+    if(uDatabase == NULL || rDatabase == NULL || fDatabase == NULL || pDatabase == NULL) return;
     FILE * comandos = fopen(argv[2],"r");
 
     if (comandos == NULL){ perror("Erro a abrir o ficheiro dos comandos"); return;} 
@@ -103,7 +104,7 @@ void readEntryFile(UsersDatabase uDatabase,ReservationsDatabase rDatabase,Flight
 
     memset(linha, '\0', strlen(linha));
 
-    while(fgets(linha,strlen(linha),comandos)){
+    while(fgets(linha,BUFFERSIZE,comandos)){
 
         int tamanhoLinha = verTamanhoLinha(linha);
 
@@ -111,7 +112,7 @@ void readEntryFile(UsersDatabase uDatabase,ReservationsDatabase rDatabase,Flight
 
         strncpy(linhaLimpa,linha,tamanhoLinha);
 
-        linhaLimpa[tamanhoLinha] = '\0';
+        linhaLimpa[tamanhoLinha - 1] = '\0';
 
         switch (linhaLimpa[0])
         {
@@ -281,7 +282,6 @@ void readEntryFile(UsersDatabase uDatabase,ReservationsDatabase rDatabase,Flight
             break;
         }
     }
-
     free(linha);
     fclose(comandos);
 }
