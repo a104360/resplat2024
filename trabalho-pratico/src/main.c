@@ -2,6 +2,7 @@
 #include "../include/interpreter.h"
 #include "../include/dataTypes.h"
 #include "../include/catalogs.h"
+#include "../include/dataStructs.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -243,22 +244,28 @@ int main(int argc,char **argv){
     flightData = NULL;
     fclose(flightsErrors); // close
     flightsErrors = NULL;
-    free(filePath); // free
-    filePath = NULL;
+    //free(filePath); // free
+    //filePath = NULL;
 
     // Create Passangers Database 
 
+    memset(filePath,'\0',argSize + 20);
+
     strncpy(filePath,argv[1],argSize);
-    strncat(filePath,"/passangers.csv",17);
+    strncat(filePath,"/passengers.csv",17);
 
     FILE * passangersFile = NULL;
     passangersFile = fopen(filePath,"r");
+    if(passangersFile == NULL){
+        perror("Did not opened the file correctly");
+        return 10;
+    }
 
     FILE * passangersErrors = NULL;
     char * filePathPErrors = NULL;
     filePathPErrors = malloc(argSize + 27);
     strncpy(filePathPErrors,"Resultados",14);
-    strncat(filePathPErrors,"/passangers_errors.csv",25);
+    strncat(filePathPErrors,"/passengers_errors.csv",25);
     passangersErrors = fopen(filePathPErrors,"a+");
     if(!passangersErrors) {perror("Passangers errors file did not open\n"); return 1;}
 
@@ -266,9 +273,13 @@ int main(int argc,char **argv){
 
     if(!passangersData) { perror("Erro a alocar memoria na main"); return 1;}
 
-    memset(passangersData, '\0', strlen(passangersData));
+    memset(passangersData, '\0', BUFFERSIZE);
 
-    PassangersDatabase * pDatabase = initPassangers();
+    PassangersDatabase * pDatabase = createPassangerDatabase();
+    
+    fgets(passangersData,BUFFERSIZE,passangersFile);
+
+    fprintf(passangersErrors,"%s",passangersData);
 
     while(fgets(passangersData,BUFFERSIZE,passangersFile)){
 
@@ -282,7 +293,7 @@ int main(int argc,char **argv){
 
         passangersDataClean[tamanhoPassangersData] = '\0';
 
-        pBuffer = passangerCheck(passangersDataClean);
+        pBuffer = passangerCheck(passangersDataClean,uDatabase,fDatabase);
 
         if(pBuffer != NULL){
             char * idBuffer = getPassangerUserId(pBuffer);
