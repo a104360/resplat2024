@@ -16,8 +16,9 @@
 void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * pDatabase,const char * id,bool f){
     int rDatabaseSize = g_hash_table_size(rDatabase);
     int fDatabaseSize = g_hash_table_size(fDatabase);
-    char * analisa = malloc(sizeof(char) * 4);
+    char * analisa = malloc(sizeof(char) * 5);
     strncpy(analisa,id,4);
+    analisa[4] = '\0';
     int flag = 0;
     if(strcoll(analisa,"Book") == 0) flag = 3; //Reservation
     if(isdigit(analisa[0])) flag = 2;//Flights
@@ -68,6 +69,10 @@ void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatab
     
     case 2: // ** Flight **
         Flight * flight = lookupFlight(fDatabase,id);
+        if(flight == NULL){
+            outputQ1Flight(f,NULL,NULL,NULL,NULL,NULL,NULL,0,0);
+            return;
+        }
         char * airline = getFlightAirline(flight);
         char * plane_model = getFlightPlaneModel(flight);
         char * origin = getFlightOrigin(flight);

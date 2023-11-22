@@ -7,7 +7,7 @@
 
 
 //inteiro que representa a Query q está a ser respondida
-int commandAtual = 0;
+static int commandAtual = 0;
 
 
 //      **** OUTPUTS PARA Q1 ****
@@ -20,9 +20,16 @@ void outputQ1User(int F, char * name, char sex, int age, char * country_code , c
 
     char fileName[50];
 
-    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
+
+    if(name == NULL){
+        if(outputFile == NULL) fclose(outputFile);
+        return;
+    }
 
     if(F == 0){
         fprintf(outputFile, "%s;", name);
@@ -44,6 +51,7 @@ void outputQ1User(int F, char * name, char sex, int age, char * country_code , c
         fprintf(outputFile, "number_of_reservations: %s\n", number_of_reservations);
         fprintf(outputFile, "total_spent: %s\n", total_spent);
     }
+    fclose(outputFile);
 }
 
 
@@ -54,9 +62,16 @@ void outputQ1Flight(int F, char * airline, char * plane_model , char * origin, c
 
     char fileName[50];
 
-    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    memset(fileName,'\0',50);
+    
+    snprintf(fileName, 50, "Resultados/command%d_output.txt", commandAtual);
+
 
     FILE * outputFile = fopen(fileName, "a");
+    if(airline == NULL){
+        if(outputFile != NULL) fclose(outputFile);
+        return;
+    }
 
     if(F == 0){
         fprintf(outputFile, "%s;", airline);
@@ -78,6 +93,7 @@ void outputQ1Flight(int F, char * airline, char * plane_model , char * origin, c
         fprintf(outputFile, "passengers: %d\n", passengers);
         fprintf(outputFile, "delay: %d\n", delay);
     }
+    fclose(outputFile);
 }
 
 
@@ -88,9 +104,16 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
 
     char fileName[50];
 
-    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
+
+    if(hotel_id == NULL){
+        if(outputFile == NULL) fclose(outputFile);
+        return;
+    }
 
     if(F == 0){
         fprintf(outputFile, "%s;", hotel_id);
@@ -112,6 +135,7 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
         fprintf(outputFile, "nights: %d\n", nights);
         fprintf(outputFile, "total_price: %.3f\n", total_price);
     }
+    fclose(outputFile);
 }
 
 
@@ -125,7 +149,9 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
 
     char fileName[50];
 
-    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
 
@@ -170,6 +196,7 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
             return;
         }
     }
+    if(outputFile != NULL) fclose(outputFile);
 }
 
 void outputQ3(bool f,double rating){
@@ -178,7 +205,9 @@ void outputQ3(bool f,double rating){
 
     char fileName[50];
 
-    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
 
@@ -196,7 +225,9 @@ void outputQ4(bool f,Reservation ** rList,int max){
 
     char fileName[50];
 
-    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
 
@@ -226,7 +257,9 @@ void outputQ5(bool f, Flight ** fList,int max){
 
     char fileName[50];
 
-    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
     if(f == true){
@@ -256,7 +289,9 @@ void outputQ8(double revenue, bool f){
 
     char fileName[50];
 
-    snprintf(fileName, sizeof(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
     if(f== true){

@@ -111,6 +111,7 @@ int numberOfDays(Time * start,Time * end){
 
 
 char * timeToString(Time * time){
+    if(time == NULL) return NULL;
     
     if(time->hour == 0 && time->min == 0 && time->sec == 0){
         char * string = malloc(sizeof(char) * 11);
