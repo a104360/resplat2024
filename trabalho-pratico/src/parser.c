@@ -753,28 +753,37 @@ int breakfastCheck(const char * line){
 
 }
 
- Passanger * passangerCheck(const char * line){
+ Passanger * passangerCheck(const char * line,UsersDatabase uDatabase,FlightsDatabase fDatabase){
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
     Passanger * passanger = createPassanger();
 
-    char * passangerFlightId = idCheck(token);
-    if(!passangerFlightId){ free(aux);
+
+    /*char * passangerFlightId = idCheck(token);
+    if(passangerFlightId == NULL){ free(aux);
     aux = NULL; destroyPassanger(passanger); return NULL;}
-    setPassangerFlightId(passanger,passangerFlightId);
     free(passangerFlightId);
-    passangerFlightId = NULL;
+    passangerFlightId = NULL;*/
+    Flight * fTemp = lookupFlight(fDatabase,token);
+    if(fTemp == NULL){ free(aux);
+    aux = NULL; destroyPassanger(passanger); return NULL;}
+    //destroyFlight(fTemp);
+    setPassangerFlightId(passanger,token);
     TOKENIZE(token,saveptr);
 
-    char * passangerUserId = idCheck(token);
+    /*char * passangerUserId = idCheck(token);
     if(!passangerUserId){ free(aux);
     aux = NULL; destroyPassanger(passanger); return NULL;}
-    setPassangerUserId(passanger,passangerUserId);
     free(passangerUserId);
-    passangerUserId = NULL;
+    passangerUserId = NULL;*/
+    User * uTemp = lookupUser(uDatabase,token);
+    if(uTemp == NULL){ free(aux);
+    aux = NULL; destroyPassanger(passanger); return NULL;}
+    //destroyUser(uTemp);
 
+    setPassangerUserId(passanger,token);
     free(aux);
     aux = NULL;
     return passanger;
