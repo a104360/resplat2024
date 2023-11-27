@@ -22,7 +22,57 @@
 
 #define ALLVAR(aux) for(int i = 0;aux[i] != '\0';aux[i] = tolower(aux[i]),i++);
 
-#define TOKENIZE(token,saveptr) token = strtok_r(NULL,";\n\0",&saveptr); 
+#define TOKENIZE(token,saveptr) token = strtok_r(NULL,";\n\0",&saveptr);
+
+
+#define ERRORSU(aux,type)\
+    if(aux){\
+        free(aux);\
+        aux = NULL;\
+    }\
+    if(type){\
+        destroyUser(type);\
+    }\
+    return NULL;
+
+
+#define ERRORSR(aux,type)\
+    if(aux){\
+        free(aux);\
+        aux = NULL;\
+    }\
+    if(type){\
+        destroyReservation(type);\
+    }\
+    return NULL;
+
+#define ERRORSF(aux,type)\
+    if(aux){\
+        free(aux);\
+        aux = NULL;\
+    }\
+    if(type){\
+        destroyFlight(type);\
+    }\
+    return NULL;
+
+
+
+#define ERRORSP(aux,type)\
+    if(aux){\
+        free(aux);\
+        aux = NULL;\
+    }\
+    if(type){\
+        destroyPassanger(type);\
+    }\
+    return NULL;
+
+
+#define NEXTSLOT(token) if(token){\
+    free(token);\
+    token = NULL;\
+    }
 
 
 /*
@@ -398,6 +448,7 @@ int breakfastCheck(const char * line){
     if(!user){
         fprintf(stderr,"Memory allocation for User failed");
         if(token) free(token);
+        token = NULL;
         if(aux) free(aux);
         aux = NULL;
         return NULL;
@@ -405,46 +456,48 @@ int breakfastCheck(const char * line){
 
     //check userId
     char * id = idCheck(token);
-    if(!id){ free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
+    if(!id){ ERRORSU(aux,user);}
     setUserId(user,token);
-    free(id);
-    id = NULL;
+    NEXTSLOT(id);
     TOKENIZE(token,saveptr);
 
     //check userName
     char * name = nameCheck(token);
-    if(!name){ free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
-    setUserName(user,name);
-    free(name);
-    name = NULL;
+    if(!name){ERRORSU(aux,user);}
+    setUserName(user,token);
+    NEXTSLOT(name);
     TOKENIZE(token,saveptr);
 
     //check userEmail
     char * email = emailCheck(token);
-    if(!email) { free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
-    setUserEmail(user,email);
-    free(email);
-    email = NULL;
+    if(!email) { ERRORSU(aux,user);}
+    setUserEmail(user,token);
+    NEXTSLOT(email);
     TOKENIZE(token,saveptr);
 
     //check userPhone
     char * phone = phoneNumberCheck(token);
-    if(!phone) { free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
+    if(!phone) { ERRORSU(aux,user);}
     setUserPhone(user,token);
-    free(phone);
-    phone = NULL;
+    NEXTSLOT(phone);
     TOKENIZE(token,saveptr);
     
     //check userBday
     Time * userBday = dateCheck(token);
-    if(userBday == NULL) { free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
+    if(userBday == NULL) { ERRORSU(aux,user);}
     setUserBday(user,userBday);
-    //destroyTime(userBday);
+    TOKENIZE(token,saveptr);
+
+
+    //check userAccountCreation time
+    Time * userAccountCreation = dateCheck(token);
+    if(!userAccountCreation && compareTimes(userBday,userAccountCreation) == false) { free(aux);
+    aux = NULL; destroyUser(user); return NULL;}
+    setUserAccountCreation(user,userAccountCreation);
+    destroyTime(userAccountCreation);
+    destroyTime(userBday);
+    userAccountCreation = NULL;
+    userBday = NULL;
     TOKENIZE(token,saveptr);
 
     //check userSex
@@ -482,17 +535,7 @@ int breakfastCheck(const char * line){
     address = NULL;
     TOKENIZE(token,saveptr);
 
-    //check userAccountCreation time
-    Time * userAccountCreation = dateCheck(token);
-    if(!userAccountCreation && compareTimes(userBday,userAccountCreation) == false) { free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
-    setUserAccountCreation(user,userAccountCreation);
-    destroyTime(userAccountCreation);
-    destroyTime(userBday);
-    userAccountCreation = NULL;
-    userBday = NULL;
-    TOKENIZE(token,saveptr);
-
+    
     //check userPayMethod
     char * payMethod = pay_methodCheck(token);
     if(!payMethod) { free(aux);
@@ -527,73 +570,62 @@ int breakfastCheck(const char * line){
     if(reservation == NULL){
         fprintf(stderr,"Memory allocation for User failed");
         if(token) free(token);
+        token = NULL;
         if(aux) free(aux);
         aux = NULL;
         return NULL;
     }
 
     char * reservationId = idCheck(token);
-    if(reservationId == NULL){ free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}
+    if(reservationId == NULL) {ERRORSR(aux,reservation);}  
     setReservId(reservation,token);
-    free(reservationId);
-    reservationId = NULL;
+    NEXTSLOT(reservationId);
     TOKENIZE(token,saveptr);
     User * temp = lookupUser(uDatabase,token);
-    
-    if(temp == NULL){ free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}
+    if(temp == NULL){ERRORSR(aux,reservation);}
     setReservUserId(reservation,token);
     TOKENIZE(token,saveptr);
 
     char * reservationHotelId = idCheck(token);
-    if(!reservationHotelId){ free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}
+    if(!reservationHotelId){ERRORSR(aux,reservation);}
     setReservHotelId(reservation,reservationHotelId);
-    free(reservationHotelId);
-    reservationHotelId = NULL;
+    NEXTSLOT(reservationHotelId);
     TOKENIZE(token,saveptr);
 
     char * reservationHotelName = nameCheck(token);
-    if(!reservationHotelName){ free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}
+    if(!reservationHotelName){ERRORSR(aux,reservation);}
     setReservHotelName(reservation,reservationHotelName);
-    free(reservationHotelName);
-    reservationHotelName = NULL;
+    NEXTSLOT(reservationHotelName);
     TOKENIZE(token,saveptr);
 
     unsigned int reservationHotelStars = hotelStarsCheck(token);
-    if(!reservationHotelStars){ free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}
+    if(!reservationHotelStars){ ERRORSR(aux,reservation);}
     setReservHotelStars(reservation,reservationHotelStars);
     TOKENIZE(token,saveptr);
 
     int reservationTax = taxCheck(token);
-    if(reservationTax < 0){ free(aux);
-    aux = NULL; destroyReservation(reservation) ;return NULL;}
+    if(reservationTax < 0){ ERRORSR(aux,reservation);}
     setReservCityTax(reservation,reservationTax);
     TOKENIZE(token,saveptr);
 
     char * reservationAdress = addressCheck(token);
-    if(!reservationAdress){ free(aux);
-    aux = NULL; destroyReservation(reservation) ;return NULL;}
+    if(!reservationAdress){ERRORSR(aux,reservation);}
     setReservHotelAddress(reservation,reservationAdress);
-    free(reservationAdress);
-    reservationAdress = NULL;
+    NEXTSLOT(reservationAdress);
     TOKENIZE(token,saveptr);
 
     Time * beginDate = dateCheck(token);
-    if(!beginDate){ free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}
+    if(!beginDate){ ERRORSR(aux,reservation);}
     setReservBeginDate(reservation, beginDate);
     TOKENIZE(token,saveptr);
 
     Time * endDate = dateCheck(token);
-    if(!endDate){ free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}
+    if(!endDate){ 
+        ERRORSR(aux,reservation);
+        destroyTime(beginDate);
+    }
+    if(!compareTimes(beginDate,endDate)){ destroyTime(beginDate); destroyTime(endDate); ERRORSR(aux,reservation);}
     setReservEndDate(reservation, endDate);
-    if(!compareTimes(beginDate,endDate)){ destroyTime(beginDate); destroyTime(endDate); free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}
     destroyTime(endDate);
     endDate = NULL;
     destroyTime(beginDate);
@@ -601,25 +633,31 @@ int breakfastCheck(const char * line){
     TOKENIZE(token,saveptr);
 
     double pricePerNight = pricePNightCheck(token);
-    if(pricePerNight < 0){ free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}
+    if(pricePerNight < 0){ ERRORSR(aux,reservation);}
     setReservPricePerNight(reservation, pricePerNight);
     bool includesBreakfast = false;
     if(saveptr[0] == ';') {
         setReservBreakfast(reservation, includesBreakfast);
         //RoomDetails
-        setReservRoomDetails(reservation,token);
+        setReservRoomDetails(reservation,NULL);
         TOKENIZE(token,saveptr);
         
         unsigned int rating = reviewCheck(token);
-        if(rating == 0){ free(aux);
-        aux = NULL; destroyReservation(reservation); return NULL;}
+        if(rating == 0){ERRORSR(aux,reservation);}
         setReservRating(reservation,rating);
+        if(saveptr[0] == ';') {
+            if(aux){
+                free(aux);
+                aux = NULL;
+            }
+                return reservation;
+        }
         TOKENIZE(token,saveptr);
 
         //Comment
         setReservComment(reservation,token);
         
+        strncpy(aux,line,strlen(line));
         free(aux);
         aux = NULL;
         return reservation;
@@ -628,11 +666,31 @@ int breakfastCheck(const char * line){
 
 
     int n = breakfastCheck(token);
-    if(n == 2) { free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}
+    if(n == 2) { ERRORSR(aux,reservation);}
     if(n == 1) includesBreakfast = true;
     setReservBreakfast(reservation, includesBreakfast);
-    //free(includesBreakfast);
+    if(saveptr[0] == ';'){
+        TOKENIZE(token,saveptr);
+        unsigned int rating = reviewCheck(token);
+        if(rating == 0){ ERRORSR(aux,reservation);}
+        setReservRating(reservation,rating);
+        if(saveptr[0] == ';'){
+                strncpy(aux,line,strlen(line));
+                free(aux);
+                aux = NULL;
+                return reservation;
+        }
+
+        TOKENIZE(token,saveptr);
+
+        //Comment
+        setReservComment(reservation,token);
+        
+        strncpy(aux,line,strlen(line));
+        free(aux);
+        aux = NULL;
+        return reservation;
+    }
     TOKENIZE(token,saveptr);
 
     //RoomDetails
@@ -640,14 +698,20 @@ int breakfastCheck(const char * line){
     TOKENIZE(token,saveptr);
     
     unsigned int rating = reviewCheck(token);
-    if(!rating){ free(aux);
-    aux = NULL; destroyReservation(reservation); return NULL;}
+    if(!rating){ ERRORSR(aux,reservation);}
     setReservRating(reservation,rating);
+    if(saveptr[0] == ';' || saveptr[0] == '\n' || saveptr[0] == '\0'){
+        strncpy(aux,line,strlen(line));
+        free(aux);
+        aux = NULL;
+        return reservation;
+    }
     TOKENIZE(token,saveptr);
 
     //Comment
     setReservComment(reservation,token);
     
+    strncpy(aux,line,strlen(line));
     free(aux);
     aux = NULL;
     return reservation;

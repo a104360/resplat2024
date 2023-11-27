@@ -1004,17 +1004,8 @@ size_t getReservSize(){
 
   void setReservId(Reservation * reserv,const char * line){
     if(reserv->id){
-        if(strlen(line) > strlen(reserv->id)){
-            char * temp = realloc(reserv->id,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            reserv->id = temp;
-            return;
-        }else{
-            strncpy(reserv->id,line,strlen(reserv->id));
-            reserv->id[strlen(reserv->id)] = '\0';
-            return;
-        }
+        free(reserv->id);
+        reserv->id = NULL;
     }
     reserv->id = strdup(line);
 }
@@ -1201,6 +1192,7 @@ void setReservEndDate(Reservation * reserv,Time * tempo){
 
 
   void setReservRoomDetails(Reservation * reserv,const char * line){
+    if(line == NULL) return;
     if(reserv->room_details){
         if(strlen(line) > strlen(reserv->room_details)){
             char * temp = realloc(reserv->room_details,strlen(line)+ 1);
