@@ -2,6 +2,7 @@ programa-principal
 programa-testes
 *.csv
 Resultados/*
+.vscode/
 
 # Prerequisites
 *.d
