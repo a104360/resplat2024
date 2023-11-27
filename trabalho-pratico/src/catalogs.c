@@ -11,7 +11,7 @@
 
 // Init usersDatabase
 UsersDatabase initUsers(){
-    UsersDatabase users = g_hash_table_new(g_str_hash, g_str_equal);
+    UsersDatabase users = g_hash_table_new_full(g_str_hash, g_str_equal,free,(void *) destroyUser);
     if (users == NULL) {
         g_error("Failed to allocate memory for UsersDatabase");
         return NULL;
@@ -48,7 +48,7 @@ User *lookupUser(void *table, const char *id){
 // Destroys usersDatabase
 void destroyUsers(UsersDatabase database){
     if (database != NULL) {
-        g_hash_table_remove_all(database);
+        //g_hash_table_remove_all(database);
         g_hash_table_destroy(database);
     } else {
         // Handle trying to destroy a NULL hash table
@@ -67,7 +67,7 @@ void destroyUsers(UsersDatabase database){
 
 // Inits the flights database
 FlightsDatabase initFlights(){
-    FlightsDatabase flights = g_hash_table_new(g_str_hash,g_str_equal);
+    FlightsDatabase flights = g_hash_table_new_full(g_str_hash,g_str_equal,free,(void *) destroyFlight);
     return flights;
 }
 
@@ -117,7 +117,7 @@ void destroyFlights(FlightsDatabase database){
 
 // Inits the reservations database
 ReservationsDatabase initReservations(){
-    ReservationsDatabase reservs = g_hash_table_new(g_str_hash,g_str_equal);
+    ReservationsDatabase reservs = g_hash_table_new_full(g_str_hash,g_str_equal,free,(void *) destroyReservation);
     return reservs;
 }
 

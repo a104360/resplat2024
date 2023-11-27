@@ -140,8 +140,8 @@ typedef struct passanger{
         if(user->account_creation != NULL) destroyTime(user->account_creation);
         if(user->birth_date != NULL) destroyTime(user->birth_date);
         //user = NULL;
-            free(user);
-            user = NULL;
+        free(user);
+        user = NULL;
     }
 }
 
@@ -548,7 +548,7 @@ void copyUser(User * dest,User * src){
         if(f->notes != NULL) f->notes = NULL; 
             //free(f->notes); 
         f = NULL;
-        //free(f); 
+        free(f); 
     }
 }
 
@@ -560,17 +560,8 @@ size_t getFlightSize(){
   void setFlightId(Flight * flight,const char * line){
     if(flight == NULL) return;
     if(flight->id) {
-        if(strlen(line) > strlen(flight->id)){
-            char * temp = realloc(flight->id,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            flight->id = temp;
-            return;
-        }else{
-            strncpy(flight->id,line,strlen(flight->id));
-            flight->id[strlen(flight->id)] = '\0';
-            return;
-        }
+        free(flight->id);
+        flight->id = NULL;
     }
     flight->id = strdup(line);
 }
@@ -588,17 +579,8 @@ size_t getFlightSize(){
   void setFlightAirline(Flight * flight,const char * line){
     if(flight == NULL) return;
     if(flight->airline) {
-        if(strlen(line) > strlen(flight->airline)){
-            char * temp = realloc(flight->airline,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            flight->airline = temp;
-            return;
-        }else{
-            strncpy(flight->airline,line,strlen(flight->airline));
-            flight->airline[strlen(flight->airline)] = '\0';
-            return;
-        }
+        free(flight->airline);
+        flight->airline = NULL;
     }
     flight->airline = strdup(line);
 }
@@ -655,25 +637,16 @@ size_t getFlightSize(){
   void setFlightOrigin(Flight * flight,const char * line){
     if(flight == NULL) return;
     if(flight->origin) {
-        if(strlen(line) > strlen(flight->origin)){
-            char * temp = realloc(flight->origin,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            flight->origin = temp;
-            return;
-        }else{
-            strncpy(flight->origin,line,strlen(flight->origin));
-            flight->origin[strlen(flight->origin)] = '\0';
-            return;
-        }
+        free(flight->origin);
+        flight->origin = NULL;
     }
-    flight->origin =strdup(line);
+    flight->origin = strdup(line);
 }
 
  char *getFlightOrigin(Flight * flight){
     if(flight == NULL) return NULL;
     if(flight->origin){
-        char * origin =strdup(flight->origin);
+        char * origin = strdup(flight->origin);
         return origin;
     }
     return NULL;
@@ -683,25 +656,16 @@ size_t getFlightSize(){
   void setFlightDestination(Flight * flight,const char * line){
     if(flight == NULL) return;
     if(flight->destination) {
-        if(strlen(line) > strlen(flight->destination)){
-            char * temp = realloc(flight->destination,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            flight->destination = temp;
-            return;
-        }else{
-            strncpy(flight->destination,line,strlen(flight->destination));
-            flight->destination[strlen(flight->destination)] = '\0';
-            return;
-        }
+        free(flight->destination);
+        flight->destination = NULL;
     }
-    flight->destination =strdup(line);
+    flight->destination = strdup(line);
 }
 
  char *getFlightDestination(Flight * flight){
     if(flight == NULL) return NULL;
     if(flight->destination){
-        char * destination =strdup(flight->destination);
+        char * destination = strdup(flight->destination);
         return destination;
     }
     return NULL;

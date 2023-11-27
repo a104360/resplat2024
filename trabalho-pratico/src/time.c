@@ -44,7 +44,6 @@ int getSec(Time * time){
 
   void destroyTime(Time *time) {
     if(time == NULL) return; 
-    initTime(time);
     free(time);
     time = NULL;
 }

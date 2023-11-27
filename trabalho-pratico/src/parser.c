@@ -491,8 +491,10 @@ int breakfastCheck(const char * line){
 
     //check userAccountCreation time
     Time * userAccountCreation = dateCheck(token);
-    if(!userAccountCreation && compareTimes(userBday,userAccountCreation) == false) { free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
+    if(!userAccountCreation && compareTimes(userBday,userAccountCreation) == false) {
+        destroyTime(userBday);
+        ERRORSU(aux,user);
+    }
     setUserAccountCreation(user,userAccountCreation);
     destroyTime(userAccountCreation);
     destroyTime(userBday);
@@ -502,58 +504,48 @@ int breakfastCheck(const char * line){
 
     //check userSex
     char sex = sexCheck(token);
-    if(sex == '\0') { free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
+    if(sex == '\0') { ERRORSU(aux,user);}
     setUserSex(user,(char) sex);
-    sex = '\0';
     TOKENIZE(token,saveptr);
 
     //check userPassaport
     char * passaport = passaportCheck(token);
-    if(!passaport) { free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
+    if(!passaport) { ERRORSU(aux,user);}
     setUserPassport(user,passaport);
-    free(passaport);
-    passaport = NULL;
+    NEXTSLOT(passaport);
     TOKENIZE(token,saveptr);
 
     //check userCountryCode
     char * countryCode = countryCheck(token);
-    if(!countryCode) { free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
+    if(!countryCode) { ERRORSU(aux,user);}
     setUserCountryCode(user,countryCode);
-    free(countryCode);
-    countryCode = NULL;
+    NEXTSLOT(countryCode);
     TOKENIZE(token,saveptr);
 
     //check userAdress
     char * address = addressCheck(token);
-    if(!address) { free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
+    if(!address) { ERRORSU(aux,user);}
     setUserAddress(user,address);
-    free(address);
-    address = NULL;
+    NEXTSLOT(address);
     TOKENIZE(token,saveptr);
 
     
     //check userPayMethod
     char * payMethod = pay_methodCheck(token);
-    if(!payMethod) { free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
+    if(!payMethod) { ERRORSU(aux,user);}
     setUserPayMethod(user,payMethod);
-    free(payMethod);
-    payMethod = NULL;
+    NEXTSLOT(payMethod);
     TOKENIZE(token,saveptr);
 
     //check user accountStatus
     char * accStatus = accStatusCheck(token);
-    if(accStatus == NULL) { free(aux);
-    aux = NULL; destroyUser(user); return NULL;}
+    if(accStatus == NULL) { ERRORSU(aux,user);}
     bool accStat = false;
-    if(strcmp(accStatus,"active") == 0) accStat = true;
+    if(strcoll(accStatus,"active") == 0) accStat = true;
     setUserAccountStatus(user,accStat);
-    free(accStatus);
-    accStatus = NULL;
+    NEXTSLOT(accStatus);
+    
+
     free(aux);
     aux = NULL;
     return user;
@@ -621,8 +613,8 @@ int breakfastCheck(const char * line){
 
     Time * endDate = dateCheck(token);
     if(!endDate){ 
-        ERRORSR(aux,reservation);
         destroyTime(beginDate);
+        ERRORSR(aux,reservation);
     }
     if(!compareTimes(beginDate,endDate)){ destroyTime(beginDate); destroyTime(endDate); ERRORSR(aux,reservation);}
     setReservEndDate(reservation, endDate);
@@ -727,104 +719,105 @@ int breakfastCheck(const char * line){
     Flight * flight = createFlight();
 
     char * flightId = idCheck(token);
-    if(!flightId || saveptr[0] == ';'){ free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+    if(flightId == NULL || saveptr[0] == ';'){ERRORSF(aux,flight);}
     setFlightId(flight,flightId);
-    free(flightId);
-    flightId = NULL;
+    NEXTSLOT(flightId);
     TOKENIZE(token,saveptr);
 
     char * airline = nameCheck(token);
-    if(!airline || saveptr[0] == ';'){ free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+    if(!airline || saveptr[0] == ';'){ERRORSF(aux,flight);}
     setFlightAirline(flight,airline);
-    free(airline);
-    airline = NULL;
+    NEXTSLOT(airline);
     TOKENIZE(token,saveptr);
 
     char * planeModel = nameCheck(token);
-    if(!planeModel || saveptr[0] == ';'){ free(planeModel); free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+    if(!planeModel || saveptr[0] == ';'){ ERRORSF(aux,flight);}
     setFlightPlaneModel(flight,planeModel);
-    free(planeModel);
-    planeModel = NULL;
+    NEXTSLOT(planeModel);
     TOKENIZE(token,saveptr);
 
     unsigned int totalSeats = seatsCheck(token);
-    if(!totalSeats || saveptr[0] == ';'){ free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+    if(!totalSeats || saveptr[0] == ';'){ERRORSF(aux,flight);}
     setFlightTotalSeats(flight,totalSeats);
     TOKENIZE(token,saveptr);
 
     //Origin
-    if(strlen(token)!=3 || saveptr[0] == ';'){ free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+    if(strlen(token)!=3 || saveptr[0] == ';'){ ERRORSF(aux,flight);}
     char * origin = strdup(token);
     setFlightOrigin(flight,origin);
     TOKENIZE(token,saveptr);
 
     //Destination
-    if((!airportCheck(origin,token) && strlen(token)) || saveptr[0] == ';'){ free(origin); free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
-    free(origin);
-    origin = NULL;
+    if((!airportCheck(origin,token) && strlen(token)) || saveptr[0] == ';'){
+        if(origin){
+            free(origin);
+            origin = NULL;
+        }
+        ERRORSF(aux,flight);
+    }
+    NEXTSLOT(origin);
     setFlightDestination(flight,token);
     TOKENIZE(token,saveptr);
     
     Time * sDepartDate = dateCheck(token);
-    if(!sDepartDate || saveptr[0] == ';'){ free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+        if(!sDepartDate || saveptr[0] == ';'){ ERRORSF(aux,flight);}
     setFlightSDepartureDate(flight,sDepartDate);
     TOKENIZE(token,saveptr);
 
     Time * sArrivalDate = dateCheck(token);
-    if(!sArrivalDate || saveptr[0] == ';'){ free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+    if(!sArrivalDate || saveptr[0] == ';'){
+        destroyTime(sDepartDate);
+        ERRORSF(aux,flight);
+    }
     setFlightSArrivalDate(flight,sArrivalDate);
 
+
     //sDepartDate before sArrivalDate
-    if(compareTimes(sDepartDate,sArrivalDate) == false || saveptr[0] == ';'){ destroyTime(sArrivalDate); destroyTime(sDepartDate); free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+    if(compareTimes(sDepartDate,sArrivalDate) == false || saveptr[0] == ';'){ 
+        destroyTime(sArrivalDate);
+        destroyTime(sDepartDate);
+        ERRORSF(aux,flight);
+    }
     destroyTime(sArrivalDate);
     sArrivalDate = NULL;
     destroyTime(sDepartDate);
     sDepartDate = NULL;
     TOKENIZE(token,saveptr);
 
+
     Time * rDepartDate = dateCheck(token);
-    if(!rDepartDate || saveptr[0] == ';'){ free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+    if(!rDepartDate || saveptr[0] == ';'){ ERRORSF(aux,flight);}
     setFlightRDepartureDate(flight,rDepartDate);
     TOKENIZE(token,saveptr);
 
     Time * rArrivalDate = dateCheck(token);
-    if(!rArrivalDate || saveptr[0] == ';'){ free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+    if(!rArrivalDate || saveptr[0] == ';'){ERRORSF(aux,flight);}
     setFlightRArrivalDate(flight,rArrivalDate);
 
     //rDepartDate before rArrivalDate
-    if(compareTimes(rDepartDate,rArrivalDate) == false || saveptr[0] == ';'){ free(rArrivalDate); free(rDepartDate); free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+    if(compareTimes(rDepartDate,rArrivalDate) == false || saveptr[0] == ';'){ 
+        if(rDepartDate)destroyTime(rDepartDate);
+        if(rArrivalDate)destroyTime(rArrivalDate);
+        ERRORSF(aux,flight);
+    }
     destroyTime(rArrivalDate);
-    rArrivalDate = NULL;
     destroyTime(rDepartDate);
-    rDepartDate = NULL;
     TOKENIZE(token,saveptr);
 
     char * pilot = nameCheck(token);
-    if(pilot == NULL || saveptr[0] == ';'){ free(pilot); free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+    if(pilot == NULL || saveptr[0] == ';'){ERRORSF(aux,flight);}
     setFlightPilot(flight,pilot);
-    free(pilot);
-    pilot = NULL;
+    NEXTSLOT(pilot);
     TOKENIZE(token,saveptr);
 
     char * copilot = nameCheck(token);
-    if(!copilot){ free(copilot); free(aux);
-    aux = NULL; destroyFlight(flight); return NULL;}
+    if(!copilot){ ERRORSF(aux,flight);}
     setFlightCopilot(flight,copilot);
-    free(copilot);
-    copilot = NULL;
+    NEXTSLOT(copilot);
+    if(saveptr[0] == ';'){
+        NEXTSLOT(aux);
+        return flight;
+    }
     TOKENIZE(token,saveptr);
 
 
@@ -847,17 +840,15 @@ int breakfastCheck(const char * line){
 
 
     Flight * fTemp = lookupFlight(fDatabase,token);
-    if(fTemp == NULL){ free(aux);
-    aux = NULL; destroyPassanger(passanger); return NULL;}
+    if(fTemp == NULL){ ERRORSP(aux,passanger);}
     setPassangerFlightId(passanger,token);
     TOKENIZE(token,saveptr);
 
     User * uTemp = lookupUser(uDatabase,token);
-    if(uTemp == NULL){ free(aux);
-    aux = NULL; destroyPassanger(passanger); return NULL;}
+    if(uTemp == NULL){ ERRORSP(aux,passanger);}
 
     setPassangerUserId(passanger,token);
-    free(aux);
-    aux = NULL;
+
+    NEXTSLOT(aux);
     return passanger;
 }

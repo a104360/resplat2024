@@ -74,7 +74,7 @@ int main(int argc,char **argv){
             free(idBuffer); // free
             idBuffer = NULL;
 
-            free(uBuffer); // free
+            uBuffer = NULL;
 
         }else{ 
             fprintf(userErrors,"%s",userDataClean);
@@ -152,13 +152,14 @@ int main(int argc,char **argv){
 
             free(idBuffer);
             idBuffer = NULL;
-            free(rBuffer);
+
+
             rBuffer = NULL;
 
         }else{ 
             fprintf(reservationsErrors,"%s",reservationDataClean);
         }
-        
+            
             rBuffer = NULL;
             free(reservationDataClean);
             reservationDataClean = NULL;
@@ -225,7 +226,6 @@ int main(int argc,char **argv){
             free(idBuffer);
             idBuffer = NULL;
 
-            free(fBuffer);
             fBuffer = NULL;
 
         }else{ 
@@ -233,7 +233,6 @@ int main(int argc,char **argv){
         }
         
             fBuffer = NULL;
-
     }
 
     fclose(flightFile); // close
@@ -303,7 +302,6 @@ int main(int argc,char **argv){
             free(idBuffer);
             idBuffer = NULL;
 
-            free(pBuffer);
             pBuffer = NULL;
 
         }else{ 
