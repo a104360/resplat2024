@@ -26,7 +26,10 @@ programa-testes: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS)
 
 run: $(EXE)
-	./$(EXE)
+	./$(EXE) ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt
+
+runTests: programa-testes
+	./programa-testes ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt ../../li3_fr/dataset/data_clean
 
 $(EXE).debug: $(OBJ)
 	$(CC) -o $(EXE).debug $^ $(CFLAGS)

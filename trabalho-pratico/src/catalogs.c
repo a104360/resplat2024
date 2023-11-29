@@ -10,51 +10,40 @@
 
 
 // Init usersDatabase
+
+
+
+// Inits the flights database
 UsersDatabase initUsers(){
-    UsersDatabase users = g_hash_table_new_full(g_str_hash, g_str_equal,free,(void *) destroyUser);
-    if (users == NULL) {
-        g_error("Failed to allocate memory for UsersDatabase");
-        return NULL;
-    }
-    return users;
+    UsersDatabase flights = g_hash_table_new_full(g_str_hash,g_str_equal,free,free);
+    return flights;
 }
 
-// Insert User
-void insertUser(void *table, User *user){
-    if (table == NULL || user == NULL) {
-        // Handle invalid input
-        g_error("Invalid input in insertUser function");
-        return;
-    }
-    if(getUserId(user) == NULL) return;
-    if (!g_hash_table_insert((UsersDatabase) table,(gpointer) getUserId(user),(gpointer) user)) {
-        // Handle insertion failure
-        g_error("Failed to insert user into UsersDatabase");
-    }
+// Inserts the flight on the database by the flight id
+void insertUser(void * structs,User * user){
+    g_hash_table_insert((UsersDatabase)structs,(gpointer)getUserId(user),(gpointer) user);
 }
 
-// Returns the user that is supposed to be identified by the ID, that is on the TABLE
-User *lookupUser(void *table, const char *id){
-    if (table == NULL || id == NULL) {
-        // Handle invalid input
-        g_error("Invalid input in lookupUser function");
-        return NULL;
-    }
-
-    User *user = g_hash_table_lookup((UsersDatabase) table, (gconstpointer) id);
+// Returns the flight based on the id
+User * lookupUser(void * table ,const char * id){
+    User * user = g_hash_table_lookup((UsersDatabase) table,(gconstpointer) id);
     return user;
 }
 
-// Destroys usersDatabase
-void destroyUsers(UsersDatabase database){
-    if (database != NULL) {
-        //g_hash_table_remove_all(database);
-        g_hash_table_destroy(database);
-    } else {
-        // Handle trying to destroy a NULL hash table
-        g_error("Attempted to destroy a NULL UsersDatabase");
+
+void destroyUDB(gpointer key,gpointer user,gpointer data){
+    if(!user && !key) return;
+    if(user){
+        destroyUser(user);
     }
 }
+
+void destroyUsers(UsersDatabase database){
+    g_hash_table_foreach(database,destroyUDB,NULL); 
+    g_hash_table_destroy(database);
+}
+
+
 
 
 
@@ -67,7 +56,7 @@ void destroyUsers(UsersDatabase database){
 
 // Inits the flights database
 FlightsDatabase initFlights(){
-    FlightsDatabase flights = g_hash_table_new_full(g_str_hash,g_str_equal,free,(void *) destroyFlight);
+    FlightsDatabase flights = g_hash_table_new_full(g_str_hash,g_str_equal,free,free);
     return flights;
 }
 
@@ -83,7 +72,15 @@ Flight * lookupFlight(void * table ,const char * id){
 }
 
 
+void destroyFDB(gpointer key,gpointer flight,gpointer data){
+    if(!flight && !key) return;
+    if(flight){
+        destroyFlight(flight);
+    }
+}
+
 void destroyFlights(FlightsDatabase database){
+    g_hash_table_foreach(database,destroyFDB,NULL); 
     g_hash_table_destroy(database);
 }
 
@@ -117,7 +114,7 @@ void destroyFlights(FlightsDatabase database){
 
 // Inits the reservations database
 ReservationsDatabase initReservations(){
-    ReservationsDatabase reservs = g_hash_table_new_full(g_str_hash,g_str_equal,free,(void *) destroyReservation);
+    ReservationsDatabase reservs = g_hash_table_new_full(g_str_hash,g_str_equal,free,free);
     return reservs;
 }
 
@@ -132,7 +129,13 @@ Reservation * lookupReserv(void * table,const char * reservId){
     return reserv;
 }
 
+void destroyRDB(gpointer key,gpointer reservation,gpointer reservationData){
+    if(!key && !reservation) return;
+    destroyReservation((Reservation *) reservation);
+}
+
 void destroyReservs(ReservationsDatabase database){
+    g_hash_table_foreach(database,destroyRDB,NULL);
     g_hash_table_destroy(database);
 }
 

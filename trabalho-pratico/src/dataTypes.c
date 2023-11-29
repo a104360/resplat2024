@@ -97,7 +97,8 @@ typedef struct passanger{
 
  User * createUser(){
     User * u = NULL;
-    u = malloc(sizeof(struct user));
+    //u = malloc(sizeof(struct user));
+    u = g_new(User,1);
     initUser(u);    
     return u;
 

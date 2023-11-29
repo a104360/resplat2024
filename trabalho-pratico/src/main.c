@@ -66,21 +66,12 @@ int main(int argc,char **argv){
         uBuffer = userCheck(userDataClean); // malloc
 
         if(uBuffer != NULL){
-            char * idBuffer = getUserId(uBuffer); // malloc
-
-            //g_hash_table_insert(uDatabase,idBuffer,uBuffer);
             insertUser(uDatabase,uBuffer);
-
-            free(idBuffer); // free
-            idBuffer = NULL;
-
-            uBuffer = NULL;
 
         }else{ 
             fprintf(userErrors,"%s",userDataClean);
         }
         
-        uBuffer = NULL;
         free(userDataClean);// free
         userDataClean = NULL;
     }
@@ -139,28 +130,12 @@ int main(int argc,char **argv){
 
         rBuffer = reservationCheck(reservationDataClean,uDatabase);
 
-        //reservationCheck(reservationDataClean);
-
     if(rBuffer != NULL){
-            //char * idBuffer = NULL;
-            //if(rBuffer != NULL) idBuffer = getReservId(rBuffer);
-            char * idBuffer = getReservId(rBuffer);
-
-
-            //g_hash_table_insert(rDatabase,idBuffer,rBuffer);
             insertReserv(rDatabase,rBuffer);
-
-            free(idBuffer);
-            idBuffer = NULL;
-
-
-            rBuffer = NULL;
-
         }else{ 
             fprintf(reservationsErrors,"%s",reservationDataClean);
         }
             
-            rBuffer = NULL;
             free(reservationDataClean);
             reservationDataClean = NULL;
     }
@@ -218,21 +193,12 @@ int main(int argc,char **argv){
         //fligthCheck(flightDataClean);
 
         if(fBuffer != NULL){
-            char * idBuffer = getFlightId(fBuffer);
 
-            //g_hash_table_insert(fDatabase,idBuffer,fBuffer);
             insertFlight(fDatabase,fBuffer);
-
-            free(idBuffer);
-            idBuffer = NULL;
-
-            fBuffer = NULL;
 
         }else{ 
             fprintf(flightsErrors,"%s",flightDataClean);
         }
-        
-            fBuffer = NULL;
     }
 
     fclose(flightFile); // close
@@ -295,21 +261,12 @@ int main(int argc,char **argv){
         pBuffer = passangerCheck(passangersDataClean,uDatabase,fDatabase);
 
         if(pBuffer != NULL){
-            char * idBuffer = getPassangerUserId(pBuffer);
 
             insertPassanger(pDatabase,pBuffer);
-
-            free(idBuffer);
-            idBuffer = NULL;
-
-            pBuffer = NULL;
 
         }else{ 
             fprintf(passangersErrors,"%s",passangersDataClean);
         }
-        
-            pBuffer = NULL;
-
     }
 
     fclose(passangersFile); // close
@@ -332,7 +289,6 @@ int main(int argc,char **argv){
     //readEntryFile(uDatabase,rDatabase,fDatabase,pDatabase,argc,argv);
 
     // Free everything used
-    //free(filePath); // free
     destroyUsers(uDatabase);
     destroyFlights(fDatabase);
     destroyReservs(rDatabase);
