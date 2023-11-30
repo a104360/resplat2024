@@ -719,40 +719,51 @@ int breakfastCheck(const char * line){
     Flight * flight = createFlight();
 
     char * flightId = idCheck(token);
-    if(flightId == NULL || saveptr[0] == ';'){ERRORSF(aux,flight);}
+    if(flightId == NULL || saveptr[0] == ';'){
+        NEXTSLOT(flightId);
+        ERRORSF(aux,flight);
+    }
     setFlightId(flight,flightId);
     NEXTSLOT(flightId);
     TOKENIZE(token,saveptr);
 
     char * airline = nameCheck(token);
-    if(!airline || saveptr[0] == ';'){ERRORSF(aux,flight);}
+    if(!airline || saveptr[0] == ';'){
+        NEXTSLOT(airline);
+        ERRORSF(aux,flight);
+    }
     setFlightAirline(flight,airline);
     NEXTSLOT(airline);
     TOKENIZE(token,saveptr);
 
     char * planeModel = nameCheck(token);
-    if(!planeModel || saveptr[0] == ';'){ ERRORSF(aux,flight);}
+    if(!planeModel || saveptr[0] == ';'){ 
+        NEXTSLOT(planeModel);
+        ERRORSF(aux,flight);
+    }
     setFlightPlaneModel(flight,planeModel);
     NEXTSLOT(planeModel);
     TOKENIZE(token,saveptr);
 
     unsigned int totalSeats = seatsCheck(token);
-    if(!totalSeats || saveptr[0] == ';'){ERRORSF(aux,flight);}
+    if(!totalSeats || saveptr[0] == ';'){
+        ERRORSF(aux,flight);
+    }
     setFlightTotalSeats(flight,totalSeats);
     TOKENIZE(token,saveptr);
 
     //Origin
-    if(strlen(token)!=3 || saveptr[0] == ';'){ ERRORSF(aux,flight);}
+    if(strlen(token)!=3 || saveptr[0] == ';'){ 
+        // free(token);
+        ERRORSF(aux,flight);
+    }
     char * origin = strdup(token);
     setFlightOrigin(flight,origin);
     TOKENIZE(token,saveptr);
 
     //Destination
-    if((!airportCheck(origin,token) && strlen(token)) || saveptr[0] == ';'){
-        if(origin){
-            free(origin);
-            origin = NULL;
-        }
+    if((!airportCheck(origin,token) && strlen(token) != 3) || saveptr[0] == ';'){
+        NEXTSLOT(origin);
         ERRORSF(aux,flight);
     }
     NEXTSLOT(origin);
@@ -760,13 +771,17 @@ int breakfastCheck(const char * line){
     TOKENIZE(token,saveptr);
     
     Time * sDepartDate = dateCheck(token);
-        if(!sDepartDate || saveptr[0] == ';'){ ERRORSF(aux,flight);}
+        if(!sDepartDate || saveptr[0] == ';'){ 
+            destroyTime(sDepartDate);
+            ERRORSF(aux,flight);
+        }
     setFlightSDepartureDate(flight,sDepartDate);
     TOKENIZE(token,saveptr);
 
     Time * sArrivalDate = dateCheck(token);
     if(!sArrivalDate || saveptr[0] == ';'){
         destroyTime(sDepartDate);
+        destroyTime(sArrivalDate);
         ERRORSF(aux,flight);
     }
     setFlightSArrivalDate(flight,sArrivalDate);
@@ -779,25 +794,30 @@ int breakfastCheck(const char * line){
         ERRORSF(aux,flight);
     }
     destroyTime(sArrivalDate);
-    sArrivalDate = NULL;
     destroyTime(sDepartDate);
-    sDepartDate = NULL;
     TOKENIZE(token,saveptr);
 
 
     Time * rDepartDate = dateCheck(token);
-    if(!rDepartDate || saveptr[0] == ';'){ ERRORSF(aux,flight);}
+    if(!rDepartDate || saveptr[0] == ';'){ 
+        destroyTime(rDepartDate);
+        ERRORSF(aux,flight);
+        }
     setFlightRDepartureDate(flight,rDepartDate);
     TOKENIZE(token,saveptr);
 
     Time * rArrivalDate = dateCheck(token);
-    if(!rArrivalDate || saveptr[0] == ';'){ERRORSF(aux,flight);}
+    if(!rArrivalDate || saveptr[0] == ';'){
+        destroyTime(rDepartDate);
+        destroyTime(rArrivalDate);
+        ERRORSF(aux,flight);
+        }
     setFlightRArrivalDate(flight,rArrivalDate);
 
     //rDepartDate before rArrivalDate
     if(compareTimes(rDepartDate,rArrivalDate) == false || saveptr[0] == ';'){ 
-        if(rDepartDate)destroyTime(rDepartDate);
-        if(rArrivalDate)destroyTime(rArrivalDate);
+        destroyTime(rDepartDate);
+        destroyTime(rArrivalDate);
         ERRORSF(aux,flight);
     }
     destroyTime(rArrivalDate);
@@ -805,13 +825,19 @@ int breakfastCheck(const char * line){
     TOKENIZE(token,saveptr);
 
     char * pilot = nameCheck(token);
-    if(pilot == NULL || saveptr[0] == ';'){ERRORSF(aux,flight);}
+    if(pilot == NULL || saveptr[0] == ';'){
+        NEXTSLOT(pilot);
+        ERRORSF(aux,flight);
+    }
     setFlightPilot(flight,pilot);
     NEXTSLOT(pilot);
     TOKENIZE(token,saveptr);
 
     char * copilot = nameCheck(token);
-    if(!copilot){ ERRORSF(aux,flight);}
+    if(!copilot){ 
+        NEXTSLOT(copilot);
+        ERRORSF(aux,flight);
+    }
     setFlightCopilot(flight,copilot);
     NEXTSLOT(copilot);
     if(saveptr[0] == ';'){

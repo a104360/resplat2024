@@ -140,7 +140,7 @@ typedef struct passanger{
         }
         if(user->account_creation != NULL) destroyTime(user->account_creation);
         if(user->birth_date != NULL) destroyTime(user->birth_date);
-        //user = NULL;
+        
         free(user);
         user = NULL;
     }
@@ -528,28 +528,52 @@ void copyUser(User * dest,User * src){
 
   void destroyFlight(Flight * f) {
     if (f != NULL) {
-        if(f->id != NULL) f->id = NULL; 
-            //free(f->id); 
-        if(f->airline != NULL) f->airline = NULL; 
-            //free(f->airline); 
-        if(f->plane_model != NULL) f->plane_model = NULL; 
-            //free(f->plane_model); 
-        if(f->origin != NULL) f->origin = NULL; 
-            //free(f->origin); 
-        if(f->destination != NULL) f->destination = NULL; 
-            //free(f->destination); 
+        if(f->id != NULL){
+            free(f->id);
+            f->id = NULL;
+        } 
+        
+        if(f->airline != NULL){
+            free(f->airline);
+            f->airline = NULL;
+        } 
+        
+        if(f->plane_model != NULL){
+            free(f->plane_model);
+            f->plane_model = NULL;
+        } 
+        
+        if(f->origin != NULL){
+            free(f->origin);
+            f->origin = NULL;
+        } 
+        
+        if(f->destination != NULL){
+            free(f->destination);
+            f->destination = NULL;
+        } 
+        
         if(f->schedule_departure_date != NULL) destroyTime(f->schedule_departure_date); 
         if(f->schedule_arrival_date != NULL) destroyTime(f->schedule_arrival_date); 
         if(f->real_departure_date != NULL) destroyTime(f->real_departure_date); 
         if(f->real_arrival_date != NULL) destroyTime(f->real_arrival_date); 
-        if(f->pilot != NULL) f->pilot = NULL; 
-            //free(f->pilot); 
-        if(f->copilot != NULL) f->copilot = NULL; 
-            //free(f->copilot); 
-        if(f->notes != NULL) f->notes = NULL; 
-            //free(f->notes); 
-        f = NULL;
+        if(f->pilot != NULL){
+            free(f->pilot);
+            f->pilot = NULL;
+        } 
+        
+        if(f->copilot != NULL){
+            free(f->copilot);
+            f->copilot = NULL;
+        } 
+        
+        if(f->notes != NULL){
+            free(f->notes);
+            f->notes = NULL;
+        } 
+        
         free(f); 
+        f = NULL;
     }
 }
 

@@ -166,11 +166,43 @@ int main(int argc,char **argv){
     strncpy(filePathFErrors,"Resultados",14);
     strncat(filePathFErrors,"/flights_errors.csv",25);
     flightsErrors = fopen(filePathFErrors,"a+");
-    if(!flightsErrors) {perror("Flights errors file did not open\n"); return 1;}
+    if(!flightsErrors) {
+        perror("Flights errors file did not open\n");
+        if(filePath){
+            free(filePath);
+            filePath = NULL;
+        } 
+        if(filePathFErrors){
+            free(filePathFErrors);
+            filePathFErrors = NULL;
+        }
+        if(flightFile){
+            fclose(flightFile);
+            flightFile = NULL;
+        }
+        return 1;
+    }
 
     char * flightData = malloc(sizeof(char) * BUFFERSIZE);
 
-    if(!flightData) { perror("Erro a alocar memoria na main"); return 1;}
+    if(!flightData) { 
+        perror("Erro a alocar memoria na main"); 
+        if(filePath){
+            free(filePath);
+            filePath = NULL;
+        } 
+        if(filePathFErrors){
+            free(filePathFErrors);
+            filePathFErrors = NULL;
+        }
+        if(flightFile){
+            fclose(flightFile);
+            flightFile = NULL;
+        }
+        free(flightsErrors);
+        flightsErrors = NULL;
+        return 1;
+    }
 
     memset(flightData, '\0', BUFFERSIZE);
 
@@ -199,6 +231,7 @@ int main(int argc,char **argv){
         }else{ 
             fprintf(flightsErrors,"%s",flightDataClean);
         }
+
     }
 
     fclose(flightFile); // close
@@ -209,8 +242,7 @@ int main(int argc,char **argv){
     flightData = NULL;
     fclose(flightsErrors); // close
     flightsErrors = NULL;
-    //free(filePath); // free
-    //filePath = NULL;
+
 
     // Create Passangers Database 
 

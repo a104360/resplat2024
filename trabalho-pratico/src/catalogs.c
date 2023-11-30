@@ -4,18 +4,16 @@
 #include "../include/time.h"
 #include <stdio.h>
 #include <glib.h>
+#include <gmodule.h>
 
 
 #define BUFFERSIZE 1000
 
 
-// Init usersDatabase
-
-
 
 // Inits the flights database
 UsersDatabase initUsers(){
-    UsersDatabase flights = g_hash_table_new_full(g_str_hash,g_str_equal,free,free);
+    UsersDatabase flights = g_hash_table_new_full(g_str_hash,g_str_equal,free,(GDestroyNotify) destroyUser);
     return flights;
 }
 
@@ -36,10 +34,11 @@ void destroyUDB(gpointer key,gpointer user,gpointer data){
     if(user){
         destroyUser(user);
     }
+    g_hash_table_remove((GHashTable *)data,key);
 }
 
 void destroyUsers(UsersDatabase database){
-    g_hash_table_foreach(database,destroyUDB,NULL); 
+    g_hash_table_foreach(database,destroyUDB,NULL);
     g_hash_table_destroy(database);
 }
 
@@ -56,13 +55,14 @@ void destroyUsers(UsersDatabase database){
 
 // Inits the flights database
 FlightsDatabase initFlights(){
-    FlightsDatabase flights = g_hash_table_new_full(g_str_hash,g_str_equal,free,free);
+    FlightsDatabase flights = g_hash_table_new(g_str_hash,g_str_equal);
     return flights;
 }
 
 // Inserts the flight on the database by the flight id
 void insertFlight(void * structs,Flight * flight){
-    g_hash_table_insert((FlightsDatabase)structs,(gpointer)getFlightId(flight),(gpointer) flight);
+    char * key = getFlightId(flight);
+    g_hash_table_insert((FlightsDatabase)structs,(gpointer)key,(gpointer) flight);
 }
 
 // Returns the flight based on the id
@@ -81,7 +81,7 @@ void destroyFDB(gpointer key,gpointer flight,gpointer data){
 
 void destroyFlights(FlightsDatabase database){
     g_hash_table_foreach(database,destroyFDB,NULL); 
-    g_hash_table_destroy(database);
+    g_hash_table_unref(database);
 }
 
 
@@ -114,7 +114,7 @@ void destroyFlights(FlightsDatabase database){
 
 // Inits the reservations database
 ReservationsDatabase initReservations(){
-    ReservationsDatabase reservs = g_hash_table_new_full(g_str_hash,g_str_equal,free,free);
+    ReservationsDatabase reservs = g_hash_table_new(g_str_hash,g_str_equal);
     return reservs;
 }
 
@@ -136,7 +136,7 @@ void destroyRDB(gpointer key,gpointer reservation,gpointer reservationData){
 
 void destroyReservs(ReservationsDatabase database){
     g_hash_table_foreach(database,destroyRDB,NULL);
-    g_hash_table_destroy(database);
+    g_hash_table_unref(database);
 }
 
 
