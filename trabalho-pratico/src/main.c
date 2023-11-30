@@ -199,7 +199,7 @@ int main(int argc,char **argv){
             fclose(flightFile);
             flightFile = NULL;
         }
-        free(flightsErrors);
+        fclose(flightsErrors);
         flightsErrors = NULL;
         return 1;
     }

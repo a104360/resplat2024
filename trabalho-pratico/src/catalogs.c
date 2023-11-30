@@ -55,7 +55,7 @@ void destroyUsers(UsersDatabase database){
 
 // Inits the flights database
 FlightsDatabase initFlights(){
-    FlightsDatabase flights = g_hash_table_new(g_str_hash,g_str_equal);
+    FlightsDatabase flights = g_hash_table_new_full(g_str_hash,g_str_equal,free,(GDestroyNotify)destroyFlight);
     return flights;
 }
 
@@ -80,8 +80,8 @@ void destroyFDB(gpointer key,gpointer flight,gpointer data){
 }
 
 void destroyFlights(FlightsDatabase database){
-    g_hash_table_foreach(database,destroyFDB,NULL); 
-    g_hash_table_unref(database);
+    //g_hash_table_foreach(database,destroyFDB,NULL); 
+    g_hash_table_destroy(database);
 }
 
 
