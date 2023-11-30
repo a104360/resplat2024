@@ -489,18 +489,6 @@ int breakfastCheck(const char * line){
     TOKENIZE(token,saveptr);
 
 
-    //check userAccountCreation time
-    Time * userAccountCreation = dateCheck(token);
-    if(!userAccountCreation && compareTimes(userBday,userAccountCreation) == false) {
-        destroyTime(userBday);
-        ERRORSU(aux,user);
-    }
-    setUserAccountCreation(user,userAccountCreation);
-    destroyTime(userAccountCreation);
-    destroyTime(userBday);
-    userAccountCreation = NULL;
-    userBday = NULL;
-    TOKENIZE(token,saveptr);
 
     //check userSex
     char sex = sexCheck(token);
@@ -529,6 +517,18 @@ int breakfastCheck(const char * line){
     NEXTSLOT(address);
     TOKENIZE(token,saveptr);
 
+    //check userAccountCreation time
+    Time * userAccountCreation = dateCheck(token);
+    if(!userAccountCreation && compareTimes(userBday,userAccountCreation) == false) {
+        destroyTime(userBday);
+        ERRORSU(aux,user);
+    }
+    setUserAccountCreation(user,userAccountCreation);
+    destroyTime(userAccountCreation);
+    destroyTime(userBday);
+    userAccountCreation = NULL;
+    userBday = NULL;
+    TOKENIZE(token,saveptr);
     
     //check userPayMethod
     char * payMethod = pay_methodCheck(token);

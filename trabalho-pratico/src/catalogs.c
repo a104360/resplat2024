@@ -38,7 +38,7 @@ void destroyUDB(gpointer key,gpointer user,gpointer data){
 }
 
 void destroyUsers(UsersDatabase database){
-    g_hash_table_foreach(database,destroyUDB,NULL);
+    //g_hash_table_foreach(database,destroyUDB,NULL);
     g_hash_table_destroy(database);
 }
 
@@ -114,7 +114,7 @@ void destroyFlights(FlightsDatabase database){
 
 // Inits the reservations database
 ReservationsDatabase initReservations(){
-    ReservationsDatabase reservs = g_hash_table_new(g_str_hash,g_str_equal);
+    ReservationsDatabase reservs = g_hash_table_new_full(g_str_hash,g_str_equal,free,(GDestroyNotify) destroyReservation);
     return reservs;
 }
 
@@ -135,7 +135,7 @@ void destroyRDB(gpointer key,gpointer reservation,gpointer reservationData){
 }
 
 void destroyReservs(ReservationsDatabase database){
-    g_hash_table_foreach(database,destroyRDB,NULL);
+    //g_hash_table_foreach(database,destroyRDB,NULL);
     g_hash_table_unref(database);
 }
 
