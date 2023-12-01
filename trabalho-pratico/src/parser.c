@@ -447,44 +447,57 @@ int breakfastCheck(const char * line){
     user = createUser();
     if(!user){
         fprintf(stderr,"Memory allocation for User failed");
-        if(token) free(token);
-        token = NULL;
-        if(aux) free(aux);
-        aux = NULL;
+        NEXTSLOT(token);
+        NEXTSLOT(aux);
         return NULL;
     }
 
     //check userId
     char * id = idCheck(token);
-    if(!id){ ERRORSU(aux,user);}
+    if(!id || saveptr[0] == ';'){ 
+        NEXTSLOT(id);
+        ERRORSU(aux,user);
+    }
     setUserId(user,token);
     NEXTSLOT(id);
     TOKENIZE(token,saveptr);
 
     //check userName
     char * name = nameCheck(token);
-    if(!name){ERRORSU(aux,user);}
+    if(!name || saveptr[0] == ';'){
+        NEXTSLOT(name);
+        ERRORSU(aux,user);
+    }
     setUserName(user,token);
     NEXTSLOT(name);
     TOKENIZE(token,saveptr);
 
     //check userEmail
     char * email = emailCheck(token);
-    if(!email) { ERRORSU(aux,user);}
+    if(!email || saveptr[0] == ';') { 
+        NEXTSLOT(email);
+        ERRORSU(aux,user);
+    }
     setUserEmail(user,token);
     NEXTSLOT(email);
     TOKENIZE(token,saveptr);
 
     //check userPhone
     char * phone = phoneNumberCheck(token);
-    if(!phone) { ERRORSU(aux,user);}
+    if(!phone || saveptr[0] == ';') { 
+        NEXTSLOT(phone);
+        ERRORSU(aux,user);
+    }
     setUserPhone(user,token);
     NEXTSLOT(phone);
     TOKENIZE(token,saveptr);
     
     //check userBday
     Time * userBday = dateCheck(token);
-    if(userBday == NULL) { ERRORSU(aux,user);}
+    if(!userBday || saveptr[0] == ';') { 
+        destroyTime(userBday);
+        ERRORSU(aux,user);
+    }
     setUserBday(user,userBday);
     TOKENIZE(token,saveptr);
 
@@ -492,58 +505,78 @@ int breakfastCheck(const char * line){
 
     //check userSex
     char sex = sexCheck(token);
-    if(sex == '\0') { ERRORSU(aux,user);}
+    if(sex == '\0') { 
+        destroyTime(userBday);
+        ERRORSU(aux,user);
+    }
     setUserSex(user,(char) sex);
     TOKENIZE(token,saveptr);
 
     //check userPassaport
     char * passaport = passaportCheck(token);
-    if(!passaport) { ERRORSU(aux,user);}
+    if(!passaport || saveptr[0] == ';') { 
+        destroyTime(userBday);
+        NEXTSLOT(passaport);
+        ERRORSU(aux,user);
+    }
     setUserPassport(user,passaport);
     NEXTSLOT(passaport);
     TOKENIZE(token,saveptr);
 
     //check userCountryCode
     char * countryCode = countryCheck(token);
-    if(!countryCode) { ERRORSU(aux,user);}
+    if(!countryCode || saveptr[0] == ';') {
+        destroyTime(userBday);
+        NEXTSLOT(countryCode);
+        ERRORSU(aux,user);
+    }
     setUserCountryCode(user,countryCode);
     NEXTSLOT(countryCode);
     TOKENIZE(token,saveptr);
 
     //check userAdress
     char * address = addressCheck(token);
-    if(!address) { ERRORSU(aux,user);}
+    if(!address || saveptr[0] == ';') { 
+        destroyTime(userBday);
+        NEXTSLOT(address);
+        ERRORSU(aux,user);
+    }
     setUserAddress(user,address);
     NEXTSLOT(address);
     TOKENIZE(token,saveptr);
 
     //check userAccountCreation time
     Time * userAccountCreation = dateCheck(token);
-    if(!userAccountCreation && compareTimes(userBday,userAccountCreation) == false) {
+    if(!userAccountCreation || compareTimes(userBday,userAccountCreation) == false || saveptr[0] == ';') {
         destroyTime(userBday);
+        destroyTime(userAccountCreation);
         ERRORSU(aux,user);
     }
     setUserAccountCreation(user,userAccountCreation);
     destroyTime(userAccountCreation);
     destroyTime(userBday);
-    userAccountCreation = NULL;
-    userBday = NULL;
     TOKENIZE(token,saveptr);
     
     //check userPayMethod
     char * payMethod = pay_methodCheck(token);
-    if(!payMethod) { ERRORSU(aux,user);}
+    if(!payMethod || saveptr[0] == ';') { 
+        NEXTSLOT(payMethod);
+        ERRORSU(aux,user);
+    }
     setUserPayMethod(user,payMethod);
     NEXTSLOT(payMethod);
     TOKENIZE(token,saveptr);
 
     //check user accountStatus
-    char * accStatus = accStatusCheck(token);
-    if(accStatus == NULL) { ERRORSU(aux,user);}
+    char * string = accStatusCheck(token);
+    if(string == NULL) { 
+        NEXTSLOT(string);
+        ERRORSU(aux,user);
+    }
     bool accStat = false;
-    if(strcoll(accStatus,"active") == 0) accStat = true;
+    if(strcoll(string,"active") == 0) accStat = true;
     setUserAccountStatus(user,accStat);
-    NEXTSLOT(accStatus);
+    NEXTSLOT(string);
     
 
     free(aux);
@@ -858,16 +891,25 @@ int breakfastCheck(const char * line){
 
 //Recieves a passanger and checks if the passanger is valid using the previus functions
  Passanger * passangerCheck(const char * line,UsersDatabase uDatabase,FlightsDatabase fDatabase){
+    if(line[0] == ';' || line == NULL || line[0] == '\0' || line[0] == '\n') return NULL;
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
     Passanger * passanger = createPassanger();
+    if(!passanger){
+        NEXTSLOT(token);
+        NEXTSLOT(aux);
+        return NULL;
+    }
 
 
     Flight * fTemp = lookupFlight(fDatabase,token);
-    if(fTemp == NULL){ ERRORSP(aux,passanger);}
+    if(fTemp == NULL || saveptr[0] == ';'){ 
+        ERRORSP(aux,passanger);
+    }
     setPassangerFlightId(passanger,token);
+
     TOKENIZE(token,saveptr);
 
     User * uTemp = lookupUser(uDatabase,token);

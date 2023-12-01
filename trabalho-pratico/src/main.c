@@ -293,7 +293,6 @@ int main(int argc,char **argv){
         pBuffer = passangerCheck(passangersDataClean,uDatabase,fDatabase);
 
         if(pBuffer != NULL){
-
             insertPassanger(pDatabase,pBuffer);
 
         }else{ 
@@ -321,9 +320,9 @@ int main(int argc,char **argv){
     //readEntryFile(uDatabase,rDatabase,fDatabase,pDatabase,argc,argv);
 
     // Free everything used
+    destroyPassangersDB(pDatabase);
     destroyUsers(uDatabase);
     destroyFlights(fDatabase);
     destroyReservs(rDatabase);
-    destroyPassangersDB(pDatabase);
     return 0;
 }

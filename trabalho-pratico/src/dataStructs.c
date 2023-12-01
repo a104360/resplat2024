@@ -18,20 +18,22 @@ typedef struct passangersDB {
 PassangersDatabase * createPassangerDatabase(){
     PassangersDatabase * db = malloc(sizeof(struct passangersDB));
     if (!db) {
-        // Handle error, for example, print an error message and exit.
         fprintf(stderr, "Error: Memory allocation failed for PassangersDatabase.\n");
         exit(EXIT_FAILURE);
     }
-    db->passangers = NULL;
     db->max = BUFFERSIZE;
     db->numPassangers = 0;
+    db->passangers = malloc(sizeof(Passanger *) * db->max);
+    for(int i = 0;i < db->max;i++) db->passangers[i] = NULL;
     return db;
 }
 
 void insertPassanger(void * dataStruct, void * passangerData){
+    //Casting the arguments
     PassangersDatabase * table = (PassangersDatabase *) dataStruct;
     Passanger * passanger = (Passanger *) passangerData;
-    if(table->numPassangers == 0){
+/*
+    if(table->numPassangers == 0){ // First insertion of the table
         table->passangers = malloc(sizeof(Passanger *) * (table->max));
         if(!table->passangers){
             if(table) free(table);
@@ -41,13 +43,13 @@ void insertPassanger(void * dataStruct, void * passangerData){
         table->passangers[table->numPassangers] = passanger;
         table->numPassangers++;
         return;
-    } else {
+
+    } else {*/
         if(table->numPassangers >= table->max){
-            Passanger **temp = realloc(table->passangers, (table->max * 2) * sizeof(Passanger *));
+            Passanger ** temp = realloc(table->passangers, (table->max * 2) * sizeof(Passanger *));
                 if (!temp) {
                     fprintf(stderr, "Error: Memory reallocation failed in insertPassanger.\n");
                     for(int i = 0;i < table->max;i++){
-                        free(table->passangers[i]);
                         table->passangers[i] = NULL;
                     }
                     free(table->passangers);
@@ -61,15 +63,20 @@ void insertPassanger(void * dataStruct, void * passangerData){
             }
         table->passangers[table->numPassangers] = passanger;
         table->numPassangers++;
-        }
+        //}
 }
 
 
 Passanger * lookupPassangerUID(const PassangersDatabase * database,const char * id){
     for(int i = 0;i < database->numPassangers;i++){
-        if (database->passangers[i] && strcoll(getPassangerUserId(database->passangers[i]), id) == 0){
+        char * uId = getPassangerUserId(database->passangers[i]);
+        if (database->passangers[i] && strcoll(uId, id) == 0){
+            free(uId);
+            uId = NULL;
             return database->passangers[i];
         }
+        free(uId);
+        uId = NULL;
     }
     return NULL;
 }
@@ -77,9 +84,12 @@ Passanger * lookupPassangerUID(const PassangersDatabase * database,const char * 
 Passanger * lookupPassangerFID(const PassangersDatabase * database,const char * id){
     if(database == NULL || id == NULL) return NULL;
     for(int i = 0;i < database->numPassangers;i++){
-        if (database->passangers[i] && strcoll(getPassangerFlightId(database->passangers[i]), id) == 0) {
+        char * fId = getPassangerFlightId(database->passangers[i]);
+        if (database->passangers[i] && strcoll(fId, id) == 0) {
+            free(fId);
             return database->passangers[i];
         }
+        free(fId);
     }
     return NULL;
 }
@@ -94,7 +104,7 @@ Passanger ** getAllPassangers(const PassangersDatabase * database){
 
 void destroyPassangersDB(PassangersDatabase * database){
     for(int i = 0;i < database->numPassangers;i++){
-        database->passangers[i] = NULL;
+        destroyPassanger(database->passangers[i]);
     }
     free(database->passangers);
     database->passangers = NULL;
