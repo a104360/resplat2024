@@ -5,6 +5,7 @@
 
 
 double getTotalSpentByUser(void ** userReservs){
+    if(userReservs == NULL) return -1;
     Reservation ** list = (Reservation **) userReservs; 
     int total = 0;
     for(int i = 0;list[i];i++){

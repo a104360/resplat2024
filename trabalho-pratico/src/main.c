@@ -317,7 +317,7 @@ int main(int argc,char **argv){
 
 
 
-    //readEntryFile(uDatabase,rDatabase,fDatabase,pDatabase,argc,argv);
+    readEntryFile(uDatabase,rDatabase,fDatabase,pDatabase,argc,argv);
 
     // Free everything used
     destroyPassangersDB(pDatabase);

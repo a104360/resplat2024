@@ -46,7 +46,7 @@ void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatab
         UserReservsDB * uRDatabase = getUserReservsDB(uDatabase,id);
         char * number_of_reservations = malloc(sizeof(char) * 10);
         snprintf(number_of_reservations,10,"%d",getNumReservs(uRDatabase));
-        destroyUserReservsDB(uRDatabase,rDatabaseSize);
+        //if(uRDatabase) destroyUserReservsDB(uRDatabase,rDatabaseSize);
 
         char * total_spent = malloc(sizeof(char) * 10);
         snprintf(total_spent,10,"%.3f",getTotalSpentByUser((void **) getUserReservs(uRDatabase)));

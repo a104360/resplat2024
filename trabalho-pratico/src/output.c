@@ -22,12 +22,16 @@ void outputQ1User(int F, char * name, char sex, int age, char * country_code , c
 
     memset(fileName,'\0',50);
 
-    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
+    if(outputFile == NULL){
+        perror("!!!File did not opened!!!\n");
+        return;
+    }
 
     if(name == NULL){
-        if(outputFile == NULL) fclose(outputFile);
+        if(outputFile != NULL) fclose(outputFile);
         return;
     }
 
@@ -66,11 +70,16 @@ void outputQ1Flight(int F, char * airline, char * plane_model , char * origin, c
     
     snprintf(fileName, 50, "Resultados/command%d_output.txt", commandAtual);
 
-
     FILE * outputFile = fopen(fileName, "a");
-    if(airline == NULL){
-        if(outputFile != NULL) fclose(outputFile);
+    if(outputFile == NULL){ 
         return;
+    }
+    
+    if(airline == NULL){
+        if(outputFile != NULL){ 
+        fclose(outputFile);
+        return;
+    }   
     }
 
     if(F == 0){

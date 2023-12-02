@@ -285,10 +285,6 @@ void allUserReservs(gpointer key ,gpointer value,gpointer userData){
 
 
 void destroyUserReservsDB(UserReservsDB * database, int hashSize){
-    for(int i = 0;i < hashSize;i++){
-
-        database->_userReservs[i] = NULL;
-    }
     free(database->_userReservs);
     database->_userReservs = NULL;
     free(database->userId);
@@ -317,15 +313,23 @@ UserFlightsDB * getUserFlightsDB(void * fDatabase,void * travels,const char * us
     FlightsDatabase allFlights = (FlightsDatabase) fDatabase;
     UserFlightsDB * book = malloc(sizeof(struct userFlightsDB));
     book->passangers = (PassangersDatabase *) travels;
-    book->flights = malloc(sizeof(Flight *) * g_hash_table_size((GHashTable *) allFlights));
-    book->numTravels = 0; 
     int max = getNumAllPassangers(book->passangers);
+    book->flights = malloc(sizeof(Flight *) * max);
+    book->numTravels = 0; 
     Passanger ** list = getAllPassangers(book->passangers); 
     for(int passangersList = 0;passangersList < max;passangersList++){
-        if(strcoll(getPassangerUserId(list[passangersList]),userId)){
-            book->flights[book->numTravels] = lookupFlight(allFlights,getPassangerFlightId(list[passangersList]));
-            book->numTravels++;
+        char * pUId = getPassangerUserId(list[passangersList]);
+        if(strcoll(pUId,userId)){
+            char * pFId = getPassangerFlightId(list[passangersList]);
+            Flight * flight = lookupFlight(allFlights,pFId);
+            if(pFId) free(pFId);
+            if(flight){
+                book->flights[book->numTravels] = flight;
+                book->numTravels++;
+            }
         }
+        free(pUId);
+        pUId = NULL;
     }
     return book;
 }
@@ -338,13 +342,15 @@ Flight ** getUserFlights(const UserFlightsDB * database){
 }
 
 void destroyUserFlightsDB(UserFlightsDB * database,int hashSize){
-    free(database->passangers);
-    database->passangers = NULL;
-    for(int i = 0;i < hashSize;i++){
-        database->flights[i] = NULL;
+    if(!database) return;
+    if(database->passangers){
+        free(database->passangers);
+        database->passangers = NULL;
     }
-    free(database->flights);
-    database->flights = NULL;
+    if(database->flights){
+        free(database->flights);
+        database->flights = NULL;
+    }
     free(database);
     database = NULL;
 }
