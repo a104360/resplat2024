@@ -353,16 +353,25 @@
 }
 
 // active vs inactive (all varitations)
-char * accStatusCheck(const char * line){
-    if(line == NULL) return NULL;
-    char * aux = strdup(line);
-    if(aux == NULL) return NULL;
-    if(tolower(aux[0]) == 'a' || tolower(aux[0]) == 'i'){
-        for(int i = 0; i < strlen(aux); i++){
+char* accStatusCheck(const char* line) {
+    if (line == NULL) return NULL;
+    
+    char* aux = strdup(line);
+    if (aux == NULL) return NULL;
+
+    int len = strlen(aux);
+
+    if (aux[0] == 'a' || aux[0] == 'A' || aux[0] == 'i' || aux[0] == 'I') {
+        for (int i = 0; i < len; i++) {
             aux[i] = tolower(aux[i]);
         }
     }
-    if(strcmp(aux,"active") == 0 || strcmp(aux,"inactive") == 0){ return aux;}
+
+    if (strcmp(aux, "active") == 0 || strcmp(aux, "inactive") == 0) {
+        return aux;
+    }
+    free(aux);
+    aux = NULL;
     return NULL;
 }
 
@@ -438,7 +447,7 @@ int breakfastCheck(const char * line){
 // *** The next 4 functions receive the full line ***  
 
 //Recieves a user and checks if the user is valid using the previus functions
- User * userCheck(const char * line){
+User * userCheck(const char * line){
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
@@ -559,7 +568,7 @@ int breakfastCheck(const char * line){
     
     //check userPayMethod
     char * payMethod = pay_methodCheck(token);
-    if(!payMethod || saveptr[0] == ';') { 
+    if(!payMethod || saveptr[0] == ';' || saveptr[0] == '\0' || saveptr[0] == '\n') { 
         NEXTSLOT(payMethod);
         ERRORSU(aux,user);
     }
@@ -569,13 +578,11 @@ int breakfastCheck(const char * line){
 
     //check user accountStatus
     char * string = accStatusCheck(token);
-    if(string == NULL) { 
+    if(string == NULL) {
         NEXTSLOT(string);
         ERRORSU(aux,user);
     }
-    bool accStat = false;
-    if(strcoll(string,"active") == 0) accStat = true;
-    setUserAccountStatus(user,accStat);
+    if(strcoll(string,"active") == 0){setUserAccountStatus(user,true);}else {setUserAccountStatus(user,false);} 
     NEXTSLOT(string);
     
 
