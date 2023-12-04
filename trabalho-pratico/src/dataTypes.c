@@ -79,7 +79,7 @@ typedef struct passanger{
 
 
 
-  void initUser(User * user){
+void initUser(User * user){
     if(!user) return;
     user->id = NULL;
     user->name = NULL;
@@ -95,7 +95,7 @@ typedef struct passanger{
     user->account_status = false;
 }
 
- User * createUser(){
+User * createUser(){
     User * u = NULL;
     //u = malloc(sizeof(struct user));
     u = g_new(User,1);
@@ -103,7 +103,7 @@ typedef struct passanger{
     return u;
 
 }
-  void destroyUser(User *user) {
+void destroyUser(User *user) {
     if(user) {
         if(user->id != NULL){ //user->id = NULL;
             free(user->id);
@@ -927,13 +927,13 @@ void copyFlight(Flight * dest,Flight * src){
 
 
 // *** Reservation related functions ***
- Reservation * createReservation(){
+Reservation * createReservation(){
     Reservation * r = malloc(sizeof(struct reservation));
     initReservation(r);
     return r;
 }
 
-  void initReservation(Reservation * reservation){
+void initReservation(Reservation * reservation){
     reservation->id = NULL;
     reservation->user_id = NULL;
     reservation->hotel_id = NULL;
@@ -950,7 +950,7 @@ void copyFlight(Flight * dest,Flight * src){
     reservation->comment = NULL;
 }
 
-  void destroyReservation(Reservation * r) {
+void destroyReservation(Reservation * r) {
     if (r != NULL) {
         if(r->id) {
             free(r->id);
@@ -991,7 +991,7 @@ size_t getReservSize(){
     return sizeof(struct reservation);
 }
 
-  void setReservId(Reservation * reserv,const char * line){
+void setReservId(Reservation * reserv,const char * line){
     if(reserv->id){
         free(reserv->id);
         reserv->id = NULL;
@@ -999,7 +999,7 @@ size_t getReservSize(){
     reserv->id = strdup(line);
 }
 
- char *getReservId(Reservation * reserv){
+char *getReservId(Reservation * reserv){
     if(reserv == NULL) return NULL;
     if(reserv->id == NULL) return NULL;
     if(reserv->id != NULL){
@@ -1010,26 +1010,17 @@ size_t getReservSize(){
 }
 
 
-  void setReservUserId(Reservation * reserv,const char * line){
+void setReservUserId(Reservation * reserv,const char * line){
     if(reserv->user_id){
-        if(strlen(line) > strlen(reserv->user_id)){
-            char * temp = realloc(reserv->user_id,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            reserv->user_id = temp;
-            return;
-        }else{
-            strncpy(reserv->user_id,line,strlen(reserv->user_id));
-            reserv->user_id[strlen(reserv->user_id)] = '\0';
-            return;
-        }
+        free(reserv->user_id);
+        reserv->user_id = NULL;
     }
-    reserv->user_id =strdup(line);
+    reserv->user_id = strdup(line);
 }
 
- char *getReservUserId(Reservation * reserv){
+char *getReservUserId(Reservation * reserv){
      if(reserv->user_id){
-        char * user_id =strdup(reserv->user_id);
+        char * user_id = strdup(reserv->user_id);
         return user_id;
     }
     return NULL;

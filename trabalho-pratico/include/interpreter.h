@@ -18,6 +18,6 @@ Time * secondDateQ8(const char *);
 
 char * airportName(const char *);
 
-void readEntryFile(UsersDatabase,ReservationsDatabase,FlightsDatabase,PassangersDatabase *,int, char **);
+void readEntryFile(const UsersDatabase,const ReservationsDatabase,const FlightsDatabase,const PassangersDatabase *,int, char **);
 
 #endif

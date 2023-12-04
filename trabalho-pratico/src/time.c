@@ -65,6 +65,7 @@ void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
 }
 
   void copyTime(Time * t,Time * aux){
+    if(t == NULL || aux == NULL) return;
     t->year = aux->year;
     t->mday = aux->mday;
     t->mon = aux->mon;

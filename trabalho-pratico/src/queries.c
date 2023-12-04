@@ -13,7 +13,12 @@
 
 #define BUFFERSIZE 100
 
-void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * pDatabase,const char * id,bool f){
+#define FREE(ptr) if(ptr){\
+    free(ptr);\
+    ptr = NULL;\
+}
+
+void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,const FlightsDatabase fDatabase,const PassangersDatabase * pDatabase,const char * id,bool f){
     int rDatabaseSize = g_hash_table_size(rDatabase);
     int fDatabaseSize = g_hash_table_size(fDatabase);
     char * analisa = malloc(sizeof(char) * 5);
@@ -29,6 +34,7 @@ void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatab
         User * user = lookupUser(uDatabase,id);
 
         if(getUserAccountStatus(user) == false){
+            outputQ1User(f,NULL,'\0',0,NULL,NULL,NULL,NULL,NULL);
             return;
         }
 
@@ -41,30 +47,25 @@ void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatab
         UserFlightsDB * uFDatabase = getUserFlightsDB(fDatabase,pDatabase,id);
         char * number_of_fights = malloc(sizeof(char) * 10);
         snprintf(number_of_fights,10,"%d",getNumFlights(uFDatabase));
-        destroyUserFlightsDB(uFDatabase,fDatabaseSize);
 
-        UserReservsDB * uRDatabase = getUserReservsDB(uDatabase,id);
+        UserReservsDB * uRDatabase = getUserReservsDB(rDatabase,id);
         char * number_of_reservations = malloc(sizeof(char) * 10);
         snprintf(number_of_reservations,10,"%d",getNumReservs(uRDatabase));
-        //if(uRDatabase) destroyUserReservsDB(uRDatabase,rDatabaseSize);
 
+        Reservation ** listReservs = getUserReservs(uRDatabase);
         char * total_spent = malloc(sizeof(char) * 10);
-        snprintf(total_spent,10,"%.3f",getTotalSpentByUser((void **) getUserReservs(uRDatabase)));
+        snprintf(total_spent,10,"%.3f",getTotalSpentByUser((void **) listReservs));
+        destroyUserFlightsDB(uFDatabase,fDatabaseSize);
+        destroyUserReservsDB(uRDatabase,rDatabaseSize);
         
         outputQ1User((int)f,name,sex,age,country_code,passaport,number_of_fights,number_of_reservations,total_spent);
 
-        free(name);
-        name = NULL;
-        free(country_code);
-        country_code = NULL;
-        free(passaport);
-        passaport = NULL;
-        free(number_of_fights);
-        number_of_fights = NULL;
-        free(number_of_reservations);
-        number_of_reservations = NULL;
-        free(total_spent);
-        total_spent = NULL;
+        FREE(name);
+        FREE(country_code);
+        FREE(passaport);
+        FREE(number_of_fights);
+        FREE(number_of_reservations);
+        FREE(total_spent);
         break;
     
     case 2: // ** Flight **
@@ -89,17 +90,17 @@ void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatab
 
         outputQ1Flight((int)f,airline,plane_model,origin,destination,schedule_departure_date,schedule_arrival_date,nPassangers,delay);
 
-        free(airline);
+        FREE(airline);
         airline = NULL;
-        free(plane_model);
+        FREE(plane_model);
         plane_model = NULL;
-        free(origin);
+        FREE(origin);
         origin = NULL;
-        free(destination);
+        FREE(destination);
         destination = NULL;
-        free(schedule_departure_date);
+        FREE(schedule_departure_date);
         schedule_departure_date = NULL;
-        free(schedule_arrival_date);
+        FREE(schedule_arrival_date);
         schedule_arrival_date = NULL;
 
 
@@ -119,20 +120,20 @@ void query1(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatab
         outputQ1Reservation((int)f,hotel_id,hotel_name,hotel_stars,begin_date,end_date,
         includes_breakfast,nights,total_price);
 
-        free(hotel_id);
+        FREE(hotel_id);
         hotel_id = NULL;
-        free(hotel_name);
+        FREE(hotel_name);
         hotel_name = NULL;
-        free(begin_date);
+        FREE(begin_date);
         begin_date = NULL;
-        free(end_date);
+        FREE(end_date);
         end_date = NULL;
         break;
     default:
         return;
         break;
     }
-    free(analisa);
+    FREE(analisa);
     analisa = NULL;
     return;
 }
@@ -148,13 +149,13 @@ const char * line,bool F){
     id = strtok_r(aux," ",&saveprt);
     tipo = strtok_r(NULL,"\n\0",&saveprt);
     if(aux){
-        free(aux);
+        FREE(aux);
         aux = NULL;
     } 
     User * user = lookupUser(uDatabase,id);
 
     if(getUserAccountStatus(user) == false){
-        free(user);
+        FREE(user);
         user = NULL;
         return;
     }
@@ -182,20 +183,20 @@ const char * line,bool F){
         outputQ2(f,rList1,r,fList1,f);
 
         destroyUserReservsDB(uRDatabase1,rDatabaseSize);
-        for(int i = 0; i < r;i++){ free(rList1[i]); rList1[i] = NULL;}
-        for(int i = 0; i < f;i++){ free(fList1[i]); fList1[i] = NULL;}
+        for(int i = 0; i < r;i++){ FREE(rList1[i]); rList1[i] = NULL;}
+        for(int i = 0; i < f;i++){ FREE(fList1[i]); fList1[i] = NULL;}
         destroyUserFlightsDB(uFDatabase1,fDatabaseSize);
 
         if(id){
-            free(id);
+            FREE(id);
             id = NULL;
         }
         if(tipo){
-            free(tipo);
+            FREE(tipo);
             tipo = NULL;
         }
         if(saveprt){
-            free(saveprt);
+            FREE(saveprt);
             saveprt = NULL;
         }
         break;
@@ -212,7 +213,7 @@ const char * line,bool F){
         outputQ2(F,NULL,0,fList2,max2);
 
         for(int i = 0; i < max2;i++){
-            free(fList2[i]);
+            FREE(fList2[i]);
             fList2[i] = NULL;
         }
         destroyUserFlightsDB(uFDatabase2,fDatabaseSize);
@@ -232,7 +233,7 @@ const char * line,bool F){
 
 
         for(int i = 0; i < max3;i++){ 
-            free(rList3[i]);    
+            FREE(rList3[i]);    
             rList3[i] = NULL ; 
         } 
         destroyUserReservsDB(uRDatabase3,rDatabaseSize);
@@ -244,7 +245,7 @@ const char * line,bool F){
         break;
     }
     
-    free(user);
+    FREE(user);
     user = NULL;
     return;
 }
@@ -267,10 +268,10 @@ void query4(ReservationsDatabase rDatabase,const char * id,bool f){
     outputQ4(f,rList,getNumReservas(hDatabase));
 
     for(int i = 0; i < getNumReservas(hDatabase);i++){
-        free(rList[i]);
+        FREE(rList[i]);
         rList[i] = NULL;
     }
-    free(rList);
+    FREE(rList);
     rList = NULL;
 
     destroyHotelDatabase(hDatabase,rDatabaseSize);
@@ -288,10 +289,10 @@ void query5(FlightsDatabase fDatabase,Time * ti,Time * tf,const char * id,bool f
     outputQ5(f,fList,max);
 
     for(int i = 0;i < max;i++){
-        free(fList[i]);
+        FREE(fList[i]);
         fList[i] = NULL;
     }
-    free(fList);
+    FREE(fList);
     fList = NULL;
     destroyAirport(airportFlights,fDatabaseSize);
 }
@@ -320,7 +321,7 @@ void query8(ReservationsDatabase rDatabase,const char * id,Time * begin,Time * e
 
     outputQ8(total,f);
 
-    free(rList);
+    FREE(rList);
     rList = NULL;
 
     destroyHotelDatabase(hDatabase,rDatabaseSize);

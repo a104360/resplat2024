@@ -28,15 +28,6 @@ User * lookupUser(void * table ,const char * id){
     return user;
 }
 
-
-void destroyUDB(gpointer key,gpointer user,gpointer data){
-    if(!user && !key) return;
-    if(user){
-        destroyUser(user);
-    }
-    g_hash_table_remove((GHashTable *)data,key);
-}
-
 void destroyUsers(UsersDatabase database){
     //g_hash_table_foreach(database,destroyUDB,NULL);
     g_hash_table_destroy(database);
@@ -71,13 +62,6 @@ Flight * lookupFlight(void * table ,const char * id){
     return flight;
 }
 
-
-void destroyFDB(gpointer key,gpointer flight,gpointer data){
-    if(!flight && !key) return;
-    if(flight){
-        destroyFlight(flight);
-    }
-}
 
 void destroyFlights(FlightsDatabase database){
     //g_hash_table_foreach(database,destroyFDB,NULL); 
@@ -127,11 +111,6 @@ void insertReserv(void * structs,Reservation * reserv){
 Reservation * lookupReserv(void * table,const char * reservId){
     Reservation * reserv = g_hash_table_lookup((ReservationsDatabase ) table,(gconstpointer) reservId);
     return reserv;
-}
-
-void destroyRDB(gpointer key,gpointer reservation,gpointer reservationData){
-    if(!key && !reservation) return;
-    destroyReservation((Reservation *) reservation);
 }
 
 void destroyReservs(ReservationsDatabase database){
@@ -257,8 +236,8 @@ UserReservsDB * getUserReservsDB(void * table,const char * userId){
     UserReservsDB * reservs = malloc(sizeof(struct userReservsDB));
     reservs->userId = strdup(userId);
     reservs->size = 0;
-    reservs->_userReservs = malloc(sizeof(Reservation *) * g_hash_table_size((UsersDatabase) table));
-    g_hash_table_foreach((UsersDatabase) table,allUserReservs,reservs);
+    reservs->_userReservs = malloc(sizeof(Reservation *) * g_hash_table_size((ReservationsDatabase) table));
+    g_hash_table_foreach((ReservationsDatabase) table,allUserReservs,reservs);
     return reservs;
 }
 
@@ -272,15 +251,17 @@ int getNumReservs(const UserReservsDB * userData){
 
 
 void allUserReservs(gpointer key ,gpointer value,gpointer userData){
-  UserReservsDB * array = (UserReservsDB *) userData;
-  Reservation * reserv = (Reservation *) value;
-  static int i = 0;
- 
-  if(!strcoll(getReservUserId(reserv),array->userId)){
-      array->_userReservs[i] = reserv;
-      array->size++;
-      i++;
-  }
+    UserReservsDB * array = (UserReservsDB *) userData;
+    Reservation * reserv = (Reservation *) value;
+    static int i = 0;
+    char * rId = getReservUserId(reserv);
+
+    if(!strcoll(rId,array->userId)){
+        array->_userReservs[i] = reserv;
+        array->size++;
+        i++;
+    }
+    free(rId);
 }
 
 
@@ -308,12 +289,12 @@ typedef struct userFlightsDB {
 } UserFlightsDB;
 
 
-
+// Args: Flights,Passangers,Id
 UserFlightsDB * getUserFlightsDB(void * fDatabase,void * travels,const char * userId){
     FlightsDatabase allFlights = (FlightsDatabase) fDatabase;
     UserFlightsDB * book = malloc(sizeof(struct userFlightsDB));
     book->passangers = (PassangersDatabase *) travels;
-    int max = getNumAllPassangers(book->passangers);
+    int max = g_hash_table_size(allFlights);
     book->flights = malloc(sizeof(Flight *) * max);
     book->numTravels = 0; 
     Passanger ** list = getAllPassangers(book->passangers); 
@@ -343,10 +324,6 @@ Flight ** getUserFlights(const UserFlightsDB * database){
 
 void destroyUserFlightsDB(UserFlightsDB * database,int hashSize){
     if(!database) return;
-    if(database->passangers){
-        free(database->passangers);
-        database->passangers = NULL;
-    }
     if(database->flights){
         free(database->flights);
         database->flights = NULL;
@@ -403,11 +380,6 @@ Passanger ** getFlightPassangersBook(const FlightPassangers * database){
 }
 
 void destroyFlightPassangers(FlightPassangers * database,int hashSize){
-    if(database->allPassangers) free(database->allPassangers);
-    database->allPassangers = NULL;
-    for(int i = 0;i < hashSize;i++){
-        database->list[i] = NULL;
-    }
     if(database->list) free(database->list);
     database->list = NULL;
     if(database) free(database);
@@ -468,19 +440,18 @@ Flight ** getAirportFlights(AirportDB * db){
 }
 
 void destroyAirport(AirportDB * db,int hashSize){
-    if(db->airport) free(db->airport);
-    db->airport = NULL;
-    if(db->f) destroyTime(db->f);
-    db->f = NULL;
-    if(db->l) destroyTime(db->l);
-    db->l = NULL;
-    for(int i = 0;i < hashSize;i++){
-        db->fList[i] = NULL;
+    if(db->airport){ 
+        free(db->airport);
+        db->airport = NULL;
     }
-    if(db->fList) free(db->fList);
-    db->fList = NULL;
-    if(db) free(db);
-    db = NULL;
+    if(db->fList){
+        free(db->fList);
+        db->fList = NULL;
+    }
+    if(db){
+        free(db);
+        db = NULL;
+    }
 }
 
 

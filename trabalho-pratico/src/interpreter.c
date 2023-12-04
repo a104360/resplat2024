@@ -92,7 +92,7 @@ char * airportName(const char * line){
     return token;
 }
 
-void readEntryFile(UsersDatabase uDatabase,ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * pDatabase,int agrc, char **argv){
+void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDatabase,const FlightsDatabase fDatabase,const PassangersDatabase * pDatabase,int agrc, char **argv){
     if(uDatabase == NULL || rDatabase == NULL || fDatabase == NULL || pDatabase == NULL) return;
     FILE * comandos = fopen(argv[2],"r");
 

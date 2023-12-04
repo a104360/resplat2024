@@ -3,6 +3,7 @@
 #include "../include/dataTypes.h"
 #include "../include/catalogs.h"
 #include "../include/dataStructs.h"
+#include "../include/statistics.h"
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -318,6 +319,17 @@ int main(int argc,char **argv){
 
 
     readEntryFile(uDatabase,rDatabase,fDatabase,pDatabase,argc,argv);
+    /*UserReservsDB * reservs = getUserReservsDB(rDatabase,"JéssiTavares910");
+
+    Reservation ** list = getUserReservs(reservs);
+
+    double n = getTotalSpentByUser(list);
+    printf("Jessica Tavares spent the total amount of %f on the following items:\n\n",n);
+    for(int i = 0; i < getNumReservs(reservs);i++){
+        char * temp = getReservId(list[i]);
+        printf("JéssiTavares910 : %s\n\n", temp);
+        free(temp);
+    }*/
 
     // Free everything used
     destroyPassangersDB(pDatabase);
