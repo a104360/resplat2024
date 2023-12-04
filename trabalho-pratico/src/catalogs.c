@@ -294,20 +294,20 @@ UserFlightsDB * getUserFlightsDB(void * fDatabase,void * travels,const char * us
     FlightsDatabase allFlights = (FlightsDatabase) fDatabase;
     UserFlightsDB * book = malloc(sizeof(struct userFlightsDB));
     book->passangers = (PassangersDatabase *) travels;
-    int max = g_hash_table_size(allFlights);
+    int max = getNumAllPassangers(book->passangers);
     book->flights = malloc(sizeof(Flight *) * max);
     book->numTravels = 0; 
     Passanger ** list = getAllPassangers(book->passangers); 
     for(int passangersList = 0;passangersList < max;passangersList++){
         char * pUId = getPassangerUserId(list[passangersList]);
-        if(strcoll(pUId,userId)){
+        if(strcoll(pUId,userId) == 0){
             char * pFId = getPassangerFlightId(list[passangersList]);
             Flight * flight = lookupFlight(allFlights,pFId);
-            if(pFId) free(pFId);
             if(flight){
                 book->flights[book->numTravels] = flight;
                 book->numTravels++;
             }
+            if(pFId) free(pFId);
         }
         free(pUId);
         pUId = NULL;

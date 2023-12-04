@@ -43,7 +43,7 @@ void outputQ1User(int F, char * name, char sex, int age, char * country_code , c
         fprintf(outputFile, "%s;", passport);
         fprintf(outputFile, "%s;", number_of_flights);
         fprintf(outputFile, "%s;", number_of_reservations);
-        fprintf(outputFile, "%s", total_spent);
+        fprintf(outputFile, "%s\n", total_spent);
     }else{
         fprintf(outputFile, "--- 1 ---\n");
         fprintf(outputFile, "name: %s\n", name);

@@ -9,13 +9,6 @@ double getTotalSpentByUser(void ** userReservs){
     Reservation ** list = (Reservation **) userReservs; 
     double total = 0;
     for(int i = 0;list[i];i++){
-        /*
-        total += (getReservPricePerNight(list[i]) * dayDiff) + ((dayDiff / 100) * getReservCityTax(list[i]));
-        free(reservBeginDate);
-        reservBeginDate = NULL;
-        free(reservEndDate);
-        reservEndDate = NULL;
-        */
         Time * reservBeginDate = getReservBeginDate(list[i]);
         Time * reservEndDate = getReservEndDate(list[i]);
         int dayDiff = numberOfDays(reservBeginDate,reservEndDate);
