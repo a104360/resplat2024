@@ -14,6 +14,8 @@ double getTotalSpentByUser(void ** userReservs){
         int dayDiff = numberOfDays(reservBeginDate,reservEndDate);
         if(dayDiff == 0) continue;
         total += getTotalSpentOnReserv(list[i],dayDiff);
+        destroyTime(reservBeginDate);
+        destroyTime(reservEndDate);
     }
     return total;
 }

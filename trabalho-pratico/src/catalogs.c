@@ -115,7 +115,7 @@ Reservation * lookupReserv(void * table,const char * reservId){
 
 void destroyReservs(ReservationsDatabase database){
     //g_hash_table_foreach(database,destroyRDB,NULL);
-    g_hash_table_unref(database);
+    g_hash_table_destroy(database);
 }
 
 
@@ -232,17 +232,25 @@ typedef struct userReservsDB{
 } UserReservsDB;
 
 
-UserReservsDB * getUserReservsDB(void * table,const char * userId){
+static int i = 0;
+
+UserReservsDB * getUserReservsDB(const void * table,const char * userId){
     UserReservsDB * reservs = malloc(sizeof(struct userReservsDB));
     reservs->userId = strdup(userId);
     reservs->size = 0;
-    reservs->_userReservs = malloc(sizeof(Reservation *) * g_hash_table_size((ReservationsDatabase) table));
-    g_hash_table_foreach((ReservationsDatabase) table,allUserReservs,reservs);
+    reservs->_userReservs = malloc(sizeof(Reservation *) * 1000);
+    if(reservs->_userReservs == NULL){
+        perror("Memory was not allocated for the users reservs list!\n");
+        return NULL;
+    }
+    i = 0;
+    g_hash_table_foreach((const ReservationsDatabase) table,allUserReservs,(gpointer) reservs);
+
     return reservs;
 }
 
 Reservation ** getUserReservs(const UserReservsDB * userData){
-    return userData->_userReservs;
+    return (Reservation **) userData->_userReservs;
 }
 
 int getNumReservs(const UserReservsDB * userData){
@@ -253,11 +261,10 @@ int getNumReservs(const UserReservsDB * userData){
 void allUserReservs(gpointer key ,gpointer value,gpointer userData){
     UserReservsDB * array = (UserReservsDB *) userData;
     Reservation * reserv = (Reservation *) value;
-    static int i = 0;
     char * rId = getReservUserId(reserv);
 
     if(!strcoll(rId,array->userId)){
-        array->_userReservs[i] = reserv;
+        array->_userReservs[i] = (Reservation *) value;
         array->size++;
         i++;
     }

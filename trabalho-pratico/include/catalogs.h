@@ -77,7 +77,7 @@ void destroyHotelDatabase(HotelDatabase *,int);
 
 typedef struct userReservsDB UserReservsDB;
 
-UserReservsDB * getUserReservsDB(void *,const char *);
+UserReservsDB * getUserReservsDB(const void *,const char *);
 
 Reservation ** getUserReservs(const UserReservsDB *);
 

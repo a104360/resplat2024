@@ -48,7 +48,7 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         char * number_of_fights = malloc(sizeof(char) * 10);
         snprintf(number_of_fights,10,"%d",getNumFlights(uFDatabase));
 
-        UserReservsDB * uRDatabase = getUserReservsDB((void *) rDatabase,id);
+        UserReservsDB * uRDatabase = getUserReservsDB((const void *) rDatabase,id);
         char * number_of_reservations = malloc(sizeof(char) * 10);
         snprintf(number_of_reservations,10,"%d",getNumReservs(uRDatabase));
 
@@ -127,13 +127,9 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         includes_breakfast,nights,total_price);
 
         FREE(hotel_id);
-        hotel_id = NULL;
         FREE(hotel_name);
-        hotel_name = NULL;
         FREE(begin_date);
-        begin_date = NULL;
         FREE(end_date);
-        end_date = NULL;
         
         break;
     default:
@@ -141,7 +137,6 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         break;
     }
     FREE(analisa);
-    analisa = NULL;
     return;
 }
 
