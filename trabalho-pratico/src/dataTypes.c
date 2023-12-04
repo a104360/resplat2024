@@ -448,10 +448,12 @@ void setUserPayMethod(User * user ,const char * line){
 int getUserAge(User * user){
     Time * userBday = getUserBday(user);
     int n = PYEAR - (getYear(userBday));
-    if(PDAY >= getMday(userBday))
-        if(PMON >= getMon(userBday))
-            return n;
-    return n - 1;
+    if(PMON >= getMon(userBday)){
+        if(PDAY >= getMday(userBday)){
+            return n + 1;
+        }
+    }
+    return n;
 }
 
 void copyUser(User * dest,User * src){
