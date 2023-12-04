@@ -170,7 +170,7 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
 
     memset(fileName,'\0',50);
 
-    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
 
@@ -226,10 +226,13 @@ void outputQ3(bool f,double rating){
 
     memset(fileName,'\0',50);
 
-    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
-
+    if(!outputFile){
+        perror("Query 3 command line did not open, probably file name wrong.\n");
+        return;
+    }
 
     if(f == true){
         fprintf(outputFile,"--- 1 ---\n%.3f\n",rating);
@@ -246,9 +249,13 @@ void outputQ4(bool f,Reservation ** rList,int max){
 
     memset(fileName,'\0',50);
 
-    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    snprintf(fileName, 49 , "Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
+    if(!outputFile){
+        perror("Query 4 command line did not open, probably file name wrong.\n");
+        return;
+    }
 
     if(f == true){
         for(int i = 0; i < max;i++){
@@ -278,9 +285,13 @@ void outputQ5(bool f, Flight ** fList,int max){
 
     memset(fileName,'\0',50);
 
-    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
+    if(!outputFile){
+        perror("Query 5 command line did not open, probably file name wrong.\n");
+        return;
+    }
     if(f == true){
         for(int i = 0;i < max;i++){
             fprintf(outputFile,"--- %d ---\n",i);
@@ -310,9 +321,14 @@ void outputQ8(double revenue, bool f){
 
     memset(fileName,'\0',50);
 
-    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
+    if(!outputFile){
+        perror("Query 8 command line did not open, probably file name wrong.\n");
+        return;
+    }
+
     if(f== true){
         fprintf(outputFile,"--- 1 ---\n");
         fprintf(outputFile,"revenue: %.3f\n",revenue);
