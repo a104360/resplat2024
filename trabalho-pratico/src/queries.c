@@ -44,11 +44,11 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         char * country_code = getUserCountryCode(user);
         char * passaport = getUserPassport(user);
 
-        UserFlightsDB * uFDatabase = getUserFlightsDB(fDatabase,pDatabase,id);
+        UserFlightsDB * uFDatabase = getUserFlightsDB((void *) fDatabase,(void *) pDatabase,id);
         char * number_of_fights = malloc(sizeof(char) * 10);
         snprintf(number_of_fights,10,"%d",getNumFlights(uFDatabase));
 
-        UserReservsDB * uRDatabase = getUserReservsDB(rDatabase,id);
+        UserReservsDB * uRDatabase = getUserReservsDB((void *) rDatabase,id);
         char * number_of_reservations = malloc(sizeof(char) * 10);
         snprintf(number_of_reservations,10,"%d",getNumReservs(uRDatabase));
 
@@ -82,7 +82,7 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         char * schedule_arrival_date = timeToString(getFlightSArrivalDate(flight));
         
 
-        FlightPassangers * book = getFlightPassangers(fDatabase,pDatabase,id);
+        FlightPassangers * book = getFlightPassangers((void *) fDatabase,(void *) pDatabase,id);
         int nPassangers = getNumPassangers(book);
         destroyFlightPassangers(book,fDatabaseSize);
 
@@ -138,8 +138,7 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
     return;
 }
 
-void query2(UsersDatabase uDatabase, ReservationsDatabase rDatabase,FlightsDatabase fDatabase,PassangersDatabase * pDatabase,
-const char * line,bool F){
+void query2(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,const FlightsDatabase fDatabase,const PassangersDatabase * pDatabase,const char * line,bool F){
     int rDatabaseSize = g_hash_table_size(rDatabase);
     int fDatabaseSize = g_hash_table_size(fDatabase);
     char * aux = strdup(line);
@@ -168,8 +167,8 @@ const char * line,bool F){
     switch (flag)
     {
     case 1: // SEM ARGUMENTOS
-        UserFlightsDB * uFDatabase1 = getUserFlightsDB(fDatabase,pDatabase,id);
-        UserReservsDB * uRDatabase1 = getUserReservsDB(rDatabase,id);
+        UserFlightsDB * uFDatabase1 = getUserFlightsDB((void *) fDatabase,(void *) pDatabase,id);
+        UserReservsDB * uRDatabase1 = getUserReservsDB((void *) rDatabase,id);
         
         Reservation ** rList1 = getUserReservs(uRDatabase1);
         Flight ** fList1 = getUserFlights(uFDatabase1);
@@ -202,7 +201,7 @@ const char * line,bool F){
         break;
 
     case 2: // FLIGHT
-        UserFlightsDB * uFDatabase2 = getUserFlightsDB(fDatabase,pDatabase,id);
+        UserFlightsDB * uFDatabase2 = getUserFlightsDB((void *) fDatabase,(void *) pDatabase,id);
         
         Flight ** fList2 = getUserFlights(uFDatabase2);
 

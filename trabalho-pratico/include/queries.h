@@ -11,7 +11,7 @@
 void query1(const UsersDatabase, const ReservationsDatabase ,const FlightsDatabase ,const PassangersDatabase *,const char *,bool);
 
 //listar voos ou reservas de um user !!atencao ao enunciado!!
-void query2(UsersDatabase,ReservationsDatabase,FlightsDatabase,PassangersDatabase *,const char *,bool);
+void query2(const UsersDatabase,const ReservationsDatabase,const FlightsDatabase,const PassangersDatabase *,const char *,bool);
 
 //apresentar classificacao media de um hotel, atraves do identificador
 void query3(ReservationsDatabase,const char *,bool);

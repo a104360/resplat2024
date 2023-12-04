@@ -43,7 +43,7 @@ void outputQ1User(int F, char * name, char sex, int age, char * country_code , c
         fprintf(outputFile, "%s;", passport);
         fprintf(outputFile, "%s;", number_of_flights);
         fprintf(outputFile, "%s;", number_of_reservations);
-        fprintf(outputFile, "%s;", total_spent);
+        fprintf(outputFile, "%s", total_spent);
     }else{
         fprintf(outputFile, "--- 1 ---\n");
         fprintf(outputFile, "name: %s\n", name);
@@ -90,7 +90,7 @@ void outputQ1Flight(int F, char * airline, char * plane_model , char * origin, c
         fprintf(outputFile, "%s;", schedule_departure_date);
         fprintf(outputFile, "%s;", schedule_arrival_date);
         fprintf(outputFile, "%d;", passengers);
-        fprintf(outputFile, "%d;", delay);
+        fprintf(outputFile, "%d\n", delay);
     }else{
         fprintf(outputFile, "--- 1 ---\n");
         fprintf(outputFile, "airline: %s\n", airline);
@@ -132,7 +132,7 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
         fprintf(outputFile, "%s;", end_date);
         fprintf(outputFile, "%d;", includes_breakfast);
         fprintf(outputFile, "%d;", nights);
-        fprintf(outputFile, "%.3f;", total_price);
+        fprintf(outputFile, "%.3f\n", total_price);
     }else{
         fprintf(outputFile, "--- 1 ---\n");
         fprintf(outputFile, "hotel_id: %s\n", hotel_id);

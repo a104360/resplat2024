@@ -133,10 +133,10 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
             //QUERIE 1
             }else {
                 if(linhaLimpa[1] == 'F'){
-                    query1(uDatabase,rDatabase,fDatabase,pDatabase,&linhaLimpa[3],true);
+                    query1((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassangersDatabase *) pDatabase,&linhaLimpa[3],true);
                     
                 }else {
-                    query1(uDatabase,rDatabase,fDatabase,pDatabase,&linhaLimpa[2],false);
+                    query1((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassangersDatabase *) pDatabase,&linhaLimpa[2],false);
                     
                 }
             }
@@ -147,10 +147,10 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
         case '2':
 
             if(linhaLimpa[1] == 'F'){
-                    query2(uDatabase,rDatabase,fDatabase,pDatabase,&linhaLimpa[3],true);
+                    query2((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassangersDatabase *) pDatabase,&linhaLimpa[3],true);
                     
                 }else {
-                    query2(uDatabase,rDatabase,fDatabase,pDatabase,&linhaLimpa[2],false);
+                    query2((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassangersDatabase *) pDatabase,&linhaLimpa[2],false);
                     
                 }
 
