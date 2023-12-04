@@ -26,8 +26,8 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
     analisa[4] = '\0';
     int flag = 0;
     if(strcoll(analisa,"Book") == 0) flag = 3; //Reservation
-    if(isdigit(analisa[0])) flag = 2;//Flights
-    if(isalpha(analisa[0])) flag = 1;//User
+    if(isdigit(analisa[0]) && flag == 0) flag = 2;//Flights
+    if(isalpha(analisa[0]) && flag == 0) flag = 1;//User
     switch (flag)
     {
     case 1: // ** User ** 
@@ -66,6 +66,8 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         FREE(number_of_fights);
         FREE(number_of_reservations);
         FREE(total_spent);
+        
+        
         break;
     
     case 2: // ** Flight **
@@ -108,6 +110,10 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
 
     case 3: // ** Reservation **
         Reservation * reserv = lookupReserv(rDatabase,id);
+        if(!reserv){
+            outputQ1Reservation(f,NULL,NULL,-1,NULL,NULL,false,0,0);
+            return;
+        } 
         char * hotel_id = getReservHotelId(reserv);
         char * hotel_name = getReservHotelName(reserv);
         int hotel_stars = getReservHotelStars(reserv);
@@ -115,7 +121,7 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         char * end_date = timeToString(getReservEndDate(reserv));
         int nights = numberOfDays(getReservBeginDate(reserv),getReservEndDate(reserv));
         bool includes_breakfast = getReservBreakfast(reserv);
-        double total_price = getTotalSpentOnReserv(reserv,-1);
+        double total_price = getTotalSpentOnReserv(reserv,nights);
 
         outputQ1Reservation((int)f,hotel_id,hotel_name,hotel_stars,begin_date,end_date,
         includes_breakfast,nights,total_price);
@@ -128,6 +134,7 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         begin_date = NULL;
         FREE(end_date);
         end_date = NULL;
+        
         break;
     default:
         return;

@@ -115,9 +115,13 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
 
     memset(fileName,'\0',50);
 
-    snprintf(fileName, strlen(fileName), "../Resultados/command%d_output.txt", commandAtual);
+    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
 
     FILE * outputFile = fopen(fileName, "a");
+    if(!outputFile){
+        perror("Query 1 reservation case did not opened the file\n");
+        return;
+    }
 
     if(hotel_id == NULL){
         if(outputFile == NULL) fclose(outputFile);
@@ -130,7 +134,10 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
         fprintf(outputFile, "%d;", hotel_stars);
         fprintf(outputFile, "%s;", begin_date);
         fprintf(outputFile, "%s;", end_date);
-        fprintf(outputFile, "%d;", includes_breakfast);
+        if(includes_breakfast == 0){
+            fprintf(outputFile, "False;");
+        }else fprintf(outputFile, "True;");
+        //fprintf(outputFile, "%d;", includes_breakfast);
         fprintf(outputFile, "%d;", nights);
         fprintf(outputFile, "%.3f\n", total_price);
     }else{
@@ -140,7 +147,10 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
         fprintf(outputFile, "hotel_stars: %d\n", hotel_stars);
         fprintf(outputFile, "begin_date: %s\n", begin_date);
         fprintf(outputFile, "end_date: %s\n", end_date);
-        fprintf(outputFile, "includes_breakfast: %d\n", includes_breakfast);
+        if(includes_breakfast == 0){
+            fprintf(outputFile, "includes_breakfast: False;");
+        }else fprintf(outputFile, "includes_breakfast: True;");
+        //fprintf(outputFile, "includes_breakfast: %d\n", includes_breakfast);
         fprintf(outputFile, "nights: %d\n", nights);
         fprintf(outputFile, "total_price: %.3f\n", total_price);
     }
