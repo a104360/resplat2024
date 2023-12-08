@@ -63,7 +63,7 @@ HotelDatabase * getHotelDataBase(void *,const char *,Time *,Time *);
 
 void allHotelReservs(gpointer , gpointer , gpointer );
 
-void destroyHotelDatabase(HotelDatabase *,int);
+void destroyHotelDatabase(HotelDatabase *);
 
 
 
@@ -118,7 +118,7 @@ void destroyFlightPassangers(FlightPassangers *,int);
 
 typedef struct airportDB AirportDB;
 
-AirportDB * getAirportDB(FlightsDatabase,const char *,Time *,Time *);
+AirportDB * getAirportDB(const FlightsDatabase,const char *,Time *,Time *);
 
 void checkAirports(gpointer,gpointer,gpointer);
 

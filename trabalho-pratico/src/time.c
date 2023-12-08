@@ -105,7 +105,8 @@ void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
 }
 
 int numberOfDays(Time * start,Time * end){
-    return (end->mday - start->mday);
+    if(end->mday > start->mday) return (end->mday - start->mday);
+    else return(start->mday - end->mday);
 }
 
 

@@ -1,14 +1,18 @@
 #ifndef SORT_H
 #define SORT_H
-#include "../include/dataTypes.h"
-
-void mergeF(Flight ** arr, int l, int m, int r);
-
-void mergeSortF(Flight ** arr, int l, int r);
 
 
-void mergeR(Reservation ** arr, int l, int m, int r);
+/*
+Sorts an array of pointers, requesting as arguments: 
+    ARRAY of pointers 
+    LENGTH of the array
+    TYPE of what is store in the array (Reservation/Flight)
+*/ 
+void mergeSort(void **,int,const char *);
 
-void mergeSortR(Reservation ** arr, int l, int r);
+void mSortRecursion(void **,int,int,const char *);
+
+void mergeSortedArrays(void **,int,int,int,const char *);
+
 
 #endif

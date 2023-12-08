@@ -139,6 +139,7 @@ void destroyReservs(ReservationsDatabase database){
 
 
 
+static int i = 0;
 
 
 
@@ -177,6 +178,7 @@ HotelDatabase * getHotelDataBase(void * dataStruct,const char * hotelId,Time * b
     reservs->end = end;
     reservs->numReservas = 0;
     reservs->sumRatings = 0;
+    i = 0;
     reservs->_hotelReservs = malloc(sizeof(Reservation *) * g_hash_table_size((GHashTable *) dataStruct));
     g_hash_table_foreach((GHashTable *)dataStruct,allHotelReservs,reservs);
     return reservs;
@@ -186,35 +188,35 @@ HotelDatabase * getHotelDataBase(void * dataStruct,const char * hotelId,Time * b
 void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
     HotelDatabase * array = (HotelDatabase *) hotelData;
     Reservation * reservation = (Reservation *)value;
-    static int i = 0;
+    char * hotelId = getReservHotelId(reservation);
+    Time * beginDate = getReservBeginDate(reservation);
+    Time * endDate = getReservEndDate(reservation);
 
     if(array->begin != NULL && array->end != NULL){
-        if (!strcoll(getReservHotelId(reservation),array->hotel_id) && compareTimes(getReservBeginDate(reservation),array->end) && compareTimes(array->begin,getReservEndDate(reservation))) {
+        if (!strcoll(hotelId,array->hotel_id) && compareTimes(beginDate,array->end) && compareTimes(array->begin,endDate)) {
           array->_hotelReservs[i] = reservation;
           array->sumRatings += getReservRating(reservation);
           array->numReservas++;
           i++;
         }
     }else{
-        if (!strcoll(getReservHotelId(reservation),array->hotel_id)) {
+        if (!strcoll(hotelId,array->hotel_id)) {
           array->_hotelReservs[i] = reservation;
           array->sumRatings += getReservRating(reservation);
           array->numReservas++;
           i++;
         }
     }
+    free(hotelId);
 }
 
-void destroyHotelDatabase(HotelDatabase * hotel, int hashSize){
+void destroyHotelDatabase(HotelDatabase * hotel){
     free(hotel->hotel_id);
     hotel->hotel_id = NULL;
-    for(int i = 0;i < hashSize;i++){
-        hotel->_hotelReservs[i] = NULL;
-    }
+    
     free(hotel->_hotelReservs);
     hotel->_hotelReservs = NULL;
-    destroyTime(hotel->begin);
-    destroyTime(hotel->end);
+
     free(hotel);
     hotel = NULL;
 }
@@ -232,7 +234,6 @@ typedef struct userReservsDB{
 } UserReservsDB;
 
 
-static int i = 0;
 
 UserReservsDB * getUserReservsDB(const void * table,const char * userId){
     UserReservsDB * reservs = malloc(sizeof(struct userReservsDB));
@@ -242,6 +243,9 @@ UserReservsDB * getUserReservsDB(const void * table,const char * userId){
     if(reservs->_userReservs == NULL){
         perror("Memory was not allocated for the users reservs list!\n");
         return NULL;
+    }
+    for(int i = 0;i < 1000;i++){
+        reservs->_userReservs[i] = NULL;
     }
     i = 0;
     g_hash_table_foreach((const ReservationsDatabase) table,allUserReservs,(gpointer) reservs);
@@ -303,11 +307,12 @@ UserFlightsDB * getUserFlightsDB(void * fDatabase,void * travels,const char * us
     book->passangers = (PassangersDatabase *) travels;
     int max = getNumAllPassangers(book->passangers);
     book->flights = malloc(sizeof(Flight *) * max);
+    for(int i = 0;i < max;book->flights[i] = NULL, i++);
     book->numTravels = 0; 
     Passanger ** list = getAllPassangers(book->passangers); 
     for(int passangersList = 0;passangersList < max;passangersList++){
         char * pUId = getPassangerUserId(list[passangersList]);
-        if(strcoll(pUId,userId) == 0){
+        if(!strcoll(pUId,userId)){
             char * pFId = getPassangerFlightId(list[passangersList]);
             Flight * flight = lookupFlight(allFlights,pFId);
             if(flight){
@@ -326,7 +331,7 @@ int getNumFlights(const UserFlightsDB * book){
 }
 
 Flight ** getUserFlights(const UserFlightsDB * database){
-    return database->flights;
+    return (Flight **) database->flights;
 }
 
 void destroyUserFlightsDB(UserFlightsDB * database,int hashSize){
@@ -370,10 +375,12 @@ FlightPassangers * getFlightPassangers(void * fDatabase,void * travels,const cha
         return book;
     }
     for(int passangersList = 0;passangersList < max;passangersList++){
-        if(strcoll(getPassangerFlightId(pList[passangersList]),flightId) == 0){
-            book->list[book->numPassangers] = lookupPassangerFID(book->allPassangers,getPassangerFlightId(pList[passangersList]));
+        char * flight_id = getPassangerFlightId(pList[passangersList]);
+        if(!strcoll(flight_id,flightId)){
+            book->list[book->numPassangers] = lookupPassangerFID(book->allPassangers,flight_id);
             book->numPassangers++;
         }
+        free(flight_id);
     }
     return book;
 }
@@ -404,14 +411,16 @@ typedef struct airportDB{
 } AirportDB;
 
 
-AirportDB * getAirportDB(FlightsDatabase fDatabase,const char * airport,Time * begin,Time * end){
+AirportDB * getAirportDB(const FlightsDatabase fDatabase,const char * airport,Time * begin,Time * end){
     int max = g_hash_table_size(fDatabase);
     AirportDB * aList = malloc(sizeof(struct airportDB));
     aList->numFlights = 0;
     aList->f = begin;
     aList->l = end;
+    aList->airport = strdup(airport);
     aList->fList = malloc(sizeof(Flight *) * max);
-    g_hash_table_foreach(fDatabase,checkAirports,aList);
+    i = 0;
+    g_hash_table_foreach((const FlightsDatabase) fDatabase,checkAirports,aList);
     return aList;
 }
 
@@ -421,21 +430,28 @@ AirportDB * getAirportDB(FlightsDatabase fDatabase,const char * airport,Time * b
 void checkAirports(gpointer key,gpointer value,gpointer flightData){
     Flight * flight = (Flight *) value;
     AirportDB * database = (AirportDB *) flightData;
-    static int i = 0;
-    if(database->f && database->l)
-        if(strcoll(database->airport,getFlightOrigin(flight)) && 
-        compareTimes(getFlightSDepartureDate(flight),database->l)==true && 
-        compareTimes(database->f,getFlightSArrivalDate(flight))==true){
+    char * origin = getFlightOrigin(flight);
+    Time * sDepartureDate = getFlightSDepartureDate(flight);
+    Time * SArrivalDate = getFlightSArrivalDate(flight);
+    if(database->f && database->l){
+        if(!strcoll(database->airport,origin) && 
+        compareTimes(sDepartureDate,database->l)==true && 
+        compareTimes(database->f,SArrivalDate)==true){
             database->fList[i] = flight;
             i++;
             database->numFlights++;
         }
-    if(database->f == NULL || database->f == NULL)
-        if(strcoll(database->airport,getFlightOrigin(flight))){
+    }
+    if(database->f == NULL || database->f == NULL){
+        if(!strcoll(database->airport,origin)){
             database->fList[i] = flight;
             i++;
             database->numFlights++;
         }
+    }
+    free(origin);
+    destroyTime(sDepartureDate);
+    destroyTime(SArrivalDate);
 }
 
 int getNumAirportFlights(AirportDB * db){

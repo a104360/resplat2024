@@ -31,7 +31,7 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
     switch (flag)
     {
     case 1: // ** User ** 
-        User * user = lookupUser(uDatabase,id);
+        User * user = lookupUser((const UsersDatabase) uDatabase,id);
 
         if(getUserAccountStatus(user) == false){
             outputQ1User(f,NULL,'\0',0,NULL,NULL,NULL,NULL,NULL);
@@ -93,17 +93,11 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         outputQ1Flight((int)f,airline,plane_model,origin,destination,schedule_departure_date,schedule_arrival_date,nPassangers,delay);
 
         FREE(airline);
-        airline = NULL;
         FREE(plane_model);
-        plane_model = NULL;
         FREE(origin);
-        origin = NULL;
         FREE(destination);
-        destination = NULL;
         FREE(schedule_departure_date);
-        schedule_departure_date = NULL;
         FREE(schedule_arrival_date);
-        schedule_arrival_date = NULL;
 
 
         break;
@@ -144,28 +138,29 @@ void query2(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
     int rDatabaseSize = g_hash_table_size(rDatabase);
     int fDatabaseSize = g_hash_table_size(fDatabase);
     char * aux = strdup(line);
-    char * id = NULL;
-    char * tipo = NULL;
+    char * token = NULL;
     char * saveprt = NULL;
-    id = strtok_r(aux," ",&saveprt);
-    tipo = strtok_r(NULL,"\n\0",&saveprt);
-    if(aux){
-        FREE(aux);
-        aux = NULL;
-    } 
-    User * user = lookupUser(uDatabase,id);
+    token = strtok_r(aux," \n\0",&saveprt);
+    User * user = lookupUser((const UsersDatabase) uDatabase,token);
+    if(user == NULL){
+        outputQ2(F,NULL,-1,NULL,-1);
+        return;
+    }
+    token = strtok_r(NULL,"\n\0",&saveprt);
+
+    FREE(aux);
 
     if(getUserAccountStatus(user) == false){
-        FREE(user);
-        user = NULL;
+        outputQ2(F,NULL,-1,NULL,-1);
         return;
     }
     int flag = 0;
-    if(!tipo) flag = 1;
+    if(!token) flag = 1;
     else{
-    if(strcoll(tipo,"flight") == 0) flag = 2;
-        else if(strcoll(tipo,"reservation") == 0) flag = 3;
+    if(strcoll(token,"flights") == 0) flag = 2;
+        else if(strcoll(token,"reservations") == 0) flag = 3;
     }
+    char * id = getUserId(user);
     switch (flag)
     {
     case 1: // SEM ARGUMENTOS
@@ -178,27 +173,19 @@ void query2(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         int r = getNumReservs(uRDatabase1);
         int f = getNumFlights(uFDatabase1);
 
-        mergeSortF(fList1,0,f);
-        mergeSortR(rList1,0,r);
+        mergeSort((void **) fList1,f,"Flight");
+        mergeSort((void **) rList1,r,"Reservation");
 
-        outputQ2(f,rList1,r,fList1,f);
+        outputQ2(F,rList1,r,fList1,f);
 
         destroyUserReservsDB(uRDatabase1,rDatabaseSize);
-        for(int i = 0; i < r;i++){ FREE(rList1[i]); rList1[i] = NULL;}
-        for(int i = 0; i < f;i++){ FREE(fList1[i]); fList1[i] = NULL;}
         destroyUserFlightsDB(uFDatabase1,fDatabaseSize);
 
         if(id){
             FREE(id);
-            id = NULL;
         }
-        if(tipo){
-            FREE(tipo);
-            tipo = NULL;
-        }
-        if(saveprt){
-            FREE(saveprt);
-            saveprt = NULL;
+        if(token){
+            FREE(token);
         }
         break;
 
@@ -209,14 +196,10 @@ void query2(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
 
         int max2 = getNumFlights(uFDatabase2);
 
-        mergeSortF(fList2,0,max2);
+        mergeSort((void **) fList2,max2,"Flight");
 
         outputQ2(F,NULL,0,fList2,max2);
 
-        for(int i = 0; i < max2;i++){
-            FREE(fList2[i]);
-            fList2[i] = NULL;
-        }
         destroyUserFlightsDB(uFDatabase2,fDatabaseSize);
 
         break;
@@ -228,15 +211,10 @@ void query2(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
 
         int max3 = getNumReservs(uRDatabase3);
 
-        mergeSortR(rList3,0,max3);
+        mergeSort((void **) rList3,max3,"Reservation");
 
         outputQ2(F,rList3,max3,NULL,0);
 
-
-        for(int i = 0; i < max3;i++){ 
-            FREE(rList3[i]);    
-            rList3[i] = NULL ; 
-        } 
         destroyUserReservsDB(uRDatabase3,rDatabaseSize);
         
         break;
@@ -245,15 +223,13 @@ void query2(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
     default:
         break;
     }
-    
-    FREE(user);
-    user = NULL;
+    FREE(id);
     return;
 }
 
 // Average rating of an hotel
 void query3(ReservationsDatabase rDatabase,const char * id,bool f){
-    double n = averageRating(rDatabase,id,g_hash_table_size(rDatabase));
+    double n = averageRating(rDatabase,id);
 
     outputQ3(f,n);
 
@@ -264,45 +240,34 @@ void query4(ReservationsDatabase rDatabase,const char * id,bool f){
     int rDatabaseSize = g_hash_table_size(rDatabase);
     HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id,NULL,NULL);
     Reservation ** rList = getAllHotelReservs(hDatabase);
-    mergeSortR(rList,0,getNumReservas(hDatabase));
+    mergeSort((void **) rList,getNumReservas(hDatabase),"Reservations");
 
     outputQ4(f,rList,getNumReservas(hDatabase));
 
-    for(int i = 0; i < getNumReservas(hDatabase);i++){
-        FREE(rList[i]);
-        rList[i] = NULL;
-    }
-    FREE(rList);
-    rList = NULL;
-
-    destroyHotelDatabase(hDatabase,rDatabaseSize);
+    destroyHotelDatabase(hDatabase);
 
     return;
 }
 
-void query5(FlightsDatabase fDatabase,Time * ti,Time * tf,const char * id,bool f){
+void query5(FlightsDatabase fDatabase,Time * ti,Time * tf,const char * name,bool f){
     int fDatabaseSize = g_hash_table_size(fDatabase);
-    AirportDB * airportFlights = getAirportDB(fDatabase,id,ti,tf);
+    AirportDB * airportFlights = getAirportDB(fDatabase,name,ti,tf);
     Flight ** fList = getAirportFlights(airportFlights);
     int max = getNumAirportFlights(airportFlights);
-    mergeSortF(fList,0,max);
+    mergeSort((void **) fList,max,"Flight");
 
     outputQ5(f,fList,max);
 
-    for(int i = 0;i < max;i++){
-        FREE(fList[i]);
-        fList[i] = NULL;
-    }
-    FREE(fList);
-    fList = NULL;
     destroyAirport(airportFlights,fDatabaseSize);
 }
 
 void query6(){
+    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
     return;
 }
 
 void query7(){
+    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
     return;
 }
 
@@ -322,18 +287,17 @@ void query8(ReservationsDatabase rDatabase,const char * id,Time * begin,Time * e
 
     outputQ8(total,f);
 
-    FREE(rList);
-    rList = NULL;
-
-    destroyHotelDatabase(hDatabase,rDatabaseSize);
+    destroyHotelDatabase(hDatabase);
 
     return;
 }
 
 void query9(){
+    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
     return;
 }
 
 void query10(){
+    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
     return;
 }

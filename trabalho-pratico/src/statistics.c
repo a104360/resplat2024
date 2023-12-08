@@ -12,7 +12,7 @@ double getTotalSpentByUser(void ** userReservs){
         Time * reservBeginDate = getReservBeginDate(list[i]);
         Time * reservEndDate = getReservEndDate(list[i]);
         int dayDiff = numberOfDays(reservBeginDate,reservEndDate);
-        if(dayDiff == 0) continue;
+        if(dayDiff <= 0) continue;
         total += getTotalSpentOnReserv(list[i],dayDiff);
         destroyTime(reservBeginDate);
         destroyTime(reservEndDate);
@@ -26,26 +26,16 @@ double getTotalSpentOnReserv(void * userReservs,int n){
     double p = getReservPricePerNight(list);
     double iva = getReservCityTax(list);
     total = (p * n) + (((p * n)/ 100) * iva);
-    /*else{
-        Time * reservBeginDate = getReservBeginDate(list);
-        Time * reservEndDate = getReservEndDate(list);
-        int dayDiff = numberOfDays(reservBeginDate,reservEndDate);
-        total = (p * dayDiff) + (((p * dayDiff)/100) * iva);
-        free(reservBeginDate);
-        reservBeginDate = NULL;
-        free(reservEndDate);
-        reservEndDate = NULL;
-    }*/
     return total;
 }
 
-double averageRating(void * reservations, const char * id,int hashSize){
+double averageRating(void * reservations, const char * id){
     HotelDatabase * hotelDB = getHotelDataBase(reservations,id,NULL,NULL);
     int sumRatings = getSumRatings(hotelDB);
     int n = getNumReservas(hotelDB);
-    destroyHotelDatabase(hotelDB,hashSize);
+    destroyHotelDatabase(hotelDB);
     hotelDB = NULL;
-    return sumRatings / n;
+    return (double) (sumRatings / n);
 }
 
 double dalayMedianAirport(void*, void*);

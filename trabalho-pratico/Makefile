@@ -23,13 +23,13 @@ $(EXE): $(OBJ)
 	$(CC) -c -o $@ $< $(CFLAGS)
 
 programa-testes: $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)
+	$(CC) -o $@ $^ $(CFLAGS) 
 
 run: $(EXE)
 	./$(EXE) ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt
 
-runTests: programa-testes
-	./programa-testes ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt ../../li3_fr/dataset/data_clean
+test: programa-testes
+	./programa-testes 100
 
 $(EXE).debug: $(OBJ)
 	$(CC) -o $(EXE).debug $^ $(CFLAGS)

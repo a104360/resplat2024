@@ -28,6 +28,8 @@ void copyTime(Time *,Time *);
 
 bool compareTimes(Time *,Time*);
 
+// Returns difference in days between two dates (it does not consider differences greater than months)
+// Args : (DATE THAT COMES FIRST/BEGIN , DATE THAT COMES AFTER/END)
 int numberOfDays(Time *,Time *);
 
 char * timeToString(Time *);
