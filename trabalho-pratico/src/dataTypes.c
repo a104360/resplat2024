@@ -1204,8 +1204,8 @@ void setReservEndDate(Reservation * reserv,Time * tempo){
     reserv->rating = n;
 }
 
- unsigned int getReservRating(Reservation * reserv){
-    return reserv->rating;
+const unsigned int getReservRating(const Reservation * reserv){
+    return (const unsigned int) reserv->rating;
 }
 
 

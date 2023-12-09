@@ -440,7 +440,7 @@ int breakfastCheck(const char * line){
 
 // int rating : 1 <= rating <= 5
  unsigned int reviewCheck(const char * line){
-    if((int) line[0] > '0' && (int) line[0] - '0' < 0 && (int) line[0] - '0' > 4 ) return false;
+    if((int) line[0] > '0' && (int) line[0] - '0' < 0 && (int) line[0] - '0' > 5 ) return false;
     return (int) line[0] - '0';
 }
 
@@ -594,6 +594,7 @@ User * userCheck(const char * line){
 
 //Recieves a reservation and checks whether the reservation is valid using the previus functions
  Reservation * reservationCheck(const char * line,UsersDatabase uDatabase){
+    if(line[0] == ';') return NULL;
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
@@ -609,59 +610,57 @@ User * userCheck(const char * line){
     }
 
     char * reservationId = idCheck(token);
-    if(reservationId == NULL) {ERRORSR(aux,reservation);}  
+    if(reservationId == NULL || saveptr[0] == ';') {ERRORSR(aux,reservation);}  
     setReservId(reservation,token);
     NEXTSLOT(reservationId);
     TOKENIZE(token,saveptr);
     User * temp = lookupUser(uDatabase,token);
-    if(temp == NULL){ERRORSR(aux,reservation);}
+    if(temp == NULL || saveptr[0] == ';'){ERRORSR(aux,reservation);}
     setReservUserId(reservation,token);
     TOKENIZE(token,saveptr);
 
     char * reservationHotelId = idCheck(token);
-    if(!reservationHotelId){ERRORSR(aux,reservation);}
+    if(!reservationHotelId || saveptr[0] == ';'){ERRORSR(aux,reservation);}
     setReservHotelId(reservation,reservationHotelId);
     NEXTSLOT(reservationHotelId);
     TOKENIZE(token,saveptr);
 
     char * reservationHotelName = nameCheck(token);
-    if(!reservationHotelName){ERRORSR(aux,reservation);}
+    if(!reservationHotelName || saveptr[0] == ';'){ERRORSR(aux,reservation);}
     setReservHotelName(reservation,reservationHotelName);
     NEXTSLOT(reservationHotelName);
     TOKENIZE(token,saveptr);
 
     unsigned int reservationHotelStars = hotelStarsCheck(token);
-    if(!reservationHotelStars){ ERRORSR(aux,reservation);}
+    if(!reservationHotelStars || saveptr[0] == ';'){ ERRORSR(aux,reservation);}
     setReservHotelStars(reservation,reservationHotelStars);
     TOKENIZE(token,saveptr);
 
     int reservationTax = taxCheck(token);
-    if(reservationTax < 0){ ERRORSR(aux,reservation);}
+    if(reservationTax < 0 || saveptr[0] == ';'){ ERRORSR(aux,reservation);}
     setReservCityTax(reservation,reservationTax);
     TOKENIZE(token,saveptr);
 
     char * reservationAdress = addressCheck(token);
-    if(!reservationAdress){ERRORSR(aux,reservation);}
+    if(!reservationAdress || saveptr[0] == ';'){ERRORSR(aux,reservation);}
     setReservHotelAddress(reservation,reservationAdress);
     NEXTSLOT(reservationAdress);
     TOKENIZE(token,saveptr);
 
     Time * beginDate = dateCheck(token);
-    if(!beginDate){ ERRORSR(aux,reservation);}
+    if(!beginDate || saveptr[0] == ';'){ ERRORSR(aux,reservation);}
     setReservBeginDate(reservation, beginDate);
     TOKENIZE(token,saveptr);
 
     Time * endDate = dateCheck(token);
-    if(!endDate){ 
+    if(!endDate || saveptr[0] == ';'){ 
         destroyTime(beginDate);
         ERRORSR(aux,reservation);
     }
     if(!compareTimes(beginDate,endDate)){ destroyTime(beginDate); destroyTime(endDate); ERRORSR(aux,reservation);}
     setReservEndDate(reservation, endDate);
     destroyTime(endDate);
-    endDate = NULL;
     destroyTime(beginDate);
-    beginDate = NULL; 
     TOKENIZE(token,saveptr);
 
     double pricePerNight = pricePNightCheck(token);

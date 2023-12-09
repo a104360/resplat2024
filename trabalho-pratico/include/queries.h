@@ -14,13 +14,13 @@ void query1(const UsersDatabase, const ReservationsDatabase ,const FlightsDataba
 void query2(const UsersDatabase,const ReservationsDatabase,const FlightsDatabase,const PassangersDatabase *,const char *,bool);
 
 //apresentar classificacao media de um hotel, atraves do identificador
-void query3(ReservationsDatabase,const char *,bool);
+void query3(const ReservationsDatabase,const char *,bool);
 
 //listar reservas de um hotel ordenadas pela data de inicio (recente -> antiga) (Se houver 2 mesma data, usar id)
-void query4(ReservationsDatabase,const char *,bool);
+void query4(const ReservationsDatabase,const char *,bool);
 
 //listar voos com origem num dado aeroporto, entre 2 datas, ordenados por data partida estimada (antiga -> recente) (se houver 2, usar id)
-void query5(FlightsDatabase,Time *,Time *,const char *,bool);
+void query5(const FlightsDatabase,Time *,Time *,const char *,bool);
 
 //listar top N aeroportos com mais passageiros, para um dado ano. Contabilizar voos com data estimada de partida nesse ano. (se 2, usar nome)
 void query6();
@@ -29,7 +29,7 @@ void query6();
 void query7();
 
 //Apresentar receita total,de um hotel entre 2 datas, apartir do identificador. (usar preco/1noite * num_noites)
-void query8(ReservationsDatabase,const char *,Time *,Time *,bool);
+void query8(const ReservationsDatabase,const char *,Time *,Time *,bool);
 
 //listar todos os users cujo nome começa com o prefixo do argumento, ordenados por nome (crescente) (se 2, usar id)
 void query9();

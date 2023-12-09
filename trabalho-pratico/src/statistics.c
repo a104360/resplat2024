@@ -35,7 +35,6 @@ double averageRating(void * reservations, const char * id){
     int n = getNumReservas(hotelDB);
     double answer = (double) sumRatings / (double) n;  
     destroyHotelDatabase(hotelDB);
-    hotelDB = NULL;
     return (double) answer;
 }
 

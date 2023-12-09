@@ -408,9 +408,9 @@ void outputQ3(bool f,double rating){
     }
 
     if(f == true){
-        fprintf(outputFile,"--- 1 ---\n%.3f\n",rating);
+        fprintf(outputFile,"--- 1 ---\n%0.3f\n",rating);
     }else{
-        fprintf(outputFile,"%.3f\n",rating);
+        fprintf(outputFile,"%0.3f\n",rating);
     }
     fclose(outputFile);
 }
@@ -449,7 +449,7 @@ void outputQ4(bool f,Reservation ** rList,int max){
                 fprintf(outputFile,"end_date : %s\n",stringETime);
                 fprintf(outputFile,"user_id : %s\n",uId);
                 fprintf(outputFile,"rating : %d\n",rating);
-                fprintf(outputFile,"total_price : %.3f\n",getTotalSpentOnReserv(rList[i],n));
+                fprintf(outputFile,"total_price : %0.3f\n",getTotalSpentOnReserv(rList[i],n));
                 FREE(id);
                 FREE(stringBTime);
                 FREE(stringETime);
@@ -472,7 +472,7 @@ void outputQ4(bool f,Reservation ** rList,int max){
                 int rating = getReservRating(rList[i]);
                 int n = numberOfDays(bTime,eTime);
 
-                fprintf(outputFile,"%s;%s;%s;%s;%d;%.3f\n",id,stringBTime,stringETime,uId,rating,getTotalSpentOnReserv(rList[i],n));
+                fprintf(outputFile,"%s;%s;%s;%s;%d;%0.3f\n",id,stringBTime,stringETime,uId,rating,getTotalSpentOnReserv(rList[i],n));
 
                 FREE(id);
                 FREE(stringBTime);
@@ -480,6 +480,8 @@ void outputQ4(bool f,Reservation ** rList,int max){
                 FREE(uId);
                 destroyTime(bTime);
                 destroyTime(eTime);
+            }else{
+                break;
             }
         }
     }
@@ -541,9 +543,9 @@ void outputQ8(double revenue, bool f){
 
     if(f== true){
         fprintf(outputFile,"--- 1 ---\n");
-        fprintf(outputFile,"revenue: %.3f\n",revenue);
+        fprintf(outputFile,"revenue: %0.3f\n",revenue);
     }else{
-        fprintf(outputFile,"%.3f\n",revenue);
+        fprintf(outputFile,"%0.3f\n",revenue);
     }
     fclose(outputFile);
 }

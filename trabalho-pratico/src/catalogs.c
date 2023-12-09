@@ -181,6 +181,7 @@ HotelDatabase * getHotelDataBase(void * reservations,const char * hotelId,Time *
     i = 0;
     int n = g_hash_table_size((ReservationsDatabase)  reservations);
     reservs->_hotelReservs = malloc(sizeof(Reservation *) * n);
+    for(int j = 0;j < n;reservs->_hotelReservs[j] = NULL,j++);
     g_hash_table_foreach((ReservationsDatabase) reservations,allHotelReservs,reservs);
     return reservs;
 }
@@ -202,13 +203,16 @@ void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
           i++;
         }
     }else{
-        if (!strcoll(hotelId,array->hotel_id)) {
+        if(!strcoll(hotelId,array->hotel_id)) {
           array->_hotelReservs[i] = reservation;
-          array->sumRatings += getReservRating(reservation);
+          int rating = getReservRating(reservation);
+          array->sumRatings += rating;
           array->numReservas++;
           i++;
         }
     }
+    destroyTime(beginDate);
+    destroyTime(endDate);
     free(hotelId);
 }
 

@@ -339,9 +339,8 @@ int main(int argc,char **argv){
         destroyFlights(fDatabase);
         destroyReservs(rDatabase);
     }
-    else {
+    if(argc == 2){
         confirmar(argc,argv);
     }
-    //confirmar(argc,argv);
     return 0;
 }

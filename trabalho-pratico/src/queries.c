@@ -228,7 +228,7 @@ void query2(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
 }
 
 // Average rating of an hotel
-void query3(ReservationsDatabase rDatabase,const char * id,bool f){
+void query3(const ReservationsDatabase rDatabase,const char * id,bool f){
     double n = averageRating(rDatabase,id);
 
     outputQ3(f,n);

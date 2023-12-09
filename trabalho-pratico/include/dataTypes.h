@@ -192,7 +192,7 @@ void setReservRoomDetails(Reservation *, const char *);
 char *getReservRoomDetails(Reservation *);
 
 void setReservRating(Reservation *,const unsigned int);
-unsigned int getReservRating(Reservation *);
+const unsigned int getReservRating(const Reservation *);
 
 void setReservComment(Reservation *, const char *);
 char *getReservComment(Reservation *);
