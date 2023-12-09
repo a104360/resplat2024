@@ -33,9 +33,10 @@ double averageRating(void * reservations, const char * id){
     HotelDatabase * hotelDB = getHotelDataBase(reservations,id,NULL,NULL);
     int sumRatings = getSumRatings(hotelDB);
     int n = getNumReservas(hotelDB);
+    double answer = (double) sumRatings / (double) n;  
     destroyHotelDatabase(hotelDB);
     hotelDB = NULL;
-    return (double) (sumRatings / n);
+    return (double) answer;
 }
 
 double dalayMedianAirport(void*, void*);

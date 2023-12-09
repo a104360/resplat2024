@@ -237,7 +237,6 @@ void query3(ReservationsDatabase rDatabase,const char * id,bool f){
 }
 
 void query4(ReservationsDatabase rDatabase,const char * id,bool f){
-    int rDatabaseSize = g_hash_table_size(rDatabase);
     HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id,NULL,NULL);
     Reservation ** rList = getAllHotelReservs(hDatabase);
     mergeSort((void **) rList,getNumReservas(hDatabase),"Reservations");
@@ -272,7 +271,6 @@ void query7(){
 }
 
 void query8(ReservationsDatabase rDatabase,const char * id,Time * begin,Time * end,bool f){
-    int rDatabaseSize = g_hash_table_size(rDatabase);
     HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id,begin,end);
     
     Reservation ** rList = getAllHotelReservs(hDatabase);
@@ -281,7 +279,9 @@ void query8(ReservationsDatabase rDatabase,const char * id,Time * begin,Time * e
 
     int days = numberOfDays(begin,end);
 
-    for(int i = 0;i < getNumReservas(hDatabase);i++){
+    int max = getNumReservas(hDatabase);
+
+    for(int i = 0;i < max && rList[i];i++){
         total += getTotalSpentOnReserv(rList[i],days);
     }
 

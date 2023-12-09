@@ -152,8 +152,8 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
         fprintf(outputFile, "begin_date: %s\n", begin_date);
         fprintf(outputFile, "end_date: %s\n", end_date);
         if(includes_breakfast == 0){
-            fprintf(outputFile, "includes_breakfast: False;");
-        }else fprintf(outputFile, "includes_breakfast: True;");
+            fprintf(outputFile, "includes_breakfast: False\n");
+        }else fprintf(outputFile, "includes_breakfast: True\n");
         //fprintf(outputFile, "includes_breakfast: %d\n", includes_breakfast);
         fprintf(outputFile, "nights: %d\n", nights);
         fprintf(outputFile, "total_price: %.3f\n", total_price);
@@ -183,7 +183,7 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
         fclose(outputFile);
         return;
     }
-    if(f == false){
+    if(f == false){ // Normal Mode
         if(r1 && n1 > 0 && f2 && n2 > 0){ // There is both reservations and flights to be written
             int i = 0,j = 0,count = 0,max = n1 + n2;
             while(count < max){
@@ -237,42 +237,46 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
             }
             fclose(outputFile);
             return;
-        }
-        if(r1 && n1 > 0){ // There only is reservations to be written
-            int i = 0;
-            while(i < n1){
-                Time * rTime = getReservBeginDate(r1[i]);
-                char * time = timeToString(rTime);
-                time[10] = '\0';
-                char * rId = getReservId(r1[i]);
-                fprintf(outputFile,"%s;%s\n",rId,time);
-                i++;
-                FREE(time);
-                FREE(rId);
-                destroyTime(rTime);
+        }else{
+            if(r1 && n1 > 0){ // There only is reservations to be written
+                int i = 0;
+                while(i < n1){
+                    Time * rTime = getReservBeginDate(r1[i]);
+                    char * time = timeToString(rTime);
+                    time[10] = '\0';
+                    char * rId = getReservId(r1[i]);
+                    fprintf(outputFile,"%s;%s\n",rId,time);
+                    i++;
+                    FREE(time);
+                    FREE(rId);
+                    destroyTime(rTime);
+                }
+                fclose(outputFile);
+                return;
             }
-            fclose(outputFile);
-            return;
-        }
-        if(f2 && n2 > 0){ // There only is flights to be written
-            int j = 0;
-            while(j < n2){
-                Time * fTime = getFlightSDepartureDate(f2[j]);
-                char * time = timeToString(fTime);
-                time[10] = '\0';
-                char * fId = getFlightId(f2[j]);
-                fprintf(outputFile,"%s;%s\n",fId,time);
-                j++;
-                FREE(time);
-                FREE(fId);
-                destroyTime(fTime);
+            if(f2 && n2 > 0){ // There only is flights to be written
+                int j = 0;
+                while(j < n2){
+                    Time * fTime = getFlightSDepartureDate(f2[j]);
+                    char * time = timeToString(fTime);
+                    time[10] = '\0';
+                    char * fId = getFlightId(f2[j]);
+                    fprintf(outputFile,"%s;%s\n",fId,time);
+                    j++;
+                    FREE(time);
+                    FREE(fId);
+                    destroyTime(fTime);
+                }
+                fclose(outputFile);
+                return;
             }
-            fclose(outputFile);
-            return;
         }
-    }else{
+    }else{ // F Mode
+        int i = 0,j = 0,count = 0;
         if(r1 && n1 > 0 && f2 && n2 > 0){ // There is both reservations and flights to be written
-            int i = 0,j = 0,count = 0,max = n1 + n2;
+            
+            int max = n1 + n2;
+
             while(count < max){
                 if(count != 0) fprintf(outputFile,"\n");
                 if(i < n1 && j < n2){ // Both the arrays have not reached their limit 
@@ -283,7 +287,7 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
                         time[10] = '\0';
                         char * fId = getFlightId(f2[j]);
                         fprintf(outputFile,"--- %d ---\n",count + 1);
-                        fprintf(outputFile,"id : %s\ndate : %s\ntype : flight\n",fId,time);
+                        fprintf(outputFile,"id: %s\ndate: %s\ntype: flight\n",fId,time);
                         j++;
                         FREE(time);
                         FREE(fId);
@@ -293,7 +297,7 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
                         time[10] = '\0';
                         char * rId = getReservId(r1[i]);
                         fprintf(outputFile,"--- %d ---\n",count + 1);
-                        fprintf(outputFile,"id : %s\ndate : %s\ntype : reservation\n",rId,time);
+                        fprintf(outputFile,"id: %s\ndate: %s\ntype: reservation\n",rId,time);
                         i++;
                         FREE(time);
                         FREE(rId);
@@ -302,68 +306,86 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
                     destroyTime(fTime);
                 }
                 if(i < n1 && j >= n2){ // Flights array have reached his limit, but the reservations has not
-                    Time * rTime = getReservBeginDate(r1[i]);
-                    char * time = timeToString(rTime);
-                    time[10] = '\0';
-                    char * rId = getReservId(r1[i]);
-                    fprintf(outputFile,"--- %d ---\n",count + 1);
-                    fprintf(outputFile,"id : %s\ndate : %s\ntype : reservation\n",rId,time);
-                    i++;
-                    FREE(time);
-                    FREE(rId);
-                    destroyTime(rTime);
+                    count++;
+                    while (i < n1)
+                    {                
+                        Time * rTime = getReservBeginDate(r1[i]);
+                        char * time = timeToString(rTime);
+                        time[10] = '\0';
+                        char * rId = getReservId(r1[i]);
+                        fprintf(outputFile,"\n--- %d ---\n",count + 1);
+                        fprintf(outputFile,"id: %s\ndate: %s\ntype: reservation\n",rId,time);
+                        i++;
+                        count++;
+                        FREE(time);
+                        FREE(rId);
+                        destroyTime(rTime);
+                    }
+                    fclose(outputFile);
+                    return;
                 }
-                if(i >= n1 && j < n2){ // Reservations array have reached his limit but the flights have not
-                    Time * fTime = getFlightSDepartureDate(f2[j]);
-                    char * time = timeToString(fTime);
-                    time[10] = '\0';
-                    char * fId = getFlightId(f2[j]);
-                    fprintf(outputFile,"--- %d ---\n",count + 1);
-                    fprintf(outputFile,"id : %s\ndate : %s\ntype : flight\n",fId,time);
-                    j++;
-                    FREE(time);
-                    FREE(fId);
-                    destroyTime(fTime);
+                if(r1 && f2 && i == n1 && j < n2){ // Reservations array have reached his limit but the flights have not
+                    count++;
+                    while (j < n2)
+                    {
+                        Time * fTime = getFlightSDepartureDate(f2[j]);
+                        char * time = timeToString(fTime);
+                        time[10] = '\0';
+                        char * fId = getFlightId(f2[j]);
+                        fprintf(outputFile,"\n--- %d ---\n",count + 1);
+                        fprintf(outputFile,"id: %s\ndate: %s\ntype: flight\n",fId,time);
+                        j++;
+                        count++;
+                        FREE(time);
+                        FREE(fId);
+                        destroyTime(fTime);
+                    }
+                    fclose(outputFile);
+                    return;
                 }
                 count++;
             }
             fclose(outputFile);
             return;
-        }
-        if(r1 && n1 > 0){ // There only is reservations to be written
-            int i = 0;
-            while(i < n1){
-                Time * rTime = getReservBeginDate(r1[i]);
-                char * time = timeToString(rTime);
-                time[10] = '\0';
-                char * rId = getReservId(r1[i]);
-                if(i != 0) fprintf(outputFile,"\n");
-                fprintf(outputFile,"--- %d ---\n",i + 1);
-                fprintf(outputFile,"id : %s\ndate : %s\n",rId,time);
-                i++;
-                FREE(time);
-                FREE(rId);
-                destroyTime(rTime);
+
+
+        }else{
+            if(r1 && n1 > 0 && !f2){ // There only is reservations to be written
+                int r = 0;
+                while(r < n1){
+                    Time * rTime = getReservBeginDate(r1[r]);
+                    char * time = timeToString(rTime);
+                    time[10] = '\0';
+                    char * rId = getReservId(r1[r]);
+                    if(r != 0) fprintf(outputFile,"\n");
+                    fprintf(outputFile,"--- %d ---\n",r + 1);
+                    fprintf(outputFile,"id: %s\ndate: %s\n",rId,time);
+                    r++;
+                    FREE(time);
+                    FREE(rId);
+                    destroyTime(rTime);
+                }
+                fclose(outputFile);
+                return;
             }
-            fclose(outputFile);
-            return;
-        }
-        if(f2 && n2 > 0){ // There only is flights to be written
-            int j = 0;
-            while(j < n2){
-                Time * fTime = getFlightSDepartureDate(f2[j]);
-                char * time = timeToString(fTime);
-                char * fId = getFlightId(f2[j]);
-                if(j != 0) fprintf(outputFile,"\n");
-                fprintf(outputFile,"--- %d ---\n",j + 1);
-                fprintf(outputFile,"id : %s\ndate : %s\n",fId,time);
-                j++;
-                FREE(time);
-                FREE(fId);
-                destroyTime(fTime);
+            if(f2 && n2 > 0 && !r1){ // There only is flights to be written
+                int f = 0;
+                while(f < n2){
+                    Time * fTime = getFlightSDepartureDate(f2[f]);
+                    char * time = timeToString(fTime);
+                    time[10] = '\0';
+                    char * fId = getFlightId(f2[f]);
+                    if(f != 0) fprintf(outputFile,"\n");
+                    fprintf(outputFile,"--- %d ---\n",f + 1);
+                    fprintf(outputFile,"id: %s\ndate: %s\n",fId,time);
+                    f++;
+                    FREE(time);
+                    FREE(fId);
+                    destroyTime(fTime);
+                }
+                fclose(outputFile);
+                return;
             }
-            fclose(outputFile);
-            return;
         }
     }
     if(outputFile != NULL) fclose(outputFile);
@@ -410,7 +432,7 @@ void outputQ4(bool f,Reservation ** rList,int max){
 
     if(f == true){
         for(int i = 0; i < max;i++){
-            if(i < max){
+            if(rList[i]){
                 char * id = getReservId(rList[i]);
                 Time * bTime = getReservBeginDate(rList[i]);
                 Time * eTime = getReservEndDate(rList[i]);
@@ -420,7 +442,7 @@ void outputQ4(bool f,Reservation ** rList,int max){
                 int rating = getReservRating(rList[i]);
                 int n = numberOfDays(bTime,eTime);
 
-                if(i != 1) fprintf(outputFile,"\n");
+                if(i != 0) fprintf(outputFile,"\n");
                 fprintf(outputFile,"--- %d ---\n",i + 1);
                 fprintf(outputFile,"id : %s\n",id);
                 fprintf(outputFile,"begin_date : %s\n",stringBTime);
@@ -434,8 +456,13 @@ void outputQ4(bool f,Reservation ** rList,int max){
                 FREE(uId);
                 destroyTime(bTime);
                 destroyTime(eTime);
+            }else{
+                break;
             }
-            if(i == max){
+        }
+    }else{
+        for(int i = 0;i < max;i++){
+            if(rList[i]){
                 char * id = getReservId(rList[i]);
                 Time * bTime = getReservBeginDate(rList[i]);
                 Time * eTime = getReservEndDate(rList[i]);
@@ -444,15 +471,9 @@ void outputQ4(bool f,Reservation ** rList,int max){
                 char * uId = getReservUserId(rList[i]);
                 int rating = getReservRating(rList[i]);
                 int n = numberOfDays(bTime,eTime);
-                i--;
-                if(i != 1) fprintf(outputFile,"\n");
-                fprintf(outputFile,"--- %d ---\n",i);
-                fprintf(outputFile,"id : %s\n",id);
-                fprintf(outputFile,"begin_date : %s\n",stringBTime);
-                fprintf(outputFile,"end_date : %s\n",stringETime);
-                fprintf(outputFile,"user_id : %s\n",uId);
-                fprintf(outputFile,"rating : %d\n",rating);
-                fprintf(outputFile,"total_price : %.3f\n",getTotalSpentOnReserv(rList[i],n));
+
+                fprintf(outputFile,"%s;%s;%s;%s;%d;%.3f\n",id,stringBTime,stringETime,uId,rating,getTotalSpentOnReserv(rList[i],n));
+
                 FREE(id);
                 FREE(stringBTime);
                 FREE(stringETime);
@@ -460,26 +481,6 @@ void outputQ4(bool f,Reservation ** rList,int max){
                 destroyTime(bTime);
                 destroyTime(eTime);
             }
-        }
-    }else{
-        for(int i = 0;i < max;i++){
-            char * id = getReservId(rList[i]);
-            Time * bTime = getReservBeginDate(rList[i]);
-            Time * eTime = getReservEndDate(rList[i]);
-            char * stringBTime = timeToString(bTime);
-            char * stringETime = timeToString(eTime);
-            char * uId = getReservUserId(rList[i]);
-            int rating = getReservRating(rList[i]);
-            int n = numberOfDays(bTime,eTime);
-
-            fprintf(outputFile,"%s;%s;%s;%s;%d;%.3f\n",id,stringBTime,stringETime,uId,rating,getTotalSpentOnReserv(rList[i],n));
-
-            FREE(id);
-            FREE(stringBTime);
-            FREE(stringETime);
-            FREE(uId);
-            destroyTime(bTime);
-            destroyTime(eTime);
         }
     }
     fclose(outputFile);
