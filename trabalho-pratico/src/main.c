@@ -11,6 +11,13 @@
 
 #define BUFFERSIZE 1000
 
+void print(gpointer key,gpointer value,gpointer data){
+    Reservation * r = (Reservation *) value;
+    if(!strcoll("HTL1002",key)) 
+        printf("%d\n",getReservRating(r));
+}
+
+
 int main(int argc,char **argv){
     if(argc == 3){
         if (argc < 2) {
@@ -318,7 +325,7 @@ int main(int argc,char **argv){
 
         // Read and execute commands, freeing after used
 
-
+        //g_hash_table_foreach(rDatabase,(GHFunc) print,NULL);
 
         readEntryFile(uDatabase,rDatabase,fDatabase,pDatabase,argc,argv);
         /*UserReservsDB * reservs = getUserReservsDB(rDatabase,"JéssiTavares910");

@@ -440,8 +440,9 @@ int breakfastCheck(const char * line){
 
 // int rating : 1 <= rating <= 5
  unsigned int reviewCheck(const char * line){
-    if((int) line[0] > '0' && (int) line[0] - '0' < 0 && (int) line[0] - '0' > 5 ) return false;
-    return (int) line[0] - '0';
+    if(!isdigit(line[0])) return false;
+    if(line[1] != '\0' || line[0] - '0' > 5 || line[0] - '0' == 0) return false;
+    return line[0] - '0';
 }
 
 // *** The next 4 functions receive the full line ***  
@@ -610,7 +611,10 @@ User * userCheck(const char * line){
     }
 
     char * reservationId = idCheck(token);
-    if(reservationId == NULL || saveptr[0] == ';') {ERRORSR(aux,reservation);}  
+    if(reservationId == NULL || saveptr[0] == ';') {
+        NEXTSLOT(reservationId);
+        ERRORSR(aux,reservation);
+    }  
     setReservId(reservation,token);
     NEXTSLOT(reservationId);
     TOKENIZE(token,saveptr);
@@ -620,13 +624,19 @@ User * userCheck(const char * line){
     TOKENIZE(token,saveptr);
 
     char * reservationHotelId = idCheck(token);
-    if(!reservationHotelId || saveptr[0] == ';'){ERRORSR(aux,reservation);}
+    if(!reservationHotelId || saveptr[0] == ';'){
+        NEXTSLOT(reservationHotelId);    
+        ERRORSR(aux,reservation);
+    }
     setReservHotelId(reservation,reservationHotelId);
     NEXTSLOT(reservationHotelId);
     TOKENIZE(token,saveptr);
 
     char * reservationHotelName = nameCheck(token);
-    if(!reservationHotelName || saveptr[0] == ';'){ERRORSR(aux,reservation);}
+    if(!reservationHotelName || saveptr[0] == ';'){
+        NEXTSLOT(reservationHotelName);
+        ERRORSR(aux,reservation);
+    }
     setReservHotelName(reservation,reservationHotelName);
     NEXTSLOT(reservationHotelName);
     TOKENIZE(token,saveptr);
@@ -641,23 +651,34 @@ User * userCheck(const char * line){
     setReservCityTax(reservation,reservationTax);
     TOKENIZE(token,saveptr);
 
-    char * reservationAdress = addressCheck(token);
-    if(!reservationAdress || saveptr[0] == ';'){ERRORSR(aux,reservation);}
-    setReservHotelAddress(reservation,reservationAdress);
-    NEXTSLOT(reservationAdress);
+    char * reservationAddress = addressCheck(token);
+    if(!reservationAddress || saveptr[0] == ';'){
+        NEXTSLOT(reservationAddress);
+        ERRORSR(aux,reservation);
+    }
+    setReservHotelAddress(reservation,reservationAddress);
+    NEXTSLOT(reservationAddress);
     TOKENIZE(token,saveptr);
 
     Time * beginDate = dateCheck(token);
-    if(!beginDate || saveptr[0] == ';'){ ERRORSR(aux,reservation);}
+    if(!beginDate || saveptr[0] == ';'){ 
+        destroyTime(beginDate);
+        ERRORSR(aux,reservation);
+    }
     setReservBeginDate(reservation, beginDate);
     TOKENIZE(token,saveptr);
 
     Time * endDate = dateCheck(token);
     if(!endDate || saveptr[0] == ';'){ 
         destroyTime(beginDate);
+        destroyTime(endDate);
         ERRORSR(aux,reservation);
     }
-    if(!compareTimes(beginDate,endDate)){ destroyTime(beginDate); destroyTime(endDate); ERRORSR(aux,reservation);}
+    if(!compareTimes(beginDate,endDate)){ 
+        destroyTime(beginDate); 
+        destroyTime(endDate); 
+        ERRORSR(aux,reservation);
+    }
     setReservEndDate(reservation, endDate);
     destroyTime(endDate);
     destroyTime(beginDate);
@@ -670,28 +691,59 @@ User * userCheck(const char * line){
     if(saveptr[0] == ';') {
         setReservBreakfast(reservation, includesBreakfast);
         //RoomDetails
-        setReservRoomDetails(reservation,NULL);
-        TOKENIZE(token,saveptr);
-        
-        unsigned int rating = reviewCheck(token);
-        if(rating == 0){ERRORSR(aux,reservation);}
-        setReservRating(reservation,rating);
-        if(saveptr[0] == ';') {
-            if(aux){
+        if(saveptr[1] == ';'){
+            setReservRoomDetails(reservation,NULL);
+            TOKENIZE(token,saveptr);
+            
+            unsigned int rating = reviewCheck(token);
+            if(rating == 0){ERRORSR(aux,reservation);}
+            setReservRating(reservation,rating);
+            if(saveptr[0] == ';') {
+                if(aux){
+                    free(aux);
+                    aux = NULL;
+                }
+                    return reservation;
+            }
+            TOKENIZE(token,saveptr);
+
+            //Comment
+            setReservComment(reservation,token);
+            
+            strncpy(aux,line,strlen(line));
+            free(aux);
+            aux = NULL;
+            return reservation;
+        }else{
+            TOKENIZE(token,saveptr);
+            char * roomDetails = idCheck(token);
+            if(!roomDetails || saveptr[0] == ';'){
+                NEXTSLOT(roomDetails);
+                ERRORSR(aux,reservation);
+            }
+            setReservRoomDetails(reservation,roomDetails);
+            TOKENIZE(token,saveptr);
+
+            unsigned int rating = reviewCheck(token);
+            if(!rating){ ERRORSR(aux,reservation); }
+            setReservRating(reservation, rating);
+            if(saveptr[0] == ';'){
+                strncpy(aux,line,strlen(line));
                 free(aux);
                 aux = NULL;
-            }
                 return reservation;
-        }
-        TOKENIZE(token,saveptr);
+            }
 
-        //Comment
-        setReservComment(reservation,token);
-        
-        strncpy(aux,line,strlen(line));
-        free(aux);
-        aux = NULL;
-        return reservation;
+            TOKENIZE(token,saveptr);
+
+            //Comment
+            setReservComment(reservation,token);
+            
+            strncpy(aux,line,strlen(line));
+            free(aux);
+            aux = NULL;
+            return reservation;
+        }
     }
     TOKENIZE(token,saveptr);
 
