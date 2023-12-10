@@ -33,7 +33,7 @@ int getSec(Time * time){
 }
 
 
-  void initTime(Time * tempo){
+void initTime(Time * tempo){
     tempo->hour = 0;
     tempo->min = 0;
     tempo->sec = 0;
@@ -42,13 +42,13 @@ int getSec(Time * time){
     tempo->mon = 0;
 }
 
-  void destroyTime(Time *time) {
+void destroyTime(Time *time) {
     if(time == NULL) return; 
     free(time);
     time = NULL;
 }
 
- Time * createTime(){
+Time * createTime(){
     Time * t = malloc(sizeof(struct time));
     initTime(t);
     return t;
@@ -75,7 +75,7 @@ void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
 }
 
 // ** If the first time happened first returns true **
- bool compareTimes(Time *t1,Time*t2){
+int compareTimes(Time *t1,Time*t2){
     if(t2 == NULL || t1 == NULL) return false; 
     if(t1->year != t2->year){
         if(t1->year > t2->year) return false;
@@ -101,8 +101,9 @@ void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
         if(t1->sec > t2->sec) return false;
         else return true;
     }
-    return true;
+    return 10;
 }
+
 
 int numberOfDays(Time * start,Time * end){
     if(end->mday > start->mday) return (end->mday - start->mday);

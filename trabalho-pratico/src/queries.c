@@ -236,10 +236,10 @@ void query3(const ReservationsDatabase rDatabase,const char * id,bool f){
     return;
 }
 
-void query4(ReservationsDatabase rDatabase,const char * id,bool f){
+void query4(const ReservationsDatabase rDatabase,const char * id,bool f){
     HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id,NULL,NULL);
     Reservation ** rList = getAllHotelReservs(hDatabase);
-    mergeSort((void **) rList,getNumReservas(hDatabase),"Reservations");
+    mergeSort((void **) rList,getNumReservas(hDatabase),"Reservation");
 
     outputQ4(f,rList,getNumReservas(hDatabase));
 

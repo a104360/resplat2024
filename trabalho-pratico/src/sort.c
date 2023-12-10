@@ -5,125 +5,6 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-/*
-
-void mergeF(Flight ** arr, int l, int m, int r) {
-    int i, j, k;
-    int n1 = m - l + 1;
-    int n2 = r - m;
- 
-    Flight ** L = malloc(sizeof(Flight *) * n1);
-    Flight ** R = malloc(sizeof(Flight *) * n2);
-
-    for (i = 0; i < n1; i++)
-        copyFlight(L[i],arr[l + i]);
-    for (j = 0; j < n2; j++)
-        copyFlight(R[j],arr[m + 1 + j]);
- 
-    i = 0;
-    j = 0;
-    k = l;
-    while (i < n1 && j < n2) {
-        if (compareTimes(getFlightSDepartureDate(R[i]),getFlightSDepartureDate(L[j])) == true) {
-            copyFlight(arr[k],L[i]);
-            i++;
-        }
-        else {
-            copyFlight(arr[k],R[j]);
-            j++;
-        }
-        k++;
-    }
- 
-    while (i < n1) {
-        copyFlight(arr[k],L[i]);
-        i++;
-        k++;
-    }
- 
-    while (j < n2) {
-        copyFlight(arr[k],R[j]);
-        j++;
-        k++;
-    }
-    free(L);
-    free(R);
-}
- 
-void mergeSortF(Flight ** arr, int l, int r) {
-    if (l < r) {
-        int m = l + (r - l) / 2;
- 
-        mergeSortF(arr, l, m);
-        mergeSortF(arr, m + 1, r);
- 
-        mergeF(arr, l, m, r);
-    }
-}
-
-
-
-
-
-void mergeR(Reservation ** arr, int l, int m, int r) {
-    int i, j, k;
-    int n1 = m - l + 1;
-    int n2 = r - m;
- 
-    Reservation ** L = malloc(sizeof(Reservation *) * n1);
-    Reservation ** R = malloc(sizeof(Reservation *) * n2);
-
-    for (i = 0; i < n1; i++)
-        copyReservation(L[i],arr[l + i]);
-    for (j = 0; j < n2; j++)
-        copyReservation(R[j],arr[m + 1 + j]);
- 
-    i = 0;
-    j = 0;
-    k = l;
-    while (i < n1 && j < n2) {
-        if (compareTimes(getReservBeginDate(R[i]),getReservBeginDate(L[j])) == true) {
-            copyReservation(arr[k],L[i]);
-            i++;
-        }
-        else {
-            copyReservation(arr[k],R[j]);
-            j++;
-        }
-        k++;
-    }
- 
-    while (i < n1) {
-        copyReservation(arr[k],L[i]);
-        i++;
-        k++;
-    }
- 
-    while (j < n2) {
-        copyReservation(arr[k],R[j]);
-        j++;
-        k++;
-    }
-    free(L);
-    L = NULL;
-    free(R);
-    R = NULL;
-}
- 
-void mergeSortR(Reservation ** arr, int l, int r) {
-    if (l < r) {
-        int m = l + (r - l) / 2;
- 
-        mergeSortR(arr, l, m);
-        mergeSortR(arr, m + 1, r);
- 
-        mergeR(arr, l, m, r);
-    }
-}
-*7
-*/
-
-
 
 
 
@@ -179,7 +60,8 @@ void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
 
     if(!strcoll(type,"Reservation")){
 
-        Reservation ** reservs = (Reservation **) a;
+        Reservation ** reservations = (Reservation **) a;
+
         // create temporary arrays to store these portions
         Reservation ** temp_left = malloc(sizeof(struct reservation *) * left_length);
         Reservation ** temp_right = malloc(sizeof(struct reservation *) * right_length);
@@ -189,11 +71,11 @@ void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
 
         // copy the left portion into the temp_left array
         for (int i = 0; i < left_length; i++)
-            temp_left[i] = reservs[l + i];
+            temp_left[i] = reservations[l + i];
 
         // copy the right portion into the temp_right array
         for (int i = 0; i < right_length; i++)
-            temp_right[i] = reservs[m + 1 + i];
+            temp_right[i] = reservations[m + 1 + i];
 
         // Use i to move through the indexes of temp_left, j to move through the 
         // indexes of temp_right, and k to move through the portion of the array 
@@ -211,36 +93,70 @@ void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
             // the array a
 
             if(i == left_length && j < right_length){
-                reservs[k] = temp_right[j];
+                reservations[k] = temp_right[j];
                 j++;
                 continue;
             }
 
             if(j == right_length && i < left_length){
-                reservs[k] = temp_left[i];
+                reservations[k] = temp_left[i];
                 i++;
                 continue;
             }
 
             Time * left = getReservBeginDate(temp_left[i]);
             Time * right = getReservBeginDate(temp_right[j]);
-            
-            if ((i < left_length) && (j >= right_length || compareTimes(left,right)))//temp_left[i] <= temp_right[j]))
+
+            int n = compareTimes(left,right);
+
+            if ((i < left_length) && (j >= right_length || n != 0))//temp_left[i] <= temp_right[j]))
             {
-                reservs[k] = temp_right[j];
-                j++;
+                if(n == 10){
+                    char * leftId = getReservId(temp_left[i]);
+                    char * rightId = getReservId(temp_right[j]);
+                    if(strcoll(leftId,rightId) < 0){
+                        reservations[k] = temp_left[i];
+                        i++;
+                    }else{
+                        reservations[k] = temp_right[j];
+                        j++;
+                    }
+                    free(leftId);
+                    free(rightId);
+                }
+                else{
+                    reservations[k] = temp_right[j];
+                    j++;
+                }
             }
             // otherwise if the next element in temp_right than the next element in 
             // temp_left OR we have reached the end of temp_left, store the next 
             // element from the temp_right array into the next element in array a
             else
             {
-                reservs[k] = temp_left[i];
-                i++;
+                if(n == 10){
+                    char * leftId = getReservId(temp_left[i]);
+                    char * rightId = getReservId(temp_right[j]);
+                    if(strcoll(leftId,rightId) < 0){
+                        reservations[k] = temp_left[i];
+                        i++;
+                    }else{
+                        reservations[k] = temp_right[j];
+                        j++;
+                    }
+                    free(leftId);
+                    free(rightId);
+                }
+                else{
+                    reservations[k] = temp_left[i];
+                    i++;
+                }
             }
-            destroyTime(left);  
             destroyTime(right);
+            destroyTime(left);
         }  
+        free(temp_left);
+        free(temp_right);
     }
     if(!strcoll(type,"Flight")){
 
@@ -291,18 +207,50 @@ void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
             Time * left = getFlightSDepartureDate(temp_left[i]);
             Time * right = getFlightSDepartureDate(temp_right[j]);
 
-            if ((i < left_length) && (j >= right_length || compareTimes(left,right)))//temp_left[i] <= temp_right[j]))
+            int n = compareTimes(left,right);
+            
+            if ((i < left_length) && (j >= right_length || n != 0))//temp_left[i] <= temp_right[j]))
             {
-                flights[k] = temp_right[j];
-                j++;
+                if(n == 10){
+                    char * leftId = getFlightId(temp_left[i]);
+                    char * rightId = getFlightId(temp_right[j]);
+                    if(strcoll(leftId,rightId) < 0){
+                        flights[k] = temp_left[i];
+                        i++;
+                    }else{
+                        flights[k] = temp_right[j];
+                        j++;
+                    }
+                    free(leftId);
+                    free(rightId);
+                }
+                else{
+                    flights[k] = temp_right[j];
+                    j++;
+                }
             }
             // otherwise if the next element in temp_right than the next element in 
             // temp_left OR we have reached the end of temp_left, store the next 
             // element from the temp_right array into the next element in array a
             else
             {
-                flights[k] = temp_left[i];
-                i++;
+                if(n == 10){
+                    char * leftId = getFlightId(temp_left[i]);
+                    char * rightId = getFlightId(temp_right[j]);
+                    if(strcoll(leftId,rightId) < 0){
+                        flights[k] = temp_left[i];
+                        i++;
+                    }else{
+                        flights[k] = temp_right[j];
+                        j++;
+                    }
+                    free(leftId);
+                    free(rightId);
+                }
+                else{
+                    flights[k] = temp_left[i];
+                    i++;
+                }
             }
             destroyTime(right);
             destroyTime(left);
@@ -311,28 +259,3 @@ void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
         free(temp_right);
     }
 }
-
-
-/*
-//
-//          [38, 27, 43, 3, 9, 82, 10]
-//                     /   \
-//       [38, 27, 43, 3]   [9, 82, 10]
-//        /         |         |      \
-//   [38, 27]    [43, 3]   [9, 82]   [10]
-//    /   |      /    |    /    \      |
-// [38]  [27]  [43]  [3]  [9]   [82]  [10]
-//    \  /       \   /     \     /     |
-//   [27, 38]    [3, 43]   [9, 82]    [10]
-//       \         /          \        /
-//     [3, 27, 38, 43]        [9, 10, 82]
-//           \                  /
-//          [3, 9, 10, 27, 38, 43, 82]
-//
-// The array is first broken up into progressively smaller unsorted portions of
-// the array, and once we have "sub-arrays" of 1 element they are by definition
-// sorted arrays.  From here the "sorted arrays" are merged together until we 
-// arrive at the complete sorted array.
-//
-Example visualization of the merge sort algorithm:
-*/ 

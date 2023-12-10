@@ -26,7 +26,7 @@ void setTime(Time *,int,int,int,int,int,int);
 
 void copyTime(Time *,Time *);
 
-bool compareTimes(Time *,Time*);
+int compareTimes(Time *,Time*);
 
 // Returns difference in days between two dates (it does not consider differences greater than months)
 // Args : (DATE THAT COMES FIRST/BEGIN , DATE THAT COMES AFTER/END)
