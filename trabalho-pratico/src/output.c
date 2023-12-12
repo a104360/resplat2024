@@ -408,7 +408,7 @@ void outputQ3(bool f,double rating){
     }
 
     if(f == true){
-        fprintf(outputFile,"--- 1 ---\n%0.3f\n",rating);
+        fprintf(outputFile,"--- 1 ---\nrating: %0.3f\n",rating);
     }else{
         fprintf(outputFile,"%0.3f\n",rating);
     }
