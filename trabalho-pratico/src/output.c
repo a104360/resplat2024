@@ -504,9 +504,9 @@ void outputQ5(bool f, Flight ** fList,int max){
         return;
     }
     if(f == true){
-        for(int i = 1;i <= max;i++){
+        for(int i = 0;i < max;i++){
             if(i != 1) fprintf(outputFile,"\n");
-            fprintf(outputFile,"--- %d ---\n",i);
+            fprintf(outputFile,"--- %d ---\n",i + 1);
             fprintf(outputFile,"id : %s\n",getFlightId(fList[i]));
             fprintf(outputFile,"schedule_departure_date : %s\n",timeToString(getFlightSDepartureDate(fList[i])));
             fprintf(outputFile,"destination : %s\n",getFlightDestination(fList[i]));
@@ -515,7 +515,7 @@ void outputQ5(bool f, Flight ** fList,int max){
         }
     }else{
         for(int i = 0;i < max;i++){
-            fprintf(outputFile,"%s;%s;%s;%s;%s",
+            fprintf(outputFile,"%s;%s;%s;%s;%s\n",
             getFlightId(fList[i]),
             timeToString(getFlightSDepartureDate(fList[i])),
             getFlightDestination(fList[i]),

@@ -87,9 +87,11 @@ char * airportName(const char * line){
     char * saveptr = aux;
     token = strtok_r(aux," \n\0",&saveptr);
 
+    char * temp = strdup(token);
+
     free(aux);
     aux = NULL;
-    return token;
+    return temp;
 }
 
 void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDatabase,const FlightsDatabase fDatabase,const PassangersDatabase * pDatabase,int agrc, char **argv){
@@ -189,11 +191,15 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
         case '5':
 
             if(linhaLimpa[1] == 'F'){
-                    query5((const FlightsDatabase) fDatabase,firstDateQ5(&linhaLimpa[7]),secondDateQ5(&linhaLimpa[29]),airportName(&linhaLimpa[3]),true);
-                    
+                    char * airport = airportName(&linhaLimpa[3]);
+                    query5((const FlightsDatabase) fDatabase,firstDateQ5(&linhaLimpa[7]),secondDateQ5(&linhaLimpa[29]),airport,true);
+                    free(airport);
+                    airport = NULL;
                 }else {
-                    query5((const FlightsDatabase) fDatabase,firstDateQ5(&linhaLimpa[7]),secondDateQ5(&linhaLimpa[29]),airportName(&linhaLimpa[2]),false);
-                    
+                    char * airport = airportName(&linhaLimpa[2]);
+                    query5((const FlightsDatabase) fDatabase,firstDateQ5(&linhaLimpa[7]),secondDateQ5(&linhaLimpa[29]),airport,false);
+                    free(airport);
+                    airport = NULL;
                 }
 
             break;

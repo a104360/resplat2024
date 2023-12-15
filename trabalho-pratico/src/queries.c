@@ -248,7 +248,7 @@ void query4(const ReservationsDatabase rDatabase,const char * id,bool f){
     return;
 }
 
-void query5(FlightsDatabase fDatabase,Time * ti,Time * tf,const char * name,bool f){
+void query5(const FlightsDatabase fDatabase,Time * ti,Time * tf,const char * name,bool f){
     int fDatabaseSize = g_hash_table_size(fDatabase);
     AirportDB * airportFlights = getAirportDB(fDatabase,name,ti,tf);
     Flight ** fList = getAirportFlights(airportFlights);

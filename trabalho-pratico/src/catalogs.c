@@ -425,9 +425,9 @@ AirportDB * getAirportDB(const FlightsDatabase fDatabase,const char * airport,Ti
     aList->l = end;
     aList->airport = strdup(airport);
     aList->fList = malloc(sizeof(Flight *) * max);
+    for(int i = 0;i < max;i++) aList->fList[i] = NULL;
     i = 0;
     g_hash_table_foreach((const FlightsDatabase) fDatabase,checkAirports,aList);
-    aList->numFlights++;
     return aList;
 }
 
