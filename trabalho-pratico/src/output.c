@@ -444,12 +444,12 @@ void outputQ4(bool f,Reservation ** rList,int max){
 
                 if(i != 0) fprintf(outputFile,"\n");
                 fprintf(outputFile,"--- %d ---\n",i + 1);
-                fprintf(outputFile,"id : %s\n",id);
-                fprintf(outputFile,"begin_date : %s\n",stringBTime);
-                fprintf(outputFile,"end_date : %s\n",stringETime);
-                fprintf(outputFile,"user_id : %s\n",uId);
-                fprintf(outputFile,"rating : %d\n",rating);
-                fprintf(outputFile,"total_price : %0.3f\n",getTotalSpentOnReserv(rList[i],n));
+                fprintf(outputFile,"id: %s\n",id);
+                fprintf(outputFile,"begin_date: %s\n",stringBTime);
+                fprintf(outputFile,"end_date: %s\n",stringETime);
+                fprintf(outputFile,"user_id: %s\n",uId);
+                fprintf(outputFile,"rating: %d\n",rating);
+                fprintf(outputFile,"total_price: %0.3f\n",getTotalSpentOnReserv(rList[i],n));
                 FREE(id);
                 FREE(stringBTime);
                 FREE(stringETime);
@@ -505,13 +505,13 @@ void outputQ5(bool f, Flight ** fList,int max){
     }
     if(f == true){
         for(int i = 0;i < max;i++){
-            if(i != 1) fprintf(outputFile,"\n");
+            if(i != 0) fprintf(outputFile,"\n");
             fprintf(outputFile,"--- %d ---\n",i + 1);
-            fprintf(outputFile,"id : %s\n",getFlightId(fList[i]));
-            fprintf(outputFile,"schedule_departure_date : %s\n",timeToString(getFlightSDepartureDate(fList[i])));
-            fprintf(outputFile,"destination : %s\n",getFlightDestination(fList[i]));
-            fprintf(outputFile,"airline : %s\n",getFlightAirline(fList[i]));
-            fprintf(outputFile,"plane_model : %s\n",getFlightPlaneModel(fList[i]));
+            fprintf(outputFile,"id: %s\n",getFlightId(fList[i]));
+            fprintf(outputFile,"schedule_departure_date: %s\n",timeToString(getFlightSDepartureDate(fList[i])));
+            fprintf(outputFile,"destination: %s\n",getFlightDestination(fList[i]));
+            fprintf(outputFile,"airline: %s\n",getFlightAirline(fList[i]));
+            fprintf(outputFile,"plane_model: %s\n",getFlightPlaneModel(fList[i]));
         }
     }else{
         for(int i = 0;i < max;i++){
