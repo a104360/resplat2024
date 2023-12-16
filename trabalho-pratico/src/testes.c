@@ -254,7 +254,7 @@ int confirmar(int argc, char ** argv) {
         snprintf(correct,99,"../../li3_fr/dataset/outputs/command%d_output.txt",i);
         if(areFilesEqual((const char *) correct,(const char *) comp)){
             printf("Command %d is correct!\n",i);
-        }else break;
+        }else continue;;
     }
     
     free(files);

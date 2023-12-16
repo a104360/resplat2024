@@ -845,10 +845,10 @@ User * userCheck(const char * line){
 
     //Origin
     if(strlen(token)!=3 || saveptr[0] == ';'){ 
-        // free(token);
         ERRORSF(aux,flight);
     }
     char * origin = strdup(token);
+    for(int a = 0;a < 3;a++) origin[a] = toupper(origin[a]);
     setFlightOrigin(flight,origin);
     TOKENIZE(token,saveptr);
 
@@ -858,7 +858,10 @@ User * userCheck(const char * line){
         ERRORSF(aux,flight);
     }
     NEXTSLOT(origin);
-    setFlightDestination(flight,token);
+    char * destination = strdup(token);
+    for(int i = 0;i < 3;i++) destination[i] = toupper(destination[i]);
+    setFlightDestination(flight,destination);
+    NEXTSLOT(destination);
     TOKENIZE(token,saveptr);
     
     Time * sDepartDate = dateCheck(token);

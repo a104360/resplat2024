@@ -327,7 +327,7 @@ int main(int argc,char **argv){
 
         //g_hash_table_foreach(rDatabase,(GHFunc) print,NULL);
 
-        readEntryFile(uDatabase,rDatabase,fDatabase,pDatabase,argc,argv);
+        readEntryFile((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassangersDatabase *) pDatabase,argc,argv);
         /*UserReservsDB * reservs = getUserReservsDB(rDatabase,"JéssiTavares910");
 
         Reservation ** list = getUserReservs(reservs);

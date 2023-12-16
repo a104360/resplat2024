@@ -3,6 +3,7 @@
 #include "../include/dataStructs.h"
 #include "../include/time.h"
 #include <stdio.h>
+#include <ctype.h>
 #include <glib.h>
 #include <gmodule.h>
 
@@ -425,7 +426,7 @@ AirportDB * getAirportDB(const FlightsDatabase fDatabase,const char * airport,Ti
     aList->l = end;
     aList->airport = strdup(airport);
     aList->fList = malloc(sizeof(Flight *) * max);
-    for(int i = 0;i < max;i++) aList->fList[i] = NULL;
+    for(int a = 0;a < max;a++) aList->fList[a] = NULL;
     i = 0;
     g_hash_table_foreach((const FlightsDatabase) fDatabase,checkAirports,aList);
     return aList;
@@ -449,7 +450,7 @@ void checkAirports(gpointer key,gpointer value,gpointer flightData){
             database->numFlights++;
         }
     }
-    if(database->f == NULL){
+    else{
         if(!strcoll(database->airport,origin)){
             database->fList[i] = flight;
             i++;
