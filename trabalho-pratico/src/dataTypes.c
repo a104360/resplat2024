@@ -450,9 +450,11 @@ int getUserAge(User * user){
     int n = PYEAR - (getYear(userBday));
     if(PMON >= getMon(userBday)){
         if(PDAY >= getMday(userBday)){
+            destroyTime(userBday);
             return n + 1;
         }
     }
+    destroyTime(userBday);
     return n;
 }
 

@@ -81,9 +81,9 @@ void outputQ1Flight(int F, char * airline, char * plane_model , char * origin, c
     
     if(airline == NULL){
         if(outputFile != NULL){ 
-        fclose(outputFile);
-        return;
-    }   
+            fclose(outputFile);
+            return;
+        }   
     }
 
     if(F == 0){
@@ -128,7 +128,7 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
     }
 
     if(hotel_id == NULL){
-        if(outputFile == NULL) fclose(outputFile);
+        if(outputFile != NULL) fclose(outputFile);
         return;
     }
 
@@ -505,22 +505,46 @@ void outputQ5(bool f, Flight ** fList,int max){
     }
     if(f == true){
         for(int i = 0;i < max;i++){
+            char * fId = getFlightId(fList[i]);
+            Time * sDD = getFlightSDepartureDate(fList[i]);
+            char * sDepDate = timeToString(sDD);
+            char * destination = getFlightDestination(fList[i]);
+            char * airline = getFlightAirline(fList[i]);
+            char * planeModel = getFlightPlaneModel(fList[i]);
             if(i != 0) fprintf(outputFile,"\n");
             fprintf(outputFile,"--- %d ---\n",i + 1);
-            fprintf(outputFile,"id: %s\n",getFlightId(fList[i]));
-            fprintf(outputFile,"schedule_departure_date: %s\n",timeToString(getFlightSDepartureDate(fList[i])));
-            fprintf(outputFile,"destination: %s\n",getFlightDestination(fList[i]));
-            fprintf(outputFile,"airline: %s\n",getFlightAirline(fList[i]));
-            fprintf(outputFile,"plane_model: %s\n",getFlightPlaneModel(fList[i]));
+            fprintf(outputFile,"id: %s\n",fId);
+            fprintf(outputFile,"schedule_departure_date: %s\n",sDepDate);
+            fprintf(outputFile,"destination: %s\n",destination);
+            fprintf(outputFile,"airline: %s\n",airline);
+            fprintf(outputFile,"plane_model: %s\n",planeModel);
+            destroyTime(sDD);
+            FREE(fId);
+            FREE(sDepDate);
+            FREE(destination);
+            FREE(airline);
+            FREE(planeModel);
         }
     }else{
         for(int i = 0;i < max;i++){
+            char * fId = getFlightId(fList[i]);
+            Time * sDD = getFlightSDepartureDate(fList[i]);
+            char * sDepDate = timeToString(sDD);
+            char * destination = getFlightDestination(fList[i]);
+            char * airline = getFlightAirline(fList[i]);
+            char * planeModel = getFlightPlaneModel(fList[i]);
             fprintf(outputFile,"%s;%s;%s;%s;%s\n",
-            getFlightId(fList[i]),
-            timeToString(getFlightSDepartureDate(fList[i])),
-            getFlightDestination(fList[i]),
-            getFlightAirline(fList[i]),
-            getFlightPlaneModel(fList[i]));
+            fId,
+            sDepDate,
+            destination,
+            airline,
+            planeModel);
+            destroyTime(sDD);
+            FREE(fId);
+            FREE(sDepDate);
+            FREE(destination);
+            FREE(airline);
+            FREE(planeModel);
         }
     }
     fclose(outputFile);

@@ -722,6 +722,7 @@ User * userCheck(const char * line){
                 ERRORSR(aux,reservation);
             }
             setReservRoomDetails(reservation,roomDetails);
+            NEXTSLOT(roomDetails);
             TOKENIZE(token,saveptr);
 
             unsigned int rating = reviewCheck(token);

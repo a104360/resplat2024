@@ -9,7 +9,8 @@
 #include "../include/parser.h"
 
 #define BUFFERSIZE 1000
-#define TOKENIZE(token,saveptr) token = strtok_r(NULL," \n\0",&saveptr); 
+#define TOKENIZE(token,saveptr) token = strtok_r(NULL," \n\0",&saveptr);
+#define FREE(ptr) if(ptr){free(ptr); ptr = NULL;} 
 
 
 int verTamanhoLinha(const char * linha){
@@ -104,7 +105,7 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
 
     if(!linha) { perror("Erro a alocar memoria no readFile"); return;}
 
-    memset(linha, '\0', strlen(linha));
+    memset(linha, '\0', BUFFERSIZE);
 
     while(fgets(linha,BUFFERSIZE,comandos)){
 
@@ -189,15 +190,20 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
 
         //QUERIE 5
         case '5':
-
+            Time * firstDate = firstDateQ5(&linhaLimpa[7]);
+            Time * secondDate = secondDateQ5(&linhaLimpa[29]);
             if(linhaLimpa[1] == 'F'){
                     char * airport = airportName(&linhaLimpa[3]);
-                    query5((const FlightsDatabase) fDatabase,firstDateQ5(&linhaLimpa[7]),secondDateQ5(&linhaLimpa[29]),airport,true);
+                    query5((const FlightsDatabase) fDatabase,firstDate,secondDate,airport,true);
+                    destroyTime(firstDate);
+                    destroyTime(secondDate);
                     free(airport);
                     airport = NULL;
                 }else {
                     char * airport = airportName(&linhaLimpa[2]);
-                    query5((const FlightsDatabase) fDatabase,firstDateQ5(&linhaLimpa[7]),secondDateQ5(&linhaLimpa[29]),airport,false);
+                    query5((const FlightsDatabase) fDatabase,firstDate,secondDate,airport,false);
+                    destroyTime(firstDate);
+                    destroyTime(secondDate);
                     free(airport);
                     airport = NULL;
                 }
@@ -245,12 +251,17 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
 
                     int tokenSize = verTamanhoLinha(token);
 
-                    free(aux);
-                    aux = NULL;
 
-                    query8(rDatabase,token,firstDateQ8(&linhaLimpa[4+tokenSize]),secondDateQ8(&linhaLimpa[15+tokenSize]),true);
+                    Time * firstDate = firstDateQ8(&linhaLimpa[4+tokenSize]);
+                    Time * secondDate = secondDateQ8(&linhaLimpa[15+tokenSize]);
+
+                    query8(rDatabase,token,firstDate,secondDate,true);
+
+                    FREE(aux);
+                    destroyTime(firstDate);
+                    destroyTime(secondDate);
                     
-                }else {
+                }else{
                     char * aux = strdup(linhaLimpa);
                     char * token = NULL;
                     char * saveptr = aux;
@@ -259,10 +270,14 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
 
                     int tokenSize = verTamanhoLinha(token);
 
-                    free(aux);
-                    aux = NULL;
+                    Time * firstDate = firstDateQ8(&linhaLimpa[3+tokenSize]);
+                    Time * secondDate = secondDateQ8(&linhaLimpa[14+tokenSize]);
 
-                    query8(rDatabase,token,firstDateQ8(&linhaLimpa[3+tokenSize]),secondDateQ8(&linhaLimpa[14+tokenSize]),false);
+                    query8(rDatabase,token,firstDate,secondDate,false);
+
+                    FREE(aux);
+                    destroyTime(firstDate);
+                    destroyTime(secondDate);
                     
                 }
 

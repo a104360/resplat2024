@@ -31,9 +31,11 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
     switch (flag)
     {
     case 1: // ** User ** 
-        User * user = lookupUser((const UsersDatabase) uDatabase,id);
+        User * user = NULL;
+        user = lookupUser((const UsersDatabase) uDatabase,id);
 
         if(getUserAccountStatus(user) == false){
+            FREE(analisa);
             outputQ1User(f,NULL,'\0',0,NULL,NULL,NULL,NULL,NULL);
             return;
         }
@@ -71,8 +73,10 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         break;
     
     case 2: // ** Flight **
-        Flight * flight = lookupFlight(fDatabase,id);
+        Flight * flight = NULL;
+        flight = lookupFlight(fDatabase,id);
         if(flight == NULL){
+            FREE(analisa);
             outputQ1Flight(f,NULL,NULL,NULL,NULL,NULL,NULL,0,0);
             return;
         }
@@ -80,8 +84,10 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         char * plane_model = getFlightPlaneModel(flight);
         char * origin = getFlightOrigin(flight);
         char * destination = getFlightDestination(flight);
-        char * schedule_departure_date = timeToString(getFlightSDepartureDate(flight));
-        char * schedule_arrival_date = timeToString(getFlightSArrivalDate(flight));
+        Time * sDD = getFlightSDepartureDate(flight);
+        Time * sAD = getFlightSArrivalDate(flight);
+        char * schedule_departure_date = timeToString(sDD);
+        char * schedule_arrival_date = timeToString(sAD);
         
 
         FlightPassangers * book = getFlightPassangers((void *) fDatabase,(void *) pDatabase,id);
@@ -91,7 +97,8 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         int delay = getFlightDelay(flight);
 
         outputQ1Flight((int)f,airline,plane_model,origin,destination,schedule_departure_date,schedule_arrival_date,nPassangers,delay);
-
+        destroyTime(sDD);
+        destroyTime(sAD);
         FREE(airline);
         FREE(plane_model);
         FREE(origin);
@@ -103,23 +110,29 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         break;
 
     case 3: // ** Reservation **
-        Reservation * reserv = lookupReserv(rDatabase,id);
+        Reservation * reserv = NULL;
+        reserv = lookupReserv(rDatabase,id);
         if(!reserv){
+            FREE(analisa);
             outputQ1Reservation(f,NULL,NULL,-1,NULL,NULL,false,0,0);
             return;
         } 
         char * hotel_id = getReservHotelId(reserv);
         char * hotel_name = getReservHotelName(reserv);
         int hotel_stars = getReservHotelStars(reserv);
-        char * begin_date = timeToString(getReservBeginDate(reserv));
-        char * end_date = timeToString(getReservEndDate(reserv));
-        int nights = numberOfDays(getReservBeginDate(reserv),getReservEndDate(reserv));
+        Time * begin = getReservBeginDate(reserv);
+        Time * end = getReservEndDate(reserv);
+        char * begin_date = timeToString(begin);
+        char * end_date = timeToString(end);
+        int nights = numberOfDays(begin,end);
         bool includes_breakfast = getReservBreakfast(reserv);
         double total_price = getTotalSpentOnReserv(reserv,nights);
 
         outputQ1Reservation((int)f,hotel_id,hotel_name,hotel_stars,begin_date,end_date,
         includes_breakfast,nights,total_price);
 
+        destroyTime(begin);
+        destroyTime(end);
         FREE(hotel_id);
         FREE(hotel_name);
         FREE(begin_date);
@@ -144,14 +157,15 @@ void query2(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
     User * user = lookupUser((const UsersDatabase) uDatabase,token);
     if(user == NULL){
         outputQ2(F,NULL,-1,NULL,-1);
+        FREE(aux);
         return;
     }
     token = strtok_r(NULL,"\n\0",&saveprt);
 
-    FREE(aux);
 
     if(getUserAccountStatus(user) == false){
         outputQ2(F,NULL,-1,NULL,-1);
+        FREE(aux);
         return;
     }
     int flag = 0;
@@ -160,6 +174,7 @@ void query2(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
     if(strcoll(token,"flights") == 0) flag = 2;
         else if(strcoll(token,"reservations") == 0) flag = 3;
     }
+    FREE(aux);
     char * id = getUserId(user);
     switch (flag)
     {
@@ -181,12 +196,11 @@ void query2(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         destroyUserReservsDB(uRDatabase1,rDatabaseSize);
         destroyUserFlightsDB(uFDatabase1,fDatabaseSize);
 
-        if(id){
-            FREE(id);
-        }
-        if(token){
-            FREE(token);
-        }
+        
+        FREE(id);
+        
+        FREE(token);
+        
         break;
 
     case 2: // FLIGHT
