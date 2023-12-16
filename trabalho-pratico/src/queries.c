@@ -295,7 +295,7 @@ void query8(ReservationsDatabase rDatabase,const char * id,Time * begin,Time * e
 
     int max = getNumReservas(hDatabase);
 
-    for(int i = 0;i < max && rList[i];i++){
+    for(int i = 0;i < max;i++){
         total += getTotalSpentOnReserv(rList[i],days);
     }
 
