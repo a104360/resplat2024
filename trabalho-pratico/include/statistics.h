@@ -6,6 +6,8 @@ double getTotalSpentByUser(void **);
 
 double getTotalSpentOnReserv(void *,int);
 
+int getHotelEarningsOfReserv(void *,int);
+
 double averageRating(void *,const char *);
 
 

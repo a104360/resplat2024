@@ -25,9 +25,24 @@ double getTotalSpentOnReserv(void * userReservs,int n){
     double total = 0;
     double p = getReservPricePerNight(list);
     double iva = getReservCityTax(list);
-    total = (p * n) + (((p * n)/ 100) * iva);
+    double baseMoney = (p * n);
+    double taxMoney = (((p * n)/ 100) * iva);
+    
+    total = baseMoney + taxMoney;
+    
     return total;
 }
+
+int getHotelEarningsOfReserv(void * userReservs,int n){
+    Reservation * list = (Reservation *) userReservs; 
+    int total = 0;
+    int p = (int) getReservPricePerNight(list);
+    int baseMoney = (p * n);
+    total = baseMoney;
+    
+    return total;
+}
+
 
 double averageRating(void * reservations, const char * id){
     HotelDatabase * hotelDB = getHotelDataBase(reservations,id,NULL,NULL);

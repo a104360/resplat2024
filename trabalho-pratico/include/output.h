@@ -16,6 +16,6 @@ void outputQ4(bool,Reservation **,int);
 
 void outputQ5(bool,Flight **,int);
 
-void outputQ8(double ,bool);
+void outputQ8(int ,bool);
 
 #endif

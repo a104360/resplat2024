@@ -284,19 +284,34 @@ void query7(){
     return;
 }
 
-void query8(ReservationsDatabase rDatabase,const char * id,Time * begin,Time * end,bool f){
-    HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id,begin,end);
+void query8(ReservationsDatabase rDatabase,const char * id,Time * lLimit,Time * uLimit,bool f){
+    HotelDatabase * hDatabase = getHotelDataBase(rDatabase,id,lLimit,uLimit);
     
     Reservation ** rList = getAllHotelReservs(hDatabase);
 
-    double total = 0;
+    int total = 0;
 
-    int days = numberOfDays(begin,end);
 
     int max = getNumReservas(hDatabase);
 
     for(int i = 0;i < max;i++){
-        total += getTotalSpentOnReserv(rList[i],days);
+        Time * begin = getReservBeginDate(rList[i]);
+        Time * end = getReservEndDate(rList[i]);
+        int days = 1;
+        switch (compareTimes(begin,lLimit))
+        {
+        case true:
+            if(compareTimes(end,uLimit)) days += numberOfDays(lLimit,end);
+            else days += numberOfDays(lLimit,uLimit);
+            break;
+        default:
+            if(compareTimes(end,uLimit)) days = numberOfDays(begin,end);
+            else days += numberOfDays(begin,uLimit);
+            break;
+        }
+        total += getHotelEarningsOfReserv(rList[i],days);
+        destroyTime(begin);
+        destroyTime(end);
     }
 
     outputQ8(total,f);

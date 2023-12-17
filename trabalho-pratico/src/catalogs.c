@@ -196,7 +196,9 @@ void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
     Time * endDate = getReservEndDate(reservation);
 
     if(array->begin != NULL && array->end != NULL){
-        if (!strcoll(hotelId,array->hotel_id) && compareTimes(beginDate,array->end) && compareTimes(array->begin,endDate)) {
+        if (!strcoll(hotelId,array->hotel_id) && 
+        (compareTimes(beginDate,array->end) || compareTimes(beginDate,array->end) == 10) && 
+        (compareTimes(array->begin,endDate) || compareTimes(array->begin,endDate) == 10)) {
           array->_hotelReservs[i] = reservation;
           int rating = getReservRating(reservation);
           array->sumRatings += rating;

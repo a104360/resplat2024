@@ -550,7 +550,7 @@ void outputQ5(bool f, Flight ** fList,int max){
     fclose(outputFile);
 }
 
-void outputQ8(double revenue, bool f){
+void outputQ8(int revenue, bool f){
     commandAtual++;
 
     char fileName[50];
@@ -567,9 +567,9 @@ void outputQ8(double revenue, bool f){
 
     if(f== true){
         fprintf(outputFile,"--- 1 ---\n");
-        fprintf(outputFile,"revenue: %0.3f\n",revenue);
+        fprintf(outputFile,"revenue: %d\n",revenue);
     }else{
-        fprintf(outputFile,"%0.3f\n",revenue);
+        fprintf(outputFile,"%d\n",revenue);
     }
     fclose(outputFile);
 }
