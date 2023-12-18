@@ -1,7 +1,6 @@
 #ifndef SORT_H
 #define SORT_H
 
-
 /*
 Sorts an array of pointers, requesting as arguments: 
     ARRAY of pointers 

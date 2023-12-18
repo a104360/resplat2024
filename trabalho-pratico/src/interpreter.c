@@ -3,7 +3,10 @@
 #include <stdlib.h>
 #include "../include/interpreter.h"
 #include "../include/queries.h"
-#include "../include/dataTypes.h"
+#include "../include/user.h"
+#include "../include/flight.h"
+#include "../include/reservation.h"
+#include "../include/passenger.h"
 #include "../include/dataStructs.h"
 #include "../include/catalogs.h"
 #include "../include/parser.h"

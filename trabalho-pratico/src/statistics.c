@@ -1,6 +1,6 @@
 #include "../include/statistics.h"
 #include "../include/catalogs.h"
-#include "../include/dataTypes.h"
+#include "../include/reservation.h"
 #include <glib.h>
 
 

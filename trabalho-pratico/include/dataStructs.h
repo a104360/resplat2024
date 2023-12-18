@@ -1,7 +1,7 @@
 #ifndef DATASTRUCTS_H
 #define DATASTRUCTS_H
 #include <stdbool.h>
-#include "../include/dataTypes.h"
+#include "../include/passenger.h"
 
 
 

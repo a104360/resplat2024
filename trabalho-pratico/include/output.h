@@ -1,6 +1,10 @@
 #ifndef OUTPUT_H
 #define OUTPUT_H
-#include "../include/dataTypes.h"
+#include "../include/user.h"
+#include "../include/flight.h"
+#include "../include/reservation.h"
+#include "../include/passenger.h"
+#include <stdbool.h>
 
 void outputQ1User(int , char * , char , int , char * , char * , char * , char * , char * );
 

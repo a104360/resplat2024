@@ -2,8 +2,10 @@
 #define PARSER_H
 #include <stdbool.h>
 #include "../include/catalogs.h"
-#include "../include/dataTypes.h"
-
+#include "../include/user.h"
+#include "../include/flight.h"
+#include "../include/reservation.h"
+#include "../include/passenger.h"
 
 char * idCheck(const char *);
 

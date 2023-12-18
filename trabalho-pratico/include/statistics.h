@@ -1,6 +1,9 @@
 #ifndef STATISTICS_H
 #define STATISTICS_H
-#include "../include/dataTypes.h"
+#include "../include/user.h"
+#include "../include/flight.h"
+#include "../include/reservation.h"
+#include "../include/passenger.h"
 
 double getTotalSpentByUser(void **);
 

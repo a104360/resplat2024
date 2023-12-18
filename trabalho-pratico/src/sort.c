@@ -1,4 +1,5 @@
-#include "../include/dataTypes.h"
+#include "../include/reservation.h"
+#include "../include/flight.h"
 #include "../include/time.h"
 #include "../include/sort.h"
 #include <ctype.h>

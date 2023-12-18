@@ -1,5 +1,8 @@
 #include "../include/parser.h"
-#include "../include/dataTypes.h"
+#include "../include/user.h"
+#include "../include/flight.h"
+#include "../include/reservation.h"
+#include "../include/passenger.h"
 #include "../include/catalogs.h"
 #include <string.h>
 #include <stdbool.h>

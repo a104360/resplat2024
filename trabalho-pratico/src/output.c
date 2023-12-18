@@ -2,6 +2,8 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdbool.h>
+#include "../include/flight.h"
+#include "../include/reservation.h"
 #include "../include/output.h"
 #include "../include/statistics.h"
 

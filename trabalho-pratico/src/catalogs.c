@@ -1,11 +1,13 @@
 #include "../include/catalogs.h"
-#include "../include/dataTypes.h"
+#include "../include/user.h"
+#include "../include/flight.h"
+#include "../include/passenger.h"
+#include "../include/reservation.h"
 #include "../include/dataStructs.h"
 #include "../include/time.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <glib.h>
-#include <gmodule.h>
 
 
 #define BUFFERSIZE 1000

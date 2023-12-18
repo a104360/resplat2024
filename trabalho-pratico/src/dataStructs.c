@@ -1,5 +1,5 @@
 #include "../include/dataStructs.h"
-#include "../include/dataTypes.h"
+#include "../include/passenger.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <glib.h>
