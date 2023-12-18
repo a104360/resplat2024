@@ -66,7 +66,7 @@ Reservation * reservationCheck(const char *,UsersDatabase);
 
 Flight * fligthCheck(const char *);
 
-Passanger * passangerCheck(const char *,UsersDatabase,FlightsDatabase);
+Passenger * passengerCheck(const char *,UsersDatabase,FlightsDatabase);
 
 
 #endif

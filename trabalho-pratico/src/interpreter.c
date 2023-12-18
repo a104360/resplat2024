@@ -98,7 +98,7 @@ char * airportName(const char * line){
     return temp;
 }
 
-void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDatabase,const FlightsDatabase fDatabase,const PassangersDatabase * pDatabase,int agrc, char **argv){
+void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDatabase,const FlightsDatabase fDatabase,const PassengersDatabase * pDatabase,int agrc, char **argv){
     if(uDatabase == NULL || rDatabase == NULL || fDatabase == NULL || pDatabase == NULL) return;
     FILE * comandos = fopen(argv[2],"r");
 
@@ -139,10 +139,10 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
             //QUERIE 1
             }else {
                 if(linhaLimpa[1] == 'F'){
-                    query1((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassangersDatabase *) pDatabase,&linhaLimpa[3],true);
+                    query1((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,&linhaLimpa[3],true);
                     
                 }else {
-                    query1((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassangersDatabase *) pDatabase,&linhaLimpa[2],false);
+                    query1((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,&linhaLimpa[2],false);
                     
                 }
             }
@@ -153,10 +153,10 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
         case '2':
 
             if(linhaLimpa[1] == 'F'){
-                    query2((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassangersDatabase *) pDatabase,&linhaLimpa[3],true);
+                    query2((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,&linhaLimpa[3],true);
                     
                 }else {
-                    query2((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassangersDatabase *) pDatabase,&linhaLimpa[2],false);
+                    query2((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,&linhaLimpa[2],false);
                     
                 }
 

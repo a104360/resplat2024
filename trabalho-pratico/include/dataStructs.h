@@ -5,20 +5,20 @@
 
 
 
-typedef struct passangersDB PassangersDatabase;
+typedef struct passengersDB PassengersDatabase;
 
-PassangersDatabase * createPassangerDatabase();
+PassengersDatabase * createPassengerDatabase();
 
-void insertPassanger(void * , void * );
+void insertPassenger(void * , void * );
 
-int getNumAllPassangers(const PassangersDatabase * );
+int getNumAllPassengers(const PassengersDatabase * );
 
-Passanger * lookupPassangerUID(const PassangersDatabase *,const char *);
+Passenger * lookupPassengerUID(const PassengersDatabase *,const char *);
 
-Passanger * lookupPassangerFID(const PassangersDatabase *,const char *);
+Passenger * lookupPassengerFID(const PassengersDatabase *,const char *);
 
-Passanger ** getAllPassangers(const PassangersDatabase * );
+Passenger ** getAllPassengers(const PassengersDatabase * );
 
-void destroyPassangersDB(PassangersDatabase *);
+void destroyPassengersDB(PassengersDatabase *);
 
 #endif

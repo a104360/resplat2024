@@ -11,10 +11,10 @@
 
 
 // Listar o resumo de um user/reserva/voo, através do identificador
-void query1(const UsersDatabase, const ReservationsDatabase ,const FlightsDatabase ,const PassangersDatabase *,const char *,bool);
+void query1(const UsersDatabase, const ReservationsDatabase ,const FlightsDatabase ,const PassengersDatabase *,const char *,bool);
 
 //listar voos ou reservas de um user !!atencao ao enunciado!!
-void query2(const UsersDatabase,const ReservationsDatabase,const FlightsDatabase,const PassangersDatabase *,const char *,bool);
+void query2(const UsersDatabase,const ReservationsDatabase,const FlightsDatabase,const PassengersDatabase *,const char *,bool);
 
 //apresentar classificacao media de um hotel, atraves do identificador
 void query3(const ReservationsDatabase,const char *,bool);

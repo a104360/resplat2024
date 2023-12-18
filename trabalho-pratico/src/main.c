@@ -257,70 +257,70 @@ int main(int argc,char **argv){
         flightsErrors = NULL;
 
 
-        // Create Passangers Database 
+        // Create Passengers Database 
 
         memset(filePath,'\0',argSize + 20);
 
         strncpy(filePath,argv[1],argSize);
         strncat(filePath,"/passengers.csv",17);
 
-        FILE * passangersFile = NULL;
-        passangersFile = fopen(filePath,"r");
-        if(passangersFile == NULL){
+        FILE * passengersFile = NULL;
+        passengersFile = fopen(filePath,"r");
+        if(passengersFile == NULL){
             perror("Did not opened the file correctly");
             return 10;
         }
 
-        FILE * passangersErrors = NULL;
+        FILE * passengersErrors = NULL;
         char * filePathPErrors = NULL;
         filePathPErrors = malloc(argSize + 27);
         strncpy(filePathPErrors,"Resultados",14);
         strncat(filePathPErrors,"/passengers_errors.csv",25);
-        passangersErrors = fopen(filePathPErrors,"a+");
-        if(!passangersErrors) {perror("Passangers errors file did not open\n"); return 1;}
+        passengersErrors = fopen(filePathPErrors,"a+");
+        if(!passengersErrors) {perror("Passengers errors file did not open\n"); return 1;}
 
-        char * passangersData = malloc(sizeof(char) * BUFFERSIZE);
+        char * passengersData = malloc(sizeof(char) * BUFFERSIZE);
 
-        if(!passangersData) { perror("Erro a alocar memoria na main"); return 1;}
+        if(!passengersData) { perror("Erro a alocar memoria na main"); return 1;}
 
-        memset(passangersData, '\0', BUFFERSIZE);
+        memset(passengersData, '\0', BUFFERSIZE);
 
-        PassangersDatabase * pDatabase = createPassangerDatabase();
+        PassengersDatabase * pDatabase = createPassengerDatabase();
         
-        fgets(passangersData,BUFFERSIZE,passangersFile);
+        fgets(passengersData,BUFFERSIZE,passengersFile);
 
-        fprintf(passangersErrors,"%s",passangersData);
+        fprintf(passengersErrors,"%s",passengersData);
 
-        while(fgets(passangersData,BUFFERSIZE,passangersFile)){
+        while(fgets(passengersData,BUFFERSIZE,passengersFile)){
 
-            Passanger * pBuffer = NULL;
+            Passenger * pBuffer = NULL;
 
-            int tamanhoPassangersData = verTamanhoLinha(passangersData);
+            int tamanhoPassengersData = verTamanhoLinha(passengersData);
 
-            char passangersDataClean[tamanhoPassangersData +1];
+            char passengersDataClean[tamanhoPassengersData +1];
 
-            strncpy(passangersDataClean,passangersData,tamanhoPassangersData);
+            strncpy(passengersDataClean,passengersData,tamanhoPassengersData);
 
-            passangersDataClean[tamanhoPassangersData] = '\0';
+            passengersDataClean[tamanhoPassengersData] = '\0';
 
-            pBuffer = passangerCheck(passangersDataClean,uDatabase,fDatabase);
+            pBuffer = passengerCheck(passengersDataClean,uDatabase,fDatabase);
 
             if(pBuffer != NULL){
-                insertPassanger(pDatabase,pBuffer);
+                insertPassenger(pDatabase,pBuffer);
 
             }else{ 
-                fprintf(passangersErrors,"%s",passangersDataClean);
+                fprintf(passengersErrors,"%s",passengersDataClean);
             }
         }
 
-        fclose(passangersFile); // close
-        passangersFile = NULL;
+        fclose(passengersFile); // close
+        passengersFile = NULL;
         free(filePathPErrors);  // free
         filePathPErrors = NULL;
-        free(passangersData); // free
-        passangersData = NULL;
-        fclose(passangersErrors); // close
-        passangersErrors = NULL;
+        free(passengersData); // free
+        passengersData = NULL;
+        fclose(passengersErrors); // close
+        passengersErrors = NULL;
         free(filePath); // free
         filePath = NULL;
 
@@ -330,7 +330,7 @@ int main(int argc,char **argv){
 
         //g_hash_table_foreach(rDatabase,(GHFunc) print,NULL);
 
-        readEntryFile((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassangersDatabase *) pDatabase,argc,argv);
+        readEntryFile((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,argc,argv);
         /*UserReservsDB * reservs = getUserReservsDB(rDatabase,"JéssiTavares910");
 
         Reservation ** list = getUserReservs(reservs);
@@ -344,7 +344,7 @@ int main(int argc,char **argv){
         }*/
 
         // Free everything used
-        destroyPassangersDB(pDatabase);
+        destroyPassengersDB(pDatabase);
         destroyUsers(uDatabase);
         destroyFlights(fDatabase);
         destroyReservs(rDatabase);

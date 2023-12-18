@@ -190,7 +190,7 @@ int validation(const char ** filePath){
         }
 
         if (strcmp(line1, line2) != 0) {
-            printf("Difference in line %d:\n of passangers", lineNum);
+            printf("Difference in line %d:\n of passengers", lineNum);
             printf("%s: %s", filePath[3], line1);
             printf("%s: %s", file2Path, line2);
             fclose(file1);
@@ -230,16 +230,16 @@ int confirmar(int argc, char ** argv) {
     memset(flights,'\0',60);
     snprintf(flights,59,"./Resultados/flights_errors.csv");
 
-    char passangers[60];
-    memset(passangers,'\0',60);
-    snprintf(passangers,59,"./Resultados/passengers_errors.csv");
+    char passengers[60];
+    memset(passengers,'\0',60);
+    snprintf(passengers,59,"./Resultados/passengers_errors.csv");
 
     char ** files = malloc(sizeof(char *) * 4);
 
     files[0] = users;
     files[1] = reservations;
     files[2] = flights;
-    files[3] = passangers;
+    files[3] = passengers;
 
     validation((const char **) files);
 

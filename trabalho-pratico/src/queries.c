@@ -21,7 +21,7 @@
     ptr = NULL;\
 }
 
-void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,const FlightsDatabase fDatabase,const PassangersDatabase * pDatabase,const char * id,bool f){
+void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,const FlightsDatabase fDatabase,const PassengersDatabase * pDatabase,const char * id,bool f){
     int rDatabaseSize = g_hash_table_size(rDatabase);
     int fDatabaseSize = g_hash_table_size(fDatabase);
     char * analisa = malloc(sizeof(char) * 5);
@@ -93,13 +93,13 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
         char * schedule_arrival_date = timeToString(sAD);
         
 
-        FlightPassangers * book = getFlightPassangers((void *) fDatabase,(void *) pDatabase,id);
-        int nPassangers = getNumPassangers(book);
-        destroyFlightPassangers(book,fDatabaseSize);
+        FlightPassengers * book = getFlightPassengers((void *) fDatabase,(void *) pDatabase,id);
+        int nPassengers = getNumPassengers(book);
+        destroyFlightPassengers(book,fDatabaseSize);
 
         int delay = getFlightDelay(flight);
 
-        outputQ1Flight((int)f,airline,plane_model,origin,destination,schedule_departure_date,schedule_arrival_date,nPassangers,delay);
+        outputQ1Flight((int)f,airline,plane_model,origin,destination,schedule_departure_date,schedule_arrival_date,nPassengers,delay);
         destroyTime(sDD);
         destroyTime(sAD);
         FREE(airline);
@@ -150,7 +150,7 @@ void query1(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,
     return;
 }
 
-void query2(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,const FlightsDatabase fDatabase,const PassangersDatabase * pDatabase,const char * line,bool F){
+void query2(const UsersDatabase uDatabase, const ReservationsDatabase rDatabase,const FlightsDatabase fDatabase,const PassengersDatabase * pDatabase,const char * line,bool F){
     int rDatabaseSize = g_hash_table_size(rDatabase);
     int fDatabaseSize = g_hash_table_size(fDatabase);
     char * aux = strdup(line);

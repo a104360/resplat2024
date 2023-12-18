@@ -106,15 +106,15 @@ void destroyUserFlightsDB(UserFlightsDB *,int);
 
 
 
-typedef struct flightPassangers FlightPassangers;
+typedef struct flightPassengers FlightPassengers;
 
-FlightPassangers * getFlightPassangers(void *,void *,const char *);
+FlightPassengers * getFlightPassengers(void *,void *,const char *);
 
-int getNumPassangers(const FlightPassangers *);
+int getNumPassengers(const FlightPassengers *);
 
-Passanger ** getFlightPassangersBook(const FlightPassangers *);
+Passenger ** getFlightPassengersBook(const FlightPassengers *);
 
-void destroyFlightPassangers(FlightPassangers *,int);
+void destroyFlightPassengers(FlightPassengers *,int);
 
 
 

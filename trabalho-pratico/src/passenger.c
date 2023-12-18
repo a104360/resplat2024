@@ -3,27 +3,27 @@
 #include <string.h>
 
 
-typedef struct passanger{
+typedef struct passenger{
     char * flight_id;
     char * user_id;
-} Passanger;
+} Passenger;
 
 
 
-// *** Passanger related functions *** 
+// *** Passenger related functions *** 
 
- Passanger * createPassanger(){
-    Passanger * p =malloc(sizeof(struct passanger));
-    initPassanger(p);
+ Passenger * createPassenger(){
+    Passenger * p =malloc(sizeof(struct passenger));
+    initPassenger(p);
     return p;
 }
 
-  void initPassanger(Passanger * passanger){
-    passanger->flight_id = NULL;
-    passanger->user_id = NULL;
+  void initPassenger(Passenger * passenger){
+    passenger->flight_id = NULL;
+    passenger->user_id = NULL;
 }
 
-  void destroyPassanger(Passanger * p) {
+  void destroyPassenger(Passenger * p) {
     if (p != NULL) {
         if(p->flight_id != NULL){
             free(p->flight_id); 
@@ -38,79 +38,79 @@ typedef struct passanger{
     }
 }
 
-size_t getPassangerSize(){
-    return sizeof(struct passanger);
+size_t getPassengerSize(){
+    return sizeof(struct passenger);
 }
 
 
- void setPassangerFlightId(Passanger * passanger,const char * line){
-    if(passanger == NULL || line == NULL) return;
-    if(passanger->flight_id){
-        if(strlen(line) > strlen(passanger->flight_id)){
-            char * temp = realloc(passanger->flight_id,strlen(line)+ 1);
+ void setPassengerFlightId(Passenger * passenger,const char * line){
+    if(passenger == NULL || line == NULL) return;
+    if(passenger->flight_id){
+        if(strlen(line) > strlen(passenger->flight_id)){
+            char * temp = realloc(passenger->flight_id,strlen(line)+ 1);
             strncpy(temp,line,strlen(line));
             temp[strlen(line)] = '\0';
-            passanger->flight_id = temp;
+            passenger->flight_id = temp;
             return;
         }else{
-            strncpy(passanger->flight_id,line,strlen(passanger->flight_id));
-            passanger->flight_id[strlen(passanger->flight_id)] = '\0';
+            strncpy(passenger->flight_id,line,strlen(passenger->flight_id));
+            passenger->flight_id[strlen(passenger->flight_id)] = '\0';
             return;
         }
     }
-    passanger->flight_id = strdup(line);
+    passenger->flight_id = strdup(line);
 }
 
- char *getPassangerFlightId(Passanger * passanger){
-    if(passanger == NULL) return NULL;
-    if(passanger->flight_id == NULL) return NULL;
-    if(passanger->flight_id != NULL){
-        char * flight_id = strdup(passanger->flight_id);
+ char *getPassengerFlightId(Passenger * passenger){
+    if(passenger == NULL) return NULL;
+    if(passenger->flight_id == NULL) return NULL;
+    if(passenger->flight_id != NULL){
+        char * flight_id = strdup(passenger->flight_id);
         return flight_id;
     }
     return NULL;
 }
 
 
-  void setPassangerUserId(Passanger * passanger,const char * line){
-    if(passanger == NULL || line == NULL) return;
-    if(passanger->user_id){
-        if(strlen(line) > strlen(passanger->user_id)){
-            char * temp = realloc(passanger->user_id,strlen(line)+ 1);
+  void setPassengerUserId(Passenger * passenger,const char * line){
+    if(passenger == NULL || line == NULL) return;
+    if(passenger->user_id){
+        if(strlen(line) > strlen(passenger->user_id)){
+            char * temp = realloc(passenger->user_id,strlen(line)+ 1);
             strncpy(temp,line,strlen(line));
             temp[strlen(line)] = '\0';
-            passanger->user_id = temp;
+            passenger->user_id = temp;
             return;
         }else{
-            strncpy(passanger->user_id,line,strlen(passanger->user_id));
-            passanger->user_id[strlen(passanger->user_id)] = '\0';
+            strncpy(passenger->user_id,line,strlen(passenger->user_id));
+            passenger->user_id[strlen(passenger->user_id)] = '\0';
             return;
         }
     }
-    passanger->user_id = strdup(line);
+    passenger->user_id = strdup(line);
 }
 
- char *getPassangerUserId(Passanger * passanger){
-    if(passanger == NULL) return NULL;
-    if(passanger->user_id){
-        char * user_id = strdup(passanger->user_id);
+ char *getPassengerUserId(Passenger * passenger){
+    if(passenger == NULL) return NULL;
+    if(passenger->user_id){
+        char * user_id = strdup(passenger->user_id);
         return user_id;
     }
     return NULL;
 }
 
 
-void copyPassanger(Passanger * dest,Passanger * src){
+void copyPassenger(Passenger * dest,Passenger * src){
     if(dest == NULL || src == NULL) return;
-    char * passangerFlightId = getPassangerFlightId(src);
-    char * passangerUserId = getPassangerUserId(src);
+    char * passengerFlightId = getPassengerFlightId(src);
+    char * passengerUserId = getPassengerUserId(src);
 
-    setPassangerFlightId(dest,passangerFlightId);
-    setPassangerUserId(dest,passangerUserId);
+    setPassengerFlightId(dest,passengerFlightId);
+    setPassengerUserId(dest,passengerUserId);
 
-    free(passangerFlightId);
-    passangerFlightId = NULL;
-    free(passangerUserId);
-    passangerUserId = NULL;
+    free(passengerFlightId);
+    passengerFlightId = NULL;
+    free(passengerUserId);
+    passengerUserId = NULL;
 }
 

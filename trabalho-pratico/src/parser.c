@@ -67,7 +67,7 @@
         aux = NULL;\
     }\
     if(type){\
-        destroyPassanger(type);\
+        destroyPassenger(type);\
     }\
     return NULL;
 
@@ -378,7 +378,7 @@ char* accStatusCheck(const char* line) {
     return NULL;
 }
 
-// total_seats must not be less than the number of passangers
+// total_seats must not be less than the number of passengers
  unsigned int seatsCheck(const char * sold){
     unsigned int virtual = atoi(sold);
     return virtual;
@@ -954,15 +954,15 @@ User * userCheck(const char * line){
 }
 
 
-//Recieves a passanger and checks if the passanger is valid using the previus functions
- Passanger * passangerCheck(const char * line,UsersDatabase uDatabase,FlightsDatabase fDatabase){
+//Recieves a passenger and checks if the passenger is valid using the previus functions
+ Passenger * passengerCheck(const char * line,UsersDatabase uDatabase,FlightsDatabase fDatabase){
     if(line[0] == ';' || line == NULL || line[0] == '\0' || line[0] == '\n') return NULL;
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux,";\n\0",&saveptr);
-    Passanger * passanger = createPassanger();
-    if(!passanger){
+    Passenger * passenger = createPassenger();
+    if(!passenger){
         NEXTSLOT(token);
         NEXTSLOT(aux);
         return NULL;
@@ -971,17 +971,17 @@ User * userCheck(const char * line){
 
     Flight * fTemp = lookupFlight(fDatabase,token);
     if(fTemp == NULL || saveptr[0] == ';'){ 
-        ERRORSP(aux,passanger);
+        ERRORSP(aux,passenger);
     }
-    setPassangerFlightId(passanger,token);
+    setPassengerFlightId(passenger,token);
 
     TOKENIZE(token,saveptr);
 
     User * uTemp = lookupUser(uDatabase,token);
-    if(uTemp == NULL){ ERRORSP(aux,passanger);}
+    if(uTemp == NULL){ ERRORSP(aux,passenger);}
 
-    setPassangerUserId(passanger,token);
+    setPassengerUserId(passenger,token);
 
     NEXTSLOT(aux);
-    return passanger;
+    return passenger;
 }
