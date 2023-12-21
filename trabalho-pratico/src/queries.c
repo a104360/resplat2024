@@ -276,11 +276,25 @@ void query5(const FlightsDatabase fDatabase,Time * ti,Time * tf,const char * nam
 
     destroyAirport(airportFlights,fDatabaseSize);
 }
-
+/*
 void query6(){
     outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
     return;
+}*/
+
+void query6(const FlightsDatabase fDatabase,const PassengersDatabase * pDatabase,const char * year, const char * n){
+    int n_airports = atoi(n);
+    int fYear = atoi(year);
+
+    AirportPassengers * airports = getYearFlights(fDatabase, pDatabase, fYear);
+    char ** names = getAirportPassengersAirportName(airports);
+    int * number = getAirportPassengersPassengers(airports);
+
+    outputQ6(n_airports,names,number);
+
+    return;
 }
+
 
 void query7(){
     outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);

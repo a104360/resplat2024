@@ -494,11 +494,105 @@ void destroyAirport(AirportDB * db,int hashSize){
 
 
 
+//                                  *** End block ***
+typedef struct airportPassengers{
+    char ** airportName;
+    int  * passengers;
+} AirportPassengers;
 
 
+char ** getAirportPassengersAirportName(AirportPassengers * db){
+    char ** name = malloc(sizeof(char *)*100);
+    for(int i = 0;i<27; i++){
+        name[i] = db->airportName[i];
+    }
+    return name;
+}
 
+int * getAirportPassengersPassengers(AirportPassengers * db){
+    int * number = malloc(sizeof(int)*100);
+    for(int i = 0;i < 27; i++){
+        number[i] = db->passengers[i];
+    }
+    return number;
+}
 
+typedef struct yearFlights {
+    Flight ** flights;
+    int * dateYear;
+    AirportPassengers * airports;
+    PassengersDatabase * passengers;
+} YearFlights;
 
+AirportPassengers * getYearFlights(const void * database,const void * databasep, const int fYear){
+    GHashTable * fDatabase = (GHashTable *) database;
+    PassengersDatabase * pDatabase = (PassengersDatabase *) databasep;
 
+    Flight ** temp = malloc(sizeof (Flight *)*1000);
+    AirportPassengers * airports = malloc(sizeof(AirportPassengers));
 
+    airports->airportName = malloc(sizeof(char *)*100);
+    airports->passengers = malloc(sizeof(int )*100);
 
+    YearFlights * list = malloc(sizeof(struct yearFlights));
+    list->airports = airports;
+    list->passengers = pDatabase;
+
+    for(int j = 0; j < 100; j++){
+        list->airports->airportName[j] = NULL;
+        list->airports->passengers[j] = 0;
+    }
+
+    list->flights = temp;
+    list->dateYear = fYear;
+
+    g_hash_table_foreach(fDatabase,yearFlight,list);
+
+    list->flights = NULL;
+    free(list);
+
+    return airports;
+}
+
+void yearFlight(gpointer key, gpointer value, gpointer siuuu){
+    Flight * f = (Flight *) value;
+    YearFlights * yF = (YearFlights *) siuuu;
+    char * airport = getFlightOrigin(f);
+    Time * dDate = getFlightSDepartureDate(f);
+    int year = getYear(dDate);
+
+    if(year == yF->dateYear){
+        int k = 0;
+        int temp = 0;
+        char * id = getFlightId(f);
+        
+        for(; yF->airports->airportName[k]; k++){
+            if(strcoll(airport,yF->airports->airportName[k]) != 0) continue;
+            yF->airports->passengers[k]+= countFPassengers(id, yF->passengers);
+            temp++;
+            break;
+        }
+        if(temp == 0){
+            yF->airports->airportName[k] = strdup(airport);
+            yF->airports->passengers[k]+= countFPassengers(id, yF->passengers);
+        } 
+    }
+    year = 0;
+    destroyTime(dDate);
+}
+
+int countFPassengers(const char * flightId,const void * database){
+    PassengersDatabase * pDatabase = (PassengersDatabase *) database;
+    int count = 0;
+    int k = 0;
+    Passenger ** p = getAllPassengers(pDatabase);
+    while(p[k]){
+        char * id = getPassengerFlightId(p[k]);
+        if(!strcoll(flightId,id)){
+            count++;
+        }
+        k++;
+    }
+    p = NULL;
+    return count;
+}

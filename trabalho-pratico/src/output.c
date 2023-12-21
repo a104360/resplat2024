@@ -552,6 +552,33 @@ void outputQ5(bool f, Flight ** fList,int max){
     fclose(outputFile);
 }
 
+
+
+void outputQ6(const int n, char ** names, int * number){
+    commandAtual++;
+
+    char fileName[50];
+
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
+
+    FILE * outputFile = fopen(fileName, "a");
+
+    if(!outputFile){
+        perror("Query 6 command line did not open, probably file name wrong.\n");
+        return;
+    }
+    
+    //int k = 0;
+    for(int k=0; k<n; k++){
+        fprintf(outputFile,"%s;%d\n",names[k],number[k]);
+    }
+    fclose(outputFile);
+}
+
+
+
 void outputQ8(int revenue, bool f){
     commandAtual++;
 

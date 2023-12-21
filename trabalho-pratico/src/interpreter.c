@@ -98,6 +98,35 @@ char * airportName(const char * line){
     return temp;
 }
 
+char * yearQ6(const char * line){
+
+    char * aux = strdup(line);
+    char * token = NULL;
+    char * saveptr = aux;
+    token = strtok_r(aux," \n\0",&saveptr);
+
+    char * temp = strdup(token);
+
+    free(aux);
+    aux = NULL;
+    return temp;
+}
+
+char * airportsQ6(const char * line){
+
+    char * aux = strdup(line);
+    char * token = NULL;
+    char * saveptr = aux;
+    token = strtok_r(aux," \n\0",&saveptr);
+    TOKENIZE(token,saveptr);
+
+    char * temp = strdup(token);
+
+    free(aux);
+    aux = NULL;
+    return temp;
+}
+
 void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDatabase,const FlightsDatabase fDatabase,const PassengersDatabase * pDatabase,int agrc, char **argv){
     if(uDatabase == NULL || rDatabase == NULL || fDatabase == NULL || pDatabase == NULL) return;
     FILE * comandos = fopen(argv[2],"r");
@@ -216,15 +245,17 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
 
         //QUERIE 6
         case '6':
-
             if(linhaLimpa[1] == 'F'){
-                    query6(&linhaLimpa[3]);
+                    char * year = yearQ6(&linhaLimpa[3]);
+                    char * nAirports = airportsQ6(&linhaLimpa[3]);
+                    query6((const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,year,nAirports);
                     
                 }else {
-                    query6(&linhaLimpa[2]);
+                    char * year = yearQ6(&linhaLimpa[2]);
+                    char * nAirports = airportsQ6(&linhaLimpa[2]);
+                    query6((const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,year,nAirports);
                     
                 }
-
             break;
 
 

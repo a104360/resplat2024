@@ -3,6 +3,8 @@
     "files.associations": {
         "interpreter.h": "c",
         "queries.h": "c",
-        "datatypes.h": "c"
+        "datatypes.h": "c",
+        "glib.h": "c",
+        "reservation.h": "c"
     }
 }

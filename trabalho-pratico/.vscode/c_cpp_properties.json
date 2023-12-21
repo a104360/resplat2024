@@ -3,8 +3,9 @@
         {
             "name": "Mac",
             "includePath": [
-                "${workspaceFolder}/**",
-                "/opt/homebrew/Cellar/glib/2.78.1/include/glib-2.0"
+                "/home/diogow/Desktop/grupo-51/trabalho-pratico/**",
+                "/opt/homebrew/Cellar/glib/2.78.1/include/glib-2.0",
+                "/usr/include/glib-2.0"
             ],
             "defines": [],
             "macFrameworkPath": [
@@ -13,7 +14,41 @@
             "compilerPath": "/usr/bin/clang",
             "cStandard": "c17",
             "cppStandard": "c++17",
-            "intelliSenseMode": "macos-clang-x64"
+            "intelliSenseMode": "macos-clang-x64",
+            "compilerPathInCppPropertiesJson": "/usr/bin/clang",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [
+                    "/home/diogow/Desktop/grupo-51/trabalho-pratico/**",
+                    "/opt/homebrew/Cellar/glib/2.78.1/include/glib-2.0",
+                    "/usr/include/glib-2.0",
+                    "${workspaceFolder}"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
+        },
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include/glib-2.0",
+                "/usr/lib/x86_64-linux-gnu/glib-2.0/include"
+            ],
+            "defines": [],
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c17",
+            "cppStandard": "gnu++17",
+            "intelliSenseMode": "linux-gcc-x64",
+            "compilerPathInCppPropertiesJson": "/usr/bin/gcc",
+            "mergeConfigurations": false,
+            "browse": {
+                "path": [
+                    "/home/diogow/Desktop/grupo-51/trabalho-pratico/**",
+                    "/**",
+                    "/home/diogow/Desktop/grupo-51/trabalho-pratico"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            }
         }
     ],
     "version": 4

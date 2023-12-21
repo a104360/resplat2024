@@ -133,7 +133,18 @@ void destroyAirport(AirportDB * db,int hashSize);
 
 
 
+typedef struct airportPassengers AirportPassengers;
 
+char ** getAirportPassengersAirportName(AirportPassengers *);
 
+int * getAirportPassengersPassengers(AirportPassengers *);
+
+typedef struct yearFlights YearFlights;
+
+AirportPassengers * getYearFlights(const void *,const void *, const int);
+
+void yearFlight(gpointer, gpointer, gpointer);
+
+int countFPassengers(const char *,const void *);
 
 #endif
