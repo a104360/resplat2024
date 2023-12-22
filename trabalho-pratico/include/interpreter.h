@@ -1,8 +1,10 @@
 #ifndef INTERPRETER_H
 #define INTERPRETER_H
-#include "../include/catalogs.h" 
-#include "../include/dataStructs.h"
-
+#include "../include/utils.h"
+#include "../include/user.h" 
+#include "../include/reservation.h"
+#include "../include/flight.h"
+#include "../include/passengers.h"
 
 int verTamanhoLinha(const char *);
 
@@ -18,6 +20,6 @@ Time * secondDateQ8(const char *);
 
 char * airportName(const char *);
 
-void readEntryFile(const UsersDatabase,const ReservationsDatabase,const FlightsDatabase,const PassengersDatabase *,int, char **);
+void readEntryFile(const Users *,const Reservations *,const Flights *,const Passengers *,int, char **);
 
 #endif

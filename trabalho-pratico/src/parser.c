@@ -3,7 +3,6 @@
 #include "../include/flight.h"
 #include "../include/reservation.h"
 #include "../include/passenger.h"
-#include "../include/catalogs.h"
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -597,7 +596,7 @@ User * userCheck(const char * line){
 
 
 //Recieves a reservation and checks whether the reservation is valid using the previus functions
- Reservation * reservationCheck(const char * line,UsersDatabase uDatabase){
+ Reservation * reservationCheck(const char * line,Users * uDatabase){
     if(line[0] == ';') return NULL;
     char * aux = strdup(line);
     char * token = NULL;
@@ -621,7 +620,7 @@ User * userCheck(const char * line){
     setReservId(reservation,token);
     NEXTSLOT(reservationId);
     TOKENIZE(token,saveptr);
-    User * temp = lookupUser(uDatabase,token);
+    User * temp = lookupElement(uDatabase,token);
     if(temp == NULL || saveptr[0] == ';'){ERRORSR(aux,reservation);}
     setReservUserId(reservation,token);
     TOKENIZE(token,saveptr);
@@ -955,7 +954,7 @@ User * userCheck(const char * line){
 
 
 //Recieves a passenger and checks if the passenger is valid using the previus functions
- Passenger * passengerCheck(const char * line,UsersDatabase uDatabase,FlightsDatabase fDatabase){
+ Passenger * passengerCheck(const char * line,Users * uDatabase,Flights * fDatabase){
     if(line[0] == ';' || line == NULL || line[0] == '\0' || line[0] == '\n') return NULL;
     char * aux = strdup(line);
     char * token = NULL;
@@ -969,7 +968,7 @@ User * userCheck(const char * line){
     }
 
 
-    Flight * fTemp = lookupFlight(fDatabase,token);
+    Flight * fTemp = lookupElement(fDatabase,token);
     if(fTemp == NULL || saveptr[0] == ';'){ 
         ERRORSP(aux,passenger);
     }
@@ -977,7 +976,7 @@ User * userCheck(const char * line){
 
     TOKENIZE(token,saveptr);
 
-    User * uTemp = lookupUser(uDatabase,token);
+    User * uTemp = lookupElement(uDatabase,token);
     if(uTemp == NULL){ ERRORSP(aux,passenger);}
 
     setPassengerUserId(passenger,token);

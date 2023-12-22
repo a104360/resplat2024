@@ -1,7 +1,9 @@
-#include "../include/time.h"
+#include "../include/utils.h"
+#include <stdlib.h>
 #include <stdbool.h>
 #include <stdio.h>
-#include <glib.h>
+
+
 
 typedef struct time{
     int sec;         /* seconds,  range 0 to 59          */
@@ -44,8 +46,7 @@ void initTime(Time * tempo){
 
 void destroyTime(Time *time) {
     if(time == NULL) return; 
-    free(time);
-    time = NULL;
+    ffree(time);
 }
 
 Time * createTime(){
@@ -64,7 +65,7 @@ void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
     t->sec = sec;
 }
 
-  void copyTime(Time * t,Time * aux){
+void copyTime(Time * t,Time * aux){
     if(t == NULL || aux == NULL) return;
     t->year = aux->year;
     t->mday = aux->mday;
@@ -74,7 +75,7 @@ void setTime(Time *t,int year,int mon,int mday,int hour,int min,int sec){
     t->sec = aux->sec;
 }
 
-// ** If the first time happened first returns true **
+
 int compareTimes(Time *t1,Time*t2){
     if(t2 == NULL || t1 == NULL) return false; 
     if(t1->year != t2->year){
@@ -135,4 +136,22 @@ char * timeToString(Time * time){
                 time->hour, time->min, time->sec);
 
     return dateString;
+}
+
+
+
+
+
+void ffree(void * ptr){
+    if(ptr){
+        free(ptr);
+        ptr = NULL;
+    }
+}
+
+
+
+void initArrays(void *** ptr, int max){
+    *ptr = (void **)malloc(sizeof(void *) * max);
+    //for(int i = 0;i < max;i++) ptr[i] = NULL;
 }

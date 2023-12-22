@@ -1,4 +1,5 @@
 #include "../include/user.h"
+#include "../include/utils.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -46,44 +47,19 @@ User * createUser(){
 }
 void destroyUser(User *user) {
     if(user) {
-        if(user->id != NULL){ //user->id = NULL;
-            free(user->id);
-            user->id = NULL;
-        }
-        if(user->name != NULL){ //user->name = NULL;
-            free(user->name);
-            user->name = NULL;
-        }
-        if(user->email != NULL){ //user->email = NULL;
-            free(user->email);
-            user->email = NULL;
-        }
-        if(user->phone_number != NULL){ //user->phone_number = NULL;
-            free(user->phone_number);
-            user->phone_number = NULL;
-        }
+        ffree(user->id);
+        ffree(user->name);
+        ffree(user->email);
+        ffree(user->phone_number);
         if(user->sex) user->sex = '\0';
-        if(user->passport != NULL){ //user->passport = NULL;
-            free(user->passport);
-            user->passport = NULL;
-        }
-        if(user->country_code != NULL){ //user->country_code = NULL;
-            free(user->country_code);
-            user->country_code = NULL;
-        }
-        if(user->address != NULL){ //user->address = NULL;
-            free(user->address);
-            user->address = NULL;
-        }
-        if(user->pay_method != NULL){ //user->pay_method = NULL;
-            free(user->pay_method);
-            user->pay_method = NULL;
-        }
+        ffree(user->passport);
+        ffree(user->country_code);
+        ffree(user->address);
+        ffree(user->pay_method);
         if(user->account_creation != NULL) destroyTime(user->account_creation);
         if(user->birth_date != NULL) destroyTime(user->birth_date);
         
-        free(user);
-        user = NULL;
+        ffree(user);
     }
 }
 
@@ -194,7 +170,7 @@ void setUserId(User * user, const char * line){
 /*
 void setUserPhone2(User * user, const char * line){
     if(user->phone_number != NULL) 
-        free(user->phone_number);
+        ffree(user->phone_number);
         user->phone_number = NULL;
 
     // Pass 'phone' instead of 'token'
@@ -205,7 +181,7 @@ void setUserPhone2(User * user, const char * line){
     }
 
     user->phone_number = strdup(phone);
-    free(phone);
+    ffree(phone);
 }
 */
 
@@ -400,6 +376,7 @@ int getUserAge(User * user){
 }
 
 void copyUser(User * dest,User * src){
+    if(src == NULL) return;
     char * uId = getUserId(src);
     char * uName = getUserName(src);
     char * uEmail = getUserEmail(src);
@@ -422,14 +399,14 @@ void copyUser(User * dest,User * src){
     setUserAccountCreation(dest,accCreation);
     setUserPayMethod(dest,uPay);
     setUserAccountStatus(dest,getUserAccountStatus(src));
-    free(uId);
-    free(uName);
-    free(uEmail);
-    free(uPhone);
-    free(uPassport);
-    free(uCountry);
-    free(uAddress);
-    free(uPay);
-    free(bDay);
-    free(accCreation);
+    ffree(uId);
+    ffree(uName);
+    ffree(uEmail);
+    ffree(uPhone);
+    ffree(uPassport);
+    ffree(uCountry);
+    ffree(uAddress);
+    ffree(uPay);
+    ffree(bDay);
+    ffree(accCreation);
 }

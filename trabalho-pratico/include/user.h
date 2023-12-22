@@ -1,6 +1,10 @@
 #ifndef USER_H
 #define USER_H
 #include "../include/time.h" 
+#include "../include/database.h"
+#include <stdbool.h>
+
+typedef Database Users;
 
 typedef struct user User;
 

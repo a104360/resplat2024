@@ -1,6 +1,10 @@
 #ifndef RESERVATION_H
 #define RESERVATION_H
 #include "../include/time.h"
+#include "../include/database.h"
+#include <stdbool.h>
+
+typedef Database Reservations;
 
 typedef struct reservation Reservation;
 
