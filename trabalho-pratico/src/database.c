@@ -8,27 +8,15 @@
 
 typedef struct database {
     GHashTable * table;
+    char * type;
 } Database;
 
-
-
-
-void destroyElement(void * element,char * id){
-    char * temp = malloc(sizeof(char) * 4);
-    temp = strncpy(temp,id,4);
-
-    if(!strcoll(temp,"Book")) destroyReservation((Reservation*) element);
-
-    if(isdigit(temp[0]))      destroyFlight((Flight *)element);
-
-    if(isalpha(temp[0]))      destroyUser((User *) element);
-    ffree(temp);
-}
-
-
-Database * createDatabase(){
+Database * createDatabase(char * type){
     Database * database = malloc(sizeof(struct database));
-    database->table = g_hash_table_new_full(g_str_hash,g_str_equal,free,(GDestroyNotify) destroyElement);
+    if(!strcoll(type,"Users")) database->table = g_hash_table_new_full(g_str_hash,g_str_equal,free,(GDestroyNotify) destroyUser);
+    if(!strcoll(type,"Reservations")) database->table = g_hash_table_new_full(g_str_hash,g_str_equal,free,(GDestroyNotify) destroyReservation);
+    if(!strcoll(type,"Flights")) database->table = g_hash_table_new_full(g_str_hash,g_str_equal,free,(GDestroyNotify) destroyFlight);
+    database->type = strdup(type);
     return database;
 }
 
@@ -56,6 +44,7 @@ void applyForEach(void * database,void (*func)(gpointer,gpointer,gpointer),void 
 void destroyDatabase(void * database){
     Database * dBase = (Database *) database;
     g_hash_table_destroy(dBase->table);
+    ffree(dBase->type);
     ffree(database);
 }
 
@@ -107,7 +96,7 @@ void destroyTemporary(Temporary * temp){
     temp->database = NULL;
     temp->num = 0;
     temp->sum = 0;
-    free(temp);
+    ffree(temp);
 }
 
 

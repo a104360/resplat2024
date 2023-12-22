@@ -10,7 +10,7 @@ typedef struct database Database;
 void destroyElement(void *,char *);
 
 // Inits the flights database
-Database * createDatabase();
+Database * createDatabase(char *);
 
 /**
  * @brief Inserts an element on the database

@@ -9,7 +9,7 @@ static int i = 0;
 
 Temporary * getAListOfSomething(void * database,const char * hotelId,Time * begin,Time * end,void (*func)(gpointer,gpointer,gpointer)){
     Temporary * temp = createTemporary();
-    void ** list = malloc(sizeof(void *) * 500);
+    void ** list = NULL; //= malloc(sizeof(void *) * 500);
     initArrays(&list,500);
     setTempList(temp,list);
     setTempId(temp,(char *) hotelId);

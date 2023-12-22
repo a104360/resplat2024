@@ -55,7 +55,7 @@ int main(int argc,char **argv){
         memset(userData, '\0', BUFFERSIZE);
 
 
-        Users * uDatabase = createDatabase(); // initDatabase
+        Users * uDatabase = createDatabase("Users"); // initDatabase
 
         fgets(userData,BUFFERSIZE,userFile);
 
@@ -121,7 +121,7 @@ int main(int argc,char **argv){
 
         memset(reservationData, '\0', BUFFERSIZE);
 
-        Reservations * rDatabase = createDatabase();
+        Reservations * rDatabase = createDatabase("Reservations");
 
         fgets(reservationData,BUFFERSIZE,reservationsFile);
 
@@ -217,7 +217,7 @@ int main(int argc,char **argv){
 
         memset(flightData, '\0', BUFFERSIZE);
 
-        Flights * fDatabase = createDatabase();
+        Flights * fDatabase = createDatabase("Flights");
 
         while(fgets(flightData,BUFFERSIZE,flightFile)){
 
