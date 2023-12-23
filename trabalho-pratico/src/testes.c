@@ -49,7 +49,7 @@ int areFilesEqual(const char *file1Path, const char *file2Path) {
 
 int validation(const char ** filePath){
     FILE *file1 = fopen(filePath[0], "r");
-    char file2Path[50];
+    char file2Path[60];
     memset(file2Path,'\0',60);
     snprintf(file2Path,59,"../../li3_fr/dataset/data/users_errors.csv");
     FILE *file2 = fopen(file2Path, "r");
