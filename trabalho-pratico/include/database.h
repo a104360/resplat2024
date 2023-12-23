@@ -3,14 +3,15 @@
 #include <glib.h>
 #include "../include/utils.h"
 
-
+/**
+ * @brief This must be used to make a database where the elements have a designated key/id
+*/
 typedef struct database Database;
 
-// Function that calls the respective destroy function, based on the id of the key
-void destroyElement(void *,char *);
-
-// Inits the flights database
-Database * createDatabase(char *);
+/**
+ * @brief This funciotn
+*/
+Database * createDatabase(void (*)());
 
 /**
  * @brief Inserts an element on the database
