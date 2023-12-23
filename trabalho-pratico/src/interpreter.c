@@ -12,10 +12,10 @@
 #define BUFFERSIZE 1000
 #define TOKENIZE(token,saveptr) token = strtok_r(NULL," \n\0",&saveptr);
 
-int verTamanhoLinha(const char * linha){
+int verTamanhoLinha(const char * line){
     int i = 0;
     int count = 0;
-    while(linha[i] != '\0'){
+    while(line[i] != '\0'){
         count++;
         i++;
     }
@@ -95,19 +95,19 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
     if (comandos == NULL){ perror("Erro a abrir o ficheiro dos comandos"); return;} 
 
-    char * linha = malloc(sizeof(char) * BUFFERSIZE);
+    char * line = malloc(sizeof(char) * BUFFERSIZE);
 
-    if(!linha) { perror("Erro a alocar memoria no readFile"); return;}
+    if(!line) { perror("Erro a alocar memoria no readFile"); return;}
 
-    memset(linha, '\0', BUFFERSIZE);
+    memset(line, '\0', BUFFERSIZE);
 
-    while(fgets(linha,BUFFERSIZE,comandos)){
+    while(fgets(line,BUFFERSIZE,comandos)){
 
-        int tamanhoLinha = verTamanhoLinha(linha);
+        int tamanhoLinha = verTamanhoLinha(line);
 
         char linhaLimpa[tamanhoLinha +1];
 
-        strncpy(linhaLimpa,linha,tamanhoLinha);
+        strncpy(linhaLimpa,line,tamanhoLinha);
 
         linhaLimpa[tamanhoLinha - 1] = '\0';
 
@@ -295,6 +295,6 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
             break;
         }
     }
-    ffree(linha);
+    ffree(line);
     fclose(comandos);
 }

@@ -314,7 +314,7 @@ void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit
         destroyTime(end);
     }
 
-    outputQ8(total,f);
+    outputQ8(f,total);
 
     ffree(rList);
     destroyTemporary(hDatabase);

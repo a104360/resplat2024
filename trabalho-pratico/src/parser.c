@@ -117,7 +117,7 @@
 //Check if userpassport is valid 
 //cannot be NULL
 // Free necessary
- char * passaportCheck(const char * line){
+ char * passportCheck(const char * line){
     CHECKLEN(line);
 }
 
@@ -524,15 +524,15 @@ User * userCheck(const char * line){
     setUserSex(user,(char) sex);
     TOKENIZE(token,saveptr);
 
-    //check userPassaport
-    char * passaport = passaportCheck(token);
-    if(!passaport || saveptr[0] == ';') { 
+    //check userPassport
+    char * passport = passportCheck(token);
+    if(!passport || saveptr[0] == ';') { 
         destroyTime(userBday);
-        ffree(passaport);
+        ffree(passport);
         ERRORSU(aux,user);
     }
-    setUserPassport(user,passaport);
-    ffree(passaport);
+    setUserPassport(user,passport);
+    ffree(passport);
     TOKENIZE(token,saveptr);
 
     //check userCountryCode
