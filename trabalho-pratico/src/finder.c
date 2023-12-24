@@ -7,7 +7,7 @@
 
 static int i = 0;
 
-Temporary * getAListOfSomething(void * database,const char * hotelId,Time * begin,Time * end,void (*func)(gpointer,gpointer,gpointer)){
+Temporary * getAListOfSomething(void * database,const char * hotelId,Time * begin,Time * end,void (*func)()){
     Temporary * temp = createTemporary();
     void ** list = NULL; //= malloc(sizeof(void *) * 500);
     initArrays(&list,500);

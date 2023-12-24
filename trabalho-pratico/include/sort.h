@@ -1,17 +1,14 @@
 #ifndef SORT_H
 #define SORT_H
 
-/*
-Sorts an array of pointers, requesting as arguments: 
-    ARRAY of pointers 
-    LENGTH of the array
-    TYPE of what is store in the array (Reservation/Flight)
-*/ 
+
+/**
+ * @brief Sorts an array of pointers to or flights or reservations
+ * @param a Array of pointers to be sorted
+ * @param length Size of the array
+ * @param type Specification of the type that is 
+ * stored in the array to be sorted (flight/reservation)
+*/
 void mergeSort(void **,int,const char *);
-
-void mSortRecursion(void **,int,int,const char *);
-
-void mergeSortedArrays(void **,int,int,int,const char *);
-
 
 #endif

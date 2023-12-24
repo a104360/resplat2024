@@ -9,51 +9,12 @@
 
 
 
-// Performs a merge sort of the array a with the given length, the function 
-// provides an easier/prettier interface for using merge sort for the 
-// programmer as they simply need to provide the array and its length
-// and the type of what is stored in the array
-void mergeSort(void ** a, int length,const char * type)
-{
-  // call the merge sort recursion function, the left index of 0 and the
-  // right index of length - 1 are provided as we are initially looking 
-  // at sorting "the entire array"
-  mSortRecursion(a, 0, length - 1,type);
-}
-
-// Applies the merge sort algorithm to the array a between the left index l
-// and the right index r.  This function implements the recursive 
-// divide-and-conquer step of the merge sort algorithm, splitting the array
-// portion between l...r at the middle, and calling itself on each portion, 
-// before applying the function to merge the sorted portions of the array 
-// that will result.
-void mSortRecursion(void ** a, int l, int r,const char * type)
-{
-  // we stop recursion when l >= r
-  if (l < r)
-  {
-    // find the midpoint of l and r
-    int m = l + (r - l) / 2;
-  
-    // apply the function recursively to the left and right portions split 
-    // at the midpoint
-    mSortRecursion(a, l, m,type);
-    mSortRecursion(a, m + 1, r,type);
-  
-    // at this point both portions of the array have been sorted, and we now 
-    // merge the sorted portions of the array
-    mergeSortedArrays(a, l, m, r,type);
-  }
-}
-
-
-
 
 
 
 // merges the two sorted portions of the array a between the indexes l ... m
 // and m + 1 ... r
-void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
+static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
 {
     // calculate the length of the left and right portions of the array
     int left_length = m - l + 1;
@@ -259,4 +220,45 @@ void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
         free(temp_left);
         free(temp_right);
     }
+}
+
+// Applies the merge sort algorithm to the array a between the left index l
+// and the right index r.  This function implements the recursive 
+// divide-and-conquer step of the merge sort algorithm, splitting the array
+// portion between l...r at the middle, and calling itself on each portion, 
+// before applying the function to merge the sorted portions of the array 
+// that will result.
+static void mSortRecursion(void ** a, int l, int r,const char * type)
+{
+  // we stop recursion when l >= r
+  if (l < r)
+  {
+    // find the midpoint of l and r
+    int m = l + (r - l) / 2;
+  
+    // apply the function recursively to the left and right portions split 
+    // at the midpoint
+    mSortRecursion(a, l, m,type);
+    mSortRecursion(a, m + 1, r,type);
+  
+    // at this point both portions of the array have been sorted, and we now 
+    // merge the sorted portions of the array
+    mergeSortedArrays(a, l, m, r,type);
+  }
+}
+
+
+
+
+
+// Performs a merge sort of the array a with the given length, the function 
+// provides an easier/prettier interface for using merge sort for the 
+// programmer as they simply need to provide the array and its length
+// and the type of what is stored in the array
+void mergeSort(void ** a, int length,const char * type)
+{
+  // call the merge sort recursion function, the left index of 0 and the
+  // right index of length - 1 are provided as we are initially looking 
+  // at sorting "the entire array"
+  mSortRecursion(a, 0, length - 1,type);
 }

@@ -1,8 +1,9 @@
 #ifndef TESTES_H
 #define TESTES_H
 
-int areFilesEqual(const char *, const char *);
-
-int confirmar(int, char **);
+/**
+ * @brief Confirms if the parsing and the outputs are correct
+*/
+void confirmar();
 
 #endif

@@ -15,13 +15,19 @@ int verTamanhoLinha(const char *);
 */
 char * limpaToken(char *);
 
-Time * firstDateQ5(const char *);
+/**
+ * @brief Gets the date for the query 5
+ * @param line Formated string with the date
+ * @return Pointer to the time struct that holds the date
+*/
+Time * dateQ5(const char *);
 
-Time * secondDateQ5(const char *);
-
-Time * firstDateQ8(const char *);
-
-Time * secondDateQ8(const char *);
+/**
+ * @brief Gets the date for the query 5
+ * @param line Formated string with the date
+ * @return Pointer to the time struct that holds the date
+*/
+Time * dateQ8(const char *);
 
 /**
  * @brief Gets the fist argument of the input (commands) lines

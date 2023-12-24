@@ -333,7 +333,7 @@ int main(int argc,char **argv){
         destroyDatabase(rDatabase);
     }
     if(argc == 2){
-        confirmar(argc,argv);
+        confirmar();
     }
     return 0;
 }

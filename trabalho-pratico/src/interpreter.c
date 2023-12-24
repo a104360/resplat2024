@@ -34,7 +34,7 @@ char * limpaToken(char * token){
     return token;
 }
 
-Time * firstDateQ5(const char * line){
+Time * dateQ5(const char * line){
         
     char * aux = strndup(line,20);
     char * tokenLimpo = limpaToken(aux);
@@ -45,18 +45,7 @@ Time * firstDateQ5(const char * line){
     return firstDate;
 }
 
-Time * secondDateQ5(const char * line){
-
-    char * aux = strndup(line,20);
-    char * tokenLimpo = limpaToken(aux);
-    Time * secondDate = dateCheck(tokenLimpo);
-
-    ffree(aux);
-
-    return secondDate;
-}
-
-Time * firstDateQ8(const char * line){
+Time * dateQ8(const char * line){
         
     char * aux = strndup(line,10);
     Time * firstDate = dateCheck(aux);
@@ -64,16 +53,6 @@ Time * firstDateQ8(const char * line){
     ffree(aux);
 
     return firstDate;
-}
-
-Time * secondDateQ8(const char * line){
-
-    char * aux = strndup(line,10);
-    Time * secondDate = dateCheck(aux);
-
-    ffree(aux);
-
-    return secondDate;
 }
 
 char * airportName(const char * line){
@@ -184,8 +163,8 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
         //QUERIE 5
         case '5':
-            Time * firstDate = firstDateQ5(&linhaLimpa[7]);
-            Time * secondDate = secondDateQ5(&linhaLimpa[29]);
+            Time * firstDate = dateQ5(&linhaLimpa[7]);
+            Time * secondDate = dateQ5(&linhaLimpa[29]);
             if(linhaLimpa[1] == 'F'){
                     char * airport = airportName(&linhaLimpa[3]);
                     query5((const Flights * ) fDatabase,firstDate,secondDate,airport,true);
@@ -244,8 +223,8 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
                     int tokenSize = verTamanhoLinha(token);
 
 
-                    Time * firstDate = firstDateQ8(&linhaLimpa[4+tokenSize]);
-                    Time * secondDate = secondDateQ8(&linhaLimpa[15+tokenSize]);
+                    Time * firstDate = dateQ8(&linhaLimpa[4+tokenSize]);
+                    Time * secondDate = dateQ8(&linhaLimpa[15+tokenSize]);
 
                     query8((Reservations *) rDatabase,token,firstDate,secondDate,true);
 
@@ -262,8 +241,8 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
                     int tokenSize = verTamanhoLinha(token);
 
-                    Time * firstDate = firstDateQ8(&linhaLimpa[3+tokenSize]);
-                    Time * secondDate = secondDateQ8(&linhaLimpa[14+tokenSize]);
+                    Time * firstDate = dateQ8(&linhaLimpa[3+tokenSize]);
+                    Time * secondDate = dateQ8(&linhaLimpa[14+tokenSize]);
 
                     query8((Reservations *) rDatabase,token,firstDate,secondDate,false);
 
