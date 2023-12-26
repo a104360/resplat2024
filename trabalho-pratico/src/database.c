@@ -122,6 +122,10 @@ void setTempListElement(Temporary * temp,void * element,int position){
     temp->list[position] = element;
 }
 
+const void * getTempListElement(Temporary * temp,int position){
+    return (const void *) temp->list[position];
+}   
+
 void ** getTempList(Temporary * temp){
     void ** list = malloc(sizeof(void *) * temp->num);
     for(int i = 0;i < temp->num;list[i] = temp->list[i],i++);

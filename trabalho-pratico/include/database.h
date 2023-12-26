@@ -138,6 +138,11 @@ void setTempListElement(Temporary *, void *, int );
  */
 void **getTempList(Temporary *);
 
+const void * getTempListElement(Temporary *,int);
+
+void ** getTempList(Temporary *);
+
+
 /**
  * @brief Sets a numerical value in the temporary struct
  * @param temp Pointer to the temporary struct

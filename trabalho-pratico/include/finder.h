@@ -15,7 +15,7 @@
  * @param function The function to be applied to the elements of the database
  * @return A struct with everything needed
 */
-Temporary * getAListOfSomething(void * database,const char * hotelId,Time * begin,Time * end,void (*func)());
+Temporary * getAListOfSomething(void * ,const char * ,Time * ,Time * ,void (*func)());
 
 
 /**
@@ -25,7 +25,7 @@ Temporary * getAListOfSomething(void * database,const char * hotelId,Time * begi
  * @param id Id of the user that is the reference
  * @return A struct containing the list and some more information
 */
-Temporary * getUserFlights(void * fDatabase,void * travels,const char * userId);
+Temporary * getUserFlights(void * ,void * ,const char * );
 
 /**
  * @brief Function to get all passengers that went on the flight
@@ -34,20 +34,24 @@ Temporary * getUserFlights(void * fDatabase,void * travels,const char * userId);
  * @param id Id of the flight that is the reference
  * @return A struct containing the list and some more information
 */
-Temporary * getFlightPassengers(void * fDatabase,void * travels,const char * flightId);
+Temporary * getFlightPassengers(void * ,void * ,const char * );
 
 /**
  * @brief Sees if the reservation belongs to the desired hotel
 */
-void allHotelReservs(gpointer key, gpointer value, gpointer hotelData);
+void allHotelReservs(gpointer, gpointer, gpointer);
 
 /**
  * @brief Checks if the reservations belongs to an user
 */
-void allUserReservs(gpointer key ,gpointer value,gpointer userData);
+void allUserReservs(gpointer ,gpointer,gpointer);
 /**
  * @brief Checks if the flight departures from a certain airport
 */
-void checkAirports(gpointer key,gpointer value,gpointer flightData);
+void checkAirports(gpointer,gpointer,gpointer);
+
+Integers * getDelays(void *);
+
+void getAirportsDelays(gpointer,gpointer,gpointer);
 
 #endif

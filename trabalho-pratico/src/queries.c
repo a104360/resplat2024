@@ -8,6 +8,7 @@
 #include <ctype.h>
 #include <string.h>
 
+static Integers * allDelays = NULL;
 
 #define BUFFERSIZE 100
 
@@ -279,9 +280,34 @@ void query6(){
     return;
 }
 
-void query7(){
-    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
-    return;
+void query7(Flights * fDatabase,char * num, bool f){
+    allDelays = getDelays((void *)fDatabase);
+    int n = atoi(num);
+    int * delays = malloc(sizeof(int) * n);
+    for(int i = 0;i < n;i++){
+        int * list = getIntList(allDelays,i);
+        delays[i] = delayMedianAirport(list,getIntListSize(allDelays,i));
+        ffree(list);
+    }
+    char ** airports = malloc(sizeof(char *) * n);
+    for(int i = 0;i < n;i++){
+        airports[i] = (char *) getIntNamesElement(allDelays,i);
+    }
+    outputQ7(f,airports,delays,n);
+
+    ffree(airports);
+    ffree(delays);
+
+    destroyIntegers(allDelays);
+
+    /*Temporary * temp = getAListOfSomething(fDatabase,NULL,NULL,NULL,&getAirportsDelays);
+
+
+    char ** airports = (char **) getTempList(temp);
+
+
+    destroyTemporary(temp);
+    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);*/
 }
 
 void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit,bool f){

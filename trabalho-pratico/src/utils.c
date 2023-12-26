@@ -4,6 +4,96 @@
 #include <stdio.h>
 
 
+typedef struct integers {
+    // keeps names
+    void ** names;
+    // keeps the list of lists of delays
+    int ** list;
+    // Number of different airports
+    int intSize;
+    // List of sizes of the delays arrays
+    int * listSize;
+} Integers;
+
+
+static void initIntegers(Integers * integers,int num){
+    integers->names = malloc(sizeof(void *) * num);
+    integers->list = malloc(sizeof(int *) * num);
+    for(int i = 0;i < num;i++) {
+        integers->list[i] = malloc(sizeof(int) * 300);
+        for(int j = 0; j < 300;j++){
+            integers->list[i][j] = -1;
+        }
+    }
+    integers->intSize = 0;
+    integers->listSize = malloc(sizeof(int) * num);
+    for(int i = 0;i < num;i++){
+        integers->listSize[i] = 0;
+    }
+}
+
+Integers * createIntegers(int num){
+    Integers * integers = malloc(sizeof(struct integers));
+    initIntegers(integers,num);
+    return integers;
+}
+
+
+void setIntNamesElement(Integers * temp,int position,void * element){
+    temp->names[position] = element;
+}
+void * getIntNamesElement(Integers*temp ,int position){
+    return temp->names[position];
+}
+
+
+void setIntListElement(Integers * temp,int arrayPosition,int delayPosition,int num){
+    temp->list[arrayPosition][delayPosition] = num;
+}
+
+
+int getIntListElement(Integers * temp,int arrayPosition,int delayPosition){
+    return temp->list[arrayPosition][delayPosition];
+}
+
+void setIntList(Integers * temp,int position,int * array){
+    int n = temp->listSize[position];
+    for(int i = 0;i < n;temp->list[position][i] = array[i],i++);
+}
+
+int * getIntList(Integers * temp,int position){
+    int size = getIntListSize(temp,position);
+    int * aux = malloc(sizeof(int) * size);
+    for(int i = 0;i < size;aux[i] = temp->list[position][i],i++);
+    return aux;
+}
+
+
+void incIntListSize(Integers * temp,int position){
+    temp->listSize[position]++;
+}
+void decIntListSize(Integers * temp,int position){
+    temp->listSize[position]--;
+}
+int getIntListSize(Integers * temp,int position){
+    return temp->listSize[position];
+}
+
+void incIntSize(Integers * temp){
+    temp->intSize++;
+}
+void decIntSize(Integers * temp){
+    temp->intSize--;
+}
+int getIntSize(Integers * temp){
+    return temp->intSize;
+}
+
+void destroyIntegers(Integers * temp){
+    ffree(temp->list);
+    ffree(temp);
+}
+
 
 typedef struct time{
     int sec;         /* seconds,  range 0 to 59          */
@@ -153,5 +243,4 @@ void ffree(void * ptr){
 
 void initArrays(void *** ptr, int max){
     *ptr = (void **)malloc(sizeof(void *) * max);
-    //for(int i = 0;i < max;i++) ptr[i] = NULL;
 }

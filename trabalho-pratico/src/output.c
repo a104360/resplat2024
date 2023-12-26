@@ -545,6 +545,39 @@ void outputQ5(bool f, Flight ** fList,int max){
     fclose(outputFile);
 }
 
+
+void outputQ7(bool f,char ** airports,int * delays,int max){
+    commandAtual++;
+    
+    
+    char fileName[50];
+
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
+
+    FILE * outputFile = fopen(fileName, "a");
+    if(!outputFile){
+        perror("Query 7 command line did not open, probably file name wrong.\n");
+        return;
+    }
+
+    if(f == true){
+        for(int i = 0;i < max;i++){
+            if(i != 0) fprintf(outputFile,"\n");
+            fprintf(outputFile,"--- %d ---\n",i + 1);
+            fprintf(outputFile,"name: %s\n",airports[i]);
+            fprintf(outputFile,"median: %d\n",delays[i]);
+        }
+    }else{
+        for(int i = 0;i < max;i++){
+            fprintf(outputFile,"%s;%d\n",airports[i],delays[i]);
+        }
+    }
+    fclose(outputFile);
+}
+
+
 void outputQ8(bool f, int revenue){
     commandAtual++;
 

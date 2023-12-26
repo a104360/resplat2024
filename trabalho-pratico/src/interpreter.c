@@ -200,10 +200,11 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
         case '7':
 
             if(linhaLimpa[1] == 'F'){
-                    query7(&linhaLimpa[3]);
+                    
+                    query7((Flights *) fDatabase,&linhaLimpa[3],true);
                     
                 }else {
-                    query7(&linhaLimpa[2]);
+                    query7((Flights *) fDatabase,&linhaLimpa[2],false);
                     
                 }
 

@@ -37,6 +37,6 @@ int getHotelEarningsOfReserv(void *,int);
 double averageRating(void *,const char *);
 
 
-double dalayMedianAirport(void*, void*);
+int delayMedianAirport(int *,int);
 
 #endif

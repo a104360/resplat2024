@@ -63,7 +63,7 @@ void query5(const Flights *,Time *,Time *,const char *,bool);
 void query6();
 
 //listar top N aeroportos com maior mediana de atrasos. Valor atraso em segundos. (se 2, usar nome)
-void query7();
+void query7(Flights *,char *,bool);
 
 //Apresentar receita total,de um hotel entre 2 datas, apartir do identificador. (usar preco/1noite * num_noites)
 /**
