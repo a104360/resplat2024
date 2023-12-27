@@ -167,24 +167,6 @@ void setUserId(User * user, const char * line){
     user->phone_number = strdup(line);
 }
 
-/*
-void setUserPhone2(User * user, const char * line){
-    if(user->phone_number != NULL) 
-        ffree(user->phone_number);
-        user->phone_number = NULL;
-
-    // Pass 'phone' instead of 'token'
-    char * phone = phoneNumberCheck(line);
-    if(!phone) {
-        fprintf(stderr, "Error checking phone number\n");
-        return;  // or handle the error appropriately
-    }
-
-    user->phone_number = strdup(phone);
-    ffree(phone);
-}
-*/
-
  char * getUserPhone(User * user){
     if(user->phone_number){
         char * aux = strdup(user->phone_number);

@@ -1,6 +1,20 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+typedef struct auxiliar Auxiliar;
+
+Auxiliar * createAux(int);
+
+void setAuxName(Auxiliar *,int,char *);
+char *getAuxName(Auxiliar *,int);
+
+void setAuxListElement(Auxiliar *,int,int);
+int getAuxListElement(Auxiliar *,int);
+
+void setAuxSize(Auxiliar *,int);
+int getAuxSize(Auxiliar *);
+
+void destroyAux(Auxiliar *);
 
 typedef struct integers Integers;
 
@@ -34,8 +48,9 @@ int getIntListElement(Integers *,int,int);
  * @param integers Pointer to the Integers structure 
  * @param position Position of the array wanted
  * @param element Array to be set as the new element of the array 
+ * @param size Size of the new array
 */
-void setIntList(Integers *,int ,int *);
+void setIntList(Integers *,int ,int *,int);
 
 /**
  * @brief Gets a copy of the array stored in the specified position
@@ -50,7 +65,7 @@ int * getIntList(Integers *,int);
  * @param position Position on the array
  * @param element Pointer the is going to be stored
 */
-void setIntNamesElement(Integers *,int,void *);
+void setIntNamesElement(Integers *,int,char *);
 
 /**
  * @brief Gets a pointer on the array
@@ -58,7 +73,7 @@ void setIntNamesElement(Integers *,int,void *);
  * @param position Position on the array
  * @return Pointer that was stored in the position
 */
-void * getIntNamesElement(Integers*,int);
+char * getIntNamesElement(Integers*,int);
 
 /**
  * @brief Increments the size of the wanted list

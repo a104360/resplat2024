@@ -8,8 +8,6 @@
 #include <ctype.h>
 #include <string.h>
 
-static Integers * allDelays = NULL;
-
 #define BUFFERSIZE 100
 
 void query1(const Users * uDatabase, const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,const char * id,bool f){
@@ -281,24 +279,26 @@ void query6(){
 }
 
 void query7(Flights * fDatabase,char * num, bool f){
-    allDelays = getDelays((void *)fDatabase);
+    Auxiliar * allDelays = getDelays((void *)fDatabase);
     int n = atoi(num);
-    int * delays = malloc(sizeof(int) * n);
-    for(int i = 0;i < n;i++){
-        int * list = getIntList(allDelays,i);
-        delays[i] = delayMedianAirport(list,getIntListSize(allDelays,i));
-        ffree(list);
-    }
-    char ** airports = malloc(sizeof(char *) * n);
-    for(int i = 0;i < n;i++){
-        airports[i] = (char *) getIntNamesElement(allDelays,i);
-    }
-    outputQ7(f,airports,delays,n);
+    int * delays = malloc(sizeof(int) * getAuxSize(allDelays));
+    for(int i = 0;i < getAuxSize(allDelays);
+    delays[i] = -1,
+    delays[i] = getAuxListElement(allDelays,i),
+    i++);
+
+    char ** airports = malloc(sizeof(char *) * getAuxSize(allDelays));
+    for(int i = 0;i < getAuxSize(allDelays);
+    airports[i] = NULL,
+    airports[i] = getAuxName(allDelays,i),
+    i++);
+
+    outputQ7(f,allDelays,n);
 
     ffree(airports);
     ffree(delays);
 
-    destroyIntegers(allDelays);
+    destroyAux(allDelays);
 
     /*Temporary * temp = getAListOfSomething(fDatabase,NULL,NULL,NULL,&getAirportsDelays);
 

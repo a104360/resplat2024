@@ -546,7 +546,7 @@ void outputQ5(bool f, Flight ** fList,int max){
 }
 
 
-void outputQ7(bool f,char ** airports,int * delays,int max){
+void outputQ7(bool f,Auxiliar * temp,int max){
     commandAtual++;
     
     
@@ -563,15 +563,21 @@ void outputQ7(bool f,char ** airports,int * delays,int max){
     }
 
     if(f == true){
-        for(int i = 0;i < max;i++){
+        for(int i = 0;i < max && i < getAuxSize(temp);i++){
             if(i != 0) fprintf(outputFile,"\n");
+            char * airport = getAuxName(temp,i);
+            int delay = getAuxListElement(temp,i);
             fprintf(outputFile,"--- %d ---\n",i + 1);
-            fprintf(outputFile,"name: %s\n",airports[i]);
-            fprintf(outputFile,"median: %d\n",delays[i]);
+            fprintf(outputFile,"name: %s\n",airport);
+            fprintf(outputFile,"median: %d\n",delay);
+            ffree(airport);
         }
     }else{
-        for(int i = 0;i < max;i++){
-            fprintf(outputFile,"%s;%d\n",airports[i],delays[i]);
+        for(int i = 0;i < max && i < getAuxSize(temp);i++){
+            char * airport = getAuxName(temp,i);
+            int delay = getAuxListElement(temp,i);
+            fprintf(outputFile,"%s;%d\n",airport,delay);
+            ffree(airport);
         }
     }
     fclose(outputFile);

@@ -12,13 +12,6 @@
 
 #define BUFFERSIZE 1000
 
-void print(gpointer key,gpointer value,gpointer data){
-    Reservation * r = (Reservation *) value;
-    if(!strcoll("HTL1002",key)) 
-        printf("%d\n",getReservRating(r));
-}
-
-
 int main(int argc,char **argv){
     if(argc == 3){
         if (argc < 2) {

@@ -1,12 +1,64 @@
 #include "../include/utils.h"
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include <stdio.h>
+
+typedef struct auxiliar{
+    char ** names;
+    int * list;
+    int size;
+} Auxiliar;
+
+static void initAux(Auxiliar * temp,int num){
+    temp->names = malloc(sizeof(char *) * num);
+    for(int i = 0;i < num;temp->names[i] = NULL,i++);
+    temp->list = malloc(sizeof(int) * num);
+    for(int i = 0;i < num;temp->list[i] = 0,i++);
+}
+
+Auxiliar * createAux(int num){
+    Auxiliar * temp = malloc(sizeof(struct auxiliar));
+    initAux(temp,num);
+    return temp;
+}
+
+void setAuxName(Auxiliar * temp,int position,char * name){
+    if(temp->names[position]) ffree(temp->names[position]);
+    temp->names[position] = strdup(name);
+}
+char *getAuxName(Auxiliar * temp,int position){
+    return strdup(temp->names[position]);
+}
+
+void setAuxListElement(Auxiliar * temp,int position,int num){
+    temp->list[position] = num;
+}
+
+int getAuxListElement(Auxiliar * temp,int position){
+    return temp->list[position];
+}
+
+void setAuxSize(Auxiliar * temp,int num){
+    temp->size = num;
+}
+int getAuxSize(Auxiliar * temp){
+    return temp->size;
+}
+
+void destroyAux(Auxiliar * temp){
+    for(int i = 0;i < temp->size;ffree(temp->names[i]),i++);
+    ffree(temp->list);
+    ffree(temp);
+}
+
+
+
 
 
 typedef struct integers {
     // keeps names
-    void ** names;
+    char ** names;
     // keeps the list of lists of delays
     int ** list;
     // Number of different airports
@@ -17,7 +69,8 @@ typedef struct integers {
 
 
 static void initIntegers(Integers * integers,int num){
-    integers->names = malloc(sizeof(void *) * num);
+    integers->names = malloc(sizeof(char *) * num);
+    for(int i = 0;i < num;integers->names[i] = NULL,i++)
     integers->list = malloc(sizeof(int *) * num);
     for(int i = 0;i < num;i++) {
         integers->list[i] = malloc(sizeof(int) * 300);
@@ -39,11 +92,16 @@ Integers * createIntegers(int num){
 }
 
 
-void setIntNamesElement(Integers * temp,int position,void * element){
-    temp->names[position] = element;
+void setIntNamesElement(Integers * temp,int position,char * element){
+    if(!element) return;
+    if(temp->names[position]) ffree(temp->names[position]);
+    temp->names[position] = strdup(element);
 }
-void * getIntNamesElement(Integers*temp ,int position){
-    return temp->names[position];
+
+
+char * getIntNamesElement(Integers * temp ,int position){
+    if(temp->names[position]) return strdup(temp->names[position]);
+    return NULL;
 }
 
 
@@ -56,9 +114,9 @@ int getIntListElement(Integers * temp,int arrayPosition,int delayPosition){
     return temp->list[arrayPosition][delayPosition];
 }
 
-void setIntList(Integers * temp,int position,int * array){
-    int n = temp->listSize[position];
-    for(int i = 0;i < n;temp->list[position][i] = array[i],i++);
+void setIntList(Integers * temp,int position,int * array,int size){
+    temp->listSize[position] = size;
+    for(int i = 0;i < size;temp->list[position][i] = array[i],i++);
 }
 
 int * getIntList(Integers * temp,int position){

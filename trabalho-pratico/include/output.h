@@ -81,7 +81,7 @@ void outputQ4(bool,Reservation **,int);
 */
 void outputQ5(bool,Flight **,int);
 
-void outputQ7(bool,char **,int *,int);
+void outputQ7(bool,Auxiliar *,int);
 
 /**
  * @brief Writes on a text file the outputs of the query 8

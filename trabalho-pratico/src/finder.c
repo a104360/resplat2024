@@ -230,27 +230,32 @@ void checkAirports(gpointer key,gpointer value,gpointer flightData){
 }
 
 
-Integers * getDelays(void * database){
+Auxiliar * getDelays(void * database){
     Integers * temp = createIntegers(30);
     applyForEach(database,&getAirportsDelays,(void *)temp); // Fill up Integers with information
 
     int max = getIntSize(temp); // Get then number of different airports
 
     int * allDelays = malloc(sizeof(int) * max);// Get a list of the median of each airport delay
+    char ** airports = malloc(sizeof(char *) * max);
     for(int j = 0;j < max;j++){
         int * array = (int *) getIntList(temp,j);
         mergeSort((void **)&array,getIntListSize(temp,j),"Int");
-        setIntList(temp,j,array);
+        setIntList(temp,j,array,getIntListSize(temp,j));
         allDelays[j] = delayMedianAirport(array,getIntListSize(temp,j));
+        airports[j] = getIntNamesElement(temp,j);
         ffree(array);
     }
+    destroyIntegers(temp);
     void ** aux = malloc(sizeof(void *) * 2);
     aux[0] = (void *) allDelays;
-    aux[1] = (void *) temp;
+    aux[1] = (void *) airports;
     mergeSort((void **) aux,max,"Integers");
-    ffree(aux);
-    ffree(allDelays);
-    return temp;
+    Auxiliar * sorted = createAux(max);
+    setAuxSize(sorted,max);
+    for(int j = 0;j < max;setAuxName(sorted,j,airports[j]),j++);
+    for(int j = 0;j < max;setAuxListElement(sorted,j,allDelays[j]),j++);
+    return sorted;
 }
 
 void getAirportsDelays(gpointer key,gpointer value,gpointer data){
@@ -279,12 +284,15 @@ void getAirportsDelays(gpointer key,gpointer value,gpointer data){
     }
 
     for(int j = 0;j < max;j++){ // Checks if the airport is already on the list
-        if(!strcoll((const char *) getIntNamesElement(temp,j),origin)){
+        char * listOrigin = getIntNamesElement(temp,j);
+        if(!strcoll(listOrigin,origin)){
             setIntListElement(temp,j,getIntListSize(temp,j),delay); // Sets the delay for the respetive position
             incIntListSize(temp,j);
             flag = true;
+            ffree(listOrigin);
             break;
         }
+        ffree(listOrigin);
     }
     if(flag == false){
         setIntNamesElement(temp,max,(void *)origin);
@@ -292,4 +300,5 @@ void getAirportsDelays(gpointer key,gpointer value,gpointer data){
         incIntListSize(temp,getIntSize(temp));
         incIntSize(temp);
     }
+    ffree(origin);
 }

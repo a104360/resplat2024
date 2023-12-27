@@ -2,6 +2,7 @@
 #define FINDER_H
 #include "../include/database.h"
 #include "../include/passengers.h"
+#include "../include/utils.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <glib.h>
@@ -50,7 +51,7 @@ void allUserReservs(gpointer ,gpointer,gpointer);
 */
 void checkAirports(gpointer,gpointer,gpointer);
 
-Integers * getDelays(void *);
+Auxiliar * getDelays(void *);
 
 void getAirportsDelays(gpointer,gpointer,gpointer);
 
