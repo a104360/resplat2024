@@ -554,7 +554,7 @@ void outputQ5(bool f, Flight ** fList,int max){
 
 
 
-void outputQ6(const int n, char ** names, int * number){
+void outputQ6(const int n, char ** names, int * number,bool f){
     commandAtual++;
 
     char fileName[50];
@@ -570,10 +570,19 @@ void outputQ6(const int n, char ** names, int * number){
         return;
     }
     
-    //int k = 0;
-    for(int k=0; k<n; k++){
+    if(f == true){
+        for(int j=0; j<n; j++){
+            if(j!=0) fprintf(outputFile,"\n");
+            fprintf(outputFile,"--- %d ,,,\n",j);
+            fprintf(outputFile,"name: %s\n",names[j]);
+            fprintf(outputFile,"passengers: %d\n",number[j]);
+        }
+    }else{
+        for(int k=0; k<n; k++){
         fprintf(outputFile,"%s;%d\n",names[k],number[k]);
+        }
     }
+    
     fclose(outputFile);
 }
 
@@ -599,6 +608,26 @@ void outputQ8(int revenue, bool f){
         fprintf(outputFile,"revenue: %d\n",revenue);
     }else{
         fprintf(outputFile,"%d\n",revenue);
+    }
+    fclose(outputFile);
+}
+
+void outputQ9(char ** ids,int valids,bool f){
+    commandAtual++;
+
+    char fileName[50];
+
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
+
+    FILE * outputFile = fopen(fileName, "a");
+    if(!outputFile){
+        perror("Query 9 command line did not open, probably file name wrong.\n");
+        return;
+    }
+    for(int k = 0; k<valids;k++){
+        fprintf(outputFile,"%s\n",ids[k]);
     }
     fclose(outputFile);
 }

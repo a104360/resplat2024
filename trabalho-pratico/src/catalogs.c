@@ -554,9 +554,9 @@ AirportPassengers * getYearFlights(const void * database,const void * databasep,
     return airports;
 }
 
-void yearFlight(gpointer key, gpointer value, gpointer siuuu){
+void yearFlight(gpointer key, gpointer value, gpointer data){
     Flight * f = (Flight *) value;
-    YearFlights * yF = (YearFlights *) siuuu;
+    YearFlights * yF = (YearFlights *) data;
     char * airport = getFlightOrigin(f);
     Time * dDate = getFlightSDepartureDate(f);
     int year = getYear(dDate);
@@ -595,4 +595,68 @@ int countFPassengers(const char * flightId,const void * database){
     }
     p = NULL;
     return count;
+}
+
+/*
+typedef struct preUsers{
+    char * prefix;
+    UsersDatabase * passengers;
+} PreUsers;
+*/
+
+
+
+typedef struct usersIdQ9 
+{
+    char ** id;
+    int numIds;
+} UsersIdQ9;
+
+
+UsersIdQ9 * prefixQ9(const void * database, char * pre){ //DEVOLVER A STRUCT E CONTAR O NUMERO DE IDS NA QUERIE9
+    GHashTable * uDatabase = (GHashTable *) database;
+
+    //char * validUsers = malloc(sizeof(char) * BUFFERSIZE);
+    //memset(validUsers, '\0', BUFFERSIZE);
+
+    UsersIdQ9 * uId = malloc(sizeof(UsersIdQ9 *));
+    uId->id = malloc(sizeof(char *)*BUFFERSIZE);
+    uId->numIds = malloc(sizeof(int));
+    i=0;
+
+    g_hash_table_foreach(uDatabase,checkPrefix,uId);
+    /*int k = 0;
+
+    while(uId!=NULL){
+        if(strcoll(pre,uId[k])!=0){
+            uId[k]=uId[k+1];
+            continue;
+        }
+        k++;
+    }*/
+    return uId;
+}
+
+
+void checkPrefix(gpointer key, gpointer value, gpointer data){
+    User * u = (User *) value;
+    UsersIdQ9 * valid = (UsersIdQ9 *) data;
+
+    char * uId = getUserId(u);
+    valid->id[i] = uId;
+    valid->numIds++;
+    i++;
+}
+
+
+int getUsersIdQ9NumIds (UsersIdQ9 * data){
+    return data->numIds;
+}
+
+char ** getUsersIdQ9Ids (UsersIdQ9 * data, int num){
+    char ** name = malloc(sizeof(char *)*100);
+    for(int i = 0;i<num; i++){
+        name[i] = data->id[i];
+    }
+    return name;
 }

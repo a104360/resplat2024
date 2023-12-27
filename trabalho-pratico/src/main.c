@@ -8,6 +8,7 @@
 #include "../include/dataStructs.h"
 #include "../include/statistics.h"
 #include "../include/testes.h"
+#include <locale.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -22,6 +23,7 @@ void print(gpointer key,gpointer value,gpointer data){
 
 
 int main(int argc,char **argv){
+    setlocale(LC_COLLATE, "en_US.UTF-8");
     if(argc == 3){
         if (argc < 2) {
             perror("Nao existe argumentos");

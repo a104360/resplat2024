@@ -248,12 +248,12 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
             if(linhaLimpa[1] == 'F'){
                     char * year = yearQ6(&linhaLimpa[3]);
                     char * nAirports = airportsQ6(&linhaLimpa[3]);
-                    query6((const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,year,nAirports);
+                    query6((const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,year,nAirports,true);
                     
                 }else {
                     char * year = yearQ6(&linhaLimpa[2]);
                     char * nAirports = airportsQ6(&linhaLimpa[2]);
-                    query6((const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,year,nAirports);
+                    query6((const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,year,nAirports,true);
                     
                 }
             break;
@@ -322,10 +322,10 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
         case '9':
 
             if(linhaLimpa[1] == 'F'){
-                    query9(&linhaLimpa[3]);
+                    query9((const UsersDatabase) uDatabase,limpaToken(&linhaLimpa[3]),true);
                     
                 }else {
-                    query9(&linhaLimpa[2]);
+                    query9((const UsersDatabase) uDatabase,limpaToken(&linhaLimpa[2]),false);
                     
                 }
 

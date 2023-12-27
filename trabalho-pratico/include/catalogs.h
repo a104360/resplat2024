@@ -147,4 +147,14 @@ void yearFlight(gpointer, gpointer, gpointer);
 
 int countFPassengers(const char *,const void *);
 
+typedef struct usersIdQ9 UsersIdQ9;
+
+UsersIdQ9 * prefixQ9(const void *, char *);
+
+void checkPrefix(gpointer, gpointer, gpointer);
+
+int getUsersIdQ9NumIds (UsersIdQ9 * data);
+
+char ** getUsersIdQ9Ids (UsersIdQ9 * data, int num);
+
 #endif

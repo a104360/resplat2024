@@ -20,8 +20,10 @@ void outputQ4(bool,Reservation **,int);
 
 void outputQ5(bool,Flight **,int);
 
-void outputQ6(const int , char **, int *);
+void outputQ6(const int , char **, int *,bool);
 
 void outputQ8(int ,bool);
+
+void outputQ9(char **,int,bool);
 
 #endif

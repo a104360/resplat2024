@@ -5,6 +5,8 @@
         "queries.h": "c",
         "datatypes.h": "c",
         "glib.h": "c",
-        "reservation.h": "c"
+        "reservation.h": "c",
+        "passenger.h": "c",
+        "flight.h": "c"
     }
 }
