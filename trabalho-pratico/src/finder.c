@@ -2,17 +2,19 @@
 #include "../include/utils.h"
 #include "../include/flight.h"
 #include "../include/reservation.h"
+#include "../include/sort.h"
+#include "../include/statistics.h"
 #include <glib.h>
 
 
 static int i = 0;
 
-Temporary * getAListOfSomething(void * database,const char * hotelId,Time * begin,Time * end,void (*func)(gpointer,gpointer,gpointer)){
+Temporary * getAListOfSomething(void * database,const char * hotelId,Time * begin,Time * end,void (*func)()){
     Temporary * temp = createTemporary();
     void ** list = NULL; //= malloc(sizeof(void *) * 500);
     initArrays(&list,500);
     setTempList(temp,list);
-    setTempId(temp,(char *) hotelId);
+    if(hotelId) setTempId(temp,(char *) hotelId);
     setTempBegin(temp,begin);
     setTempEnd(temp,end);
     setTempMax(temp,500);
@@ -225,4 +227,78 @@ void checkAirports(gpointer key,gpointer value,gpointer flightData){
     free(origin);
     destroyTime(sDepartureDate);
     destroyTime(SArrivalDate);
+}
+
+
+Auxiliar * getDelays(void * database){
+    Integers * temp = createIntegers(30);
+    applyForEach(database,&getAirportsDelays,(void *)temp); // Fill up Integers with information
+
+    int max = getIntSize(temp); // Get then number of different airports
+
+    int * allDelays = malloc(sizeof(int) * max);// Get a list of the median of each airport delay
+    char ** airports = malloc(sizeof(char *) * max);
+    for(int j = 0;j < max;j++){
+        int * array = (int *) getIntList(temp,j);
+        mergeSort((void **)&array,getIntListSize(temp,j),"Int");
+        setIntList(temp,j,array,getIntListSize(temp,j));
+        allDelays[j] = delayMedianAirport(array,getIntListSize(temp,j));
+        airports[j] = getIntNamesElement(temp,j);
+        ffree(array);
+    }
+    destroyIntegers(temp);
+    void ** aux = malloc(sizeof(void *) * 2);
+    aux[0] = (void *) allDelays;
+    aux[1] = (void *) airports;
+    mergeSort((void **) aux,max,"Integers");
+    Auxiliar * sorted = createAux(max);
+    setAuxSize(sorted,max);
+    for(int j = 0;j < max;setAuxName(sorted,j,airports[j]),j++);
+    for(int j = 0;j < max;setAuxListElement(sorted,j,allDelays[j]),j++);
+    return sorted;
+}
+
+void getAirportsDelays(gpointer key,gpointer value,gpointer data){
+    Integers * temp = (Integers *) data; // Cast for the temp struct
+    Flight * flight = (Flight *) value; // Cast for the flight that is being analysed
+
+
+    int delay = getFlightDelay(flight); // Get the delay 
+    char * origin = getFlightOrigin(flight); // Get the airport of the flight
+    int max = getIntSize(temp); // Get how many differents airports I have on the list
+
+    bool flag = false; // Flag to check if the airport is already on the list
+
+    if(max == 0){ // Case of the first iteration
+
+        // Set the first airport for the first 
+        // element of the airports list
+        setIntNamesElement(temp,0,origin); 
+
+        // Set the first flight delay for the first 
+        // element of the delays list
+        setIntListElement(temp,0,0,delay);
+        incIntListSize(temp,0);
+        incIntSize(temp); // Increments the number of diferents airports
+        return;
+    }
+
+    for(int j = 0;j < max;j++){ // Checks if the airport is already on the list
+        char * listOrigin = getIntNamesElement(temp,j);
+        if(!strcoll(listOrigin,origin)){
+            setIntListElement(temp,j,getIntListSize(temp,j),delay); // Sets the delay for the respetive position
+            incIntListSize(temp,j);
+            flag = true;
+            ffree(listOrigin);
+            break;
+        }
+        ffree(listOrigin);
+    }
+    if(flag == false){
+        setIntNamesElement(temp,max,(void *)origin);
+        setIntListElement(temp,getIntSize(temp),0,delay);
+        incIntListSize(temp,getIntSize(temp));
+        incIntSize(temp);
+    }
+    ffree(origin);
 }

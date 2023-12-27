@@ -54,4 +54,12 @@ double averageRating(void * reservations, const char * id){
     return (double) answer;
 }
 
-double dalayMedianAirport(void*, void*);
+int delayMedianAirport(int * list,int n){
+    int mid = (n / 2) - 1;
+    if(n % 2 == 0){
+        int a =  (list[mid]);
+        int b =  (list[mid + 1]);
+        return (int) (a + b) / 2;
+    }
+    return list[mid]; 
+}

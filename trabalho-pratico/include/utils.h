@@ -1,10 +1,144 @@
 #ifndef UTILS_H
 #define UTILS_H
 
+typedef struct auxiliar Auxiliar;
+
+Auxiliar * createAux(int);
+
+void setAuxName(Auxiliar *,int,char *);
+char *getAuxName(Auxiliar *,int);
+
+void setAuxListElement(Auxiliar *,int,int);
+int getAuxListElement(Auxiliar *,int);
+
+void setAuxSize(Auxiliar *,int);
+int getAuxSize(Auxiliar *);
+
+void destroyAux(Auxiliar *);
+
+typedef struct integers Integers;
+
+/**
+ * @brief Allocates memory and initializes a Integers structure
+ * @param num Number of possible slots of array to be stored
+ * @return Pointer to the allocated and initialized structure
+*/
+Integers * createIntegers(int);
+
+/**
+ * @brief Sets the value on the element
+ * @param integers Pointer to the Integers structure
+ * @param arrayPosition Position of the array wanted
+ * @param elementPosition Position of the element wanted
+ * @param element Value to be put on the position 
+*/
+void setIntListElement(Integers *,int,int,int);
+
+/**
+ * @brief Gets the value on the element
+ * @param integers Pointer to the structure Integers
+ * @param arrayPosition Position of the array wanted
+ * @param elementPosition Position of the element wanted
+ * @return The value stored on the position 
+*/
+int getIntListElement(Integers *,int,int);
+
+/**
+ * @brief Sets an array as the element on an array of arrays
+ * @param integers Pointer to the Integers structure 
+ * @param position Position of the array wanted
+ * @param element Array to be set as the new element of the array 
+ * @param size Size of the new array
+*/
+void setIntList(Integers *,int ,int *,int);
+
+/**
+ * @brief Gets a copy of the array stored in the specified position
+ * @param integers Pointer to the structure Integers
+ * @param arrayPosition Position of the array wanted
+*/
+int * getIntList(Integers *,int);
+
+/**
+ * @brief Sets a pointer on the array
+ * @param integers Pointer to the Integers structure
+ * @param position Position on the array
+ * @param element Pointer the is going to be stored
+*/
+void setIntNamesElement(Integers *,int,char *);
+
+/**
+ * @brief Gets a pointer on the array
+ * @param integers Pointer to the Integers structure
+ * @param position Position on the array
+ * @return Pointer that was stored in the position
+*/
+char * getIntNamesElement(Integers*,int);
+
+/**
+ * @brief Increments the size of the wanted list
+ * @param integers Pointer to the Integers structure
+ * @param position Position of the array we want to increment
+ * the size
+*/
+void incIntListSize(Integers *,int);
+
+/**
+ * @brief Decrements the size of the wanted list
+ * @param integers Pointer to the Integers structure
+ * @param position Position of the array we want to increment
+ * the size
+*/
+void decIntListSize(Integers *,int);
+
+/**
+ * @brief Gets the size of the wanted list
+ * @param integers Pointer to the Integers structure
+ * @param position Position of the array we want to increment
+ * the size
+ * @return The size of the selected array
+*/
+int getIntListSize(Integers *,int);
+
+/**
+ * @brief Increments the number of arrays of elements
+ * @param integers Pointer to the Integers structure
+*/
+void incIntSize(Integers *);
+
+/**
+ * @brief Decrements the number of arrays of elements
+ * @param integers Pointer to the Integers structure
+*/
+void decIntSize(Integers *);
+
+/**
+ * @brief Gets the number of arrays of elements
+ * @param integers Pointer to the Integers structure
+ * @return The number of arrays stored
+*/
+int getIntSize(Integers *);
+
+/**
+ * @brief Frees the Integers structure
+ * @param integers Pointer to the Integers structure
+*/
+void destroyIntegers(Integers *);
 
 
+
+
+/**
+ * @brief Year of the date considered as the present day
+*/
 #define PYEAR 2023
+/**
+ * @brief Month of the date considered as the present day
+*/
 #define PMON 10
+/**
+ * @brief Day of the date considered as the present day
+*/
 #define PDAY 1
 
 

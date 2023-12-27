@@ -12,13 +12,6 @@
 
 #define BUFFERSIZE 1000
 
-void print(gpointer key,gpointer value,gpointer data){
-    Reservation * r = (Reservation *) value;
-    if(!strcoll("HTL1002",key)) 
-        printf("%d\n",getReservRating(r));
-}
-
-
 int main(int argc,char **argv){
     if(argc == 3){
         if (argc < 2) {
@@ -55,7 +48,7 @@ int main(int argc,char **argv){
         memset(userData, '\0', BUFFERSIZE);
 
 
-        Users * uDatabase = createDatabase("Users"); // initDatabase
+        Users * uDatabase = createDatabase(&destroyUser); // initDatabase
 
         fgets(userData,BUFFERSIZE,userFile);
 
@@ -121,7 +114,7 @@ int main(int argc,char **argv){
 
         memset(reservationData, '\0', BUFFERSIZE);
 
-        Reservations * rDatabase = createDatabase("Reservations");
+        Reservations * rDatabase = createDatabase(&destroyReservation);
 
         fgets(reservationData,BUFFERSIZE,reservationsFile);
 
@@ -217,7 +210,7 @@ int main(int argc,char **argv){
 
         memset(flightData, '\0', BUFFERSIZE);
 
-        Flights * fDatabase = createDatabase("Flights");
+        Flights * fDatabase = createDatabase(&destroyFlight);
 
         while(fgets(flightData,BUFFERSIZE,flightFile)){
 
@@ -333,7 +326,7 @@ int main(int argc,char **argv){
         destroyDatabase(rDatabase);
     }
     if(argc == 2){
-        confirmar(argc,argv);
+        confirmar();
     }
     return 0;
 }

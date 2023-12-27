@@ -161,7 +161,7 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
 
 
 //*OUTPUTS PARA Q2
-void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
+void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n2){
     
     commandAtual++;
 
@@ -174,21 +174,21 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
     FILE * outputFile = fopen(fileName, "a");
 
 
-    if(!r1 && !f2){
+    if(!reservations && !flights){
         fclose(outputFile);
         return;
     }
     if(f == false){ // Normal Mode
-        if(r1 && n1 > 0 && f2 && n2 > 0){ // There is both reservations and flights to be written
+        if(reservations && n1 > 0 && flights && n2 > 0){ // There is both reservations and flights to be written
             int i = 0,j = 0,count = 0,max = n1 + n2;
             while(count < max){
                 if(i < n1 && j < n2){ // Both the arrays have not reached their limit 
-                    Time * rTime = getReservBeginDate(r1[i]);
-                    Time * fTime = getFlightSDepartureDate(f2[j]);
+                    Time * rTime = getReservBeginDate(reservations[i]);
+                    Time * fTime = getFlightSDepartureDate(flights[j]);
                     if(compareTimes(rTime,fTime) == true){ // Flight is more recent that the reservation
                         char * time = timeToString(fTime);
                         time[10] = '\0';
-                        char * fId = getFlightId(f2[j]);
+                        char * fId = getFlightId(flights[j]);
                         fprintf(outputFile,"%s;%s;flight\n",fId,time);
                         j++;
                         ffree(time);
@@ -197,7 +197,7 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
                     else{ // Reservation is more recent that the flight
                         char * time = timeToString(rTime);
                         time[10] = '\0';
-                        char * rId = getReservId(r1[i]);
+                        char * rId = getReservId(reservations[i]);
                         fprintf(outputFile,"%s;%s;reservation\n",rId,time);
                         i++;
                         ffree(time);
@@ -207,10 +207,10 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
                     destroyTime(fTime);
                 }
                 if(i < n1 && j >= n2){ // Flights array have reached his limit
-                    Time * rTime = getReservBeginDate(r1[i]);
+                    Time * rTime = getReservBeginDate(reservations[i]);
                     char * time = timeToString(rTime);
                     time[10] = '\0';
-                    char * rId = getReservId(r1[i]);
+                    char * rId = getReservId(reservations[i]);
                     fprintf(outputFile,"%s;%s;reservation\n",rId,time);
                     i++;
                     ffree(time);
@@ -218,10 +218,10 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
                     destroyTime(rTime);
                 }
                 if(i >= n1 && j < n2){ // Reservations array have reached his limit
-                    Time * fTime = getFlightSDepartureDate(f2[j]);
+                    Time * fTime = getFlightSDepartureDate(flights[j]);
                     char * time = timeToString(fTime);
                     time[10] = '\0';
-                    char * fId = getFlightId(f2[j]);
+                    char * fId = getFlightId(flights[j]);
                     fprintf(outputFile,"%s;%s;flight\n",fId,time);
                     j++;
                     ffree(time);
@@ -233,13 +233,13 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
             fclose(outputFile);
             return;
         }else{
-            if(r1 && n1 > 0){ // There only is reservations to be written
+            if(reservations && n1 > 0){ // There only is reservations to be written
                 int i = 0;
                 while(i < n1){
-                    Time * rTime = getReservBeginDate(r1[i]);
+                    Time * rTime = getReservBeginDate(reservations[i]);
                     char * time = timeToString(rTime);
                     time[10] = '\0';
-                    char * rId = getReservId(r1[i]);
+                    char * rId = getReservId(reservations[i]);
                     fprintf(outputFile,"%s;%s\n",rId,time);
                     i++;
                     ffree(time);
@@ -249,13 +249,13 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
                 fclose(outputFile);
                 return;
             }
-            if(f2 && n2 > 0){ // There only is flights to be written
+            if(flights && n2 > 0){ // There only is flights to be written
                 int j = 0;
                 while(j < n2){
-                    Time * fTime = getFlightSDepartureDate(f2[j]);
+                    Time * fTime = getFlightSDepartureDate(flights[j]);
                     char * time = timeToString(fTime);
                     time[10] = '\0';
-                    char * fId = getFlightId(f2[j]);
+                    char * fId = getFlightId(flights[j]);
                     fprintf(outputFile,"%s;%s\n",fId,time);
                     j++;
                     ffree(time);
@@ -268,19 +268,19 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
         }
     }else{ // F Mode
         int i = 0,j = 0,count = 0;
-        if(r1 && n1 > 0 && f2 && n2 > 0){ // There is both reservations and flights to be written
+        if(reservations && n1 > 0 && flights && n2 > 0){ // There is both reservations and flights to be written
             
             int max = n1 + n2;
 
             while(count < max){
                 if(count != 0) fprintf(outputFile,"\n");
                 if(i < n1 && j < n2){ // Both the arrays have not reached their limit 
-                    Time * rTime = getReservBeginDate(r1[i]);
-                    Time * fTime = getFlightSDepartureDate(f2[j]);
+                    Time * rTime = getReservBeginDate(reservations[i]);
+                    Time * fTime = getFlightSDepartureDate(flights[j]);
                     if(compareTimes(rTime,fTime) == true){ // Flight is more recent that the reservation
                         char * time = timeToString(fTime);
                         time[10] = '\0';
-                        char * fId = getFlightId(f2[j]);
+                        char * fId = getFlightId(flights[j]);
                         fprintf(outputFile,"--- %d ---\n",count + 1);
                         fprintf(outputFile,"id: %s\ndate: %s\ntype: flight\n",fId,time);
                         j++;
@@ -290,7 +290,7 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
                     else{ // Reservation is more recent that the flight
                         char * time = timeToString(rTime);
                         time[10] = '\0';
-                        char * rId = getReservId(r1[i]);
+                        char * rId = getReservId(reservations[i]);
                         fprintf(outputFile,"--- %d ---\n",count + 1);
                         fprintf(outputFile,"id: %s\ndate: %s\ntype: reservation\n",rId,time);
                         i++;
@@ -304,10 +304,10 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
                     count++;
                     while (i < n1)
                     {                
-                        Time * rTime = getReservBeginDate(r1[i]);
+                        Time * rTime = getReservBeginDate(reservations[i]);
                         char * time = timeToString(rTime);
                         time[10] = '\0';
-                        char * rId = getReservId(r1[i]);
+                        char * rId = getReservId(reservations[i]);
                         fprintf(outputFile,"\n--- %d ---\n",count + 1);
                         fprintf(outputFile,"id: %s\ndate: %s\ntype: reservation\n",rId,time);
                         i++;
@@ -319,14 +319,14 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
                     fclose(outputFile);
                     return;
                 }
-                if(r1 && f2 && i == n1 && j < n2){ // Reservations array have reached his limit but the flights have not
+                if(reservations && flights && i == n1 && j < n2){ // Reservations array have reached his limit but the flights have not
                     count++;
                     while (j < n2)
                     {
-                        Time * fTime = getFlightSDepartureDate(f2[j]);
+                        Time * fTime = getFlightSDepartureDate(flights[j]);
                         char * time = timeToString(fTime);
                         time[10] = '\0';
-                        char * fId = getFlightId(f2[j]);
+                        char * fId = getFlightId(flights[j]);
                         fprintf(outputFile,"\n--- %d ---\n",count + 1);
                         fprintf(outputFile,"id: %s\ndate: %s\ntype: flight\n",fId,time);
                         j++;
@@ -345,13 +345,13 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
 
 
         }else{
-            if(r1 && n1 > 0 && !f2){ // There only is reservations to be written
+            if(reservations && n1 > 0 && !flights){ // There only is reservations to be written
                 int r = 0;
                 while(r < n1){
-                    Time * rTime = getReservBeginDate(r1[r]);
+                    Time * rTime = getReservBeginDate(reservations[r]);
                     char * time = timeToString(rTime);
                     time[10] = '\0';
-                    char * rId = getReservId(r1[r]);
+                    char * rId = getReservId(reservations[r]);
                     if(r != 0) fprintf(outputFile,"\n");
                     fprintf(outputFile,"--- %d ---\n",r + 1);
                     fprintf(outputFile,"id: %s\ndate: %s\n",rId,time);
@@ -363,13 +363,13 @@ void outputQ2(bool f,Reservation ** r1,int n1, Flight ** f2,int n2){
                 fclose(outputFile);
                 return;
             }
-            if(f2 && n2 > 0 && !r1){ // There only is flights to be written
+            if(flights && n2 > 0 && !reservations){ // There only is flights to be written
                 int f = 0;
                 while(f < n2){
-                    Time * fTime = getFlightSDepartureDate(f2[f]);
+                    Time * fTime = getFlightSDepartureDate(flights[f]);
                     char * time = timeToString(fTime);
                     time[10] = '\0';
-                    char * fId = getFlightId(f2[f]);
+                    char * fId = getFlightId(flights[f]);
                     if(f != 0) fprintf(outputFile,"\n");
                     fprintf(outputFile,"--- %d ---\n",f + 1);
                     fprintf(outputFile,"id: %s\ndate: %s\n",fId,time);
@@ -545,7 +545,46 @@ void outputQ5(bool f, Flight ** fList,int max){
     fclose(outputFile);
 }
 
-void outputQ8(int revenue, bool f){
+
+void outputQ7(bool f,Auxiliar * temp,int max){
+    commandAtual++;
+    
+    
+    char fileName[50];
+
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
+
+    FILE * outputFile = fopen(fileName, "a");
+    if(!outputFile){
+        perror("Query 7 command line did not open, probably file name wrong.\n");
+        return;
+    }
+
+    if(f == true){
+        for(int i = 0;i < max && i < getAuxSize(temp);i++){
+            if(i != 0) fprintf(outputFile,"\n");
+            char * airport = getAuxName(temp,i);
+            int delay = getAuxListElement(temp,i);
+            fprintf(outputFile,"--- %d ---\n",i + 1);
+            fprintf(outputFile,"name: %s\n",airport);
+            fprintf(outputFile,"median: %d\n",delay);
+            ffree(airport);
+        }
+    }else{
+        for(int i = 0;i < max && i < getAuxSize(temp);i++){
+            char * airport = getAuxName(temp,i);
+            int delay = getAuxListElement(temp,i);
+            fprintf(outputFile,"%s;%d\n",airport,delay);
+            ffree(airport);
+        }
+    }
+    fclose(outputFile);
+}
+
+
+void outputQ8(bool f, int revenue){
     commandAtual++;
 
     char fileName[50];

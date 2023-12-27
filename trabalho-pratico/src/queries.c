@@ -8,7 +8,6 @@
 #include <ctype.h>
 #include <string.h>
 
-
 #define BUFFERSIZE 100
 
 void query1(const Users * uDatabase, const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,const char * id,bool f){
@@ -279,9 +278,36 @@ void query6(){
     return;
 }
 
-void query7(){
-    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
-    return;
+void query7(Flights * fDatabase,char * num, bool f){
+    Auxiliar * allDelays = getDelays((void *)fDatabase);
+    int n = atoi(num);
+    int * delays = malloc(sizeof(int) * getAuxSize(allDelays));
+    for(int i = 0;i < getAuxSize(allDelays);
+    delays[i] = -1,
+    delays[i] = getAuxListElement(allDelays,i),
+    i++);
+
+    char ** airports = malloc(sizeof(char *) * getAuxSize(allDelays));
+    for(int i = 0;i < getAuxSize(allDelays);
+    airports[i] = NULL,
+    airports[i] = getAuxName(allDelays,i),
+    i++);
+
+    outputQ7(f,allDelays,n);
+
+    ffree(airports);
+    ffree(delays);
+
+    destroyAux(allDelays);
+
+    /*Temporary * temp = getAListOfSomething(fDatabase,NULL,NULL,NULL,&getAirportsDelays);
+
+
+    char ** airports = (char **) getTempList(temp);
+
+
+    destroyTemporary(temp);
+    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);*/
 }
 
 void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit,bool f){
@@ -314,7 +340,7 @@ void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit
         destroyTime(end);
     }
 
-    outputQ8(total,f);
+    outputQ8(f,total);
 
     ffree(rList);
     destroyTemporary(hDatabase);

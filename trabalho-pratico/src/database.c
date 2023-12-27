@@ -8,15 +8,12 @@
 
 typedef struct database {
     GHashTable * table;
-    char * type;
 } Database;
 
-Database * createDatabase(char * type){
+Database * createDatabase(void (*func)()){
     Database * database = malloc(sizeof(struct database));
-    if(!strcoll(type,"Users")) database->table = g_hash_table_new_full(g_str_hash,g_str_equal,free,(GDestroyNotify) destroyUser);
-    if(!strcoll(type,"Reservations")) database->table = g_hash_table_new_full(g_str_hash,g_str_equal,free,(GDestroyNotify) destroyReservation);
-    if(!strcoll(type,"Flights")) database->table = g_hash_table_new_full(g_str_hash,g_str_equal,free,(GDestroyNotify) destroyFlight);
-    database->type = strdup(type);
+    GDestroyNotify function = (GDestroyNotify) func;
+    database->table = g_hash_table_new_full(g_str_hash,g_str_equal,free,(GDestroyNotify) function);
     return database;
 }
 
@@ -44,7 +41,6 @@ void applyForEach(void * database,void (*func)(gpointer,gpointer,gpointer),void 
 void destroyDatabase(void * database){
     Database * dBase = (Database *) database;
     g_hash_table_destroy(dBase->table);
-    ffree(dBase->type);
     ffree(database);
 }
 
@@ -125,6 +121,10 @@ void setTempList(Temporary * temp,void ** list){
 void setTempListElement(Temporary * temp,void * element,int position){
     temp->list[position] = element;
 }
+
+const void * getTempListElement(Temporary * temp,int position){
+    return (const void *) temp->list[position];
+}   
 
 void ** getTempList(Temporary * temp){
     void ** list = malloc(sizeof(void *) * temp->num);
