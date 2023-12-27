@@ -1,4 +1,5 @@
 #include "../include/reservation.h"
+#include "../include/database.h"
 #include <stdbool.h>
 #include <string.h>
 #include <stdlib.h>

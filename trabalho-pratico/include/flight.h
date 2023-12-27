@@ -1,6 +1,9 @@
 #ifndef FLIGHT_H
 #define FLIGHT_H
 #include "../include/time.h" 
+#include "../include/database.h"
+
+typedef Database Flights;
 
 typedef struct flight Flight;
 

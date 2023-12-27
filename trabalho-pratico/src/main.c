@@ -1,11 +1,9 @@
 #include "../include/parser.h"
 #include "../include/interpreter.h"
 #include "../include/user.h"
-#include "../include/flight.h"
 #include "../include/reservation.h"
-#include "../include/passenger.h"
-#include "../include/catalogs.h"
-#include "../include/dataStructs.h"
+#include "../include/flight.h"
+#include "../include/passengers.h"
 #include "../include/statistics.h"
 #include "../include/testes.h"
 #include <locale.h>
@@ -59,7 +57,7 @@ int main(int argc,char **argv){
         memset(userData, '\0', BUFFERSIZE);
 
 
-        UsersDatabase uDatabase = initUsers(); // initDatabase
+        Users * uDatabase = createDatabase("Users"); // initDatabase
 
         fgets(userData,BUFFERSIZE,userFile);
 
@@ -81,7 +79,7 @@ int main(int argc,char **argv){
             uBuffer = userCheck(userDataClean); // malloc
 
             if(uBuffer != NULL){
-                insertUser(uDatabase,uBuffer);
+                insertOnDatabase(uDatabase,getUserId(uBuffer),uBuffer);
 
             }else{ 
                 fprintf(userErrors,"%s",userDataClean);
@@ -125,7 +123,7 @@ int main(int argc,char **argv){
 
         memset(reservationData, '\0', BUFFERSIZE);
 
-        ReservationsDatabase rDatabase = initReservations();
+        Reservations * rDatabase = createDatabase("Reservations");
 
         fgets(reservationData,BUFFERSIZE,reservationsFile);
 
@@ -146,7 +144,7 @@ int main(int argc,char **argv){
             rBuffer = reservationCheck(reservationDataClean,uDatabase);
 
         if(rBuffer != NULL){
-                insertReserv(rDatabase,rBuffer);
+                insertOnDatabase(rDatabase,getReservId(rBuffer),rBuffer);
             }else{ 
                 fprintf(reservationsErrors,"%s",reservationDataClean);
             }
@@ -221,7 +219,7 @@ int main(int argc,char **argv){
 
         memset(flightData, '\0', BUFFERSIZE);
 
-        FlightsDatabase fDatabase = initFlights();
+        Flights * fDatabase = createDatabase("Flights");
 
         while(fgets(flightData,BUFFERSIZE,flightFile)){
 
@@ -241,7 +239,7 @@ int main(int argc,char **argv){
 
             if(fBuffer != NULL){
 
-                insertFlight(fDatabase,fBuffer);
+                insertOnDatabase(fDatabase,getFlightId(fBuffer),fBuffer);
 
             }else{ 
                 fprintf(flightsErrors,"%s",flightDataClean);
@@ -287,7 +285,7 @@ int main(int argc,char **argv){
 
         memset(passengersData, '\0', BUFFERSIZE);
 
-        PassengersDatabase * pDatabase = createPassengerDatabase();
+        Passengers * pDatabase = createPassengerDatabase();
         
         fgets(passengersData,BUFFERSIZE,passengersFile);
 
@@ -326,30 +324,15 @@ int main(int argc,char **argv){
         free(filePath); // free
         filePath = NULL;
 
-
-
         // Read and execute commands, freeing after used
 
-        //g_hash_table_foreach(rDatabase,(GHFunc) print,NULL);
-
-        readEntryFile((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,argc,argv);
-        /*UserReservsDB * reservs = getUserReservsDB(rDatabase,"JéssiTavares910");
-
-        Reservation ** list = getUserReservs(reservs);
-
-        double n = getTotalSpentByUser(list);
-        printf("Jessica Tavares spent the total amount of %f on the following items:\n\n",n);
-        for(int i = 0; i < getNumReservs(reservs);i++){
-            char * temp = getReservId(list[i]);
-            printf("JéssiTavares910 : %s\n\n", temp);
-            free(temp);
-        }*/
+        readEntryFile((const Users *) uDatabase,(const Reservations *) rDatabase,(const Flights *) fDatabase,(const Passengers *) pDatabase,argc,argv);
 
         // Free everything used
-        destroyPassengersDB(pDatabase);
-        destroyUsers(uDatabase);
-        destroyFlights(fDatabase);
-        destroyReservs(rDatabase);
+        destroyPassengers(pDatabase);
+        destroyDatabase(uDatabase);
+        destroyDatabase(fDatabase);
+        destroyDatabase(rDatabase);
     }
     if(argc == 2){
         confirmar(argc,argv);

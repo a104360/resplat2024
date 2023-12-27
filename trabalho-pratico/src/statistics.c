@@ -1,14 +1,15 @@
 #include "../include/statistics.h"
-#include "../include/catalogs.h"
 #include "../include/reservation.h"
+#include "../include/database.h"
+#include "../include/finder.h"
 #include <glib.h>
 
 
-double getTotalSpentByUser(void ** userReservs){
+double getTotalSpentByUser(void ** userReservs,int max){
     if(userReservs == NULL) return -1;
     Reservation ** list = (Reservation **) userReservs; 
     double total = 0;
-    for(int i = 0;list[i];i++){
+    for(int i = 0;i < max;i++){
         Time * reservBeginDate = getReservBeginDate(list[i]);
         Time * reservEndDate = getReservEndDate(list[i]);
         int dayDiff = numberOfDays(reservBeginDate,reservEndDate);
@@ -45,11 +46,11 @@ int getHotelEarningsOfReserv(void * userReservs,int n){
 
 
 double averageRating(void * reservations, const char * id){
-    HotelDatabase * hotelDB = getHotelDataBase(reservations,id,NULL,NULL);
-    int sumRatings = getSumRatings(hotelDB);
-    int n = getNumReservas(hotelDB);
+    Temporary * temp = getAListOfSomething(reservations,id,NULL,NULL,&allHotelReservs);
+    int sumRatings = getTempSum(temp);
+    int n = getTempNum(temp);
     double answer = (double) sumRatings / (double) n;  
-    destroyHotelDatabase(hotelDB);
+    destroyTemporary(temp);
     return (double) answer;
 }
 

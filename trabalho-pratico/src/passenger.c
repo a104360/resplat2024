@@ -13,7 +13,7 @@ typedef struct passenger{
 // *** Passenger related functions *** 
 
  Passenger * createPassenger(){
-    Passenger * p =malloc(sizeof(struct passenger));
+    Passenger * p = malloc(sizeof(struct passenger));
     initPassenger(p);
     return p;
 }

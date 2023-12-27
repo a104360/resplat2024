@@ -7,14 +7,10 @@
 #include "../include/flight.h"
 #include "../include/reservation.h"
 #include "../include/passenger.h"
-#include "../include/dataStructs.h"
-#include "../include/catalogs.h"
 #include "../include/parser.h"
 
 #define BUFFERSIZE 1000
 #define TOKENIZE(token,saveptr) token = strtok_r(NULL," \n\0",&saveptr);
-#define FREE(ptr) if(ptr){free(ptr); ptr = NULL;} 
-
 
 int verTamanhoLinha(const char * linha){
     int i = 0;
@@ -44,8 +40,7 @@ Time * firstDateQ5(const char * line){
     char * tokenLimpo = limpaToken(aux);
     Time * firstDate = dateCheck(tokenLimpo);
 
-    free(aux);
-    aux = NULL;
+    ffree(aux);
 
     return firstDate;
 }
@@ -56,8 +51,7 @@ Time * secondDateQ5(const char * line){
     char * tokenLimpo = limpaToken(aux);
     Time * secondDate = dateCheck(tokenLimpo);
 
-    free(aux);
-    aux = NULL;
+    ffree(aux);
 
     return secondDate;
 }
@@ -67,8 +61,7 @@ Time * firstDateQ8(const char * line){
     char * aux = strndup(line,10);
     Time * firstDate = dateCheck(aux);
 
-    free(aux);
-    aux = NULL;
+    ffree(aux);
 
     return firstDate;
 }
@@ -78,8 +71,7 @@ Time * secondDateQ8(const char * line){
     char * aux = strndup(line,10);
     Time * secondDate = dateCheck(aux);
 
-    free(aux);
-    aux = NULL;
+    ffree(aux);
 
     return secondDate;
 }
@@ -93,8 +85,7 @@ char * airportName(const char * line){
 
     char * temp = strdup(token);
 
-    free(aux);
-    aux = NULL;
+    ffree(aux);
     return temp;
 }
 
@@ -127,7 +118,7 @@ char * airportsQ6(const char * line){
     return temp;
 }
 
-void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDatabase,const FlightsDatabase fDatabase,const PassengersDatabase * pDatabase,int agrc, char **argv){
+void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,int agrc, char **argv){
     if(uDatabase == NULL || rDatabase == NULL || fDatabase == NULL || pDatabase == NULL) return;
     FILE * comandos = fopen(argv[2],"r");
 
@@ -168,10 +159,10 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
             //QUERIE 1
             }else {
                 if(linhaLimpa[1] == 'F'){
-                    query1((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,&linhaLimpa[3],true);
+                    query1((const Users *) uDatabase,(const Reservations *) rDatabase,(const Flights *) fDatabase,(const Passengers *) pDatabase,&linhaLimpa[3],true);
                     
                 }else {
-                    query1((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,&linhaLimpa[2],false);
+                    query1((const Users *) uDatabase,(const Reservations *) rDatabase,(const Flights *) fDatabase,(const Passengers *) pDatabase,&linhaLimpa[2],false);
                     
                 }
             }
@@ -182,10 +173,10 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
         case '2':
 
             if(linhaLimpa[1] == 'F'){
-                    query2((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,&linhaLimpa[3],true);
+                    query2((const Users * ) uDatabase,(const Reservations * ) rDatabase,(const Flights * ) fDatabase,(const Passengers *) pDatabase,&linhaLimpa[3],true);
                     
                 }else {
-                    query2((const UsersDatabase) uDatabase,(const ReservationsDatabase) rDatabase,(const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,&linhaLimpa[2],false);
+                    query2((const Users * ) uDatabase,(const Reservations * ) rDatabase,(const Flights * ) fDatabase,(const Passengers *) pDatabase,&linhaLimpa[2],false);
                     
                 }
 
@@ -196,10 +187,10 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
         case '3':
 
             if(linhaLimpa[1] == 'F'){
-                    query3((const ReservationsDatabase) rDatabase,&linhaLimpa[3],true);
+                    query3((Reservations * ) rDatabase,&linhaLimpa[3],true);
                     
                 }else {
-                    query3((const ReservationsDatabase) rDatabase,&linhaLimpa[2],false);
+                    query3((Reservations * ) rDatabase,&linhaLimpa[2],false);
                     
                 }
 
@@ -210,10 +201,10 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
         case '4':
 
             if(linhaLimpa[1] == 'F'){
-                    query4(rDatabase,&linhaLimpa[3],true);
+                    query4((Reservations *) rDatabase,&linhaLimpa[3],true);
                     
                 }else {
-                    query4(rDatabase,&linhaLimpa[2],false);
+                    query4((Reservations *) rDatabase,&linhaLimpa[2],false);
                     
                 }
 
@@ -226,18 +217,16 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
             Time * secondDate = secondDateQ5(&linhaLimpa[29]);
             if(linhaLimpa[1] == 'F'){
                     char * airport = airportName(&linhaLimpa[3]);
-                    query5((const FlightsDatabase) fDatabase,firstDate,secondDate,airport,true);
+                    query5((const Flights * ) fDatabase,firstDate,secondDate,airport,true);
                     destroyTime(firstDate);
                     destroyTime(secondDate);
-                    free(airport);
-                    airport = NULL;
+                    ffree(airport);
                 }else {
                     char * airport = airportName(&linhaLimpa[2]);
-                    query5((const FlightsDatabase) fDatabase,firstDate,secondDate,airport,false);
+                    query5((const Flights * ) fDatabase,firstDate,secondDate,airport,false);
                     destroyTime(firstDate);
                     destroyTime(secondDate);
-                    free(airport);
-                    airport = NULL;
+                    ffree(airport);
                 }
 
             break;
@@ -248,12 +237,12 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
             if(linhaLimpa[1] == 'F'){
                     char * year = yearQ6(&linhaLimpa[3]);
                     char * nAirports = airportsQ6(&linhaLimpa[3]);
-                    query6((const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,year,nAirports,true);
+                    query6((Flights *) fDatabase,(Passengers *) pDatabase,year,nAirports,true);
                     
                 }else {
                     char * year = yearQ6(&linhaLimpa[2]);
                     char * nAirports = airportsQ6(&linhaLimpa[2]);
-                    query6((const FlightsDatabase) fDatabase,(const PassengersDatabase *) pDatabase,year,nAirports,true);
+                    query6((Flights *) fDatabase,(Passengers *) pDatabase,year,nAirports,true);
                     
                 }
             break;
@@ -289,9 +278,9 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
                     Time * firstDate = firstDateQ8(&linhaLimpa[4+tokenSize]);
                     Time * secondDate = secondDateQ8(&linhaLimpa[15+tokenSize]);
 
-                    query8(rDatabase,token,firstDate,secondDate,true);
+                    query8((Reservations *) rDatabase,token,firstDate,secondDate,true);
 
-                    FREE(aux);
+                    ffree(aux);
                     destroyTime(firstDate);
                     destroyTime(secondDate);
                     
@@ -307,9 +296,9 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
                     Time * firstDate = firstDateQ8(&linhaLimpa[3+tokenSize]);
                     Time * secondDate = secondDateQ8(&linhaLimpa[14+tokenSize]);
 
-                    query8(rDatabase,token,firstDate,secondDate,false);
+                    query8((Reservations *) rDatabase,token,firstDate,secondDate,false);
 
-                    FREE(aux);
+                    ffree(aux);
                     destroyTime(firstDate);
                     destroyTime(secondDate);
                     
@@ -322,10 +311,10 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
         case '9':
 
             if(linhaLimpa[1] == 'F'){
-                    query9((const UsersDatabase) uDatabase,limpaToken(&linhaLimpa[3]),true);
+                    query9((Users *) uDatabase,limpaToken(&linhaLimpa[3]),true);
                     
                 }else {
-                    query9((const UsersDatabase) uDatabase,limpaToken(&linhaLimpa[2]),false);
+                    query9((Users *) uDatabase,limpaToken(&linhaLimpa[2]),false);
                     
                 }
 
@@ -337,6 +326,6 @@ void readEntryFile(const UsersDatabase uDatabase,const ReservationsDatabase rDat
             break;
         }
     }
-    free(linha);
+    ffree(linha);
     fclose(comandos);
 }

@@ -1,4 +1,4 @@
-#include "../include/dataStructs.h"
+#include "../include/passengers.h"
 #include "../include/passenger.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -8,17 +8,17 @@
 
 
 
-typedef struct passengersDB {
+typedef struct passengers {
     Passenger ** passengers;
     unsigned int max;
     unsigned int numPassengers;
-} PassengersDatabase;
+} Passengers;
 
 
-PassengersDatabase * createPassengerDatabase(){
-    PassengersDatabase * db = malloc(sizeof(struct passengersDB));
+Passengers * createPassengerDatabase(){
+    Passengers * db = malloc(sizeof(struct passengers));
     if (!db) {
-        fprintf(stderr, "Error: Memory allocation failed for PassengersDatabase.\n");
+        fprintf(stderr, "Error: Memory allocation failed for Passengers.\n");
         exit(EXIT_FAILURE);
     }
     db->max = BUFFERSIZE;
@@ -30,7 +30,7 @@ PassengersDatabase * createPassengerDatabase(){
 
 void insertPassenger(void * dataStruct, void * passengerData){
     //Casting the arguments
-    PassengersDatabase * table = (PassengersDatabase *) dataStruct;
+    Passengers * table = (Passengers *) dataStruct;
     Passenger * passenger = (Passenger *) passengerData;
 /*
     if(table->numPassengers == 0){ // First insertion of the table
@@ -67,7 +67,7 @@ void insertPassenger(void * dataStruct, void * passengerData){
 }
 
 
-Passenger * lookupPassengerUID(const PassengersDatabase * database,const char * id){
+Passenger * lookupPassengerUID(const Passengers * database,const char * id){
     for(int i = 0;i < database->numPassengers;i++){
         char * uId = getPassengerUserId(database->passengers[i]);
         if (database->passengers[i] && strcoll(uId, id) == 0){
@@ -81,7 +81,7 @@ Passenger * lookupPassengerUID(const PassengersDatabase * database,const char * 
     return NULL;
 }
 
-Passenger * lookupPassengerFID(const PassengersDatabase * database,const char * id){
+Passenger * lookupPassengerFID(const Passengers * database,const char * id){
     if(database == NULL || id == NULL) return NULL;
     for(int i = 0;i < database->numPassengers;i++){
         char * fId = getPassengerFlightId(database->passengers[i]);
@@ -94,15 +94,15 @@ Passenger * lookupPassengerFID(const PassengersDatabase * database,const char * 
     return NULL;
 }
 
-int getNumAllPassengers(const PassengersDatabase * database){
+int getNumAllPassengers(const Passengers * database){
     return database->numPassengers;
 }
 
-Passenger ** getAllPassengers(const PassengersDatabase * database){
+Passenger ** getAllPassengers(const Passengers * database){
     return database->passengers;
 }
 
-void destroyPassengersDB(PassengersDatabase * database){
+void destroyPassengers(Passengers * database){
     for(int i = 0;i < database->numPassengers;i++){
         destroyPassenger(database->passengers[i]);
     }

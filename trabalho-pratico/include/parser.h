@@ -1,7 +1,6 @@
 #ifndef PARSER_H
 #define PARSER_H
 #include <stdbool.h>
-#include "../include/catalogs.h"
 #include "../include/user.h"
 #include "../include/flight.h"
 #include "../include/reservation.h"
@@ -62,11 +61,11 @@ unsigned int reviewCheck(const char *);
 
 User * userCheck(const char *);
 
-Reservation * reservationCheck(const char *,UsersDatabase);
+Reservation * reservationCheck(const char *,Users *);
 
 Flight * fligthCheck(const char *);
 
-Passenger * passengerCheck(const char *,UsersDatabase,FlightsDatabase);
+Passenger * passengerCheck(const char *,Users *,Flights *);
 
 
 #endif
