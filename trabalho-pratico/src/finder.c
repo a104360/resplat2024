@@ -6,6 +6,7 @@
 #include "../include/statistics.h"
 #include "../include/singularRecord.h"
 #include "../include/multipleRecord.h"
+#include "../include/temporary.h"
 #include <glib.h>
 
 
