@@ -76,20 +76,6 @@ void destroyTemporary(Temporary *);
 
 /**
  * @brief Sets a secondary database to be used on some iterating functions
- * @param temp Pointer to the temporary struct,
- * @param database Pointer to a database
-*/
-void setTempDatabase(Temporary *,void *);
-
-/**
- * @brief Gets the pointer, to a the database, stored in the temporary struct
- * @param temp Pointer to the temporary struct 
- * @return Pointer to the database 
-*/
-void * getTempDatabase(Temporary *);
-
-/**
- * @brief Sets a secondary database to be used on some iterating functions
  * @param temp Pointer to the temporary struct
  * @param database Pointer to a database
  */
@@ -227,5 +213,19 @@ void setTempMax(Temporary *, int);
 int getTempMax(Temporary *);
 
 
+/**
+ * @brief Sets a pointer to the struct
+ * @param temp Pointer to the temporary struct
+ * @param element Pointer to what will be stored in the struct
+ * @note Only use this function when no dates are needed
+*/
+void setTempAux(Temporary *,void *);
+
+/**
+ * @brief Gets the pointer stored on the struct
+ * @param temp Pointer to the temporary struct
+ * @return Pointer stored on the struct
+*/
+void * getTempAux(Temporary *);
 
 #endif

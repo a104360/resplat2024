@@ -12,16 +12,6 @@
 #define BUFFERSIZE 1000
 #define TOKENIZE(token,saveptr) token = strtok_r(NULL," \n\0",&saveptr);
 
-int verTamanhoLinha(const char * line){
-    int i = 0;
-    int count = 0;
-    while(line[i] != '\0'){
-        count++;
-        i++;
-    }
-    return count;
-}
-
 char * limpaToken(char * token){
     int tamanho = 0;
     if(token[0] == '\"'){
@@ -68,6 +58,25 @@ char * airportName(const char * line){
     return temp;
 }
 
+
+char * getSecondParam(const char * line){
+    char * aux = strdup(line);
+    char * token = NULL;
+    char * saveptr = aux;
+    token = strtok_r(aux," \n\0",&saveptr);
+    
+    if(token){
+        token = strtok_r(NULL," \n\0",&saveptr);
+        char * temp = strdup(token);
+        ffree(aux);
+        return temp;
+    }
+    ffree(aux);
+    return NULL;
+}
+
+
+
 void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,int agrc, char **argv){
     if(uDatabase == NULL || rDatabase == NULL || fDatabase == NULL || pDatabase == NULL) return;
     FILE * comandos = fopen(argv[2],"r");
@@ -82,7 +91,7 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
     while(fgets(line,BUFFERSIZE,comandos)){
 
-        int tamanhoLinha = verTamanhoLinha(line);
+        int tamanhoLinha = strlen(line);
 
         char linhaLimpa[tamanhoLinha +1];
 
@@ -184,15 +193,17 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
         //QUERIE 6
         case '6':
-
             if(linhaLimpa[1] == 'F'){
-                    query6(&linhaLimpa[3]);
-                    
-                }else {
-                    query6(&linhaLimpa[2]);
-                    
-                }
-
+                char * year = airportName(&linhaLimpa[3]);
+                char * nAirports = getSecondParam(&linhaLimpa[3]);
+                query6((const Flights *) fDatabase,(const Passengers *) pDatabase,year,nAirports,true);
+                
+            }else {
+                char * year = airportName(&linhaLimpa[2]);
+                char * nAirports = getSecondParam(&linhaLimpa[2]);
+                query6((const Flights *) fDatabase,(const Passengers *) pDatabase,year,nAirports,false);
+                
+            }
             break;
 
 
@@ -221,7 +232,7 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
                     token = strtok_r(aux," \n\0",&saveptr);
                     TOKENIZE(token,saveptr);
 
-                    int tokenSize = verTamanhoLinha(token);
+                    int tokenSize = strlen(token);
 
 
                     Time * firstDate = dateQ8(&linhaLimpa[4+tokenSize]);
@@ -240,7 +251,7 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
                     token = strtok_r(aux," \n\0",&saveptr);
                     TOKENIZE(token,saveptr);
 
-                    int tokenSize = verTamanhoLinha(token);
+                    int tokenSize = strlen(token);
 
                     Time * firstDate = dateQ8(&linhaLimpa[3+tokenSize]);
                     Time * secondDate = dateQ8(&linhaLimpa[14+tokenSize]);
