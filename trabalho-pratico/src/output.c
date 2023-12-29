@@ -546,7 +546,39 @@ void outputQ5(bool f, Flight ** fList,int max){
 }
 
 
-void outputQ7(bool f,Auxiliar * temp,int max){
+void outputQ6(bool f,const int n, char ** names, int * number){
+    commandAtual++;
+
+    char fileName[50];
+
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
+
+    FILE * outputFile = fopen(fileName, "a");
+
+    if(!outputFile){
+        perror("Query 6 command line did not open, probably file name wrong.\n");
+        return;
+    }
+    
+    if(f == true){
+        for(int j=0; j<n; j++){
+            if(j!=0) fprintf(outputFile,"\n");
+            fprintf(outputFile,"--- %d ---\n",j + 1);
+            fprintf(outputFile,"name: %s\n",names[j]);
+            fprintf(outputFile,"passengers: %d\n",number[j]);
+        }
+    }else{
+        for(int k=0; k<n; k++){
+        fprintf(outputFile,"%s;%d\n",names[k],number[k]);
+        }
+    }
+    
+    fclose(outputFile);
+}
+
+void outputQ7(bool f,SingularRecord * temp,int max){
     commandAtual++;
     
     
@@ -563,19 +595,19 @@ void outputQ7(bool f,Auxiliar * temp,int max){
     }
 
     if(f == true){
-        for(int i = 0;i < max && i < getAuxSize(temp);i++){
+        for(int i = 0;i < max && i < getSRecordSize(temp);i++){
             if(i != 0) fprintf(outputFile,"\n");
-            char * airport = getAuxName(temp,i);
-            int delay = getAuxListElement(temp,i);
+            char * airport = getSRecordName(temp,i);
+            int delay = getSRecordListElement(temp,i);
             fprintf(outputFile,"--- %d ---\n",i + 1);
             fprintf(outputFile,"name: %s\n",airport);
             fprintf(outputFile,"median: %d\n",delay);
             ffree(airport);
         }
     }else{
-        for(int i = 0;i < max && i < getAuxSize(temp);i++){
-            char * airport = getAuxName(temp,i);
-            int delay = getAuxListElement(temp,i);
+        for(int i = 0;i < max && i < getSRecordSize(temp);i++){
+            char * airport = getSRecordName(temp,i);
+            int delay = getSRecordListElement(temp,i);
             fprintf(outputFile,"%s;%d\n",airport,delay);
             ffree(airport);
         }

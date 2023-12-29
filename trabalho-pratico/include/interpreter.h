@@ -6,8 +6,6 @@
 #include "../include/flight.h"
 #include "../include/passengers.h"
 
-int verTamanhoLinha(const char *);
-
 /**
  * @brief Removes the ' " ' characters from the string
  * @param token String with ' " ' characters on the beggining and the end
@@ -35,6 +33,13 @@ Time * dateQ8(const char *);
  * @return The first parameter of the command line, next to the query number
 */
 char * airportName(const char *);
+
+/**
+ * @brief Gets the second argument of the input (command) lines
+ * @param line String with the input line
+ * @return The second parameter of the command line
+*/
+char * getSecondParam(const char *);
 
 /**
  * @brief Reads the inputs text file with the commands and executes them by calling the respective queries

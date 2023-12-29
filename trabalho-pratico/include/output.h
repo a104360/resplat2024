@@ -4,6 +4,7 @@
 #include "../include/flight.h"
 #include "../include/reservation.h"
 #include "../include/passenger.h"
+#include "../include/singularRecord.h"
 #include <stdbool.h>
 
 /**
@@ -81,7 +82,22 @@ void outputQ4(bool,Reservation **,int);
 */
 void outputQ5(bool,Flight **,int);
 
-void outputQ7(bool,Auxiliar *,int);
+/**
+ * @brief Writes on a text file the outputs of the query 5
+ * @param f Mode of the command/output
+ * @param n Number of sets to be displayed
+ * @param names Array with the names of the airports
+ * @param passengers Array with the passengers of each airport
+*/
+void outputQ6(bool,int,char **,int *);
+
+/**
+ * @brief Writes on a text file the outputs of the query 7
+ * @param f Mode of the command/output
+ * @param aux Auxiliar structure 
+ * @param max Number of sets to be displayed
+*/
+void outputQ7(bool,SingularRecord * ,int);
 
 /**
  * @brief Writes on a text file the outputs of the query 8

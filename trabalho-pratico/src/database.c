@@ -55,13 +55,13 @@ void destroyDatabase(void * database){
 
 
 typedef struct temporary {
-    void * database;
+    void * database;//
     char * id;
-    void ** list;
+    void ** list;//
     int num;
     int sum;
-    void * begin;
-    void * end;
+    void * begin;//
+    void * end;//
     int max;
 } Temporary;
 
@@ -188,5 +188,12 @@ int getTempMax(Temporary * temp){
     return temp->max;
 }
 
+void setTempAux(Temporary * temp,void * element){
+    temp->begin = element;
+}
+
+void * getTempAux(Temporary * temp){
+    return temp->begin;
+}
 
 

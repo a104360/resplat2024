@@ -3,6 +3,7 @@
 #include "../include/database.h"
 #include "../include/passengers.h"
 #include "../include/utils.h"
+#include "../include/singularRecord.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <glib.h>
@@ -51,8 +52,42 @@ void allUserReservs(gpointer ,gpointer,gpointer);
 */
 void checkAirports(gpointer,gpointer,gpointer);
 
-Auxiliar * getDelays(void *);
+/**
+ * @brief Grabs a list of names of airports and the amount of 
+ * passengers the airport has had in a year
+ * @param flights Pointer to the flights database
+ * @param passengers Pointer to the passengers database
+ * @param year Year which the flights must be from
+ * @return Pointer to an SingularRecord structure with the list of
+ * airport names and the respective number of passengers
+*/
+SingularRecord * getYearFlights(const void *,const void *, int);
 
+/**
+ * @brief If the flight is from the selected year, it is added to the list
+ * and the number of passengers in the selected year
+*/
+void yearFlight(gpointer, gpointer, gpointer);
+
+/**
+ * @brief Gets the number of how much passengers went on a flight
+ * @param id Id of the flight
+ * @param passengers Pointer to the passengers database
+ * @return Number of passengers on the flight 
+*/
+int countFPassengers(const char *,const void *); // Colocar no passenger.c
+
+/**
+ * @brief Gets a structure with a list of names 
+ * @param flights Pointer to the flights database
+ * @return Pointer to the structure with the names of the airports
+ * and the respective median of the flight delays
+*/
+SingularRecord * getDelays(void *);
+
+/**
+ * @brief Adds the delay of the flight to the respective airport 
+*/
 void getAirportsDelays(gpointer,gpointer,gpointer);
 
 #endif

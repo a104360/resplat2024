@@ -58,7 +58,7 @@ int main(int argc,char **argv){
 
             User * uBuffer = NULL;
 
-            int tamanhoUserData = verTamanhoLinha(userData);
+            int tamanhoUserData = strlen(userData);
 
             char * userDataClean = malloc(sizeof(char) * (tamanhoUserData +1)); // malloc
 
@@ -124,7 +124,7 @@ int main(int argc,char **argv){
 
             Reservation * rBuffer = NULL;
 
-            int tamanhoReservationData = verTamanhoLinha(reservationData);
+            int tamanhoReservationData = strlen(reservationData);
 
             char * reservationDataClean = malloc(sizeof(char) * (tamanhoReservationData +1));
 
@@ -216,7 +216,7 @@ int main(int argc,char **argv){
 
             Flight * fBuffer = NULL;
 
-            int tamanhoFlightData = verTamanhoLinha(flightData);
+            int tamanhoFlightData = strlen(flightData);
 
             char flightDataClean[tamanhoFlightData +1];
 
@@ -286,7 +286,7 @@ int main(int argc,char **argv){
 
             Passenger * pBuffer = NULL;
 
-            int tamanhoPassengersData = verTamanhoLinha(passengersData);
+            int tamanhoPassengersData = strlen(passengersData);
 
             char passengersDataClean[tamanhoPassengersData +1];
 
