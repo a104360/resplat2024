@@ -4,6 +4,7 @@
 #include "../include/passengers.h"
 #include "../include/utils.h"
 #include "../include/singularRecord.h"
+#include "../include/temporary.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <glib.h>
