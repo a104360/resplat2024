@@ -11,10 +11,13 @@ typedef struct mRecord {
     int ** list;
     
     // Number of different airports
-    int intSize;
+    int size;
 
     // List of sizes of the delays arrays
     int * listSize;
+
+    // Keeps the maximum number (allocated) of diferent names
+    int max;
 } MultipleRecord;
 
 
@@ -28,11 +31,12 @@ static void initMRecord(MultipleRecord * MRecord,int num){
             MRecord->list[i][j] = -1;
         }
     }
-    MRecord->intSize = 0;
+    MRecord->size = 0;
     MRecord->listSize = malloc(sizeof(int) * num);
     for(int i = 0;i < num;i++){
         MRecord->listSize[i] = 0;
     }
+    MRecord->max = num;
 }
 
 MultipleRecord * createMRecord(int num){
@@ -44,7 +48,7 @@ MultipleRecord * createMRecord(int num){
 
 void setMRecordNamesElement(MultipleRecord * temp,int position,char * element){
     if(!element) return;
-    if(temp->names[position]) ffree(temp->names[position]);
+    if(temp->names[position]) ffree((void **)&temp->names[position]);
     temp->names[position] = strdup(element);
 }
 
@@ -88,16 +92,22 @@ int getMRecordListSize(MultipleRecord * temp,int position){
 }
 
 void incMRecordSize(MultipleRecord * temp){
-    temp->intSize++;
+    temp->size++;
 }
 void decMRecordSize(MultipleRecord * temp){
-    temp->intSize--;
+    temp->size--;
 }
 int getMRecordSize(MultipleRecord * temp){
-    return temp->intSize;
+    return temp->size;
 }
 
-void destroyMRecord(MultipleRecord * temp){
-    ffree(temp->list);
-    ffree(temp);
+void destroyMRecord(MultipleRecord ** temp){
+    for(int i = 0; i < (*temp)->max;i++) ffree((void **) &(*temp)->list[i]);
+    ffree((void **) &(*temp)->list);
+
+    ffree((void **) &(*temp)->listSize);
+
+    for(int i = 0; i < (*temp)->max;i++) ffree((void **) &(*temp)->names[i]);
+    ffree((void **) &(*temp)->names);
+    ffree((void **) &(*temp));
 }

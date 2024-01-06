@@ -77,6 +77,6 @@ int getSRecordSize(SingularRecord *);
  * structure itself and nullifies the pointers
  * @param sRecord Pointer to the structure
 */
-void destroySRecord(SingularRecord *);
+void destroySRecord(SingularRecord **);
 
 #endif 

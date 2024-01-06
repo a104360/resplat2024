@@ -46,7 +46,7 @@ void initTime(Time * tempo){
 
 void destroyTime(Time *time) {
     if(time == NULL) return; 
-    ffree(time);
+    ffree((void **) &time);
 }
 
 Time * createTime(){
@@ -142,10 +142,10 @@ char * timeToString(Time * time){
 
 
 
-void ffree(void * ptr){
-    if(ptr){
-        free(ptr);
-        ptr = NULL;
+void ffree(void ** ptr){
+    if(*ptr){
+        free(*ptr);
+        *ptr = NULL;
     }
 }
 

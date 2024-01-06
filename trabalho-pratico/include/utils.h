@@ -136,7 +136,7 @@ char * timeToString(Time *);
  * @brief Better version of free function (only frees if it exists and nullifies it)
  * @param ptr Pointer to something that was allocated
 */
-void ffree(void *);
+void ffree(void **);
 
 
 

@@ -36,12 +36,12 @@ Temporary * createTemporary(){
 void destroyTemporary(Temporary * temp){
     destroyTime(temp->begin);
     destroyTime(temp->end);
-    ffree(temp->id);
-    ffree(temp->list);
+    ffree((void **) &temp->id);
+    ffree((void **) &temp->list);
     temp->database = NULL;
     temp->num = 0;
     temp->sum = 0;
-    ffree(temp);
+    ffree((void **) &temp);
 }
 
 
@@ -55,7 +55,7 @@ void * getTempDatabase(Temporary * temp){
 }
     
 void setTempId(Temporary * temp,char * id){
-    ffree(temp->id);
+    ffree((void **) &temp->id);
     temp->id = strdup(id);
 }
 char * getTempId(Temporary * temp){
@@ -63,7 +63,7 @@ char * getTempId(Temporary * temp){
 }
 
 void setTempList(Temporary * temp,void ** list){
-    ffree(temp->list);
+    ffree((void **) &temp->list);
     temp->list = list;
 }
 
