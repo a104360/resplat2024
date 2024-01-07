@@ -1,6 +1,7 @@
 #ifndef TEMPORARY_H
 #define TEMPORARY_H
 #include "../include/utils.h"
+#include "../include/time.h"
 
 /**
  * @brief Struct to be used on Iterations over the databases

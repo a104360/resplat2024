@@ -4,6 +4,7 @@
 #include "../include/sort.h"
 #include "../include/output.h"
 #include "../include/utils.h"
+#include "../include/time.h"
 #include "../include/temporary.h"
 #include <stdio.h>
 #include <ctype.h>
@@ -28,7 +29,7 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         user = lookupElement((const Users *) uDatabase,id);
 
         if(getUserAccountStatus(user) == false){
-            ffree(analisa);
+            ffree((void **) &analisa);
             outputQ1User(f,NULL,'\0',0,NULL,NULL,NULL,NULL,NULL);
             return;
         }
@@ -56,12 +57,12 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         
         outputQ1User((int)f,name,sex,age,country_code,passaport,number_of_fights,number_of_reservations,total_spent);
 
-        ffree(name);
-        ffree(country_code);
-        ffree(passaport);
-        ffree(number_of_fights);
-        ffree(number_of_reservations);
-        ffree(total_spent);
+        ffree((void **) &name);
+        ffree((void **) &country_code);
+        ffree((void **) &passaport);
+        ffree((void **) &number_of_fights);
+        ffree((void **) &number_of_reservations);
+        ffree((void **) &total_spent);
         
         
         break;
@@ -70,7 +71,7 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         Flight * flight = NULL;
         flight = lookupElement(fDatabase,id);
         if(flight == NULL){
-            ffree(analisa);
+            ffree((void **) &analisa);
             outputQ1Flight(f,NULL,NULL,NULL,NULL,NULL,NULL,0,0);
             return;
         }
@@ -94,12 +95,12 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         
         destroyTime(sDD);
         destroyTime(sAD);
-        ffree(airline);
-        ffree(plane_model);
-        ffree(origin);
-        ffree(destination);
-        ffree(schedule_departure_date);
-        ffree(schedule_arrival_date);
+        ffree((void **) &airline);
+        ffree((void **) &plane_model);
+        ffree((void **) &origin);
+        ffree((void **) &destination);
+        ffree((void **) &schedule_departure_date);
+        ffree((void **) &schedule_arrival_date);
 
 
         break;
@@ -108,7 +109,7 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         Reservation * reserv = NULL;
         reserv = lookupElement(rDatabase,id);
         if(!reserv){
-            ffree(analisa);
+            ffree((void **) &analisa);
             outputQ1Reservation(f,NULL,NULL,-1,NULL,NULL,false,0,0);
             return;
         } 
@@ -128,17 +129,17 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
 
         destroyTime(begin);
         destroyTime(end);
-        ffree(hotel_id);
-        ffree(hotel_name);
-        ffree(begin_date);
-        ffree(end_date);
+        ffree((void **) &hotel_id);
+        ffree((void **) &hotel_name);
+        ffree((void **) &begin_date);
+        ffree((void **) &end_date);
         
         break;
     default:
         return;
         break;
     }
-    ffree(analisa);
+    ffree((void **) &analisa);
     return;
 }
 
@@ -152,7 +153,7 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
     User * user = lookupElement((const Users *) uDatabase,token);
     if(user == NULL){
         outputQ2(F,NULL,-1,NULL,-1);
-        ffree(SRecord);
+        ffree((void **) &SRecord);
         return;
     }
     token = strtok_r(NULL,"\n\0",&saveprt);
@@ -160,7 +161,7 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
 
     if(getUserAccountStatus(user) == false){
         outputQ2(F,NULL,-1,NULL,-1);
-        ffree(SRecord);
+        ffree((void **) &SRecord);
         return;
     }
     int flag = 0;
@@ -169,7 +170,7 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
     if(strcoll(token,"flights") == 0) flag = 2;
         else if(strcoll(token,"reservations") == 0) flag = 3;
     }
-    ffree(SRecord);
+    ffree((void **) &SRecord);
     char * id = getUserId(user);
     switch (flag)
     {
@@ -236,7 +237,7 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
         break;
     }
 
-    ffree(id);
+    ffree((void **) &id);
     return;
 }
 
@@ -256,7 +257,7 @@ void query4(Reservations * rDatabase,const char * id,bool f){
 
     outputQ4(f,rList,getTempNum(hDatabase));
 
-    ffree(rList);
+    ffree((void **) &rList);
     destroyTemporary(hDatabase);
 
     return;
@@ -280,7 +281,7 @@ void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * 
 
     SingularRecord * airports = getYearFlights(fDatabase, pDatabase, fYear);
     char ** names = getSRecordNames(airports);
-    int * number = malloc(sizeof(int) * getSRecordSize(airports));//getAirportPassengersPassengers(airports);
+    int * number = malloc(sizeof(int) * getSRecordSize(airports));
     for(int i = 0;i < getSRecordSize(airports);number[i] = getSRecordListElement(airports,i),i++);
 
     
@@ -291,49 +292,44 @@ void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * 
 
     list[0] = NULL;
     list[1] = NULL;
-    ffree(list);
+    ffree((void **) &list);
 
 
     outputQ6(f,n_airports,names,number);
 
-    ffree(names);
+    for(int i = 0;i < getSRecordSize(airports);i++) ffree((void **) &names[i]);
+    ffree((void **) &names);
 
-    ffree(number);
+    ffree((void **) &number);
 
-    destroySRecord(airports);
+    destroySRecord(&airports);
 
 }
 
 void query7(Flights * fDatabase,char * num, bool f){
     SingularRecord * allDelays = getDelays((void *)fDatabase);
     int n = atoi(num);
-    int * delays = malloc(sizeof(int) * getSRecordSize(allDelays));
-    for(int i = 0;i < getSRecordSize(allDelays);
+    int max = getSRecordSize(allDelays);
+    int * delays = malloc(sizeof(int) * max);
+    for(int i = 0;i < max;
     delays[i] = -1,
     delays[i] = getSRecordListElement(allDelays,i),
     i++);
 
-    char ** airports = malloc(sizeof(char *) * getSRecordSize(allDelays));
-    for(int i = 0;i < getSRecordSize(allDelays);
+    char ** airports = malloc(sizeof(char *) * max);
+    for(int i = 0;i < max;
     airports[i] = NULL,
     airports[i] = getSRecordName(allDelays,i),
     i++);
 
     outputQ7(f,allDelays,n);
+    for(int i = 0;i < max;ffree((void **) &(airports[i])),i++);
+    ffree((void **) &airports);
+    ffree((void **) &delays);
 
-    ffree(airports);
-    ffree(delays);
+    destroySRecord(&allDelays);
 
-    destroySRecord(allDelays);
-
-    /*Temporary * temp = getAListOfSomething(fDatabase,NULL,NULL,NULL,&getAirportsDelays);
-
-
-    char ** airports = (char **) getTempList(temp);
-
-
-    destroyTemporary(temp);
-    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);*/
+    
 }
 
 void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit,bool f){
@@ -368,7 +364,7 @@ void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit
 
     outputQ8(f,total);
 
-    ffree(rList);
+    ffree((void **) &rList);
     destroyTemporary(hDatabase);
 
     return;

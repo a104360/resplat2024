@@ -47,19 +47,19 @@ User * createUser(){
 }
 void destroyUser(User *user) {
     if(user) {
-        ffree(user->id);
-        ffree(user->name);
-        ffree(user->email);
-        ffree(user->phone_number);
+        ffree((void **) &user->id);
+        ffree((void **) &user->name);
+        ffree((void **) &user->email);
+        ffree((void **) &user->phone_number);
         if(user->sex) user->sex = '\0';
-        ffree(user->passport);
-        ffree(user->country_code);
-        ffree(user->address);
-        ffree(user->pay_method);
+        ffree((void **) &user->passport);
+        ffree((void **) &user->country_code);
+        ffree((void **) &user->address);
+        ffree((void **) &user->pay_method);
         if(user->account_creation != NULL) destroyTime(user->account_creation);
         if(user->birth_date != NULL) destroyTime(user->birth_date);
         
-        ffree(user);
+        ffree((void **) &user);
     }
 }
 
@@ -381,14 +381,14 @@ void copyUser(User * dest,User * src){
     setUserAccountCreation(dest,accCreation);
     setUserPayMethod(dest,uPay);
     setUserAccountStatus(dest,getUserAccountStatus(src));
-    ffree(uId);
-    ffree(uName);
-    ffree(uEmail);
-    ffree(uPhone);
-    ffree(uPassport);
-    ffree(uCountry);
-    ffree(uAddress);
-    ffree(uPay);
-    ffree(bDay);
-    ffree(accCreation);
+    ffree((void **) &uId);
+    ffree((void **) &uName);
+    ffree((void **) &uEmail);
+    ffree((void **) &uPhone);
+    ffree((void **) &uPassport);
+    ffree((void **) &uCountry);
+    ffree((void **) &uAddress);
+    ffree((void **) &uPay);
+    ffree((void **) &bDay);
+    ffree((void **) &accCreation);
 }

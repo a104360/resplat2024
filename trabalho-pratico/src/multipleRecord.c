@@ -11,10 +11,13 @@ typedef struct mRecord {
     int ** list;
     
     // Number of different airports
-    int intSize;
+    int size;
 
     // List of sizes of the delays arrays
     int * listSize;
+
+    // Keeps the maximum number (allocated) of diferent names
+    int max;
 } MultipleRecord;
 
 
@@ -28,11 +31,12 @@ static void initMRecord(MultipleRecord * MRecord,int num){
             MRecord->list[i][j] = -1;
         }
     }
-    MRecord->intSize = 0;
+    MRecord->size = 0;
     MRecord->listSize = malloc(sizeof(int) * num);
     for(int i = 0;i < num;i++){
         MRecord->listSize[i] = 0;
     }
+    MRecord->max = num;
 }
 
 MultipleRecord * createMRecord(int num){
@@ -44,7 +48,7 @@ MultipleRecord * createMRecord(int num){
 
 void setMRecordNamesElement(MultipleRecord * temp,int position,char * element){
     if(!element) return;
-    if(temp->names[position]) ffree(temp->names[position]);
+    if(temp->names[position]) ffree((void **)&temp->names[position]);
     temp->names[position] = strdup(element);
 }
 
@@ -65,8 +69,10 @@ int getMRecordListElement(MultipleRecord * temp,int arrayPosition,int delayPosit
 }
 
 void setMRecordList(MultipleRecord * temp,int position,int * array,int size){
+    for(int i = 0;i < size;i++){
+        temp->list[position][i] = array[i];
+    }
     temp->listSize[position] = size;
-    for(int i = 0;i < size;temp->list[position][i] = array[i],i++);
 }
 
 int * getMRecordList(MultipleRecord * temp,int position){
@@ -88,16 +94,36 @@ int getMRecordListSize(MultipleRecord * temp,int position){
 }
 
 void incMRecordSize(MultipleRecord * temp){
-    temp->intSize++;
+    temp->size++;
 }
 void decMRecordSize(MultipleRecord * temp){
-    temp->intSize--;
+    temp->size--;
 }
 int getMRecordSize(MultipleRecord * temp){
-    return temp->intSize;
+    return temp->size;
 }
 
-void destroyMRecord(MultipleRecord * temp){
-    ffree(temp->list);
-    ffree(temp);
+void destroyMRecord(MultipleRecord ** temp){
+    int i = 0;
+    while(i < (*temp)->max){
+        ffree((void **) &(*temp)->list[i]);
+        i++;
+    }
+    ffree((void **) &(*temp)->list);
+
+
+    ffree((void **) &(*temp)->listSize);
+
+
+
+    i = 0;
+    while(i < (*temp)->max){
+        ffree((void **) &(*temp)->names[i]);
+        i++;
+    }
+    ffree((void **) &(*temp)->names);
+
+
+    
+    ffree((void **) &(*temp));
 }

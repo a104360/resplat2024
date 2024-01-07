@@ -32,38 +32,24 @@ void insertPassenger(void * dataStruct, void * passengerData){
     //Casting the arguments
     Passengers * table = (Passengers *) dataStruct;
     Passenger * passenger = (Passenger *) passengerData;
-/*
-    if(table->numPassengers == 0){ // First insertion of the table
-        table->passengers = malloc(sizeof(Passenger *) * (table->max));
-        if(!table->passengers){
-            if(table) free(table);
-            table = NULL;
-            return;
-        }
-        table->passengers[table->numPassengers] = passenger;
-        table->numPassengers++;
-        return;
-
-    } else {*/
-        if(table->numPassengers >= table->max){
-            Passenger ** temp = realloc(table->passengers, (table->max * 2) * sizeof(Passenger *));
-                if (!temp) {
-                    fprintf(stderr, "Error: Memory reallocation failed in insertPassenger.\n");
-                    for(int i = 0;i < table->max;i++){
-                        table->passengers[i] = NULL;
-                    }
-                    free(table->passengers);
-                    table->passengers = NULL;
-                    free(table);
-                    table = NULL;
-                    return;
+    if(table->numPassengers >= table->max){
+        Passenger ** temp = realloc(table->passengers, (table->max * 2) * sizeof(Passenger *));
+            if (!temp) {
+                fprintf(stderr, "Error: Memory reallocation failed in insertPassenger.\n");
+                for(int i = 0;i < table->max;i++){
+                    table->passengers[i] = NULL;
                 }
-                table->passengers = temp;
-                table->max *= 2;
+                free(table->passengers);
+                table->passengers = NULL;
+                free(table);
+                table = NULL;
+                return;
             }
-        table->passengers[table->numPassengers] = passenger;
-        table->numPassengers++;
-        //}
+            table->passengers = temp;
+            table->max *= 2;
+        }
+    table->passengers[table->numPassengers] = passenger;
+    table->numPassengers++;
 }
 
 

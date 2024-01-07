@@ -45,3 +45,6 @@ memo: grind
 
 clean:
 	rm -f $(EXE) programa-testes src/*.o $(EXE).debug valgrind-out.txt Resultados/*.csv Resultados/*.txt
+
+cout:
+	rm -f Resultados/*.csv Resultados/*.txt

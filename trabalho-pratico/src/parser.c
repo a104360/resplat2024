@@ -3,6 +3,7 @@
 #include "../include/flight.h"
 #include "../include/reservation.h"
 #include "../include/passenger.h"
+#include "../include/utils.h"
 #include <string.h>
 #include <stdbool.h>
 #include <stdlib.h>
@@ -29,7 +30,7 @@
 
 #define ERRORSU(aux,type)\
     if(aux){\
-        ffree(aux);\
+        ffree((void **) &aux);\
         aux = NULL;\
     }\
     if(type){\
@@ -40,7 +41,7 @@
 
 #define ERRORSR(aux,type)\
     if(aux){\
-        ffree(aux);\
+        ffree((void **) &aux);\
         aux = NULL;\
     }\
     if(type){\
@@ -50,7 +51,7 @@
 
 #define ERRORSF(aux,type)\
     if(aux){\
-        ffree(aux);\
+        ffree((void **) &aux);\
         aux = NULL;\
     }\
     if(type){\
@@ -62,20 +63,13 @@
 
 #define ERRORSP(aux,type)\
     if(aux){\
-        ffree(aux);\
+        ffree((void **) &aux);\
         aux = NULL;\
     }\
     if(type){\
         destroyPassenger(type);\
     }\
     return NULL;
-
-
-#define ffree(token) if(token){\
-    ffree(token);\
-    token = NULL;\
-    }
-
 
 /*
 *
@@ -212,12 +206,12 @@
         return date;
         break;
     default:
-        ffree(date);
+        ffree((void **) &date);
         date = NULL;
         return NULL;
         break;
     }
-    ffree(date);
+    ffree((void **) &date);
     date = NULL;
     return NULL;
 }
@@ -248,7 +242,7 @@
             aux[2] = '\0';
             int n = 0; 
             n = atoi(aux);
-            ffree(aux);
+            ffree((void **) &aux);
             aux = NULL;
             return n;
         }
@@ -263,7 +257,7 @@
         aux[2] = '\0';
         int n = 0; 
         n = atoi(aux);
-        ffree(aux);
+        ffree((void **) &aux);
         aux = NULL;
         return n;
     }
@@ -284,7 +278,7 @@
         aux[2] = '\0';
         int n = 0; 
         n = atoi(aux);
-        ffree(aux);
+        ffree((void **) &aux);
         aux = NULL;
         return n;
     }
@@ -305,7 +299,7 @@
         aux[2] = '\0';
         int n = 0; 
         n = atoi(aux);
-        ffree(aux);
+        ffree((void **) &aux);
         aux = NULL;
         return n;
     }
@@ -372,7 +366,7 @@ char* accStatusCheck(const char* line) {
     if (strcasecmp(aux, "active") == 0 || strcasecmp(aux, "inactive") == 0) {
         return aux;
     }
-    ffree(aux);
+    ffree((void **) &aux);
     aux = NULL;
     return NULL;
 }
@@ -390,8 +384,8 @@ char* accStatusCheck(const char* line) {
     ALLVAR(d);
     ALLVAR(a);
     if(!strcoll(d,a)) return false;
-    ffree(d);
-    ffree(a);
+    ffree((void **) &d);
+    ffree((void **) &a);
     return true;
 }
 
@@ -426,16 +420,16 @@ int breakfastCheck(const char * line){
     char * aux = strdup(line);
     ALLVAR(aux);
     if(!strcoll(aux,"true") || !strcoll(aux,"t") || !strcoll(aux,"1")){ 
-        ffree(aux);
+        ffree((void **) &aux);
         aux = NULL;
         return 1;
     }
     if(!strcoll(aux,"false") || !strcoll(aux,"f") || !strcoll(aux,"0")){ 
-        ffree(aux);
+        ffree((void **) &aux);
         aux = NULL;
         return 0;
     }
-    ffree(aux);
+    ffree((void **) &aux);
     aux = NULL;
     return 2;
 }
@@ -459,49 +453,49 @@ User * userCheck(const char * line){
     user = createUser();
     if(!user){
         fprintf(stderr,"Memory allocation for User failed");
-        ffree(token);
-        ffree(aux);
+        ffree((void **) &token);
+        ffree((void **) &aux);
         return NULL;
     }
 
     //check userId
     char * id = idCheck(token);
     if(!id || saveptr[0] == ';'){ 
-        ffree(id);
+        ffree((void **) &id);
         ERRORSU(aux,user);
     }
     setUserId(user,token);
-    ffree(id);
+    ffree((void **) &id);
     TOKENIZE(token,saveptr);
 
     //check userName
     char * name = nameCheck(token);
     if(!name || saveptr[0] == ';'){
-        ffree(name);
+        ffree((void **) &name);
         ERRORSU(aux,user);
     }
     setUserName(user,token);
-    ffree(name);
+    ffree((void **) &name);
     TOKENIZE(token,saveptr);
 
     //check userEmail
     char * email = emailCheck(token);
     if(!email || saveptr[0] == ';') { 
-        ffree(email);
+        ffree((void **) &email);
         ERRORSU(aux,user);
     }
     setUserEmail(user,token);
-    ffree(email);
+    ffree((void **) &email);
     TOKENIZE(token,saveptr);
 
     //check userPhone
     char * phone = phoneNumberCheck(token);
     if(!phone || saveptr[0] == ';') { 
-        ffree(phone);
+        ffree((void **) &phone);
         ERRORSU(aux,user);
     }
     setUserPhone(user,token);
-    ffree(phone);
+    ffree((void **) &phone);
     TOKENIZE(token,saveptr);
     
     //check userBday
@@ -528,33 +522,33 @@ User * userCheck(const char * line){
     char * passport = passportCheck(token);
     if(!passport || saveptr[0] == ';') { 
         destroyTime(userBday);
-        ffree(passport);
+        ffree((void **) &passport);
         ERRORSU(aux,user);
     }
     setUserPassport(user,passport);
-    ffree(passport);
+    ffree((void **) &passport);
     TOKENIZE(token,saveptr);
 
     //check userCountryCode
     char * countryCode = countryCheck(token);
     if(!countryCode || saveptr[0] == ';') {
         destroyTime(userBday);
-        ffree(countryCode);
+        ffree((void **) &countryCode);
         ERRORSU(aux,user);
     }
     setUserCountryCode(user,countryCode);
-    ffree(countryCode);
+    ffree((void **) &countryCode);
     TOKENIZE(token,saveptr);
 
     //check userAdress
     char * address = addressCheck(token);
     if(!address || saveptr[0] == ';') { 
         destroyTime(userBday);
-        ffree(address);
+        ffree((void **) &address);
         ERRORSU(aux,user);
     }
     setUserAddress(user,address);
-    ffree(address);
+    ffree((void **) &address);
     TOKENIZE(token,saveptr);
 
     //check userAccountCreation time
@@ -572,24 +566,24 @@ User * userCheck(const char * line){
     //check userPayMethod
     char * payMethod = pay_methodCheck(token);
     if(!payMethod || saveptr[0] == ';' || saveptr[0] == '\0' || saveptr[0] == '\n') { 
-        ffree(payMethod);
+        ffree((void **) &payMethod);
         ERRORSU(aux,user);
     }
     setUserPayMethod(user,payMethod);
-    ffree(payMethod);
+    ffree((void **) &payMethod);
     TOKENIZE(token,saveptr);
 
     //check user accountStatus
     char * string = accStatusCheck(token);
     if(string == NULL) {
-        ffree(string);
+        ffree((void **) &string);
         ERRORSU(aux,user);
     }
     if(strcoll(string,"active") == 0){setUserAccountStatus(user,true);}else {setUserAccountStatus(user,false);} 
-    ffree(string);
+    ffree((void **) &string);
     
 
-    ffree(aux);
+    ffree((void **) &aux);
     aux = NULL;
     return user;
 }
@@ -605,18 +599,18 @@ User * userCheck(const char * line){
     Reservation * reservation = createReservation();
     if(reservation == NULL){
         fprintf(stderr,"Memory allocation for User failed");
-        ffree(token);
-        ffree(aux);
+        ffree((void **) &token);
+        ffree((void **) &aux);
         return NULL;
     }
 
     char * reservationId = idCheck(token);
     if(reservationId == NULL || saveptr[0] == ';') {
-        ffree(reservationId);
+        ffree((void **) &reservationId);
         ERRORSR(aux,reservation);
     }  
     setReservId(reservation,token);
-    ffree(reservationId);
+    ffree((void **) &reservationId);
     TOKENIZE(token,saveptr);
     User * temp = lookupElement(uDatabase,token);
     if(temp == NULL || saveptr[0] == ';'){ERRORSR(aux,reservation);}
@@ -625,20 +619,20 @@ User * userCheck(const char * line){
 
     char * reservationHotelId = idCheck(token);
     if(!reservationHotelId || saveptr[0] == ';'){
-        ffree(reservationHotelId);    
+        ffree((void **) &reservationHotelId);    
         ERRORSR(aux,reservation);
     }
     setReservHotelId(reservation,reservationHotelId);
-    ffree(reservationHotelId);
+    ffree((void **) &reservationHotelId);
     TOKENIZE(token,saveptr);
 
     char * reservationHotelName = nameCheck(token);
     if(!reservationHotelName || saveptr[0] == ';'){
-        ffree(reservationHotelName);
+        ffree((void **) &reservationHotelName);
         ERRORSR(aux,reservation);
     }
     setReservHotelName(reservation,reservationHotelName);
-    ffree(reservationHotelName);
+    ffree((void **) &reservationHotelName);
     TOKENIZE(token,saveptr);
 
     unsigned int reservationHotelStars = hotelStarsCheck(token);
@@ -653,11 +647,11 @@ User * userCheck(const char * line){
 
     char * reservationAddress = addressCheck(token);
     if(!reservationAddress || saveptr[0] == ';'){
-        ffree(reservationAddress);
+        ffree((void **) &reservationAddress);
         ERRORSR(aux,reservation);
     }
     setReservHotelAddress(reservation,reservationAddress);
-    ffree(reservationAddress);
+    ffree((void **) &reservationAddress);
     TOKENIZE(token,saveptr);
 
     Time * beginDate = dateCheck(token);
@@ -700,7 +694,7 @@ User * userCheck(const char * line){
             setReservRating(reservation,rating);
             if(saveptr[0] == ';') {
                 if(aux){
-                    ffree(aux);
+                    ffree((void **) &aux);
                     aux = NULL;
                 }
                     return reservation;
@@ -711,18 +705,18 @@ User * userCheck(const char * line){
             setReservComment(reservation,token);
             
             strncpy(aux,line,strlen(line));
-            ffree(aux);
+            ffree((void **) &aux);
             aux = NULL;
             return reservation;
         }else{
             TOKENIZE(token,saveptr);
             char * roomDetails = idCheck(token);
             if(!roomDetails || saveptr[0] == ';'){
-                ffree(roomDetails);
+                ffree((void **) &roomDetails);
                 ERRORSR(aux,reservation);
             }
             setReservRoomDetails(reservation,roomDetails);
-            ffree(roomDetails);
+            ffree((void **) &roomDetails);
             TOKENIZE(token,saveptr);
 
             unsigned int rating = reviewCheck(token);
@@ -730,7 +724,7 @@ User * userCheck(const char * line){
             setReservRating(reservation, rating);
             if(saveptr[0] == ';'){
                 strncpy(aux,line,strlen(line));
-                ffree(aux);
+                ffree((void **) &aux);
                 aux = NULL;
                 return reservation;
             }
@@ -741,7 +735,7 @@ User * userCheck(const char * line){
             setReservComment(reservation,token);
             
             strncpy(aux,line,strlen(line));
-            ffree(aux);
+            ffree((void **) &aux);
             aux = NULL;
             return reservation;
         }
@@ -760,7 +754,7 @@ User * userCheck(const char * line){
         setReservRating(reservation,rating);
         if(saveptr[0] == ';'){
                 strncpy(aux,line,strlen(line));
-                ffree(aux);
+                ffree((void **) &aux);
                 aux = NULL;
                 return reservation;
         }
@@ -771,7 +765,7 @@ User * userCheck(const char * line){
         setReservComment(reservation,token);
         
         strncpy(aux,line,strlen(line));
-        ffree(aux);
+        ffree((void **) &aux);
         aux = NULL;
         return reservation;
     }
@@ -786,7 +780,7 @@ User * userCheck(const char * line){
     setReservRating(reservation,rating);
     if(saveptr[0] == ';' || saveptr[0] == '\n' || saveptr[0] == '\0'){
         strncpy(aux,line,strlen(line));
-        ffree(aux);
+        ffree((void **) &aux);
         aux = NULL;
         return reservation;
     }
@@ -796,7 +790,7 @@ User * userCheck(const char * line){
     setReservComment(reservation,token);
     
     strncpy(aux,line,strlen(line));
-    ffree(aux);
+    ffree((void **) &aux);
     aux = NULL;
     return reservation;
 }
@@ -812,29 +806,29 @@ User * userCheck(const char * line){
 
     char * flightId = idCheck(token);
     if(flightId == NULL || saveptr[0] == ';'){
-        ffree(flightId);
+        ffree((void **) &flightId);
         ERRORSF(aux,flight);
     }
     setFlightId(flight,flightId);
-    ffree(flightId);
+    ffree((void **) &flightId);
     TOKENIZE(token,saveptr);
 
     char * airline = nameCheck(token);
     if(!airline || saveptr[0] == ';'){
-        ffree(airline);
+        ffree((void **) &airline);
         ERRORSF(aux,flight);
     }
     setFlightAirline(flight,airline);
-    ffree(airline);
+    ffree((void **) &airline);
     TOKENIZE(token,saveptr);
 
     char * planeModel = nameCheck(token);
     if(!planeModel || saveptr[0] == ';'){ 
-        ffree(planeModel);
+        ffree((void **) &planeModel);
         ERRORSF(aux,flight);
     }
     setFlightPlaneModel(flight,planeModel);
-    ffree(planeModel);
+    ffree((void **) &planeModel);
     TOKENIZE(token,saveptr);
 
     unsigned int totalSeats = seatsCheck(token);
@@ -855,14 +849,14 @@ User * userCheck(const char * line){
 
     //Destination
     if((!airportCheck(origin,token) && strlen(token) != 3) || saveptr[0] == ';'){
-        ffree(origin);
+        ffree((void **) &origin);
         ERRORSF(aux,flight);
     }
-    ffree(origin);
+    ffree((void **) &origin);
     char * destination = strdup(token);
     for(int i = 0;i < 3;i++) destination[i] = toupper(destination[i]);
     setFlightDestination(flight,destination);
-    ffree(destination);
+    ffree((void **) &destination);
     TOKENIZE(token,saveptr);
     
     Time * sDepartDate = dateCheck(token);
@@ -921,22 +915,22 @@ User * userCheck(const char * line){
 
     char * pilot = nameCheck(token);
     if(pilot == NULL || saveptr[0] == ';'){
-        ffree(pilot);
+        ffree((void **) &pilot);
         ERRORSF(aux,flight);
     }
     setFlightPilot(flight,pilot);
-    ffree(pilot);
+    ffree((void **) &pilot);
     TOKENIZE(token,saveptr);
 
     char * copilot = nameCheck(token);
     if(!copilot){ 
-        ffree(copilot);
+        ffree((void **) &copilot);
         ERRORSF(aux,flight);
     }
     setFlightCopilot(flight,copilot);
-    ffree(copilot);
+    ffree((void **) &copilot);
     if(saveptr[0] == ';'){
-        ffree(aux);
+        ffree((void **) &aux);
         return flight;
     }
     TOKENIZE(token,saveptr);
@@ -944,7 +938,7 @@ User * userCheck(const char * line){
 
     if(token) setFlightNotes(flight,token);
     
-    ffree(aux);
+    ffree((void **) &aux);
     aux = NULL;
     return flight;
 
@@ -960,8 +954,8 @@ User * userCheck(const char * line){
     token = strtok_r(aux,";\n\0",&saveptr);
     Passenger * passenger = createPassenger();
     if(!passenger){
-        ffree(token);
-        ffree(aux);
+        ffree((void **) &token);
+        ffree((void **) &aux);
         return NULL;
     }
 
@@ -979,6 +973,6 @@ User * userCheck(const char * line){
 
     setPassengerUserId(passenger,token);
 
-    ffree(aux);
+    ffree((void **) &aux);
     return passenger;
 }
