@@ -1,6 +1,3 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
 #include "../include/interpreter.h"
 #include "../include/queries.h"
 #include "../include/user.h"
@@ -8,6 +5,10 @@
 #include "../include/reservation.h"
 #include "../include/passenger.h"
 #include "../include/parser.h"
+#include "../include/time.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 
 #define BUFFERSIZE 1000
 #define TOKENIZE(token,saveptr) token = strtok_r(NULL," \n\0",&saveptr);

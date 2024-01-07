@@ -7,6 +7,7 @@
 #include "../include/singularRecord.h"
 #include "../include/multipleRecord.h"
 #include "../include/temporary.h"
+#include "../include/time.h"
 #include <glib.h>
 
 

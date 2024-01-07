@@ -1,11 +1,12 @@
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <stdbool.h>
 #include "../include/flight.h"
 #include "../include/reservation.h"
 #include "../include/output.h"
 #include "../include/statistics.h"
+#include "../include/time.h"
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include <stdbool.h>
 
 
 //inteiro que representa a Query q está a ser respondida
