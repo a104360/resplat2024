@@ -59,9 +59,25 @@ void query4(Reservations *,const char *,bool);
 void query5(const Flights *,Time *,Time *,const char *,bool);
 
 //listar top N aeroportos com mais passageiros, para um dado ano. Contabilizar voos com data estimada de partida nesse ano. (se 2, usar nome)
-void query6();
+/**
+ * @brief Presents the top N airports with the most amount of passengers, in a year
+ * @param flights Pointer to the flights database
+ * @param passengers Pointer to the passengers database
+ * @param year Year to which the flights take place
+ * @param n Max number of airports to display
+ * @param f Mode of the outputs
+ * @note Both schedule dates are considered 
+*/
+void query6(const Flights *,const Passengers *,const char *, const char *,bool);
 
 //listar top N aeroportos com maior mediana de atrasos. Valor atraso em segundos. (se 2, usar nome)
+/**
+ * @brief Presents the top N airports with the most median of flight delays
+ * @param flights Pointer to the flights database
+ * @param n Max number of airports to display
+ * @param f Mode of the outputs
+ * @note It outputs the values in seconds
+*/
 void query7(Flights *,char *,bool);
 
 //Apresentar receita total,de um hotel entre 2 datas, apartir do identificador. (usar preco/1noite * num_noites)
