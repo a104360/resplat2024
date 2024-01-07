@@ -24,7 +24,7 @@ SingularRecord * createSRecord(int num){
 }
 
 void setSRecordName(SingularRecord * temp,int position,char * name){
-    if(temp->names[position]) ffree(temp->names[position]);
+    if(temp->names[position]) ffree((void **) &temp->names[position]);
     temp->names[position] = strdup(name);
 }
 char *getSRecordName(SingularRecord * temp,int position){
@@ -40,7 +40,7 @@ char ** getSRecordNames(SingularRecord * temp){
     }
     char ** sRecord = malloc(sizeof(char *) * temp->size);
     for(int i = 0;i < temp->size;i++){
-        if(temp->names[i]) sRecord[i] = temp->names[i];
+        if(temp->names[i]) sRecord[i] = strdup(temp->names[i]);
         else sRecord[i] = NULL;
     }
     return sRecord;
@@ -62,8 +62,9 @@ int getSRecordSize(SingularRecord * temp){
     return temp->size;
 }
 
-void destroySRecord(SingularRecord * temp){
-    for(int i = 0;i < temp->size;ffree(temp->names[i]),i++);
-    ffree(temp->list);
-    ffree(temp);
+void destroySRecord(SingularRecord ** temp){
+    for(int i = 0;i < (*temp)->size;ffree((void **) &(*temp)->names[i]),i++);
+    ffree((void **) &(*temp)->names);
+    ffree((void **) &(*temp)->list);
+    ffree((void **) &(*temp));
 }

@@ -5,6 +5,7 @@
 #include "../include/flight.h"
 #include "../include/reservation.h"
 #include "../include/passenger.h"
+#include "../include/time.h"
 
 /**
  * @brief Checks if the id is valid

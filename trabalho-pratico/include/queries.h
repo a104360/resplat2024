@@ -17,7 +17,6 @@
 */
 void query1(const Users *, const Reservations *,const Flights *,const Passengers *,const char *,bool);
 
-//listar voos ou reservas de um user !!atencao ao enunciado!!
 /**
  * @brief Lists the flights or reservations of an user
  * @param users Pointer to the users database
