@@ -69,8 +69,10 @@ int getMRecordListElement(MultipleRecord * temp,int arrayPosition,int delayPosit
 }
 
 void setMRecordList(MultipleRecord * temp,int position,int * array,int size){
+    for(int i = 0;i < size;i++){
+        temp->list[position][i] = array[i];
+    }
     temp->listSize[position] = size;
-    for(int i = 0;i < size;temp->list[position][i] = array[i],i++);
 }
 
 int * getMRecordList(MultipleRecord * temp,int position){
@@ -102,12 +104,26 @@ int getMRecordSize(MultipleRecord * temp){
 }
 
 void destroyMRecord(MultipleRecord ** temp){
-    for(int i = 0; i < (*temp)->max;i++) ffree((void **) &(*temp)->list[i]);
+    int i = 0;
+    while(i < (*temp)->max){
+        ffree((void **) &(*temp)->list[i]);
+        i++;
+    }
     ffree((void **) &(*temp)->list);
+
 
     ffree((void **) &(*temp)->listSize);
 
-    for(int i = 0; i < (*temp)->max;i++) ffree((void **) &(*temp)->names[i]);
+
+
+    i = 0;
+    while(i < (*temp)->max){
+        ffree((void **) &(*temp)->names[i]);
+        i++;
+    }
     ffree((void **) &(*temp)->names);
+
+
+    
     ffree((void **) &(*temp));
 }
