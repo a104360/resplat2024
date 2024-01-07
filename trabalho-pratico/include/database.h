@@ -3,14 +3,17 @@
 #include <glib.h>
 #include "../include/utils.h"
 
-
+/**
+ * @brief This must be used to make a database where the elements have a designated key/id
+*/
 typedef struct database Database;
 
-// Function that calls the respective destroy function, based on the id of the key
-void destroyElement(void *,char *);
-
-// Inits the flights database
-Database * createDatabase(char *);
+/**
+ * @brief Allocates memory for the database and sets the argument function as the element free function;
+ * @param func Pointer to the function that will be used as a element free function
+ * @return Pointer to the created database
+*/
+Database * createDatabase(void (*)());
 
 /**
  * @brief Inserts an element on the database
@@ -49,44 +52,5 @@ void applyForEach(void *,void (*func)(gpointer,gpointer,gpointer),void *);
  * @param database Pointer to the database to be erased
 */
 void destroyDatabase(void *);
-
-
-
-
-
-
-typedef struct temporary Temporary;
-
-Temporary * createTemporary();
-
-void destroyTemporary(Temporary *);
-
-void setTempDatabase(Temporary *,void *);
-void * getTempDatabase(Temporary *);
-
-void setTempId(Temporary *,char * id);
-char * getTempId(Temporary *);
-
-void setTempList(Temporary *,void **);
-void setTempListElement(Temporary *,void *,int);
-void ** getTempList(Temporary *);
-
-void setTempNum(Temporary *,int);
-void incTempNum(Temporary *);
-int getTempNum(Temporary *);
-
-void setTempSum(Temporary *,int);
-void increaseTempSum(Temporary *,int);
-int getTempSum(Temporary *);
-
-
-void setTempBegin(Temporary *,Time *);
-Time * getTempBegin(Temporary *);
-
-void setTempEnd(Temporary *,Time *);
-Time * getTempEnd(Temporary *);
-
-void setTempMax(Temporary *,int);
-int getTempMax(Temporary *);
 
 #endif

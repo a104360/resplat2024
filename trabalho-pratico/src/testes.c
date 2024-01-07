@@ -5,7 +5,7 @@
 
 #define MAX_LINE_LENGTH 1024
 
-int areFilesEqual(const char *file1Path, const char *file2Path) {
+static int areFilesEqual(const char *file1Path, const char *file2Path) {
     FILE *file1 = fopen(file1Path, "r");
     FILE *file2 = fopen(file2Path, "r");
 
@@ -47,9 +47,9 @@ int areFilesEqual(const char *file1Path, const char *file2Path) {
     return 1;  // Return true if all lines match
 }
 
-int validation(const char ** filePath){
+static int validation(const char ** filePath){
     FILE *file1 = fopen(filePath[0], "r");
-    char file2Path[50];
+    char file2Path[60];
     memset(file2Path,'\0',60);
     snprintf(file2Path,59,"../../li3_fr/dataset/data/users_errors.csv");
     FILE *file2 = fopen(file2Path, "r");
@@ -216,7 +216,7 @@ int validation(const char ** filePath){
     return 1;  // Return true if all lines match
 }
 
-int confirmar(int argc, char ** argv) {
+void confirmar() {
 
     char users[60];
     memset(users,'\0',60);
@@ -243,9 +243,7 @@ int confirmar(int argc, char ** argv) {
 
     validation((const char **) files);
 
-    int num = atoi(argv[1]);
-
-    for(int i = 1;i <= num;i++){
+    for(int i = 1;i <= 100;i++){
         char comp[100];
         memset(comp,'\0',100);
         snprintf(comp, 99, "./Resultados/command%d_output.txt",i);
@@ -254,12 +252,10 @@ int confirmar(int argc, char ** argv) {
         snprintf(correct,99,"../../li3_fr/dataset/outputs/command%d_output.txt",i);
         if(areFilesEqual((const char *) correct,(const char *) comp)){
             printf("Command %d is correct!\n",i);
-        }else continue;;
+        }else continue;
     }
     
     free(files);
-
-    return 0;
 
 }
 

@@ -1,8 +1,8 @@
 #include "../include/utils.h"
 #include <stdlib.h>
 #include <stdbool.h>
+#include <string.h>
 #include <stdio.h>
-
 
 
 typedef struct time{
@@ -153,5 +153,4 @@ void ffree(void * ptr){
 
 void initArrays(void *** ptr, int max){
     *ptr = (void **)malloc(sizeof(void *) * max);
-    //for(int i = 0;i < max;i++) ptr[i] = NULL;
 }

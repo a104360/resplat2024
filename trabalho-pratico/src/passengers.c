@@ -99,7 +99,9 @@ int getNumAllPassengers(const Passengers * database){
 }
 
 Passenger ** getAllPassengers(const Passengers * database){
-    return database->passengers;
+    Passenger ** list = malloc(sizeof(Passenger*) * database->numPassengers);
+    for(int i = 0; i < database->numPassengers;i++) list[i] = database->passengers[i];
+    return list;
 }
 
 void destroyPassengers(Passengers * database){

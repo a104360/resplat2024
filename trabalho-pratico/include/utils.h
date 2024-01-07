@@ -3,8 +3,18 @@
 
 
 
+
+/**
+ * @brief Year of the date considered as the present day
+*/
 #define PYEAR 2023
+/**
+ * @brief Month of the date considered as the present day
+*/
 #define PMON 10
+/**
+ * @brief Day of the date considered as the present day
+*/
 #define PDAY 1
 
 

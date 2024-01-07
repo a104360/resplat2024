@@ -4,10 +4,10 @@
 #include "../include/sort.h"
 #include "../include/output.h"
 #include "../include/utils.h"
+#include "../include/temporary.h"
 #include <stdio.h>
 #include <ctype.h>
 #include <string.h>
-
 
 #define BUFFERSIZE 100
 
@@ -145,14 +145,14 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
 void query2(const Users * uDatabase, const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,const char * line,bool F){
     //int rDatabaseSize = getDatabaseSize(rDatabase);
     //int fDatabaseSize = getDatabaseSize(fDatabase);
-    char * aux = strdup(line);
+    char * SRecord = strdup(line);
     char * token = NULL;
     char * saveprt = NULL;
-    token = strtok_r(aux," \n\0",&saveprt);
+    token = strtok_r(SRecord," \n\0",&saveprt);
     User * user = lookupElement((const Users *) uDatabase,token);
     if(user == NULL){
         outputQ2(F,NULL,-1,NULL,-1);
-        ffree(aux);
+        ffree(SRecord);
         return;
     }
     token = strtok_r(NULL,"\n\0",&saveprt);
@@ -160,7 +160,7 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
 
     if(getUserAccountStatus(user) == false){
         outputQ2(F,NULL,-1,NULL,-1);
-        ffree(aux);
+        ffree(SRecord);
         return;
     }
     int flag = 0;
@@ -169,7 +169,7 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
     if(strcoll(token,"flights") == 0) flag = 2;
         else if(strcoll(token,"reservations") == 0) flag = 3;
     }
-    ffree(aux);
+    ffree(SRecord);
     char * id = getUserId(user);
     switch (flag)
     {
@@ -273,29 +273,67 @@ void query5(const Flights * fDatabase,Time * ti,Time * tf,const char * name,bool
     free(fList);
     destroyTemporary(airportFlights);
 }
-/*
-void query6(){
-    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
-    return;
-}*/
 
-void query6(const FlightsDatabase fDatabase,const PassengersDatabase * pDatabase,const char * year, const char * n,bool f){
+void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * year, const char * n,bool f){
     int n_airports = atoi(n);
     int fYear = atoi(year);
 
-    AirportPassengers * airports = getYearFlights(fDatabase, pDatabase, fYear);
-    char ** names = getAirportPassengersAirportName(airports);
-    int * number = getAirportPassengersPassengers(airports);
+    SingularRecord * airports = getYearFlights(fDatabase, pDatabase, fYear);
+    char ** names = getSRecordNames(airports);
+    int * number = malloc(sizeof(int) * getSRecordSize(airports));//getAirportPassengersPassengers(airports);
+    for(int i = 0;i < getSRecordSize(airports);number[i] = getSRecordListElement(airports,i),i++);
 
-    outputQ6(n_airports,names,number,f);
+    
+    void ** list = malloc(sizeof(void *) * 2);
+    list[0] = (void *) number;
+    list[1] = (void **) names;
+    mergeSort(list,getSRecordSize(airports),"Integers");
 
-    return;
+    list[0] = NULL;
+    list[1] = NULL;
+    ffree(list);
+
+
+    outputQ6(f,n_airports,names,number);
+
+    ffree(names);
+
+    ffree(number);
+
+    destroySRecord(airports);
+
 }
 
+void query7(Flights * fDatabase,char * num, bool f){
+    SingularRecord * allDelays = getDelays((void *)fDatabase);
+    int n = atoi(num);
+    int * delays = malloc(sizeof(int) * getSRecordSize(allDelays));
+    for(int i = 0;i < getSRecordSize(allDelays);
+    delays[i] = -1,
+    delays[i] = getSRecordListElement(allDelays,i),
+    i++);
 
-void query7(){
-    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
-    return;
+    char ** airports = malloc(sizeof(char *) * getSRecordSize(allDelays));
+    for(int i = 0;i < getSRecordSize(allDelays);
+    airports[i] = NULL,
+    airports[i] = getSRecordName(allDelays,i),
+    i++);
+
+    outputQ7(f,allDelays,n);
+
+    ffree(airports);
+    ffree(delays);
+
+    destroySRecord(allDelays);
+
+    /*Temporary * temp = getAListOfSomething(fDatabase,NULL,NULL,NULL,&getAirportsDelays);
+
+
+    char ** airports = (char **) getTempList(temp);
+
+
+    destroyTemporary(temp);
+    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);*/
 }
 
 void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit,bool f){
@@ -328,7 +366,7 @@ void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit
         destroyTime(end);
     }
 
-    outputQ8(total,f);
+    outputQ8(f,total);
 
     ffree(rList);
     destroyTemporary(hDatabase);
@@ -336,11 +374,11 @@ void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit
     return;
 }
 
-/*void query9(){
+void query9(){
     outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
     return;
-}*/
-
+}
+/*
 void query9(UsersDatabase uDatabase, char * pre, bool f){
     UsersIdQ9 * ids = prefixQ9(uDatabase,pre);
     int k = 0;
@@ -360,7 +398,7 @@ void query9(UsersDatabase uDatabase, char * pre, bool f){
 
     outputQ9(uIds,num,f);
     return;
-}
+}*/
 
 void query10(){
     outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);

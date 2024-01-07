@@ -365,8 +365,8 @@ char *getFlightNotes(Flight * flight){
 
 int getFlightDelay(Flight * flight){
     if(flight == NULL) return -1;
-    return ((getYear(flight->real_departure_date) - getYear(flight->schedule_departure_date)) * 31536000) + 
-    ((getMon(flight->real_departure_date) - getMon(flight->schedule_departure_date)) * 2592000) + 
+    return ((getYear(flight->real_departure_date) - getYear(flight->schedule_departure_date)) * 32140800) + 
+    ((getMon(flight->real_departure_date) - getMon(flight->schedule_departure_date)) * 2678400) + 
     ((getMday(flight->real_departure_date) - getMday(flight->schedule_departure_date)) * 86400) + 
     ((getHour(flight->real_departure_date) - getHour(flight->schedule_departure_date)) * 3600) + 
     ((getMin(flight->real_departure_date) - getMin(flight->schedule_departure_date)) * 60) +
