@@ -266,12 +266,18 @@ void yearFlight(gpointer key, gpointer value, gpointer data){
     char * flightId = getFlightId(flight);
     int selectedYear = getTempSum(temp);
     Time * date = getFlightSDepartureDate(flight);
+    Time * date2 = getFlightRDepartureDate(flight);
+    Time * date3 = getFlightSArrivalDate(flight);
+    Time * date4 = getFlightRArrivalDate(flight);
     int year = getYear(date);
+    int year2 = getYear(date2);
+    int year3 = getYear(date3);
+    int year4 = getYear(date4);
     SingularRecord * aux = (SingularRecord *) getTempAux(temp);
 
     bool flag = false;
 
-    if(selectedYear == year){
+    if(selectedYear == year || selectedYear == year2){
 
         char * origin = getFlightOrigin(flight);
         int max = getSRecordSize(aux);
@@ -303,8 +309,45 @@ void yearFlight(gpointer key, gpointer value, gpointer data){
 
     }
 
+    flag = false;
+
+        if(selectedYear == year3 || selectedYear == year4){
+
+        char * destination = getFlightDestination(flight);
+        int max = getSRecordSize(aux);
+        Passengers * pDatabase = getTempDatabase(temp);
+
+        for(int j2 = 0;j2 < max;j2++){
+
+            char * airport = getSRecordName(aux,j2);
+            if(!strcoll(airport,destination)){
+
+                int n = getSRecordListElement(aux,j2);
+                setSRecordListElement(aux,j2,n + countFPassengers(flightId,(void *)pDatabase));
+                flag = true;
+                ffree((void **) &airport);
+                break;
+
+            }
+            ffree((void **) &airport);
+        }
+        if(flag == false){
+            
+            setSRecordName(aux,max,destination);
+            setSRecordListElement(aux,max,countFPassengers(flightId,(void *) pDatabase));
+            setSRecordSize(aux,getSRecordSize(aux) + 1);
+
+        }
+        ffree((void **) &destination);
+        
+
+    }
+
     ffree((void **) &flightId);
     destroyTime(date);
+    destroyTime(date2);
+    destroyTime(date3);
+    destroyTime(date4);
     
 
 }

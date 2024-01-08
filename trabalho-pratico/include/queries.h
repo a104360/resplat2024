@@ -59,7 +59,7 @@ void query4(Reservations *,const char *,bool);
 void query5(const Flights *,Time *,Time *,const char *,bool);
 
 //listar top N aeroportos com mais passageiros, para um dado ano. Contabilizar voos com data estimada de partida nesse ano. (se 2, usar nome)
-void query6(const FlightsDatabase,const PassengersDatabase *,const char *, const char *,bool);
+void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * year, const char * n,bool f);
 
 //listar top N aeroportos com maior mediana de atrasos. Valor atraso em segundos. (se 2, usar nome)
 void query7(Flights *,char *,bool);
@@ -76,7 +76,7 @@ void query7(Flights *,char *,bool);
 void query8(Reservations *,const char *,Time *,Time *,bool);
 
 //listar todos os users cujo nome começa com o prefixo do argumento, ordenados por nome (crescente) (se 2, usar id)
-void query9(UsersDatabase, char *, bool);
+void query9();
 
 //Apresentar metricas gerais:
 /*  num_novos_users; 

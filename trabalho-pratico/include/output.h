@@ -82,11 +82,6 @@ void outputQ4(bool,Reservation **,int);
 */
 void outputQ5(bool,Flight **,int);
 
-<<<<<<< HEAD
-void outputQ6(const int , char **, int *,bool);
-
-void outputQ8(int ,bool);
-=======
 /**
  * @brief Writes on a text file the outputs of the query 5
  * @param f Mode of the command/output
@@ -110,7 +105,6 @@ void outputQ7(bool,SingularRecord * ,int);
  * @param revenue Total profit of the hotel
 */
 void outputQ8(bool,int);
->>>>>>> main
 
 void outputQ9(char **,int,bool);
 

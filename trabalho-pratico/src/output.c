@@ -547,12 +547,7 @@ void outputQ5(bool f, Flight ** fList,int max){
 }
 
 
-<<<<<<< HEAD
-
-void outputQ6(const int n, char ** names, int * number,bool f){
-=======
 void outputQ6(bool f,const int n, char ** names, int * number){
->>>>>>> main
     commandAtual++;
 
     char fileName[50];
@@ -571,11 +566,7 @@ void outputQ6(bool f,const int n, char ** names, int * number){
     if(f == true){
         for(int j=0; j<n; j++){
             if(j!=0) fprintf(outputFile,"\n");
-<<<<<<< HEAD
-            fprintf(outputFile,"--- %d ,,,\n",j);
-=======
             fprintf(outputFile,"--- %d ---\n",j + 1);
->>>>>>> main
             fprintf(outputFile,"name: %s\n",names[j]);
             fprintf(outputFile,"passengers: %d\n",number[j]);
         }
@@ -588,11 +579,6 @@ void outputQ6(bool f,const int n, char ** names, int * number){
     fclose(outputFile);
 }
 
-<<<<<<< HEAD
-
-
-void outputQ8(int revenue, bool f){
-=======
 void outputQ7(bool f,SingularRecord * temp,int max){
     commandAtual++;
     
@@ -632,7 +618,6 @@ void outputQ7(bool f,SingularRecord * temp,int max){
 
 
 void outputQ8(bool f, int revenue){
->>>>>>> main
     commandAtual++;
 
     char fileName[50];

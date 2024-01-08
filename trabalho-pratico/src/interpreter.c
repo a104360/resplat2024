@@ -59,41 +59,12 @@ char * airportName(const char * line){
     return temp;
 }
 
-<<<<<<< HEAD
-char * yearQ6(const char * line){
-
-=======
 
 char * getSecondParam(const char * line){
->>>>>>> main
     char * aux = strdup(line);
     char * token = NULL;
     char * saveptr = aux;
     token = strtok_r(aux," \n\0",&saveptr);
-<<<<<<< HEAD
-
-    char * temp = strdup(token);
-
-    free(aux);
-    aux = NULL;
-    return temp;
-}
-
-char * airportsQ6(const char * line){
-
-    char * aux = strdup(line);
-    char * token = NULL;
-    char * saveptr = aux;
-    token = strtok_r(aux," \n\0",&saveptr);
-    TOKENIZE(token,saveptr);
-
-    char * temp = strdup(token);
-
-    free(aux);
-    aux = NULL;
-    return temp;
-}
-=======
     
     if(token){
         token = strtok_r(NULL," \n\0",&saveptr);
@@ -106,7 +77,6 @@ char * airportsQ6(const char * line){
 }
 
 
->>>>>>> main
 
 void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,int agrc, char **argv){
     if(uDatabase == NULL || rDatabase == NULL || fDatabase == NULL || pDatabase == NULL) return;
@@ -225,18 +195,6 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
         //QUERIE 6
         case '6':
             if(linhaLimpa[1] == 'F'){
-<<<<<<< HEAD
-                    char * year = yearQ6(&linhaLimpa[3]);
-                    char * nAirports = airportsQ6(&linhaLimpa[3]);
-                    query6((Flights *) fDatabase,(Passengers *) pDatabase,year,nAirports,true);
-                    
-                }else {
-                    char * year = yearQ6(&linhaLimpa[2]);
-                    char * nAirports = airportsQ6(&linhaLimpa[2]);
-                    query6((Flights *) fDatabase,(Passengers *) pDatabase,year,nAirports,true);
-                    
-                }
-=======
                 char * year = airportName(&linhaLimpa[3]);
                 char * nAirports = getSecondParam(&linhaLimpa[3]);
                 query6((const Flights *) fDatabase,(const Passengers *) pDatabase,year,nAirports,true);
@@ -252,7 +210,6 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
                 ffree((void **) &nAirports);
 
             }
->>>>>>> main
             break;
 
 
