@@ -111,7 +111,7 @@ int getMRecordSize(MultipleRecord *);
  * @brief Frees the MultipleRecord structure
  * @param MRecord Pointer to the MultipleRecord structure
 */
-void destroyMRecord(MultipleRecord **);
+void destroyMRecord(MultipleRecord *);
 
 
 #endif

@@ -21,19 +21,22 @@ typedef struct mRecord {
 } MultipleRecord;
 
 
-static void initMRecord(MultipleRecord * MRecord,int num){
+static void initMRecord(MultipleRecord * MRecord, int num) {
     MRecord->names = malloc(sizeof(char *) * num);
-    for(int i = 0;i < num;MRecord->names[i] = NULL,i++)
-    MRecord->list = malloc(sizeof(int *) * num);
-    for(int i = 0;i < num;i++) {
+    for (int i = 0; i < num; i++)
+        MRecord->names[i] = NULL;
+
+    MRecord->list = (int **)malloc(sizeof(int *) * num);
+    for (int i = 0; i < num; i++) {
         MRecord->list[i] = malloc(sizeof(int) * 300);
-        for(int j = 0; j < 300;j++){
+        for (int j = 0; j < 300; j++) {
             MRecord->list[i][j] = -1;
         }
     }
+
     MRecord->size = 0;
     MRecord->listSize = malloc(sizeof(int) * num);
-    for(int i = 0;i < num;i++){
+    for (int i = 0; i < num; i++) {
         MRecord->listSize[i] = 0;
     }
     MRecord->max = num;
@@ -69,6 +72,8 @@ int getMRecordListElement(MultipleRecord * temp,int arrayPosition,int delayPosit
 }
 
 void setMRecordList(MultipleRecord * temp,int position,int * array,int size){
+    if(!temp->list[position]) 
+        temp->list[position] = malloc(sizeof(int) * size);
     for(int i = 0;i < size;i++){
         temp->list[position][i] = array[i];
     }
@@ -103,27 +108,22 @@ int getMRecordSize(MultipleRecord * temp){
     return temp->size;
 }
 
-void destroyMRecord(MultipleRecord ** temp){
-    int i = 0;
-    while(i < (*temp)->max){
-        ffree((void **) &(*temp)->list[i]);
-        i++;
+void destroyMRecord(MultipleRecord *temp) {
+    // Free the memory for the 'list' array
+    for (int i = 0; i < temp->max; i++) {
+        ffree((void **)&temp->list[i]);
     }
-    ffree((void **) &(*temp)->list);
+    ffree((void **)&(temp->list));
 
+    // Free the memory for the 'listSize' array
+    ffree((void **)&temp->listSize);
 
-    ffree((void **) &(*temp)->listSize);
-
-
-
-    i = 0;
-    while(i < (*temp)->max){
-        ffree((void **) &(*temp)->names[i]);
-        i++;
+    // Free the memory for the 'names' array
+    for (int i = 0; i < temp->max; i++) {
+        ffree((void **)&temp->names[i]);
     }
-    ffree((void **) &(*temp)->names);
+    ffree((void **)&temp->names);
 
-
-    
-    ffree((void **) &(*temp));
+    // Free the memory for the 'temp' structure itself
+    ffree((void **)&temp);
 }

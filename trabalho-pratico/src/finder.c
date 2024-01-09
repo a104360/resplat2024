@@ -344,7 +344,7 @@ SingularRecord * getDelays(void * database){
         airports[j] = getMRecordNamesElement(temp,j);
         ffree((void **) &array);
     }
-    destroyMRecord(&temp);
+    destroyMRecord(temp);
     void ** aux = malloc(sizeof(void *) * 2);
     aux[0] = (void *) allDelays;
     aux[1] = (void *) airports;
