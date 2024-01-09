@@ -374,6 +374,27 @@ void query9(){
     outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
     return;
 }
+/*
+void query9(UsersDatabase uDatabase, char * pre, bool f){
+    UsersIdQ9 * ids = prefixQ9(uDatabase,pre);
+    int k = 0;
+    int num = getUsersIdQ9NumIds(ids);
+    char ** uIds = getUsersIdQ9Ids(ids,num);
+
+    int valids = 0;
+
+    while(k<num){
+        if(strcoll(pre,uIds[k])!=0){
+            uIds[k]=uIds[k+1];
+            continue;
+        }
+        valids++;
+        k++;
+    }
+
+    outputQ9(uIds,num,f);
+    return;
+}*/
 
 void query10(){
     outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);

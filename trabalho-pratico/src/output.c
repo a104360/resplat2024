@@ -640,3 +640,23 @@ void outputQ8(bool f, int revenue){
     }
     fclose(outputFile);
 }
+
+void outputQ9(char ** ids,int valids,bool f){
+    commandAtual++;
+
+    char fileName[50];
+
+    memset(fileName,'\0',50);
+
+    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
+
+    FILE * outputFile = fopen(fileName, "a");
+    if(!outputFile){
+        perror("Query 9 command line did not open, probably file name wrong.\n");
+        return;
+    }
+    for(int k = 0; k<valids;k++){
+        fprintf(outputFile,"%s\n",ids[k]);
+    }
+    fclose(outputFile);
+}

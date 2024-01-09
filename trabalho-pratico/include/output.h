@@ -106,4 +106,6 @@ void outputQ7(bool,SingularRecord * ,int);
 */
 void outputQ8(bool,int);
 
+void outputQ9(char **,int,bool);
+
 #endif

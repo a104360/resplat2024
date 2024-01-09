@@ -277,10 +277,10 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
         case '9':
 
             if(linhaLimpa[1] == 'F'){
-                    query9(&linhaLimpa[3]);
+                    query9((Users *) uDatabase,limpaToken(&linhaLimpa[3]),true);
                     
                 }else {
-                    query9(&linhaLimpa[2]);
+                    query9((Users *) uDatabase,limpaToken(&linhaLimpa[2]),false);
                     
                 }
 
