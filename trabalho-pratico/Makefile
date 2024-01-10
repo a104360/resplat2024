@@ -1,7 +1,7 @@
 CC = gcc
 IDIR = ../include
 DEPS = $(IDIR)/$(wildcard *.h)
-CFLAGS= -g -Wall -Werror=discarded-qualifiers -I$(IDIR) `pkg-config --libs --cflags glib-2.0`
+CFLAGS= -g -Wall -Werror=discarded-qualifiers -I$(IDIR) `pkg-config --libs --cflags glib-2.0` -lncurses
 EXE = programa-principal
 
 

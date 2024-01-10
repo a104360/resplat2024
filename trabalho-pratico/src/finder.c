@@ -368,7 +368,7 @@ void countFPassengers(const void * pDatabase,const void * fDatabase,void * recor
         }
             
         
-        nonexistent:
+        nonexistent: // Label for the cases where the year is not the pretended
         int j = k;
         while(j < max){
             char * aux = getPassengerFlightId(p[j]);
