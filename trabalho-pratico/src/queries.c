@@ -276,6 +276,10 @@ void query5(const Flights * fDatabase,Time * ti,Time * tf,const char * name,bool
 }
 
 void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * year, const char * n,bool f){
+    
+    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
+    return;
+    
     int n_airports = atoi(n);
     int fYear = atoi(year);
 
@@ -369,32 +373,29 @@ void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit
 
     return;
 }
-
+/*
 void query9(){
     outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
     return;
-}
-/*
-void query9(UsersDatabase uDatabase, char * pre, bool f){
-    UsersIdQ9 * ids = prefixQ9(uDatabase,pre);
-    int k = 0;
-    int num = getUsersIdQ9NumIds(ids);
-    char ** uIds = getUsersIdQ9Ids(ids,num);
-
-    int valids = 0;
-
-    while(k<num){
-        if(strcoll(pre,uIds[k])!=0){
-            uIds[k]=uIds[k+1];
-            continue;
-        }
-        valids++;
-        k++;
-    }
-
-    outputQ9(uIds,num,f);
-    return;
 }*/
+
+void query9(Users * uDatabase, char * pre, bool f){
+    //SingularRecord * preUsers = getUsersPre(uDatabase,pre);
+    //char ** users = getSRecordNames(preUsers);
+    //int max = getSRecordSize(preUsers);
+    Temporary * temp = getUsersPre(uDatabase,pre);
+    char ** preUsersIds = getTempAux(temp);
+    char ** preUsersNames = getTempListChar(temp);
+    int max = getTempMax(temp);
+
+    //outputQ9(users,max,f);
+    outputQ9(preUsersIds,preUsersNames,max,f);
+
+    //free(preUsersIds);
+    //free(preUsersNames);
+    destroyTemporaryChar(temp);
+    return;
+}
 
 void query10(){
     outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);

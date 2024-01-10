@@ -8,6 +8,7 @@
 #include "../include/multipleRecord.h"
 #include "../include/temporary.h"
 #include "../include/time.h"
+#include "../include/user.h"
 #include <glib.h>
 
 
@@ -466,4 +467,67 @@ void getAirportsDelays(gpointer key,gpointer value,gpointer data){
         incMRecordSize(temp);
     }
     ffree((void **) &origin);
+}
+
+Temporary * getUsersPre(void * database, char * prefix){
+    Users * uDatabase = (Users *) database;
+    /*SingularRecord * preUsers = createSRecord(10000);
+
+    Temporary * list = createTemporary();
+    setTempAux(list,preUsers);
+    setTempId(list,prefix);
+    */
+    char ** preUsersIds = malloc(sizeof(char*) *10000);
+    char ** preUsersNames = malloc(sizeof(char*)*10000);
+
+    Temporary * list = createTemporary();
+    setTempAux(list,(void *) preUsersIds);
+    setTempList(list,(void **)preUsersNames);
+    setTempId(list,prefix);
+
+    applyForEach(uDatabase,&checkPre,(void *)list);
+
+    //setTempAux(list,NULL);
+
+    //destroyTemporary(list);
+
+    //return preUsers;
+    return list;
+}
+
+void checkPre(gpointer key, gpointer value, gpointer data){
+    User * user = (User *) value;
+    Temporary * temp = (Temporary *) data;
+    char * userId = getUserId(user);
+    char * userName = getUserName(user);
+    char * userIdClone = getUserId(user);
+    char * prefix = getTempId(temp);
+    //SingularRecord * aux = (SingularRecord *) getTempAux(temp);
+
+
+    int preSize = strlen(prefix);
+
+    userId[preSize] = '\0';
+
+    if(strcoll(userId,prefix)==0){
+        int max = getTempMax(temp);
+        setTempListElement(temp,userName,max);
+        setTempAuxElement(temp,userIdClone,max);
+        setTempMax(temp,max+1);
+    }
+
+    /*
+    for(int i = 0; prefix[i]; i++){
+        preSize ++;
+    }
+
+    userId[preSize] = '\0';
+
+    if(strcmp(userId,prefix)==0){
+        int max = getSRecordSize(aux);
+        setSRecordName(aux,max,userIdClone);
+        setSRecordSize(aux,max+1);
+    }*/
+    
+    ffree((void **) &userId);
 }

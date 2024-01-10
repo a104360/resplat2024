@@ -20,6 +20,8 @@ Temporary * createTemporary();
 */
 void destroyTemporary(Temporary *);
 
+void destroyTemporaryChar(Temporary *);
+
 /**
  * @brief Sets a secondary database to be used on some iterating functions
  * @param temp Pointer to the temporary struct
@@ -69,6 +71,8 @@ void setTempListElement(Temporary *, void *, int );
  * @return Pointer to the list
  */
 void **getTempList(Temporary *);
+
+char ** getTempListChar(Temporary *);
 
 const void * getTempListElement(Temporary *,int);
 
@@ -166,6 +170,8 @@ int getTempMax(Temporary *);
  * @note Only use this function when no dates are needed
 */
 void setTempAux(Temporary *,void *);
+
+void setTempAuxElement(Temporary *, void *, int);
 
 /**
  * @brief Gets the pointer stored on the struct

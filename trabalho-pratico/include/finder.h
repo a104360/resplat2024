@@ -93,4 +93,8 @@ SingularRecord * getDelays(void *);
 */
 void getAirportsDelays(gpointer,gpointer,gpointer);
 
+Temporary * getUsersPre(void *, char *);
+
+void checkPre(gpointer, gpointer, gpointer);
+
 #endif

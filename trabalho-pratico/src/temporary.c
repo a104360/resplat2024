@@ -46,8 +46,17 @@ void destroyTemporary(Temporary * temp){
     ffree((void **) &temp);
 }
 
-
-
+void destroyTemporaryChar(Temporary * temp){
+    ffree((void **) &temp->begin);
+    ffree((void **) &temp->end);
+    ffree((void **) &temp->id);
+    ffree((void **) &temp->list);
+    temp->database = NULL;
+    temp->num = 0;
+    temp->sum = 0;
+    temp->max = 0;
+    ffree((void **) &temp);
+}
 
 void setTempDatabase(Temporary * temp,void * database){
     temp->database = database;
@@ -80,6 +89,16 @@ const void * getTempListElement(Temporary * temp,int position){
 void ** getTempList(Temporary * temp){
     void ** list = malloc(sizeof(void *) * temp->num);
     for(int i = 0;i < temp->num;list[i] = temp->list[i],i++);
+    return list;
+}
+
+char ** getTempListChar(Temporary * temp){
+    char ** list = malloc(sizeof(char *)* temp->max);
+    for(int i = 0; i < temp->max; i++){
+        char * aux = (char *) temp->list[i];
+        list[i] = strdup(aux);
+    }
+
     return list;
 }
 
@@ -143,6 +162,12 @@ void setTempAux(Temporary * temp,void * element){
     temp->begin = element;
 }
 
+void setTempAuxElement(Temporary * temp, void * element, int position){
+    void ** aux = (void **) temp->begin;
+    aux[position] = element;
+}
+
 void * getTempAux(Temporary * temp){
     return temp->begin;
 }
+

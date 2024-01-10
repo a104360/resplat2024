@@ -641,7 +641,7 @@ void outputQ8(bool f, int revenue){
     fclose(outputFile);
 }
 
-void outputQ9(char ** ids,int valids,bool f){
+void outputQ9(char ** ids,char ** names,int valids,bool f){
     commandAtual++;
 
     char fileName[50];
@@ -655,8 +655,8 @@ void outputQ9(char ** ids,int valids,bool f){
         perror("Query 9 command line did not open, probably file name wrong.\n");
         return;
     }
-    for(int k = 0; k<valids;k++){
-        fprintf(outputFile,"%s\n",ids[k]);
+    for(int k = 0; k<valids-1;k++){
+        fprintf(outputFile,"%s;%s\n",ids[k],names[k]);
     }
     fclose(outputFile);
 }
