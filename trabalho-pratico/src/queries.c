@@ -277,9 +277,6 @@ void query5(const Flights * fDatabase,Time * ti,Time * tf,const char * name,bool
 
 void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * year, const char * n,bool f){
     
-    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
-    return;
-    
     int n_airports = atoi(n);
     int fYear = atoi(year);
 
