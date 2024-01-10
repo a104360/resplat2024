@@ -23,6 +23,7 @@ static void initTemp(Temporary * temp){
     temp->list = NULL;
     temp->num = 0;
     temp->sum = 0;
+    temp->max = 0;
 }
 
 Temporary * createTemporary(){
@@ -41,6 +42,7 @@ void destroyTemporary(Temporary * temp){
     temp->database = NULL;
     temp->num = 0;
     temp->sum = 0;
+    temp->max = 0;
     ffree((void **) &temp);
 }
 

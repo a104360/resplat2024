@@ -240,146 +240,75 @@ SingularRecord * getYearFlights(const void * database,const void * databasep, co
     Flights * fDatabase = (Flights *) database;
     SingularRecord * airports = createSRecord(50);
 
-
-    //Temporary * list = createTemporary();
-    //setTempAux(list,(void *) airports);
-    //setTempDatabase(list,(void *) databasep);
-
-    //setTempList(list,(void **)temp);
-    //setTempSum(list,fYear);
     i = 0;
     applyForEach(fDatabase,&yearFlight,airports);
-
-    //setTempAux(list,NULL);
-
-    //destroyTemporary(list);
 
     countFPassengers(databasep,database,(void *) airports,fYear);
 
     return airports;
 }
 
-/*typedef struct sRecord{
-    char ** names;
-    int * list;
-    int size;
-} SingularRecord;*/
-
 void yearFlight(gpointer key, gpointer value, gpointer data){
     Flight * flight = (Flight *) value;
     SingularRecord * record = (SingularRecord *) data;
-    char * airport = getFlightOrigin(flight);
+    char * origin = getFlightOrigin(flight);
+    char * dest = getFlightDestination(flight);
     int max = getSRecordSize(record);
     int j = 0;
+    int destPosition = -1,originPosition = -1;
     for(;j < max;j++){
         char * name = getSRecordName(record,j);
-        if(!strcoll(name,airport)){
-            ffree((void **)&airport);
-            ffree((void **)&name);
+        if(!strcoll(name,origin)){
+            originPosition = j;
+        }
+        if(!strcoll(name,dest)){
+            destPosition = j;
+        }
+        if(originPosition != -1 && destPosition != -1){
+            ffree((void **) &origin);
+            ffree((void **) &dest);
+            ffree((void **) &name);
             return;
         }
         ffree((void **) &name);
     }
-    setSRecordName(record,j,airport);
-    setSRecordListElement(record,j,0);
-    incSRecordSize(record);
-    ffree((void **) &airport);
-    /*Flight * flight = (Flight *) value;
-    Temporary * temp = (Temporary *) data;
-    char * flightId = getFlightId(flight);
-    int selectedYear = getTempSum(temp);
-    Time * date = getFlightSDepartureDate(flight);
-    Time * date2 = getFlightRDepartureDate(flight);
-    Time * date3 = getFlightSArrivalDate(flight);
-    Time * date4 = getFlightRArrivalDate(flight);
-    int year = getYear(date);
-    int year2 = getYear(date2);
-    int year3 = getYear(date3);
-    int year4 = getYear(date4);
-    SingularRecord * aux = (SingularRecord *) getTempAux(temp);
-
-    bool flag = false;
-
-    if(selectedYear == year || selectedYear == year2){
-
-        char * origin = getFlightOrigin(flight);
-        int max = getSRecordSize(aux);
-        Passengers * pDatabase = getTempDatabase(temp);
-
-        for(int j = 0;j < max;j++){
-
-            char * airport = getSRecordName(aux,j);
-            if(!strcoll(airport,origin)){
-
-                int n = getSRecordListElement(aux,j);
-                setSRecordListElement(aux,j,n + countFPassengers(flightId,(void *)pDatabase));
-                flag = true;
-                ffree((void **) &airport);
-                break;
-
-            }
-            ffree((void **) &airport);
-        }
-        if(flag == false){
-            
-            setSRecordName(aux,max,origin);
-            setSRecordListElement(aux,max,countFPassengers(flightId,(void *) pDatabase));
-            setSRecordSize(aux,getSRecordSize(aux) + 1);
-
-        }
+    if(originPosition == -1 && destPosition != -1){
+        setSRecordName(record,j,origin);
+        setSRecordListElement(record,j,0);
+        incSRecordSize(record);
         ffree((void **) &origin);
-        
-
+        ffree((void **) &dest);
+        return;
     }
-
-    flag = false;
-
-        if(selectedYear == year3 || selectedYear == year4){
-
-        char * destination = getFlightDestination(flight);
-        int max = getSRecordSize(aux);
-        Passengers * pDatabase = getTempDatabase(temp);
-
-        for(int j2 = 0;j2 < max;j2++){
-
-            char * airport = getSRecordName(aux,j2);
-            if(!strcoll(airport,destination)){
-
-                int n = getSRecordListElement(aux,j2);
-                setSRecordListElement(aux,j2,n + countFPassengers(flightId,(void *)pDatabase));
-                flag = true;
-                ffree((void **) &airport);
-                break;
-
-            }
-            ffree((void **) &airport);
-        }
-        if(flag == false){
-            
-            setSRecordName(aux,max,destination);
-            setSRecordListElement(aux,max,countFPassengers(flightId,(void *) pDatabase));
-            setSRecordSize(aux,getSRecordSize(aux) + 1);
-
-        }
-        ffree((void **) &destination);
-        
-
+    if(originPosition != -1 && destPosition == -1){
+        setSRecordName(record,j,dest);
+        setSRecordListElement(record,j,0);
+        incSRecordSize(record);
+        ffree((void **) &origin);
+        ffree((void **) &dest);
+        return;
     }
+    if(originPosition == -1 && destPosition == -1){
+        setSRecordName(record,j,origin);
+        setSRecordListElement(record,j,0);
+        incSRecordSize(record);
 
-    ffree((void **) &flightId);
-    destroyTime(date);
-    destroyTime(date2);
-    destroyTime(date3);
-    destroyTime(date4);
+        setSRecordName(record,j + 1,dest);
+        setSRecordListElement(record,j + 1,0);
+        incSRecordSize(record);
+
+        ffree((void **) &origin);
+        ffree((void **) &dest);
+        return;
+    }
     
-    */
 }
 
 void countFPassengers(const void * pDatabase,const void * fDatabase,void * record,int year){
     Passengers * passengers = (Passengers *) pDatabase;
     SingularRecord * table = (SingularRecord *) record;
-
-    int k = 0;
+    
+    int k = 0; // Marks the first element of the block of flights
     int max = getNumAllPassengers(pDatabase);
     Passenger ** p = getAllPassengers(passengers);
 
@@ -389,6 +318,7 @@ void countFPassengers(const void * pDatabase,const void * fDatabase,void * recor
         char * id = getPassengerFlightId(p[k]);
         Flight * flight = (Flight *) lookupElement(fDatabase,id);
         Time * time1 = getFlightSDepartureDate(flight);
+
         int year1 = getYear(time1);
 
         if(year == year1){ // Procedure to execute in case the flight took place on the year
@@ -404,8 +334,8 @@ void countFPassengers(const void * pDatabase,const void * fDatabase,void * recor
             if(departPosition > -1) dep = true;
             if(arrivePosition > -1) arr = true;
 
-            int j = k;
-            
+            int j = k; // Block iteration count 
+
             // This cycle should only be executed if any of the airports is in the array
             if(dep == true || arr == true){ 
                 while(j < max){ // The cycle must count the amount of users on the flight and add them to the airports in which the flights arrive/depart
@@ -420,6 +350,8 @@ void countFPassengers(const void * pDatabase,const void * fDatabase,void * recor
                     ffree((void **) &aux);
                     break;
                 }
+            }else{
+                goto nonexistent;
             }
 
             k = j; // Set k to the value of the next flight id, so it does not go through nonsense checks
@@ -431,9 +363,12 @@ void countFPassengers(const void * pDatabase,const void * fDatabase,void * recor
             ffree((void **) &id);
             year1 = 0;
             destroyTime(time1);
+
             continue;
         }
+            
         
+        nonexistent:
         int j = k;
         while(j < max){
             char * aux = getPassengerFlightId(p[j]);
@@ -448,26 +383,11 @@ void countFPassengers(const void * pDatabase,const void * fDatabase,void * recor
         
         year1 = 0;
         destroyTime(time1);
+
         ffree((void **) &id);
         k = j;
     }
     ffree((void **) &p);
-    /*
-    int count = 0;
-    int k = 0;
-    int max = getNumAllPassengers(pDatabase);
-    Passenger ** p = getAllPassengers(pDatabase);
-
-    while(k < max){
-        char * id = getPassengerFlightId(p[k]);
-        if(!strcoll(flightId,id)){
-            count++;
-        }
-        k++;
-        ffree((void **) &id);
-    }
-    ffree((void **) &p);
-    return count;*/
 }
 
 SingularRecord * getDelays(void * database){
