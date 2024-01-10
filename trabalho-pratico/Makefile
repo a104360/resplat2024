@@ -29,7 +29,7 @@ run: $(EXE)
 	./$(EXE) ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt
 
 test: programa-testes
-	./programa-testes test
+	./programa-testes ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt ../../li3_fr/dataset/outputs/
 
 $(EXE).debug: $(OBJ)
 	$(CC) -o $(EXE).debug $^ $(CFLAGS)

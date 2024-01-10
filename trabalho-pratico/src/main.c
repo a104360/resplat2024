@@ -327,7 +327,7 @@ int main(int argc,char **argv){
         destroyDatabase(fDatabase);
         destroyDatabase(rDatabase);
     }
-    if(argc == 2){
+    if(argc == 4){
         confirmar();
     }
     return 0;

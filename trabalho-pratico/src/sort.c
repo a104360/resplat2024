@@ -344,7 +344,107 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
         ffree((void **) &swapNamesLeft);
         ffree((void **) &swapNamesRight);
     }
-}
+    if(!strcoll(type,"String")){
+        char ** names = (char **) a[0];
+        char ** ids = (char **) a[1];
+
+        char ** swapNamesLeft = malloc(sizeof(char *) * left_length);
+        char ** swapNamesRight = malloc(sizeof(char *) * right_length);
+
+        char ** swapIdsLeft = malloc(sizeof(char *) * left_length);
+        char ** swapIdsRight = malloc(sizeof(char *) * right_length);
+
+        int i, j, k;
+
+        // copy the left portion into the temp_left array
+        for (int i = 0; i < left_length; i++){
+            swapNamesLeft[i] = strdup(names[l + i]);
+            swapIdsLeft[i] = strdup(ids[l + i]);
+        }
+
+        // copy the right portion into the temp_right array
+        for (int i = 0; i < right_length; i++){
+            swapNamesRight[i] = strdup(names[m + 1 + i]);
+            swapIdsRight[i] = strdup(ids[m + 1 + i]);
+        }
+        
+        for (i = 0, j = 0, k = l; k <= r; k++){
+            // The left array is out 
+            if(i == left_length && j < right_length){
+                ffree((void **) &names[k]);
+                names[k] = strdup(swapNamesRight[j]);
+
+                ffree((void **) &ids[k]);
+                ids[k] = strdup(swapIdsRight[j]);
+                j++;
+                continue;
+            }
+
+            if(j == right_length && i < left_length){
+                ffree((void **) &names[k]);
+                names[k] = strdup(swapNamesLeft[i]);
+
+                ffree((void **) &ids[k]);
+                ids[k] = strdup(swapIdsLeft[i]);
+
+                i++;
+                continue;
+            }
+
+            
+            if ((i < left_length) && (j >= right_length || strcoll(swapNamesLeft[i],swapNamesRight[j]) >= 0))
+            {
+                if(!strcoll(swapNamesLeft[i],swapNamesRight[j])){
+                    if(strcoll(swapIdsLeft[i],swapIdsRight[j]) < 0){
+                        ffree((void **) &ids[k]);
+                        ids[k] = strdup(swapIdsLeft[i]);
+
+                        ffree((void **) &names[k]);
+                        names[k] = strdup(swapNamesLeft[i]);
+                        i++;
+                        continue;
+                    }
+                }
+                ffree((void **) &ids[k]);
+                ids[k] = strdup(swapIdsRight[j]);
+                ffree((void **) &names[k]);
+                names[k] = strdup(swapNamesRight[j]);
+
+                j++;
+                //}
+            }
+            // otherwise if the next element in swapNamesRight than the next element in 
+            // swapNamesLeft OR we have reached the end of swapNamesLeft, store the next 
+            // element from the swapNamesRight array into the next element in array a
+            else
+            {
+                ffree((void **) &ids[k]);
+                ids[k] = strdup(swapIdsLeft[i]);
+                ffree((void **) &names[k]);
+                names[k] = strdup(swapNamesLeft[i]);
+                
+                
+                i++;
+                //}
+            }
+        }  
+
+        for(int i = 0;i < left_length;i++) 
+            ffree((void **) &swapIdsLeft[i]);
+        for(int i = 0;i < right_length;i++) 
+            ffree((void **) &swapIdsRight[i]);
+        ffree((void **) &swapIdsLeft);
+        ffree((void **) &swapIdsRight);
+        for(int i = 0;i < left_length;i++) 
+            ffree((void **) &swapNamesLeft[i]);
+        for(int i = 0;i < right_length;i++) 
+            ffree((void **) &swapNamesRight[i]);
+        ffree((void **) &swapNamesLeft);
+        ffree((void **) &swapNamesRight);
+        }
+
+
+    }
 
 // Applies the merge sort algorithm to the array a between the left index l
 // and the right index r.  This function implements the recursive 

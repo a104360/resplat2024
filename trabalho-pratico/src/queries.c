@@ -388,11 +388,19 @@ void query9(Users * uDatabase, char * pre, bool f){
     char ** preUsersNames = getTempListChar(temp);
     int max = getTempMax(temp);
 
+    void ** sort = malloc(sizeof(void *) * 2);
+    sort[0] = preUsersNames;
+    sort[1] = preUsersIds;
+
+    mergeSort(sort,max,"String");
+
     //outputQ9(users,max,f);
     outputQ9(preUsersIds,preUsersNames,max,f);
-
+    //sort[0] = NULL;
+    //sort[1] = NULL;
+    //ffree((void **) &sort);
     //free(preUsersIds);
-    //free(preUsersNames);
+    free(preUsersNames);
     destroyTemporaryChar(temp);
     return;
 }
