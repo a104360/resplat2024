@@ -13,7 +13,7 @@ static void initSRecord(SingularRecord * temp,int num){
     temp->names = malloc(sizeof(char *) * num);
     for(int i = 0;i < num;temp->names[i] = NULL,i++);
     temp->list = malloc(sizeof(int) * num);
-    for(int i = 0;i < num;temp->list[i] = 0,i++);
+    for(int i = 0;i < num;temp->list[i] = -1,i++);
     temp->size = 0;
 }
 
@@ -30,6 +30,15 @@ void setSRecordName(SingularRecord * temp,int position,char * name){
 char *getSRecordName(SingularRecord * temp,int position){
     if(!temp->names[position]) return NULL;
     return strdup(temp->names[position]);
+}
+
+int getSRecordNamePosition(SingularRecord * temp,const char * name){
+    int i = 0;
+    while(i < temp->size){
+        if(!strcoll(name,temp->names[i])) return i;
+        i++;
+    }
+    return -1;
 }
 
 char ** getSRecordNames(SingularRecord * temp){
@@ -51,12 +60,37 @@ void setSRecordListElement(SingularRecord * temp,int position,int num){
     temp->list[position] = num;
 }
 
+void incSRecordNameElement(SingularRecord * temp,const char * name){
+    int i = 0;
+    while(i < temp->size){
+        if(!strcoll(temp->names[i],name)){
+            temp->list[i]++;
+            return;
+        }
+        i++;
+    }
+    if(i < temp->size){
+        setSRecordName(temp,i,(char *) name);
+        setSRecordListElement(temp,i,1);
+        return;
+    }
+    
+}
+
 int getSRecordListElement(SingularRecord * temp,int position){
     return temp->list[position];
 }
 
 void setSRecordSize(SingularRecord * temp,int num){
     temp->size = num;
+}
+
+void incSRecordSize(SingularRecord * temp){
+    temp->size++;
+}
+
+void incSRecordListElement(SingularRecord * temp,int position){
+    temp->list[position]++;
 }
 int getSRecordSize(SingularRecord * temp){
     return temp->size;

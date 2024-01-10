@@ -71,12 +71,14 @@ SingularRecord * getYearFlights(const void *,const void *, int);
 void yearFlight(gpointer, gpointer, gpointer);
 
 /**
- * @brief Gets the number of how much passengers went on a flight
- * @param id Id of the flight
+ * @brief Counts the amount of passengers on the airports on the selected year
  * @param passengers Pointer to the passengers database
+ * @param flights Pointer to the flights database
+ * @param record Pointer to the table to be filled
+ * @param year Year selected
  * @return Number of passengers on the flight 
 */
-int countFPassengers(const char *,const void *); // Colocar no passenger.c
+void countFPassengers(const void * ,const void *,void * ,int );
 
 /**
  * @brief Gets a structure with a list of names 

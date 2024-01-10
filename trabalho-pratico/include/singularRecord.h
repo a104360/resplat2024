@@ -31,6 +31,22 @@ void setSRecordName(SingularRecord *,int,char *);
 char *getSRecordName(SingularRecord *,int);
 
 /**
+ * @brief Gets the position on the array in which a name is on
+ * @param sRecord Pointer to the struct
+ * @param name Name selected
+ * @note Returns -1 if the name does not exist
+*/
+int getSRecordNamePosition(SingularRecord *,const char *);
+
+/**
+ * @brief Increments the value that is stored on the name, adding the
+ * the name and values to the structure
+ * @param sRecord Pointer to the structure
+ * @param name Name to be searched/inserted on the structure
+*/
+void incSRecordNameElement(SingularRecord *,const char *);
+
+/**
  * @brief Get a copy of all the names on the struct
  * @param sRecord Pointer to the structure
  * @return Pointer to an copy of all names on the structure
@@ -46,6 +62,15 @@ char ** getSRecordNames(SingularRecord *);
  * on the same position
 */
 void setSRecordListElement(SingularRecord *,int,int);
+
+
+/**
+ * @brief Increments the value of one element of the list
+ * @param sRecord Pointer to the structure
+ * @param position Position on the array to be incremented
+*/
+void incSRecordListElement(SingularRecord *,int);
+
 
 /**
  * @brief Gets a value on the selected position
@@ -63,6 +88,12 @@ int getSRecordListElement(SingularRecord *,int);
  * @param size Number to be setted as the size of the structure
 */
 void setSRecordSize(SingularRecord *,int);
+
+/**
+ * @brief Increments the size/number of diferent elements
+ * @param sRecord Pointer to the structure
+*/
+void incSRecordSize(SingularRecord *);
 
 /**
  * @brief Gets the structure size, or how many different names/values
