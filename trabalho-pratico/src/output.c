@@ -655,8 +655,17 @@ void outputQ9(char ** ids,char ** names,int valids,bool f){
         perror("Query 9 command line did not open, probably file name wrong.\n");
         return;
     }
-    for(int k = 0; k<valids-1;k++){
-        fprintf(outputFile,"%s;%s\n",ids[k],names[k]);
+    if(f== true){
+          for(int k = 0; k<valids;k++){
+            if(k>0) fprintf(outputFile,"\n");
+            fprintf(outputFile,"--- %d ---\n",k+1);
+            fprintf(outputFile,"id: %s\n",ids[k]);
+            fprintf(outputFile,"name: %s\n",names[k]);
+          }
+    }else{
+        for(int k = 0; k<valids-1;k++){
+            fprintf(outputFile,"%s;%s\n",ids[k],names[k]);
+        } 
     }
     fclose(outputFile);
 }

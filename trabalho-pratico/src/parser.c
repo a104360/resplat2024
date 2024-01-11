@@ -579,7 +579,7 @@ User * userCheck(const char * line){
         ffree((void **) &string);
         ERRORSU(aux,user);
     }
-    if(strcoll(string,"active") == 0){setUserAccountStatus(user,true);}else {setUserAccountStatus(user,false);} 
+    if(strcasecmp(string,"active") == 0){setUserAccountStatus(user,true);}else {setUserAccountStatus(user,false);} 
     ffree((void **) &string);
     
 
