@@ -663,7 +663,7 @@ void outputQ9(char ** ids,char ** names,int valids,bool f){
             fprintf(outputFile,"name: %s\n",names[k]);
           }
     }else{
-        for(int k = 0; k<valids-1;k++){
+        for(int k = 0; k<valids;k++){
             fprintf(outputFile,"%s;%s\n",ids[k],names[k]);
         } 
     }
