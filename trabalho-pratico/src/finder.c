@@ -366,7 +366,7 @@ void countFPassengers(const void * pDatabase,const void * fDatabase,void * recor
         }
             
         
-        nonexistent: // Label for the cases where the year is not the pretended
+        nonexistent:
         int j = k;
         while(j < max){
             char * aux = getPassengerFlightId(p[j]);
@@ -497,18 +497,25 @@ void checkPre(gpointer key, gpointer value, gpointer data){
     Temporary * temp = (Temporary *) data;
     char * userId = getUserId(user);
     char * userName = getUserName(user);
-    char * userIdClone = getUserId(user);
+    //char * userNameClone = getUserName(user);
     char * prefix = getTempId(temp);
+    bool status = getUserAccountStatus(user);
+    //SingularRecord * aux = (SingularRecord *) getTempAux(temp);
 
 
     int preSize = strlen(prefix);
+    int nameSize = strlen(userName);
 
-    userId[preSize] = '\0';
+    if(nameSize < preSize) return;
 
-    if(strcoll(userId,prefix)==0){
+    //userId[preSize] = '\0';
+
+
+    //if(strcoll(prefix,userId)==0 && status == 1){
+    if(strncmp(userName,prefix,strlen(prefix))==0 && status ==1){
         int max = getTempMax(temp);
         setTempListElement(temp,userName,max);
-        setTempAuxElement(temp,userIdClone,max);
+        setTempAuxElement(temp,userId,max);
         setTempMax(temp,max+1);
     }    
     ffree((void **) &userId);
