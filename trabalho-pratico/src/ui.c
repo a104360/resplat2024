@@ -626,29 +626,27 @@ void printQ8(bool f,int dist,int revenue){
     wrefresh(terminal);
 }
 
-
-// PODE NAO SER NECESSARIO
-static void printPageNF(WINDOW * window,int * count,int dist,int nPerPage, char ** names,int size){
-    wclear(window);
-    box(window,0,0);
-    int y = 1;
-
-    mvwprintw(window,dist * y, 20,"%s",names[*count]);
-    y++;
-    *count += 1;
-    while(((*count % nPerPage) != 0) && *count < size){
-        mvwprintw(window,dist * y,20,"%s",names[*count]);
-        y++;
-        *count += 1;
-    }
-    wrefresh(window);
-    return;
-    
-}
-
 void printQ9(bool f,int dist,int npp,int * index,char ** ids,char ** names,int max){
-    
+    int yChunk = 1;
+    if(f == false){
+        while(yChunk - 1 < npp && *index < max){
+            mvwprintw(terminal,dist * yChunk,20,"%s;%s",ids[*index],names[*index]);
+            yChunk++;
+            *index += 1;
+        }
+        wrefresh(terminal);
+        return;
+    }
+    while(yChunk - 1 < npp && *index < max){
+        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*index + 1);
+        mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",ids[*index]);
+        mvwprintw(terminal,(dist * yChunk) + 2,20,"name: %s",names[*index]);
+        yChunk++;
+        *index += 1;
+    }
+    wrefresh(terminal);
 }
+
 
 // FALTA ATUALIZAR
 void navigatePages(WINDOW * window,int height,int width,int nPerPage,int size,char ** names,bool f){
