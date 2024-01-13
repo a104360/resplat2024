@@ -6,15 +6,24 @@
 #include "../include/passengers.h"
 #include "../include/statistics.h"
 #include "../include/testes.h"
+#include "../include/ui.h"
 #include <locale.h>
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
+#include <ncurses.h>
 
 #define BUFFERSIZE 1000
 
+bool interactive = false;
+
 int main(int argc,char **argv){
     setlocale(LC_COLLATE, "en_US.UTF-8");
+    if(argc == 1){
+        interactive = true;
+        printf("Modo interativo em desenvolvimento\n");
+        return 0;
+    }
     if(argc == 3){
         if (argc < 2) {
             perror("Nao existe argumentos");
@@ -70,6 +79,7 @@ int main(int argc,char **argv){
 
 
             uBuffer = userCheck(userDataClean); // malloc
+
 
             if(uBuffer != NULL){
                 insertOnDatabase(uDatabase,getUserId(uBuffer),uBuffer);

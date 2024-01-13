@@ -12,50 +12,56 @@
 //inteiro que representa a Query q está a ser respondida
 static int commandAtual = 0;
 
+extern bool interactive;
 
 //user
 void outputQ1User(int F, char * name, char sex, int age, char * country_code , char * passport , char * number_of_flights, char * number_of_reservations, char * total_spent){
 
     commandAtual++;
 
-    char fileName[50];
+    if(interactive == false){
 
-    memset(fileName,'\0',50);
+        char fileName[50];
 
-    snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
+        memset(fileName,'\0',50);
 
-    FILE * outputFile = fopen(fileName, "a");
-    if(outputFile == NULL){
-        perror("!!!File did not opened!!!\n");
+        snprintf(fileName, 49, "Resultados/command%d_output.txt", commandAtual);
+
+        FILE * outputFile = fopen(fileName, "a");
+        if(outputFile == NULL){
+            perror("!!!File did not opened!!!\n");
+            return;
+        }
+
+        if(name == NULL){
+            if(outputFile != NULL) fclose(outputFile);
+            return;
+        }
+
+        if(F == 0){
+            fprintf(outputFile, "%s;", name);
+            fprintf(outputFile, "%c;", sex);
+            fprintf(outputFile, "%d;", age);
+            fprintf(outputFile, "%s;", country_code);
+            fprintf(outputFile, "%s;", passport);
+            fprintf(outputFile, "%s;", number_of_flights);
+            fprintf(outputFile, "%s;", number_of_reservations);
+            fprintf(outputFile, "%s\n", total_spent);
+        }else{
+            fprintf(outputFile, "--- 1 ---\n");
+            fprintf(outputFile, "name: %s\n", name);
+            fprintf(outputFile, "sex: %c\n", sex);
+            fprintf(outputFile, "age: %d\n", age);
+            fprintf(outputFile, "country_code: %s\n", country_code);
+            fprintf(outputFile, "passport: %s\n", passport);
+            fprintf(outputFile, "number_of_flights: %s\n", number_of_flights);
+            fprintf(outputFile, "number_of_reservations: %s\n", number_of_reservations);
+            fprintf(outputFile, "total_spent: %s\n", total_spent);
+        }
+        fclose(outputFile);
         return;
     }
-
-    if(name == NULL){
-        if(outputFile != NULL) fclose(outputFile);
-        return;
-    }
-
-    if(F == 0){
-        fprintf(outputFile, "%s;", name);
-        fprintf(outputFile, "%c;", sex);
-        fprintf(outputFile, "%d;", age);
-        fprintf(outputFile, "%s;", country_code);
-        fprintf(outputFile, "%s;", passport);
-        fprintf(outputFile, "%s;", number_of_flights);
-        fprintf(outputFile, "%s;", number_of_reservations);
-        fprintf(outputFile, "%s\n", total_spent);
-    }else{
-        fprintf(outputFile, "--- 1 ---\n");
-        fprintf(outputFile, "name: %s\n", name);
-        fprintf(outputFile, "sex: %c\n", sex);
-        fprintf(outputFile, "age: %d\n", age);
-        fprintf(outputFile, "country_code: %s\n", country_code);
-        fprintf(outputFile, "passport: %s\n", passport);
-        fprintf(outputFile, "number_of_flights: %s\n", number_of_flights);
-        fprintf(outputFile, "number_of_reservations: %s\n", number_of_reservations);
-        fprintf(outputFile, "total_spent: %s\n", total_spent);
-    }
-    fclose(outputFile);
+    
 }
 
 
@@ -137,7 +143,6 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
         if(includes_breakfast == 0){
             fprintf(outputFile, "False;");
         }else fprintf(outputFile, "True;");
-        //fprintf(outputFile, "%d;", includes_breakfast);
         fprintf(outputFile, "%d;", nights);
         fprintf(outputFile, "%.3f\n", total_price);
     }else{
@@ -150,7 +155,6 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
         if(includes_breakfast == 0){
             fprintf(outputFile, "includes_breakfast: False\n");
         }else fprintf(outputFile, "includes_breakfast: True\n");
-        //fprintf(outputFile, "includes_breakfast: %d\n", includes_breakfast);
         fprintf(outputFile, "nights: %d\n", nights);
         fprintf(outputFile, "total_price: %.3f\n", total_price);
     }
@@ -547,7 +551,7 @@ void outputQ5(bool f, Flight ** fList,int max){
 }
 
 
-void outputQ6(bool f,const int n, char ** names, int * number){
+void outputQ6(bool f,int n, char ** names, int * number){
     commandAtual++;
 
     char fileName[50];

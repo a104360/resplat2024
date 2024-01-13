@@ -572,14 +572,13 @@ User * userCheck(const char * line){
     setUserPayMethod(user,payMethod);
     ffree((void **) &payMethod);
     TOKENIZE(token,saveptr);
-
-    //check user accountStatus
+    
     char * string = accStatusCheck(token);
     if(string == NULL) {
         ffree((void **) &string);
         ERRORSU(aux,user);
     }
-    if(strcoll(string,"active") == 0){setUserAccountStatus(user,true);}else {setUserAccountStatus(user,false);} 
+    if(strcasecmp(string,"active") == 0){setUserAccountStatus(user,true);}else {setUserAccountStatus(user,false);} 
     ffree((void **) &string);
     
 

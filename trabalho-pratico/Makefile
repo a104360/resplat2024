@@ -25,6 +25,9 @@ $(EXE): $(OBJ)
 programa-testes: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) 
 
+menu: $(EXE)
+	./$(EXE)
+
 run: $(EXE)
 	./$(EXE) ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt
 

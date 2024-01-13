@@ -30,7 +30,7 @@ Temporary * getAListOfSomething(void * database,const char * hotelId,Time * begi
 
 
 Temporary * getUserFlights(void * fDatabase,void * travels,const char * userId){
-    Database * allFlights = (Database *) fDatabase;
+    Flights * allFlights = (Flights *) fDatabase;
     Passengers * pDatabase = (Passengers *) travels;
 
     Temporary * book = createTemporary();
@@ -53,15 +53,12 @@ Temporary * getUserFlights(void * fDatabase,void * travels,const char * userId){
             char * pFId = getPassengerFlightId((Passenger *) list[passengersList]);
             Flight * flight = (Flight *) lookupElement(allFlights,pFId);
             if(flight){
-                //tList[getTempNum(book)] = (void *) flight;
                 setTempListElement(book,(void *) flight,i);
                 incTempNum(book);
             }
             ffree((void **) &pFId);
             i++;
         }
-        //free(pUId);
-        //pUId = NULL;
         ffree((void **) &pUId);
     }
     ffree((void **) &list);
@@ -502,7 +499,6 @@ void checkPre(gpointer key, gpointer value, gpointer data){
     char * userName = getUserName(user);
     char * userIdClone = getUserId(user);
     char * prefix = getTempId(temp);
-    //SingularRecord * aux = (SingularRecord *) getTempAux(temp);
 
 
     int preSize = strlen(prefix);
@@ -514,20 +510,6 @@ void checkPre(gpointer key, gpointer value, gpointer data){
         setTempListElement(temp,userName,max);
         setTempAuxElement(temp,userIdClone,max);
         setTempMax(temp,max+1);
-    }
-
-    /*
-    for(int i = 0; prefix[i]; i++){
-        preSize ++;
-    }
-
-    userId[preSize] = '\0';
-
-    if(strcmp(userId,prefix)==0){
-        int max = getSRecordSize(aux);
-        setSRecordName(aux,max,userIdClone);
-        setSRecordSize(aux,max+1);
-    }*/
-    
+    }    
     ffree((void **) &userId);
 }

@@ -78,6 +78,16 @@ char * getSecondParam(const char * line){
 
 
 
+void readInput(const Users * uDatabase,const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,const char * line){
+    if(line[1] == '0'){
+        if(line[2] == 'F'){
+            query10(&line[4]);
+        }
+    }
+}
+
+
+
 void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,int agrc, char **argv){
     if(uDatabase == NULL || rDatabase == NULL || fDatabase == NULL || pDatabase == NULL) return;
     FILE * comandos = fopen(argv[2],"r");

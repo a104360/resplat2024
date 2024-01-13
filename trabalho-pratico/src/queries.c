@@ -13,8 +13,6 @@
 #define BUFFERSIZE 100
 
 void query1(const Users * uDatabase, const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,const char * id,bool f){
-    //int rDatabaseSize = getDatabaseSize(rDatabase);
-    //int fDatabaseSize = getDatabaseSize(fDatabase);
     char * analisa = malloc(sizeof(char) * 5);
     strncpy(analisa,id,4);
     analisa[4] = '\0';
@@ -144,8 +142,6 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
 }
 
 void query2(const Users * uDatabase, const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,const char * line,bool F){
-    //int rDatabaseSize = getDatabaseSize(rDatabase);
-    //int fDatabaseSize = getDatabaseSize(fDatabase);
     char * SRecord = strdup(line);
     char * token = NULL;
     char * saveprt = NULL;
