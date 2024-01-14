@@ -52,4 +52,7 @@ char * getSecondParam(const char *);
 */
 void readEntryFile(const Users *,const Reservations *,const Flights *,const Passengers *,int, char **,double *);
 
+
+void readQuery(const Users *,const Reservations *,const Flights *,const Passengers *,char *);
+
 #endif

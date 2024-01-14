@@ -1,4 +1,5 @@
 #include "../include/ui.h"
+#include "../include/statistics.h"
 #include <ncurses.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -7,6 +8,10 @@
 #include <string.h>
 
 WINDOW * terminal;
+int dist;
+
+#define NEWPAGE wclear(terminal);\
+    box(terminal,0,0);
 
 static WINDOW * drawMainMenu(int bWidth, int bHeight) {
     int width = bWidth * 0.70;
@@ -65,13 +70,57 @@ static void newSearch(WINDOW * search,char * buffer,int max){
 }
 
 static bool checkPath(const char * path){
-    char * dup = strdup(path);
-    dup[6] = '\0';
-    if(strcoll(dup,"../../") != 0){
-        free(dup);
+    int size = strlen(path);
+    char * buffer = malloc(sizeof(char) * (size + 20));
+    memset(buffer,'\0',size + 20);
+    strncpy(buffer,path,size);
+    
+    if(path[size-1] == '/') strncat(buffer,"users.csv",9);
+    else strncat(buffer,"/users.csv",10);
+    FILE * test = fopen(buffer,"r");
+    if(test == NULL){
+        free(buffer);
         return false;
     }
-    free(dup);
+    fclose(test);
+
+    memset(buffer,'\0',size + 20);
+    strncpy(buffer,path,size);
+    
+    if(path[size-1] == '/') strncat(buffer,"reservations.csv",9);
+    else strncat(buffer,"/reservations.csv",10);
+    FILE * test = fopen(buffer,"r");
+    if(test == NULL){
+        free(buffer);
+        return false;
+    }
+    fclose(test);
+
+    memset(buffer,'\0',size + 20);
+    strncpy(buffer,path,size);
+    
+    if(path[size-1] == '/') strncat(buffer,"flights.csv",9);
+    else strncat(buffer,"/flights.csv",10);
+    FILE * test = fopen(buffer,"r");
+    if(test == NULL){
+        free(buffer);
+        return false;
+    }
+    fclose(test);
+
+    memset(buffer,'\0',size + 20);
+    strncpy(buffer,path,size);
+    
+    if(path[size-1] == '/') strncat(buffer,"passengers.csv",9);
+    else strncat(buffer,"/passengers.csv",10);
+    FILE * test = fopen(buffer,"r");
+    if(test == NULL){
+        free(buffer);
+        return false;
+    }
+    fclose(test);
+
+    free(buffer);
     return true;
 }
 
@@ -87,8 +136,8 @@ static bool checkMode(const char * mode){
 }
 
 static bool checkQuery(const char * line){
-    if(line[0] == '1') return true;
-    return false;
+    if(isdigit(line[0]) != isdigit('0')) return false;
+    return true;
 }
 
 static char * getPath(WINDOW * search,int yW, int xW,int heightW,int widthW){
@@ -145,11 +194,10 @@ static bool getMode(WINDOW * search,int yW, int xW,int heightW,int widthW){
 
 
 
-void printQ1User(int dist,int F, char * name, char sex, int age, char * country_code , 
+void printQ1User(bool F, char * name, char sex, int age, char * country_code , 
             char * passport , char * number_of_flights, char * number_of_reservations, char * total_spent){
     noecho();
-    wclear(terminal);
-    box(terminal,0,0);
+    NEWPAGE;
     if(F == false)mvwprintw(terminal,dist,20,"%s;%c;%d;%s;%s;%s;%s,%s",name,sex,age,country_code,passport,number_of_flights,number_of_reservations,total_spent);
     else {
         mvwprintw(terminal,dist,20,"--- 1 ---");
@@ -165,12 +213,11 @@ void printQ1User(int dist,int F, char * name, char sex, int age, char * country_
     wrefresh(terminal);
 }
 
-void printQ1Flight(int dist,int F, char * airline, char * plane_model , char * origin, 
+void printQ1Flight(bool F, char * airline, char * plane_model , char * origin, 
             char * destination,char * schedule_departure_date , char * schedule_arrival_date, int passengers, int delay){
 
     noecho();
-    wclear(terminal);
-    box(terminal,0,0);
+    NEWPAGE;
     if(F == false)mvwprintw(terminal,dist,20,"%s;%s;%s;%s;%s;%s;%d;%d",airline,plane_model,origin,destination,schedule_departure_date,schedule_arrival_date,passengers,delay);
     else {
         mvwprintw(terminal,dist,20,"--- 1 ---");
@@ -186,11 +233,10 @@ void printQ1Flight(int dist,int F, char * airline, char * plane_model , char * o
     wrefresh(terminal);
 }
 
-void printQ1Reservation(int dist,int F, char * hotel_id, char * hotel_name , int hotel_stars, char * begin_date , char * end_date , 
+void printQ1Reservation(bool F, char * hotel_id, char * hotel_name , int hotel_stars, char * begin_date , char * end_date , 
             bool includes_breakfast, int nights, double total_price){
     noecho();
-    wclear(terminal);
-    box(terminal,0,0);
+    NEWPAGE;
     if(F == false){
         if(includes_breakfast == true) mvwprintw(terminal,dist,20,"%s;%s;%d;%s;%s;True;%d;%.3f",hotel_id,hotel_name,hotel_stars,begin_date,end_date,nights,total_price);
         else mvwprintw(terminal,dist,20,"%s;%s;%d;%s;%s;False;%d;%.3f",hotel_id,hotel_name,hotel_stars,begin_date,end_date,nights,total_price);
@@ -211,7 +257,11 @@ void printQ1Reservation(int dist,int F, char * hotel_id, char * hotel_name , int
 }
 
 
-void printQ2(bool f,int * command,int dist,int npp,Reservation ** reservations,int n1,int * rCount, Flight ** flights,int n2,int * fCount){
+void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int * rCount, Flight ** flights,int n2,int * fCount){
+    NEWPAGE;
+    if(*command < 1) *command = 1;
+    if(*rCount < 0) *rCount = 0;
+    if(*fCount < 0) *fCount = 0;
     int yChunk = 1;
     if(f == false){ // Normal Mode
         if(reservations && n1 > 0 && flights && n2 > 0){ // There is both reservations and flights to be written
@@ -318,7 +368,7 @@ void printQ2(bool f,int * command,int dist,int npp,Reservation ** reservations,i
                         char * time = timeToString(fTime);
                         time[10] = '\0';
                         char * fId = getFlightId(flights[*fCount]);
-                        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",command);
+                        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command);
                         mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",fId);
                         mvwprintw(terminal,(dist * yChunk) + 2,20,"date: %s",time);
                         mvwprintw(terminal,(dist * yChunk) + 3,20,"type: flight");
@@ -332,7 +382,7 @@ void printQ2(bool f,int * command,int dist,int npp,Reservation ** reservations,i
                         char * time = timeToString(rTime);
                         time[10] = '\0';
                         char * rId = getReservId(reservations[*rCount]);
-                        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",command);
+                        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command);
                         mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",rId);
                         mvwprintw(terminal,(dist * yChunk) + 2,20,"date: %s",time);
                         mvwprintw(terminal,(dist * yChunk) + 3,20,"type: reservation");
@@ -353,7 +403,7 @@ void printQ2(bool f,int * command,int dist,int npp,Reservation ** reservations,i
                         char * time = timeToString(rTime);
                         time[10] = '\0';
                         char * rId = getReservId(reservations[*rCount]);
-                        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",command + 1);
+                        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command + 1);
                         mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",rId);
                         mvwprintw(terminal,(dist * yChunk) + 2,20,"date: %s",time);
                         mvwprintw(terminal,(dist * yChunk) + 3,20,"type: reservation");
@@ -373,7 +423,7 @@ void printQ2(bool f,int * command,int dist,int npp,Reservation ** reservations,i
                         char * time = timeToString(fTime);
                         time[10] = '\0';
                         char * fId = getFlightId(flights[*fCount]);
-                        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",command + 1);
+                        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command + 1);
                         mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",fId);
                         mvwprintw(terminal,(dist * yChunk) + 2,20,"date: %s",time);
                         mvwprintw(terminal,(dist * yChunk) + 3,20,"type: flight");
@@ -397,7 +447,7 @@ void printQ2(bool f,int * command,int dist,int npp,Reservation ** reservations,i
                     char * time = timeToString(rTime);
                     time[10] = '\0';
                     char * rId = getReservId(reservations[*rCount]);
-                    mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",command);
+                    mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command);
                     mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",rId);
                     mvwprintw(terminal,(dist * yChunk) + 2,20,"date: %s",time);
                     yChunk++;
@@ -415,7 +465,7 @@ void printQ2(bool f,int * command,int dist,int npp,Reservation ** reservations,i
                     char * time = timeToString(fTime);
                     time[10] = '\0';
                     char * fId = getFlightId(flights[*fCount]);
-                    mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",command + 1);
+                    mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command + 1);
                     mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",fId);
                     mvwprintw(terminal,(dist * yChunk) + 2,20,"date: %s",time);
                     yChunk++;
@@ -434,7 +484,8 @@ void printQ2(bool f,int * command,int dist,int npp,Reservation ** reservations,i
 
 
 
-void printQ3(bool f,int dist,double rating){
+void printQ3(bool f,double rating){
+    NEWPAGE;
     if(f == false){
         mvwprintw(terminal,dist,20,"%.3f",rating);
         wrefresh(terminal);
@@ -446,7 +497,9 @@ void printQ3(bool f,int dist,double rating){
 }
 
 
-void printQ4(bool f,int dist,int npp,int * index,Reservation ** reservation,int max){
+void printQ4(bool f,int npp,int * index,Reservation ** reservation,int max){
+    NEWPAGE;
+    if(*index < 0) *index = 0;
     int yChunk = 1;
     if(f == false){
         while(*index < max && yChunk - 1 < npp){
@@ -460,7 +513,7 @@ void printQ4(bool f,int dist,int npp,int * index,Reservation ** reservation,int 
                 int rating = getReservRating(reservation[*index]);
                 int n = numberOfDays(bTime,eTime);
 
-                mvwprintw(terminal,dist * yChunk,20,"%s;%s;%s;%s;%d;%0.3f",id,stringBTime,stringETime,uId,rating,getTotalSpentOnReserv(reservation[*index],n));
+                mvwprintw(terminal,dist * yChunk,20,"%s;%s;%s;%s;%d;%.3f",id,stringBTime,stringETime,uId,rating,getTotalSpentOnReserv(reservation[*index],n));
 
                 ffree((void **) &id);
                 ffree((void **) &stringBTime);
@@ -506,7 +559,9 @@ void printQ4(bool f,int dist,int npp,int * index,Reservation ** reservation,int 
     }
 }
 
-void printQ5(bool f,int dist,int npp,int* index,Flight** flight,int max){
+void printQ5(bool f,int npp,int* index,Flight** flight,int max){
+    NEWPAGE;
+    if(*index < 0) *index = 0;
     int yChunk = 1;
     if(f == false){
         while(*index < max && yChunk - 1 < npp){
@@ -562,7 +617,9 @@ void printQ5(bool f,int dist,int npp,int* index,Flight** flight,int max){
     wrefresh(terminal);
 }
 
-void printQ6(bool f,int dist,int npp,int * index,int max,char ** names,int * passengers){
+void printQ6(bool f,int npp,int * index,int max,char ** names,int * passengers){
+    NEWPAGE;
+    if(*index < 0) *index = 0;
     int yChunk = 1;
     if(f == false){
         while(yChunk - 1 < npp && *index < max){
@@ -588,7 +645,9 @@ void printQ6(bool f,int dist,int npp,int * index,int max,char ** names,int * pas
     wrefresh(terminal);
 }
 
-void printQ7(bool f,int dist,int npp,int * index,SingularRecord * table,int max){
+void printQ7(bool f,int npp,int * index,SingularRecord * table,int max){
+    NEWPAGE;
+    if(*index < 0) *index = 0;
     int yChunk = 1;
     if(f == false){
         while(yChunk - 1 < npp && *index < max){
@@ -605,9 +664,9 @@ void printQ7(bool f,int dist,int npp,int * index,SingularRecord * table,int max)
     while(yChunk - 1 < npp && *index < max){
         char * airport = getSRecordName(table,*index);
         int delay = getSRecordListElement(table,*index);
-        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---");
+        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*index + 1);
         mvwprintw(terminal,(dist * yChunk) + 1,20,"name: %s",airport);
-        mvwprintw(terminal,(dist * yChunk) + 2,20,"median: %s",delay);
+        mvwprintw(terminal,(dist * yChunk) + 2,20,"median: %d",delay);
         ffree((void **) &airport);
         yChunk++;
         *index += 1;
@@ -615,18 +674,20 @@ void printQ7(bool f,int dist,int npp,int * index,SingularRecord * table,int max)
     wrefresh(terminal);
 }
 
-void printQ8(bool f,int dist,int revenue){
+void printQ8(bool f,int revenue){
+    NEWPAGE;
     if(f == false){
         mvwprintw(terminal,dist,20,"%d",revenue);
         wrefresh(terminal);
         return;
     }
     mvwprintw(terminal,dist,20,"--- 1 ---");
-    mvwprintw(terminal,dist + 1,"revenue: %d",revenue);
+    mvwprintw(terminal,dist + 1,20,"revenue: %d",revenue);
     wrefresh(terminal);
 }
 
-void printQ9(bool f,int dist,int npp,int * index,char ** ids,char ** names,int max){
+void printQ9(bool f,int npp,int * index,char ** ids,char ** names,int max){
+    NEWPAGE;
     int yChunk = 1;
     if(f == false){
         while(yChunk - 1 < npp && *index < max){
@@ -647,106 +708,15 @@ void printQ9(bool f,int dist,int npp,int * index,char ** ids,char ** names,int m
     wrefresh(terminal);
 }
 
-
-// FALTA ATUALIZAR
-void navigatePages(WINDOW * window,int height,int width,int nPerPage,int size,char ** names,bool f){
-    noecho();
-    keypad(window,TRUE);
-    int dist = (height - nPerPage) / (nPerPage + 1);
-    int count = 0;
-    int y = 1;
-    wclear(window);
-    box(window,0,0);
-    wrefresh(window);
-    refresh();
-    if(f == false){
-        printPageNF(window,&count,dist,nPerPage,names,size);
-        int ch = getch();
-        while(ch != 'q'){
-            if((ch == 's' || ch == KEY_DOWN) && count < size){
-                printPageNF(window,&count,dist,nPerPage,names,size);
-                wrefresh(window);
-                ch = getch();
-                continue;
-            }
-            if(ch == 'w' || ch == KEY_UP){
-                wclear(window);
-                box(window,0,0);
-                count -= nPerPage * 2;
-                if(count < 0) count = 0;
-                printPageNF(window,&count,dist,nPerPage,names,size);
-                wrefresh(window);
-                ch = getch();
-                continue;
-            }
-            else{
-                ch = getch();
-                continue;
-            }
-        }
-    }else{
-        mvwprintw(window,dist * y - 1, 20,"---%d---",count + 1);
-        mvwprintw(window,dist * y, 20,"%s",names[count]);
-        y++;
-        count++;
-        while(((count % nPerPage) != 0) && count < size){
-            mvwprintw(window,dist * y - 1, 20,"---%d---",count + 1);
-            mvwprintw(window,dist * y,20,"%s",names[count]);
-            y++;
-            count++;
-        }
-        wrefresh(window);
-        int ch = getch();
-        while(ch != 'q'){
-            if((ch == 's' || ch == KEY_DOWN) && count < size){
-                wclear(window);
-                box(window,0,0);
-                y = 1;
-                mvwprintw(window,dist * y - 1, 20,"---%d---",count + 1);
-                mvwprintw(window,dist * y,20,"%s",names[count]);
-                y++;
-                count++;
-                while(((count % nPerPage) != 0) && count < size){
-                    mvwprintw(window,dist * y - 1, 20,"---%d---",count + 1);
-                    mvwprintw(window,dist * y,20,"%s",names[count]);
-                    y++;
-                    count++;
-                }
-                wrefresh(window);
-                ch = getch();
-                continue;
-            }
-            if(ch == 'w' || ch == KEY_UP){
-                wclear(window);
-                box(window,0,0);
-                count -= nPerPage * 2;
-                if(count < 0) count = 0;
-                y = 1;
-                mvwprintw(window,dist * y - 1, 20,"---%d---",count + 1);
-                mvwprintw(window,dist * y,20,"%s",names[count]);
-                y++;
-                count++;
-                while(((count % nPerPage) != 0) && count < size){
-                    mvwprintw(window,dist * y - 1, 20,"---%d---",count + 1);
-                    mvwprintw(window,dist * y,20,"%s",names[count]);
-                    y++;
-                    count++;
-                }
-                wrefresh(window);
-                ch = getch();
-                continue;
-            }
-            else{
-                ch = getch();
-                continue;
-            }
-        }
-    }
-    wclear(window);
+int getInput(){
+    int ch = getch();
+    if(ch == 'q') return 0;
+    if(ch == 'w' || ch == KEY_UP) return 1;
+    if(ch == 's' || ch == KEY_DOWN) return -1;
+    return 10;
 }
 
-
-void interactive(){
+void menus(){
     initscr();
     cbreak();
     keypad(stdscr,true);
@@ -764,7 +734,7 @@ void interactive(){
     const int xW = 0.16 * scrWidth;
     const int yW = 0.06 * scrHeight;
 
-
+    dist = (height - 5) / (5 + 1);
 
     terminal = drawMainMenu(width,height);
     keypad(terminal,true);

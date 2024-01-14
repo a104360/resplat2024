@@ -1,3 +1,9 @@
+#include <locale.h>
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+#include "../../../../../../usr/include/linux/time.h"
+#include <sys/resource.h>
 #include "../include/parser.h"
 #include "../include/interpreter.h"
 #include "../include/user.h"
@@ -7,16 +13,10 @@
 #include "../include/statistics.h"
 #include "../include/testes.h"
 #include "../include/ui.h"
-#include <locale.h>
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-#include <time.h>
-#include <sys/resource.h>
 
 #define BUFFERSIZE 1000
 
-bool interactive = false;
+bool interactive = false;   
 
 int main(int argc,char **argv){
 
@@ -35,10 +35,6 @@ int main(int argc,char **argv){
         return 0;
     }
     if(argc == 3){
-        if (argc < 2) {
-            perror("Nao existe argumentos");
-            return 1;
-        }
         size_t argSize = 0;
         argSize = strlen(argv[1]);
         char * filePath = NULL;

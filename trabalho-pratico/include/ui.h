@@ -5,83 +5,42 @@
 #include "../include/reservation.h"
 #include "../include/singularRecord.h"
 
-/**
- * @brief Draws the box for the main menu
- * @param width Width of the background screen
- * @param height Height of the background screen
-*/
-WINDOW * drawMainMenu(int,int);
+void printQ1User(bool,char *,char,int,char *,char *,char *,char *,char *);
+
+void printQ1Flight(bool, char *, char *, char *,char *,char *,char *,int,int);
+
+void printQ1Reservation(bool,char *,char *,int, char *, char *,bool,int,double);
 
 /**
- * @brief Draws the box for the user input
- * @param width Width of the background screen
- * @param height Height of the background screen
+ * @brief Prints chuncks of the query 2
+ * @param f Mode
+ * @param command Number of the command to be displayed
+ * @param npp Number of chunks per page
+ * @param reservations Reservations to be displayed
+ * @param n1 Number of reservations
+ * @param rCount Index of reservations
+ * @param flights Flights to be displayed
+ * @param n2 Number of flights
+ * @param fCount Index of flights
 */
-WINDOW * drawSearchBox(int, int);
+void printQ2(bool,int *,int,Reservation **,int,int *,Flight **,int,int *);
 
-/**
- * @brief Writes on the middle of the window 
- * a message to request something
- * @param window Pointer to the WINDOW structure where 
- * it will be displayed;
- * @param width Width of the window which will display 
- * the message
- * @param message Pointer of the string to be displayed
- * @note The message must be short 
-*/
-void requestSomething(WINDOW *,int,int,const char *);
+void printQ3(bool,double);
 
+void printQ4(bool,int,int *,Reservation **,int);
 
-void warning(int,int,int,int,const char *);
+void printQ5(bool,int,int*,Flight**,int);
 
-void printQ1User(int,int,char *,char,int,char *,char *,char *,char *,char *);
+void printQ6(bool,int,int*,int,char **,int *);
 
-void printQ1Flight(int,int, char *, char *, char *,char *,char *,char *,int,int);
+void printQ7(bool,int,int *,SingularRecord *,int);
 
-void printQ1Reservation(int,int,char *,char *,int, char *, char *,bool,int,double);
+void printQ8(bool,int);
 
-void printQ2(bool,int *,int,int,Reservation **,int,int *,Flight **,int,int *);
+void printQ9(bool,int,int *,char **,char **,int);
 
-void printQ3(bool,int,double);
+int getInput();
 
-void printQ4(bool,int,int,int *,Reservation **,int);
-
-void printQ5(bool,int,int,int*,Flight**,int);
-
-void printQ6(bool,int,int,int*,int,char **,int *);
-
-void printQ7(bool,int,int,int *,SingularRecord *,int);
-
-void printQ8(bool,int,int);
-
-void printQ9(bool,int,int,int *,char **,char **,int);
-
-void resquestMode();
-
-void requestQuery();
-
-void queryWarning();
-
-void pathWarining();
-
-void drawQueryWindow();
-
-void drawQuery1(); 
-
-void drawQuery2(); 
-
-void drawQuery3(); 
-
-void drawQuery4(); 
-
-void drawQuery5(); 
-
-void drawQuery6(); 
-
-void drawQuery7(); 
-
-void drawQuery8(); 
-
-void drawQuery9(); 
+void menus();
 
 #endif
