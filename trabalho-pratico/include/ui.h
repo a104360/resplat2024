@@ -43,6 +43,6 @@ void printQ9(bool,int,int *,char **,char **,int);
 
 int getInput();
 
-void menus(const Users *,const Reservations *,const Flights *,const Passengers *);
+void menus();
 
 #endif

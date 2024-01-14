@@ -903,7 +903,7 @@ int getInput(){
     return 10;
 }
 
-void menus(const Users * uDatabase,const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase){
+void menus(){
     initscr();
     cbreak();
     keypad(stdscr,true);
@@ -931,6 +931,16 @@ void menus(const Users * uDatabase,const Reservations * rDatabase,const Flights 
     WINDOW * search = drawSearchBox(width,height);
 
     char * buffer = getPath(search,yW,xW,windowHeight,windowWidth);
+
+    Users * uDatabase = validateUsers(buffer);
+
+    Reservations * rDatabase = validateReservations(uDatabase,buffer);
+
+    Flights * fDatabase = validateFlights(buffer);
+
+
+    Passengers * pDatabase = validatePassengers(uDatabase,fDatabase,buffer);
+
     free(buffer);
     buffer = NULL;
 

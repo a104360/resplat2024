@@ -31,7 +31,8 @@ int main(int argc,char **argv){
     setlocale(LC_COLLATE, "en_US.UTF-8");
     if(argc == 1){
         interactive = true;
-        printf("Modo interativo em desenvolvimento\n");
+        //printf("Modo interativo em desenvolvimento\n");
+        menus();
         return 0;
     }
     if(argc == 3){
