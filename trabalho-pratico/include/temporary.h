@@ -74,6 +74,8 @@ void **getTempList(Temporary *);
 
 char ** getTempListChar(Temporary *);
 
+void setTempListElementChar(Temporary *,char *,int);
+
 const void * getTempListElement(Temporary *,int);
 
 void ** getTempList(Temporary *);
@@ -169,9 +171,11 @@ int getTempMax(Temporary *);
  * @param element Pointer to what will be stored in the struct
  * @note Only use this function when no dates are needed
 */
-void setTempAux(Temporary *,void *);
+void setTempAux(Temporary *,char **);
 
 void setTempAuxElement(Temporary *, void *, int);
+
+void setTempAuxElementChar(Temporary *,char *,int);
 
 /**
  * @brief Gets the pointer stored on the struct

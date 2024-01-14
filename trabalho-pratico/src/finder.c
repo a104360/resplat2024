@@ -475,7 +475,13 @@ Temporary * getUsersPre(void * database, char * prefix){
     setTempId(list,prefix);
     */
     char ** preUsersIds = malloc(sizeof(char*) *10000);
+    for(int j = 0;j < 10000;j++){
+        preUsersIds[j] = NULL;
+    }
     char ** preUsersNames = malloc(sizeof(char*)*10000);
+    for(int j = 0;j < 10000;j++){
+        preUsersNames[j] = NULL;
+    }
 
     Temporary * list = createTemporary();
     setTempAux(list,(void *) preUsersIds);
@@ -497,10 +503,8 @@ void checkPre(gpointer key, gpointer value, gpointer data){
     Temporary * temp = (Temporary *) data;
     char * userId = getUserId(user);
     char * userName = getUserName(user);
-    //char * userNameClone = getUserName(user);
     char * prefix = getTempId(temp);
     bool status = getUserAccountStatus(user);
-    //SingularRecord * aux = (SingularRecord *) getTempAux(temp);
 
 
     int preSize = strlen(prefix);
@@ -508,14 +512,11 @@ void checkPre(gpointer key, gpointer value, gpointer data){
 
     if(nameSize < preSize) return;
 
-    //userId[preSize] = '\0';
 
-
-    //if(strcoll(prefix,userId)==0 && status == 1){
     if(strncmp(userName,prefix,strlen(prefix))==0 && status ==1){
         int max = getTempMax(temp);
-        setTempListElement(temp,userName,max);
-        setTempAuxElement(temp,userId,max);
+        setTempListElementChar(temp,userName,max);
+        setTempAuxElementChar(temp,userId,max);
         setTempMax(temp,max+1);
     }    
     ffree((void **) &userId);

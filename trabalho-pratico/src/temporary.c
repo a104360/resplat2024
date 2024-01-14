@@ -163,8 +163,8 @@ int getTempMax(Temporary * temp){
     return temp->max;
 }
 
-void setTempAux(Temporary * temp,void * element){
-    temp->begin = element;
+void setTempAux(Temporary * temp,char ** element){
+    temp->begin = (void *) element;
 }
 
 void setTempAuxElement(Temporary * temp, void * element, int position){
