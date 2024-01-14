@@ -81,6 +81,11 @@ void setTempList(Temporary * temp,void ** list){
 void setTempListElement(Temporary * temp,void * element,int position){
     temp->list[position] = element;
 }
+void setTempListElementChar(Temporary * temp,char * element,int position){
+    char ** list = (char **) temp->list;
+    if(list[position]) ffree((void **) &list[position]);
+    list[position] = strdup(element);
+}
 
 const void * getTempListElement(Temporary * temp,int position){
     return (const void *) temp->list[position];
@@ -165,6 +170,12 @@ void setTempAux(Temporary * temp,void * element){
 void setTempAuxElement(Temporary * temp, void * element, int position){
     void ** aux = (void **) temp->begin;
     aux[position] = element;
+}
+
+void setTempAuxElementChar(Temporary * temp,char * element,int position){
+    char ** list = (char **) temp->begin;
+    if(list[position]) ffree((void **) &list[position]);
+    list[position] = strdup(element);
 }
 
 void * getTempAux(Temporary * temp){

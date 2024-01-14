@@ -1,8 +1,10 @@
 #ifndef UI_H
 #define UI_H
 #include <ncurses.h>
+#include "../include/user.h"
 #include "../include/flight.h"
 #include "../include/reservation.h"
+#include "../include/passengers.h"
 #include "../include/singularRecord.h"
 
 void printQ1User(bool,char *,char,int,char *,char *,char *,char *,char *);
@@ -41,6 +43,6 @@ void printQ9(bool,int,int *,char **,char **,int);
 
 int getInput();
 
-void menus();
+void menus(const Users *,const Reservations *,const Flights *,const Passengers *);
 
 #endif

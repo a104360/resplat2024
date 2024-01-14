@@ -2,7 +2,7 @@
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
-#include "../../../../../../usr/include/linux/time.h"
+#include <time.h>
 #include <sys/resource.h>
 #include "../include/parser.h"
 #include "../include/interpreter.h"

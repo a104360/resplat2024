@@ -176,6 +176,7 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
             fprintf(outputFile, "total_price: %.3f\n", total_price);
         }
         fclose(outputFile);
+        return;
     }
     printQ1Reservation(F,hotel_id,hotel_name,hotel_stars,begin_date,end_date,includes_breakfast,nights,total_price);
     int input = getInput();
@@ -463,6 +464,7 @@ void outputQ3(bool f,double rating){
             fprintf(outputFile,"%0.3f\n",rating);
         }
         fclose(outputFile);
+        return;
     }
     printQ3(f,rating);
     int input = getInput();
@@ -543,6 +545,7 @@ void outputQ4(bool f,Reservation ** rList,int max){
             }
         }
         fclose(outputFile);
+        return;
     }
     int index = 0;
     printQ4(f,5,&index,rList,max);
@@ -623,6 +626,7 @@ void outputQ5(bool f, Flight ** fList,int max){
             }
         }
         fclose(outputFile);
+        return;
     }
     int index = 0;
     printQ5(f,5,&index,fList,max);
@@ -676,6 +680,7 @@ void outputQ6(bool f,int n, char ** names, int * number){
         }
         
         fclose(outputFile);
+        return;
     }
     int index = 0;
     printQ6(f,5,&index,n,names,number);
@@ -778,6 +783,7 @@ void outputQ8(bool f, int revenue){
             fprintf(outputFile,"%d\n",revenue);
         }
         fclose(outputFile);
+        return;
     }
     printQ8(f,revenue);
     int input = getInput();
@@ -812,6 +818,7 @@ void outputQ9(char ** ids,char ** names,int valids,bool f){
             } 
         }
         fclose(outputFile);
+        return;
     }
     int index = 0;
     printQ9(f,5,&index,ids,names,valids);

@@ -1,5 +1,7 @@
 #include "../include/ui.h"
 #include "../include/statistics.h"
+#include "../include/parser.h"
+#include "../include/interpreter.h"
 #include <ncurses.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -11,7 +13,8 @@ WINDOW * terminal;
 int dist;
 
 #define NEWPAGE wclear(terminal);\
-    box(terminal,0,0);
+    box(terminal,0,0);\
+
 
 static WINDOW * drawMainMenu(int bWidth, int bHeight) {
     int width = bWidth * 0.70;
@@ -75,8 +78,8 @@ static bool checkPath(const char * path){
     memset(buffer,'\0',size + 20);
     strncpy(buffer,path,size);
     
-    if(path[size-1] == '/') strncat(buffer,"users.csv",9);
-    else strncat(buffer,"/users.csv",10);
+    if(path[size-1] == '/') strncat(buffer,"users.csv",10);
+    else strncat(buffer,"/users.csv",11);
     FILE * test = fopen(buffer,"r");
     if(test == NULL){
         free(buffer);
@@ -89,7 +92,7 @@ static bool checkPath(const char * path){
     
     if(path[size-1] == '/') strncat(buffer,"reservations.csv",9);
     else strncat(buffer,"/reservations.csv",10);
-    FILE * test = fopen(buffer,"r");
+    test = fopen(buffer,"r");
     if(test == NULL){
         free(buffer);
         return false;
@@ -101,7 +104,7 @@ static bool checkPath(const char * path){
     
     if(path[size-1] == '/') strncat(buffer,"flights.csv",9);
     else strncat(buffer,"/flights.csv",10);
-    FILE * test = fopen(buffer,"r");
+    test = fopen(buffer,"r");
     if(test == NULL){
         free(buffer);
         return false;
@@ -113,7 +116,7 @@ static bool checkPath(const char * path){
     
     if(path[size-1] == '/') strncat(buffer,"passengers.csv",9);
     else strncat(buffer,"/passengers.csv",10);
-    FILE * test = fopen(buffer,"r");
+    test = fopen(buffer,"r");
     if(test == NULL){
         free(buffer);
         return false;
@@ -124,7 +127,7 @@ static bool checkPath(const char * path){
     return true;
 }
 
-static bool checkMode(const char * mode){
+/*static bool checkMode(const char * mode){
     char * dup = strdup(mode);
     dup[1] = '\0';
     if(!strcasecmp(dup,"t") || !strcasecmp(dup,"f")){
@@ -133,10 +136,194 @@ static bool checkMode(const char * mode){
     }
     free(dup);
     return false;
-}
+}*/
 
 static bool checkQuery(const char * line){
-    if(isdigit(line[0]) != isdigit('0')) return false;
+    char * dup = strdup(line);
+    char * token = NULL;
+    char * saveptr = NULL;
+    token = strtok_r(dup," ",&saveptr);
+    if(strlen(token) > 2){
+        free(dup);
+        return false;
+    }
+    int n = atoi(token);
+    if(token == 0){
+        free(dup);
+        return false;
+    }
+    Time * buffer = NULL;
+    switch (n)
+    {
+    case 1:
+        token = strtok_r(NULL," \n\0",&saveptr);
+        if(token == NULL){
+            free(dup);
+            return false;
+        }
+        free(dup);
+        return true;
+        break;
+
+    case 2:
+        token = strtok_r(NULL," \n\0",&saveptr);
+        if(token == NULL){
+            free(dup);
+            return false;
+        }
+        token = strtok_r(NULL," \n\0",&saveptr);
+        if(token == NULL){
+            free(dup);
+            return true;
+        }
+        if(strcasecmp(token,"flights") != 0 && strcasecmp(token,"reservations") != 0){
+            free(dup);
+            return false;
+        }
+        free(dup);
+        return true;        
+        break;
+    case 3:
+        token = strtok_r(NULL," \n\0",&saveptr);
+        if(!token){
+            free(dup);
+            return false;
+        }
+        free(dup);
+        return true;
+        break;
+    case 4:
+        token = strtok_r(NULL," \n\0",&saveptr);
+        if(!token){
+            free(dup);
+            return false;
+        }
+        free(dup);
+        return true;
+        break;
+    case 5:
+        token = strtok_r(NULL," ",&saveptr); // Name
+        if(!token){
+            free(dup);
+            return false;
+        }
+
+        token = strtok_r(NULL,"\"",&saveptr); // First Date
+        if(!token){
+            free(dup);
+            return false;
+        }
+        buffer = dateCheck(token);
+        if(buffer == NULL){
+            free(dup);
+            return false;
+        }
+        destroyTime(buffer);
+
+        if(saveptr[0] == '\0' || saveptr[0] == '\n' || saveptr[1] == '\0' || saveptr[1] == '\n'){ 
+            free(dup);
+            return false;
+        }
+        saveptr = &saveptr[1]; // Skipping the space between the dates
+
+        token = strtok_r(NULL,"\"",&saveptr); // Second date 
+        if(!token){
+            free(dup);
+            return false;
+        }
+        buffer = dateCheck(token);
+        if(buffer == NULL){
+            free(dup);
+            return false;
+        }
+        destroyTime(buffer);
+
+        free(dup);
+        return true;
+        break;
+    case 6:
+        token = strtok_r(NULL," ",&saveptr); // Year 
+        if(!token){
+            free(dup);
+            return false;
+        }
+        if(atoi(token) == 0){
+            free(dup);
+            return false;
+        }
+
+        token = strtok_r(NULL," \n\0",&saveptr); // N 
+        if(!token){
+            free(dup);
+            return false;
+        }
+        if(atoi(token) == 0){
+            free(dup);
+            return false;
+        }
+        free(dup);
+        return true;
+        break;
+    case 7:
+        token = strtok_r(NULL," \n\0",&saveptr);
+        if(!token){
+            free(dup);
+            return false;
+        }
+        if(atoi(token) == 0){
+            free(dup);
+            return false;
+        }
+        free(dup);
+        return true;
+        break;
+    case 8:
+        token = strtok_r(NULL," \n\0",&saveptr);
+        if(!token){
+            free(dup);
+            return false;
+        }
+        token = strtok_r(NULL," \n\0",&saveptr);
+        if(!token){
+            free(dup);
+            return false;
+        }
+        buffer = dateCheck(token);
+        if(!buffer){
+            free(dup);
+            return false;
+        }
+        destroyTime(buffer);
+
+        token = strtok_r(NULL," \n\0",&saveptr);
+        if(!token){
+            free(dup);
+            return false;
+        }
+        buffer = dateCheck(token);
+        if(!buffer){
+            free(dup);
+            return false;
+        }
+        destroyTime(buffer);
+        free(dup);
+        return true;
+        break;
+    case 9:
+        token = strtok_r(NULL," \n\0",&saveptr);
+        if(!token){
+            free(dup);
+            return false;
+        }
+
+        free(dup);
+        break;
+
+    default:
+        if(dup) free(dup);
+        return false;
+        break;
+    }
     return true;
 }
 
@@ -166,7 +353,7 @@ static char * getQuery(WINDOW * search,int yW, int xW,int heightW,int widthW){
 }
 
 
-static bool getMode(WINDOW * search,int yW, int xW,int heightW,int widthW){
+/*static bool getMode(WINDOW * search,int yW, int xW,int heightW,int widthW){
     char * buffer = malloc(sizeof(char) * 2);
     newSearch(search,buffer,2);
 
@@ -187,7 +374,7 @@ static bool getMode(WINDOW * search,int yW, int xW,int heightW,int widthW){
     wrefresh(search);
     free(buffer);
     return true;
-}
+}*/
 
 
 
@@ -716,7 +903,7 @@ int getInput(){
     return 10;
 }
 
-void menus(){
+void menus(const Users * uDatabase,const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase){
     initscr();
     cbreak();
     keypad(stdscr,true);
@@ -751,15 +938,15 @@ void menus(){
     box(search,0,0);
     wrefresh(search);
 
-    requestSomething(terminal,windowWidth,windowHeight,"Por favor, insira o modo para os outputs(F ou T).");
-
-    bool mode = getMode(search,yW,xW,windowHeight,windowWidth);
-    
     requestSomething(terminal,windowWidth,windowHeight,"Por favor, insira a query e parametros (h para ajuda).");
 
-    char * query = getQuery(search,yW,xW,windowHeight,windowWidth);
+    wclear(search);
+    box(search,0,0);
+    wrefresh(search);
 
+    char * query = getQuery(search,yW,xW,windowHeight,windowWidth);
     
+    readQuery(uDatabase,rDatabase,fDatabase,pDatabase,query);
 
     wclear(terminal);
     delwin(terminal);
