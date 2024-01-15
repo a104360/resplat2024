@@ -78,7 +78,7 @@ char * getSecondParam(const char * line){
 
 
 
-void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,int agrc, char **argv, double * queriesTimes){
+void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,int agrc, char **argv, double * queriesTimes,int * queriesNumExec){
 
     //Time
     struct timespec start, end;
@@ -110,12 +110,16 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
         //QUERIE 1 ou 10
         case '1':
+
+
+            //QUERIE 10
+            if(linhaLimpa[1] == '0'){
+
+            queriesNumExec[9] ++;
             
             //start time
             clock_gettime(CLOCK_REALTIME, &start);
 
-            //QUERIE 10
-            if(linhaLimpa[1] == '0'){
                 if(linhaLimpa[2] == 'F'){
                         query10(&linhaLimpa[4]);
 
@@ -133,6 +137,8 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
             //QUERIE 1
             }else {
+
+                queriesNumExec[0] ++;
 
                 //start time
                 clock_gettime(CLOCK_REALTIME, &start);
@@ -157,6 +163,8 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
         //QUERIE 2
         case '2':
 
+            queriesNumExec[1] ++;
+
             //start time
             clock_gettime(CLOCK_REALTIME, &start);
 
@@ -179,6 +187,8 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
         //QUERIE 3
         case '3':
+
+            queriesNumExec[2] ++;
 
             //start time
             clock_gettime(CLOCK_REALTIME, &start);
@@ -203,6 +213,8 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
         //QUERIE 4
         case '4':
 
+            queriesNumExec[3] ++;
+
             //start time
             clock_gettime(CLOCK_REALTIME, &start);
 
@@ -225,6 +237,8 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
         //QUERIE 5
         case '5':
+
+            queriesNumExec[4] ++;
 
             //start time
             clock_gettime(CLOCK_REALTIME, &start);
@@ -256,6 +270,8 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
         //QUERIE 6
         case '6':
+
+            queriesNumExec[5] ++;
 
             //start time
             clock_gettime(CLOCK_REALTIME, &start);
@@ -289,6 +305,8 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
         //QUERIE 7
         case '7':
 
+            queriesNumExec[6] ++;
+
             //start time
             clock_gettime(CLOCK_REALTIME, &start);
 
@@ -312,6 +330,8 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
         //QUERIE 8
         case '8':
+
+            queriesNumExec[7] ++;
 
             //start time
             clock_gettime(CLOCK_REALTIME, &start);
@@ -366,6 +386,8 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
         //QUERIE 9
         case '9':
+
+            queriesNumExec[8] ++;
 
             //start time
             clock_gettime(CLOCK_REALTIME, &start);
