@@ -526,7 +526,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     char * time = timeToString(rTime);
                     time[10] = '\0';
                     char * rId = getReservId(reservations[*rCount]);
-                    mvwprintw(terminal,dist * yChunk,20,"%s;%s",rId,time);
+                    mvwprintw(terminal,dist * yChunk,20,"%s;%s;reservation",rId,time);
                     yChunk++;
                     *rCount += 1;
                     *command += 1;
@@ -543,7 +543,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     char * time = timeToString(fTime);
                     time[10] = '\0';
                     char * fId = getFlightId(flights[*fCount]);
-                    mvwprintw(terminal,dist * yChunk,20,"%s;%s",fId,time);
+                    mvwprintw(terminal,dist * yChunk,20,"%s;%sflight",fId,time);
                     yChunk++;
                     *fCount += 1;
                     *command += 1;
