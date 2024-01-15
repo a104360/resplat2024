@@ -7,7 +7,7 @@
 #include "../include/passengers.h"
 #include "../include/singularRecord.h"
 
-void printQ1User(bool,char *,char,int,char *,char *,char *,char *,char *);
+void printQ1User(bool,char *,char,int,char *,char *,int,int,double);
 
 void printQ1Flight(bool, char *, char *, char *,char *,char *,char *,int,int);
 

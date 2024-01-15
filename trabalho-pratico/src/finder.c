@@ -56,6 +56,13 @@ Temporary * getUserFlights(void * fDatabase,void * travels,const char * userId){
                 setTempListElement(book,(void *) flight,i);
                 incTempNum(book);
             }
+            char * pFId2 = getPassengerFlightId((Passenger *) list[passengersList + 1]);
+            while(!strcmp(pFId,pFId2)){
+                passengersList++;
+                ffree(pFId2);
+                pFId2 = getPassengerFlightId((Passenger *) list[passengersList]);
+            }
+            ffree(pFId2);
             ffree(pFId);
             i++;
         }
@@ -89,8 +96,9 @@ Temporary * getFlightPassengers(void * fDatabase,void * travels,const char * fli
     for(int passengersList = 0;passengersList < max;passengersList++){
         char * flight_id = getPassengerFlightId(pList[passengersList]);
         if(!strcoll(flight_id,flightId)){
-            setTempListElement(book,(void *) lookupPassengerFID(pDatabase,flight_id),getTempNum(book));
+            //setTempListElement(book,(void *) lookupPassengerFID(pDatabase,flight_id),getTempNum(book));
             incTempNum(book);
+            
         }
         free(flight_id);
     }

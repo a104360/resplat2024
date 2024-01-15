@@ -28,7 +28,7 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
 
         if(getUserAccountStatus(user) == false){
             ffree(analisa);
-            outputQ1User(f,NULL,'\0',0,NULL,NULL,NULL,NULL,NULL);
+            outputQ1User(f,NULL,'\0',0,NULL,NULL,0,0,0);
             return;
         }
 
@@ -39,18 +39,15 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         char * passaport = getUserPassport(user);
 
         Temporary * uFDatabase = getUserFlights((void *) fDatabase,(void *) pDatabase,id);
-        char * number_of_fights = malloc(sizeof(char) * 10);
-        snprintf(number_of_fights,10,"%d",getTempNum(uFDatabase));
+        int number_of_fights = getTempNum(uFDatabase);
+        destroyTemporary(uFDatabase);
 
         Temporary * uRDatabase = getAListOfSomething((void *) rDatabase,id,NULL,NULL,&allUserReservs);
-        char * number_of_reservations = malloc(sizeof(char) * 10);
-        snprintf(number_of_reservations,10,"%d",getTempNum(uRDatabase));
+        int number_of_reservations = getTempNum(uRDatabase);
 
         Reservation ** listReservs = (Reservation **) getTempList(uRDatabase);
-        char * total_spent = malloc(sizeof(char) * 10);
-        snprintf(total_spent,10,"%.3f",getTotalSpentByUser((void **) listReservs,getTempNum(uRDatabase)));
+        double total_spent = getTotalSpentByUser((void **) listReservs,number_of_reservations);
         free(listReservs);
-        destroyTemporary(uFDatabase);
         destroyTemporary(uRDatabase);
         
         outputQ1User((int)f,name,sex,age,country_code,passaport,number_of_fights,number_of_reservations,total_spent);
@@ -58,9 +55,6 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         ffree(name);
         ffree(country_code);
         ffree(passaport);
-        ffree(number_of_fights);
-        ffree(number_of_reservations);
-        ffree(total_spent);
         
         
         break;

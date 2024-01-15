@@ -19,7 +19,7 @@
  * @param numberOfReservations Number of reservations of the user
  * @param totalSpent Total spent by the user
 */
-void outputQ1User(int , char * , char , int , char * , char * , char * , char * , char * );
+void outputQ1User(int , char * , char , int , char * , char * ,int,int,double );
 
 /**
  * @brief Writes on a file the outputs of the query 1, refering to a flight

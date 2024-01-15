@@ -387,10 +387,10 @@ static char * getQuery(WINDOW * search,int yW, int xW,int heightW,int widthW){
 
 
 void printQ1User(bool F, char * name, char sex, int age, char * country_code , 
-            char * passport , char * number_of_flights, char * number_of_reservations, char * total_spent){
+            char * passport , int number_of_flights, int number_of_reservations,double total_spent){
     noecho();
     NEWPAGE;
-    if(F == false)mvwprintw(terminal,dist,20,"%s;%c;%d;%s;%s;%s;%s,%s",name,sex,age,country_code,passport,number_of_flights,number_of_reservations,total_spent);
+    if(F == false)mvwprintw(terminal,dist,20,"%s;%c;%d;%s;%s;%d;%d,%.3f",name,sex,age,country_code,passport,number_of_flights,number_of_reservations,total_spent);
     else {
         mvwprintw(terminal,dist,20,"--- 1 ---");
         mvwprintw(terminal,dist + 1,20,"name: %s",name);
@@ -398,9 +398,9 @@ void printQ1User(bool F, char * name, char sex, int age, char * country_code ,
         mvwprintw(terminal,dist + 3,20,"age: %d",age);
         mvwprintw(terminal,dist + 4,20,"country_code: %s",country_code);
         mvwprintw(terminal,dist + 5,20,"passport: %s",passport);
-        mvwprintw(terminal,dist + 6,20,"number_of_flights: %s",number_of_flights);
-        mvwprintw(terminal,dist + 7,20,"number_of_reservations: %s",number_of_reservations);
-        mvwprintw(terminal,dist + 8,20,"total_spent: %s",total_spent);
+        mvwprintw(terminal,dist + 6,20,"number_of_flights: %d",number_of_flights);
+        mvwprintw(terminal,dist + 7,20,"number_of_reservations: %d",number_of_reservations);
+        mvwprintw(terminal,dist + 8,20,"total_spent: %.3f",total_spent);
     }
     wrefresh(terminal);
 }

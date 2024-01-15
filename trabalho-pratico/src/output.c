@@ -19,7 +19,7 @@ static int commandAtual = 0;
 extern bool interactive;
 
 //user
-void outputQ1User(int F, char * name, char sex, int age, char * country_code , char * passport , char * number_of_flights, char * number_of_reservations, char * total_spent){
+void outputQ1User(int F, char * name, char sex, int age, char * country_code , char * passport , int number_of_flights, int number_of_reservations, double total_spent){
 
     commandAtual++;
 
@@ -48,9 +48,9 @@ void outputQ1User(int F, char * name, char sex, int age, char * country_code , c
             fprintf(outputFile, "%d;", age);
             fprintf(outputFile, "%s;", country_code);
             fprintf(outputFile, "%s;", passport);
-            fprintf(outputFile, "%s;", number_of_flights);
-            fprintf(outputFile, "%s;", number_of_reservations);
-            fprintf(outputFile, "%s\n", total_spent);
+            fprintf(outputFile, "%d;", number_of_flights);
+            fprintf(outputFile, "%d;", number_of_reservations);
+            fprintf(outputFile, "%.3f\n", total_spent);
         }else{
             fprintf(outputFile, "--- 1 ---\n");
             fprintf(outputFile, "name: %s\n", name);
@@ -58,9 +58,9 @@ void outputQ1User(int F, char * name, char sex, int age, char * country_code , c
             fprintf(outputFile, "age: %d\n", age);
             fprintf(outputFile, "country_code: %s\n", country_code);
             fprintf(outputFile, "passport: %s\n", passport);
-            fprintf(outputFile, "number_of_flights: %s\n", number_of_flights);
-            fprintf(outputFile, "number_of_reservations: %s\n", number_of_reservations);
-            fprintf(outputFile, "total_spent: %s\n", total_spent);
+            fprintf(outputFile, "number_of_flights: %d\n", number_of_flights);
+            fprintf(outputFile, "number_of_reservations: %d\n", number_of_reservations);
+            fprintf(outputFile, "total_spent: %.3f\n", total_spent);
         }
         fclose(outputFile);
         return;
