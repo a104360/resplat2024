@@ -23,6 +23,7 @@ int main(int argc,char **argv){
     struct timespec start, end;
     double elapsed;
     double queriesTimes[10] = {0,0,0,0,0,0,0,0,0,0};
+    int queriesNumExec[10] = {0,0,0,0,0,0,0,0,0,0};
     
     //start time
     
@@ -47,7 +48,7 @@ int main(int argc,char **argv){
         Passengers * pDatabase = validatePassengers(uDatabase,fDatabase,argv[1]);
 
 
-        readEntryFile((const Users *) uDatabase,(const Reservations *) rDatabase,(const Flights *) fDatabase,(const Passengers *) pDatabase,argc,argv,queriesTimes);
+        readEntryFile((const Users *) uDatabase,(const Reservations *) rDatabase,(const Flights *) fDatabase,(const Passengers *) pDatabase,argc,argv,queriesTimes,queriesNumExec);
 
         // Free everything used
         destroyPassengers(pDatabase);
@@ -66,7 +67,7 @@ int main(int argc,char **argv){
 
     //queries time
     for(int t = 0; t<10; t++){
-        printf("\nA querie %d demorou %.6f segundos a ser executada.", t+1, queriesTimes[t]);
+        printf("\nA querie %d demorou %.6f segundos a ser executada e foi executada %d vezes", t+1, queriesTimes[t]/queriesNumExec[t], queriesNumExec[t]);
     }
     
     //total time
@@ -76,7 +77,7 @@ int main(int argc,char **argv){
     struct rusage r_usage;
     getrusage(RUSAGE_SELF, &r_usage);
 
-    printf("\n\nO programa usou %ld KB de memória\n", r_usage.ru_maxrss);
+    printf("\n\nO programa usou %ld KB de memória.\n", r_usage.ru_maxrss);
 
     return 0;
 }

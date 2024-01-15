@@ -50,7 +50,7 @@ char * getSecondParam(const char *);
  * @param argc Number of arguments 
  * @param argv Array of arguments provinient of the main function
 */
-void readEntryFile(const Users *,const Reservations *,const Flights *,const Passengers *,int, char **,double *);
+void readEntryFile(const Users *,const Reservations *,const Flights *,const Passengers *,int, char **,double *,int *);
 
 /**
  * @brief Reads the inputs passed by the user on the interactive mode
