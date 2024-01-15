@@ -72,12 +72,32 @@ void setTempListElement(Temporary *, void *, int );
  */
 void **getTempList(Temporary *);
 
+/**
+ * @brief Gets the names stored on an primary pointer
+ * @param temp Pointer to the temporary struct
+*/
 char ** getTempListChar(Temporary *);
 
+/**
+ * @brief Sets a name to a specific position
+ * @param temp Pointer to the temporary struct
+ * @param name Name to be stored in the primary group of names
+ * @param position Position in which the name will be stored
+*/
 void setTempListElementChar(Temporary *,char *,int);
 
+/**
+ * @brief Gets the pointer stored in a specific position
+ * @param temp Pointer to ht temporary struct
+ * @param position Position from which the pointer shall be retrieved
+*/
 const void * getTempListElement(Temporary *,int);
 
+
+/**
+ * @brief Gets all the pointers stored in the struct
+ * @param temp Pointer to the temporary struct
+*/
 void ** getTempList(Temporary *);
 
 
@@ -173,8 +193,21 @@ int getTempMax(Temporary *);
 */
 void setTempAux(Temporary *,char **);
 
+/**
+ * @brief Sets an element on an position
+ * @param temp Pointer to the temporary struct
+ * @param element Pointer to the element to be inserted on the element
+ * @param position Position for the element to be inserted in 
+*/
 void setTempAuxElement(Temporary *, void *, int);
 
+
+/**
+ * @brief Sets a name to the position requested
+ * @param temp Pointer to the temporary struct
+ * @param name Pointer to the name to be inserted on the element
+ * @param position Position for the element to be inserted in 
+*/
 void setTempAuxElementChar(Temporary *,char *,int);
 
 /**
@@ -184,6 +217,12 @@ void setTempAuxElementChar(Temporary *,char *,int);
 */
 void * getTempAux(Temporary *);
 
+
+/**
+ * @brief Gets the names stored on an secondary pointer
+ * @param temp Pointer to the temporary struct
+ * @note This function must not be used when a begin date is being used
+*/
 char ** getTempAuxChar(Temporary *);
 
 #endif

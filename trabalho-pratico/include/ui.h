@@ -43,10 +43,19 @@ void printQ9(bool,int,int *,char **,char **,int);
 
 int getInput();
 
+/**
+ * @brief Control function of the interactive mode
+*/
 void menus();
 
+/**
+ * @brief Turns off the printing of inputs of the user
+*/
 void dontWriteOnScreen();
 
+/**
+ * @brief Turns on the printing of inputs of the user
+*/
 void writeOnScreen();
 
 #endif

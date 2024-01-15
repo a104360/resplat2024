@@ -106,6 +106,14 @@ void outputQ7(bool,SingularRecord * ,int);
 */
 void outputQ8(bool,int);
 
+
+/**
+ * @brief Writes on a text file the outputs of the query 9
+ * @param ids Ids to be written
+ * @param names Names to be written
+ * @param valids Number of names/ids to be written
+ * @param f Mode of the command/output
+*/
 void outputQ9(char **,char**,int,bool);
 
 #endif
