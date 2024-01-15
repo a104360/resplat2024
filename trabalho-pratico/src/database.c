@@ -41,6 +41,6 @@ void applyForEach(void * database,void (*func)(gpointer,gpointer,gpointer),void 
 void destroyDatabase(void * database){
     Database * dBase = (Database *) database;
     g_hash_table_destroy(dBase->table);
-    ffree((void **) &database);
+    ffree(database);
 }
 

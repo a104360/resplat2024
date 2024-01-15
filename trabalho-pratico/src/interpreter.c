@@ -31,7 +31,7 @@ Time * dateQ5(const char * line){
     char * tokenLimpo = limpaToken(aux);
     Time * firstDate = dateCheck(tokenLimpo);
 
-    ffree((void **) &aux);
+    ffree(aux);
 
     return firstDate;
 }
@@ -41,7 +41,7 @@ Time * dateQ8(const char * line){
     char * aux = strndup(line,10);
     Time * firstDate = dateCheck(aux);
 
-    ffree((void **) &aux);
+    ffree(aux);
 
     return firstDate;
 }
@@ -55,7 +55,7 @@ char * airportName(const char * line){
 
     char * temp = strdup(token);
 
-    ffree((void **) &aux);
+    ffree(aux);
     return temp;
 }
 
@@ -69,10 +69,10 @@ char * getSecondParam(const char * line){
     if(token){
         token = strtok_r(NULL," \n\0",&saveptr);
         char * temp = strdup(token);
-        ffree((void **) &aux);
+        ffree(aux);
         return temp;
     }
-    ffree((void **) &aux);
+    ffree(aux);
     return NULL;
 }
 
@@ -188,13 +188,13 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
                     query5((const Flights * ) fDatabase,firstDate,secondDate,airport,true);
                     destroyTime(firstDate);
                     destroyTime(secondDate);
-                    ffree((void **) &airport);
+                    ffree(airport);
                 }else {
                     char * airport = airportName(&line[2]);
                     query5((const Flights * ) fDatabase,firstDate,secondDate,airport,false);
                     destroyTime(firstDate);
                     destroyTime(secondDate);
-                    ffree((void **) &airport);
+                    ffree(airport);
                 }
 
             //end time
@@ -212,16 +212,16 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
                 char * year = airportName(&line[3]);
                 char * nAirports = getSecondParam(&line[3]);
                 query6((const Flights *) fDatabase,(const Passengers *) pDatabase,year,nAirports,true);
-                ffree((void **) &year);
-                ffree((void **) &nAirports);
+                ffree(year);
+                ffree(nAirports);
 
                 
             }else {
                 char * year = airportName(&line[2]);
                 char * nAirports = getSecondParam(&line[2]);
                 query6((const Flights *) fDatabase,(const Passengers *) pDatabase,year,nAirports,false);
-                ffree((void **) &year);
-                ffree((void **) &nAirports);
+                ffree(year);
+                ffree(nAirports);
 
             }
 
@@ -271,7 +271,7 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
 
                     query8((Reservations *) rDatabase,token,firstDate,secondDate,true);
 
-                    ffree((void **) &aux);
+                    ffree(aux);
                     destroyTime(firstDate);
                     destroyTime(secondDate);
                     
@@ -289,7 +289,7 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
 
                     query8((Reservations *) rDatabase,token,firstDate,secondDate,false);
 
-                    ffree((void **) &aux);
+                    ffree(aux);
                     destroyTime(firstDate);
                     destroyTime(secondDate);
                     
@@ -486,13 +486,13 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
                     query5((const Flights * ) fDatabase,firstDate,secondDate,airport,true);
                     destroyTime(firstDate);
                     destroyTime(secondDate);
-                    ffree((void **) &airport);
+                    ffree(airport);
                 }else {
                     char * airport = airportName(&linhaLimpa[2]);
                     query5((const Flights * ) fDatabase,firstDate,secondDate,airport,false);
                     destroyTime(firstDate);
                     destroyTime(secondDate);
-                    ffree((void **) &airport);
+                    ffree(airport);
                 }
 
             //end time
@@ -514,16 +514,16 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
                 char * year = airportName(&linhaLimpa[3]);
                 char * nAirports = getSecondParam(&linhaLimpa[3]);
                 query6((const Flights *) fDatabase,(const Passengers *) pDatabase,year,nAirports,true);
-                ffree((void **) &year);
-                ffree((void **) &nAirports);
+                ffree(year);
+                ffree(nAirports);
 
                 
             }else {
                 char * year = airportName(&linhaLimpa[2]);
                 char * nAirports = getSecondParam(&linhaLimpa[2]);
                 query6((const Flights *) fDatabase,(const Passengers *) pDatabase,year,nAirports,false);
-                ffree((void **) &year);
-                ffree((void **) &nAirports);
+                ffree(year);
+                ffree(nAirports);
 
             }
 
@@ -581,7 +581,7 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
                     query8((Reservations *) rDatabase,token,firstDate,secondDate,true);
 
-                    ffree((void **) &aux);
+                    ffree(aux);
                     destroyTime(firstDate);
                     destroyTime(secondDate);
                     
@@ -599,7 +599,7 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
 
                     query8((Reservations *) rDatabase,token,firstDate,secondDate,false);
 
-                    ffree((void **) &aux);
+                    ffree(aux);
                     destroyTime(firstDate);
                     destroyTime(secondDate);
                     
@@ -642,6 +642,6 @@ void readEntryFile(const Users * uDatabase,const Reservations * rDatabase,const 
             break;
         }
     }
-    ffree((void **) &line);
+    ffree(line);
     fclose(comandos);
 }

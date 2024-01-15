@@ -226,8 +226,8 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                             char * fId = getFlightId(flights[j]);
                             fprintf(outputFile,"%s;%s;flight\n",fId,time);
                             j++;
-                            ffree((void **) &time);
-                            ffree((void **) &fId);
+                            ffree(time);
+                            ffree(fId);
                         }
                         else{ // Reservation is more recent that the flight
                             char * time = timeToString(rTime);
@@ -235,8 +235,8 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                             char * rId = getReservId(reservations[i]);
                             fprintf(outputFile,"%s;%s;reservation\n",rId,time);
                             i++;
-                            ffree((void **) &time);
-                            ffree((void **) &rId);
+                            ffree(time);
+                            ffree(rId);
                         }
                         destroyTime(rTime);
                         destroyTime(fTime);
@@ -248,8 +248,8 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                         char * rId = getReservId(reservations[i]);
                         fprintf(outputFile,"%s;%s;reservation\n",rId,time);
                         i++;
-                        ffree((void **) &time);
-                        ffree((void **) &rId);
+                        ffree(time);
+                        ffree(rId);
                         destroyTime(rTime);
                     }
                     if(i >= n1 && j < n2){ // Reservations array have reached his limit
@@ -259,8 +259,8 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                         char * fId = getFlightId(flights[j]);
                         fprintf(outputFile,"%s;%s;flight\n",fId,time);
                         j++;
-                        ffree((void **) &time);
-                        ffree((void **) &fId);
+                        ffree(time);
+                        ffree(fId);
                         destroyTime(fTime);
                     }
                     count++;
@@ -277,8 +277,8 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                         char * rId = getReservId(reservations[i]);
                         fprintf(outputFile,"%s;%s\n",rId,time);
                         i++;
-                        ffree((void **) &time);
-                        ffree((void **) &rId);
+                        ffree(time);
+                        ffree(rId);
                         destroyTime(rTime);
                     }
                     fclose(outputFile);
@@ -293,8 +293,8 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                         char * fId = getFlightId(flights[j]);
                         fprintf(outputFile,"%s;%s\n",fId,time);
                         j++;
-                        ffree((void **) &time);
-                        ffree((void **) &fId);
+                        ffree(time);
+                        ffree(fId);
                         destroyTime(fTime);
                     }
                     fclose(outputFile);
@@ -319,8 +319,8 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                             fprintf(outputFile,"--- %d ---\n",count + 1);
                             fprintf(outputFile,"id: %s\ndate: %s\ntype: flight\n",fId,time);
                             j++;
-                            ffree((void **) &time);
-                            ffree((void **) &fId);
+                            ffree(time);
+                            ffree(fId);
                         }
                         else{ // Reservation is more recent that the flight
                             char * time = timeToString(rTime);
@@ -329,8 +329,8 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                             fprintf(outputFile,"--- %d ---\n",count + 1);
                             fprintf(outputFile,"id: %s\ndate: %s\ntype: reservation\n",rId,time);
                             i++;
-                            ffree((void **) &time);
-                            ffree((void **) &rId);
+                            ffree(time);
+                            ffree(rId);
                         }
                         destroyTime(rTime);
                         destroyTime(fTime);
@@ -347,8 +347,8 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                             fprintf(outputFile,"id: %s\ndate: %s\ntype: reservation\n",rId,time);
                             i++;
                             count++;
-                            ffree((void **) &time);
-                            ffree((void **) &rId);
+                            ffree(time);
+                            ffree(rId);
                             destroyTime(rTime);
                         }
                         fclose(outputFile);
@@ -366,8 +366,8 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                             fprintf(outputFile,"id: %s\ndate: %s\ntype: flight\n",fId,time);
                             j++;
                             count++;
-                            ffree((void **) &time);
-                            ffree((void **) &fId);
+                            ffree(time);
+                            ffree(fId);
                             destroyTime(fTime);
                         }
                         fclose(outputFile);
@@ -391,8 +391,8 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                         fprintf(outputFile,"--- %d ---\n",r + 1);
                         fprintf(outputFile,"id: %s\ndate: %s\n",rId,time);
                         r++;
-                        ffree((void **) &time);
-                        ffree((void **) &rId);
+                        ffree(time);
+                        ffree(rId);
                         destroyTime(rTime);
                     }
                     fclose(outputFile);
@@ -409,8 +409,8 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                         fprintf(outputFile,"--- %d ---\n",f + 1);
                         fprintf(outputFile,"id: %s\ndate: %s\n",fId,time);
                         f++;
-                        ffree((void **) &time);
-                        ffree((void **) &fId);
+                        ffree(time);
+                        ffree(fId);
                         destroyTime(fTime);
                     }
                     fclose(outputFile);
@@ -539,10 +539,10 @@ void outputQ4(bool f,Reservation ** rList,int max){
                     fprintf(outputFile,"user_id: %s\n",uId);
                     fprintf(outputFile,"rating: %d\n",rating);
                     fprintf(outputFile,"total_price: %0.3f\n",getTotalSpentOnReserv(rList[i],n));
-                    ffree((void **) &id);
-                    ffree((void **) &stringBTime);
-                    ffree((void **) &stringETime);
-                    ffree((void **) &uId);
+                    ffree(id);
+                    ffree(stringBTime);
+                    ffree(stringETime);
+                    ffree(uId);
                     destroyTime(bTime);
                     destroyTime(eTime);
                 }else{
@@ -563,10 +563,10 @@ void outputQ4(bool f,Reservation ** rList,int max){
 
                     fprintf(outputFile,"%s;%s;%s;%s;%d;%0.3f\n",id,stringBTime,stringETime,uId,rating,getTotalSpentOnReserv(rList[i],n));
 
-                    ffree((void **) &id);
-                    ffree((void **) &stringBTime);
-                    ffree((void **) &stringETime);
-                    ffree((void **) &uId);
+                    ffree(id);
+                    ffree(stringBTime);
+                    ffree(stringETime);
+                    ffree(uId);
                     destroyTime(bTime);
                     destroyTime(eTime);
                 }else{
@@ -629,11 +629,11 @@ void outputQ5(bool f, Flight ** fList,int max){
                 fprintf(outputFile,"airline: %s\n",airline);
                 fprintf(outputFile,"plane_model: %s\n",planeModel);
                 destroyTime(sDD);
-                ffree((void **) &fId);
-                ffree((void **) &sDepDate);
-                ffree((void **) &destination);
-                ffree((void **) &airline);
-                ffree((void **) &planeModel);
+                ffree(fId);
+                ffree(sDepDate);
+                ffree(destination);
+                ffree(airline);
+                ffree(planeModel);
             }
         }else{
             for(int i = 0;i < max;i++){
@@ -650,11 +650,11 @@ void outputQ5(bool f, Flight ** fList,int max){
                 airline,
                 planeModel);
                 destroyTime(sDD);
-                ffree((void **) &fId);
-                ffree((void **) &sDepDate);
-                ffree((void **) &destination);
-                ffree((void **) &airline);
-                ffree((void **) &planeModel);
+                ffree(fId);
+                ffree(sDepDate);
+                ffree(destination);
+                ffree(airline);
+                ffree(planeModel);
             }
         }
         fclose(outputFile);
@@ -762,14 +762,14 @@ void outputQ7(bool f,SingularRecord * temp,int max){
                 fprintf(outputFile,"--- %d ---\n",i + 1);
                 fprintf(outputFile,"name: %s\n",airport);
                 fprintf(outputFile,"median: %d\n",delay);
-                ffree((void **) &airport);
+                ffree(airport);
             }
         }else{
             for(int i = 0;i < max && i < getSRecordSize(temp);i++){
                 char * airport = getSRecordName(temp,i);
                 int delay = getSRecordListElement(temp,i);
                 fprintf(outputFile,"%s;%d\n",airport,delay);
-                ffree((void **) &airport);
+                ffree(airport);
             }
         }
         fclose(outputFile);

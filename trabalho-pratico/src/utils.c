@@ -5,10 +5,10 @@
 #include <stdio.h>
 
 
-void ffree(void ** ptr){
-    if(*ptr){
-        free(*ptr);
-        *ptr = NULL;
+void ffree(void * ptr){
+    if(ptr){
+        free(ptr);
+        ptr = NULL;
     }
 }
 

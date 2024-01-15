@@ -56,12 +56,12 @@ Temporary * getUserFlights(void * fDatabase,void * travels,const char * userId){
                 setTempListElement(book,(void *) flight,i);
                 incTempNum(book);
             }
-            ffree((void **) &pFId);
+            ffree(pFId);
             i++;
         }
-        ffree((void **) &pUId);
+        ffree(pUId);
     }
-    ffree((void **) &list);
+    ffree(list);
     return book;
 }
 
@@ -95,7 +95,7 @@ Temporary * getFlightPassengers(void * fDatabase,void * travels,const char * fli
         free(flight_id);
     }
     
-    ffree((void **) &pList);
+    ffree(pList);
 
     return book;
 }
@@ -120,19 +120,19 @@ void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
             void ** aux = realloc(list,(getTempMax(array) * 2) * sizeof(void *));
             if(!aux){
                 fprintf(stderr,"Error allocating memory for the list");
-                ffree((void **) &hotelId);
+                ffree(hotelId);
                 destroyTime(beginDate);
                 destroyTime(endDate);
                 destroyTime(beginLimit);
                 destroyTime(endLimit);
-                ffree((void **) &wantedHotel);
-                ffree((void **) &list);
+                ffree(wantedHotel);
+                ffree(list);
                 return;
             }
             list = aux;
             setTempList(array,list);         
             setTempMax(array,getTempMax(array) * 2);
-            ffree((void **) &aux);
+            ffree(aux);
           }
           setTempListElement(array,reservation,i);
           int rating = getReservRating(reservation);
@@ -148,19 +148,19 @@ void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
             void ** aux = realloc(list,(getTempMax(array) * 2) * sizeof(void *));
             if(!aux){
                 fprintf(stderr,"Error allocating memory for the list");
-                ffree((void **) &hotelId);
+                ffree(hotelId);
                 destroyTime(beginDate);
                 destroyTime(endDate);
                 destroyTime(beginLimit);
                 destroyTime(endLimit);
-                ffree((void **) &wantedHotel);
-                ffree((void **) &list);
+                ffree(wantedHotel);
+                ffree(list);
                 return;
             }
             list = aux;
             setTempList(array,list);         
             setTempMax(array,getTempMax(array) * 2);
-            ffree((void **) &aux);     
+            ffree(aux);     
           }
           setTempListElement(array,reservation,i);
           int rating = getReservRating(reservation);
@@ -174,8 +174,8 @@ void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
     destroyTime(endLimit);
     destroyTime(beginDate);
     destroyTime(endDate);
-    ffree((void **) &wantedHotel);
-    ffree((void **) &hotelId);
+    ffree(wantedHotel);
+    ffree(hotelId);
 }
 
 
@@ -263,27 +263,27 @@ void yearFlight(gpointer key, gpointer value, gpointer data){
             destPosition = j;
         }
         if(originPosition != -1 && destPosition != -1){
-            ffree((void **) &origin);
-            ffree((void **) &dest);
-            ffree((void **) &name);
+            ffree(origin);
+            ffree(dest);
+            ffree(name);
             return;
         }
-        ffree((void **) &name);
+        ffree(name);
     }
     if(originPosition == -1 && destPosition != -1){
         setSRecordName(record,j,origin);
         setSRecordListElement(record,j,0);
         incSRecordSize(record);
-        ffree((void **) &origin);
-        ffree((void **) &dest);
+        ffree(origin);
+        ffree(dest);
         return;
     }
     if(originPosition != -1 && destPosition == -1){
         setSRecordName(record,j,dest);
         setSRecordListElement(record,j,0);
         incSRecordSize(record);
-        ffree((void **) &origin);
-        ffree((void **) &dest);
+        ffree(origin);
+        ffree(dest);
         return;
     }
     if(originPosition == -1 && destPosition == -1){
@@ -295,8 +295,8 @@ void yearFlight(gpointer key, gpointer value, gpointer data){
         setSRecordListElement(record,j + 1,0);
         incSRecordSize(record);
 
-        ffree((void **) &origin);
-        ffree((void **) &dest);
+        ffree(origin);
+        ffree(dest);
         return;
     }
     
@@ -342,10 +342,10 @@ void countFPassengers(const void * pDatabase,const void * fDatabase,void * recor
                         if(dep == true) incSRecordListElement(table,departPosition);
                         if(arr == true) incSRecordListElement(table,arrivePosition);
                         j++;
-                        ffree((void **)&aux);
+                        ffree(aux);
                         continue;
                     }
-                    ffree((void **) &aux);
+                    ffree(aux);
                     break;
                 }
             }else{
@@ -354,11 +354,11 @@ void countFPassengers(const void * pDatabase,const void * fDatabase,void * recor
 
             k = j; // Set k to the value of the next flight id, so it does not go through nonsense checks
 
-            ffree((void **)&departAirport);
-            ffree((void **)&arriveAirport);
+            ffree(departAirport);
+            ffree(arriveAirport);
 
 
-            ffree((void **) &id);
+            ffree(id);
             year1 = 0;
             destroyTime(time1);
 
@@ -371,21 +371,21 @@ void countFPassengers(const void * pDatabase,const void * fDatabase,void * recor
         while(j < max){
             char * aux = getPassengerFlightId(p[j]);
             if(!strcoll(aux,id)){
-                ffree((void **)&aux);
+                ffree(aux);
                 j++;
                 continue;
             }
-            ffree((void **)&aux);
+            ffree(aux);
             break;
         }
         
         year1 = 0;
         destroyTime(time1);
 
-        ffree((void **) &id);
+        ffree(id);
         k = j;
     }
-    ffree((void **) &p);
+    ffree(p);
 }
 
 SingularRecord * getDelays(void * database){
@@ -402,21 +402,21 @@ SingularRecord * getDelays(void * database){
         setMRecordList(temp,j,array,getMRecordListSize(temp,j));
         allDelays[j] = delayMedianAirport(array,getMRecordListSize(temp,j));
         airports[j] = getMRecordNamesElement(temp,j);
-        ffree((void **) &array);
+        ffree(array);
     }
     destroyMRecord(temp);
     void ** aux = malloc(sizeof(void *) * 2);
     aux[0] = (void *) allDelays;
     aux[1] = (void *) airports;
     mergeSort((void **) aux,max,"Integers");
-    ffree((void **) &aux);
+    ffree(aux);
     SingularRecord * sorted = createSRecord(max);
     setSRecordSize(sorted,max);
     for(int j = 0;j < max;setSRecordName(sorted,j,airports[j]),j++);
     for(int j = 0;j < max;setSRecordListElement(sorted,j,allDelays[j]),j++);
-    for(int j = 0;j < max;ffree((void **) &airports[j]),j++);
-    ffree((void **) &airports);
-    ffree((void **) &allDelays);
+    for(int j = 0;j < max;ffree(airports[j]),j++);
+    ffree(airports);
+    ffree(allDelays);
     return sorted;
 }
 
@@ -442,7 +442,7 @@ void getAirportsDelays(gpointer key,gpointer value,gpointer data){
         setMRecordListElement(temp,0,0,delay);
         incMRecordListSize(temp,0);
         incMRecordSize(temp); // Increments the number of diferents airports
-        ffree((void **) &origin);
+        ffree(origin);
         return;
     }
 
@@ -452,10 +452,10 @@ void getAirportsDelays(gpointer key,gpointer value,gpointer data){
             setMRecordListElement(temp,j,getMRecordListSize(temp,j),delay); // Sets the delay for the respetive position
             incMRecordListSize(temp,j);
             flag = true;
-            ffree((void **) &listOrigin);
+            ffree(listOrigin);
             break;
         }
-        ffree((void **) &listOrigin);
+        ffree(listOrigin);
     }
     if(flag == false){
         setMRecordNamesElement(temp,max,(void *)origin);
@@ -463,7 +463,7 @@ void getAirportsDelays(gpointer key,gpointer value,gpointer data){
         incMRecordListSize(temp,getMRecordSize(temp));
         incMRecordSize(temp);
     }
-    ffree((void **) &origin);
+    ffree(origin);
 }
 
 Temporary * getUsersPre(void * database, char * prefix){
@@ -509,7 +509,7 @@ void checkPre(gpointer key, gpointer value, gpointer data){
         setTempAuxElementChar(temp,userId,max);
         setTempMax(temp,max+1);
     }    
-    ffree((void **) &userName);
-    ffree((void **) &userId);
-    ffree((void **) &prefix);
+    ffree(userName);
+    ffree(userId);
+    ffree(prefix);
 }

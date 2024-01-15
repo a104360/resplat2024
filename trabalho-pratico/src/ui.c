@@ -470,8 +470,8 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                         yChunk++;
                         *fCount += 1;
                         *command += 1;
-                        ffree((void **) &time);
-                        ffree((void **) &fId);
+                        ffree(time);
+                        ffree(fId);
                     }
                     else{ // Reservation is more recent that the flight
                         char * time = timeToString(rTime);
@@ -481,8 +481,8 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                         yChunk++;
                         *rCount += 1;
                         *command += 1;
-                        ffree((void **) &time);
-                        ffree((void **) &rId);
+                        ffree(time);
+                        ffree(rId);
                     }
                     destroyTime(rTime);
                     destroyTime(fTime);
@@ -497,8 +497,8 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     yChunk++;
                     *rCount += 1;
                     *command += 1;
-                    ffree((void **) &time);
-                    ffree((void **) &rId);
+                    ffree(time);
+                    ffree(rId);
                     destroyTime(rTime);
                     continue;
                 }
@@ -511,8 +511,8 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     yChunk++;
                     *fCount += 1;
                     *command += 1;
-                    ffree((void **) &time);
-                    ffree((void **) &fId);
+                    ffree(time);
+                    ffree(fId);
                     destroyTime(fTime);
                     continue;
                 }
@@ -530,8 +530,8 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     yChunk++;
                     *rCount += 1;
                     *command += 1;
-                    ffree((void **) &time);
-                    ffree((void **) &rId);
+                    ffree(time);
+                    ffree(rId);
                     destroyTime(rTime);
                 }
                 wrefresh(terminal);
@@ -547,8 +547,8 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     yChunk++;
                     *fCount += 1;
                     *command += 1;
-                    ffree((void **) &time);
-                    ffree((void **) &fId);
+                    ffree(time);
+                    ffree(fId);
                     destroyTime(fTime);
                 }
                 wrefresh(terminal);
@@ -575,8 +575,8 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                         yChunk++;
                         *fCount += 1;
                         *command += 1;
-                        ffree((void **) &time);
-                        ffree((void **) &fId);
+                        ffree(time);
+                        ffree(fId);
                     }
                     else{ // Reservation is more recent that the flight
                         char * time = timeToString(rTime);
@@ -589,8 +589,8 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                         yChunk++;
                         *rCount += 1;
                         *command += 1;
-                        ffree((void **) &time);
-                        ffree((void **) &rId);
+                        ffree(time);
+                        ffree(rId);
                     }
                     destroyTime(rTime);
                     destroyTime(fTime);
@@ -610,8 +610,8 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                         yChunk++;
                         *rCount += 1;
                         *command += 1;
-                        ffree((void **) &time);
-                        ffree((void **) &rId);
+                        ffree(time);
+                        ffree(rId);
                         destroyTime(rTime);
                     }
                     return;
@@ -630,8 +630,8 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                         yChunk++;
                         *fCount += 1;
                         *command += 1;
-                        ffree((void **) &time);
-                        ffree((void **) &fId);
+                        ffree(time);
+                        ffree(fId);
                         destroyTime(fTime);
                     }
                     return;
@@ -653,8 +653,8 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     yChunk++;
                     *rCount += 1;
                     *command += 1;
-                    ffree((void **) &time);
-                    ffree((void **) &rId);
+                    ffree(time);
+                    ffree(rId);
                     destroyTime(rTime);
                 }
                 return;
@@ -671,8 +671,8 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     yChunk++;
                     *fCount += 1;
                     *command += 1;
-                    ffree((void **) &time);
-                    ffree((void **) &fId);
+                    ffree(time);
+                    ffree(fId);
                     destroyTime(fTime);
                 }
                 return;
@@ -715,10 +715,10 @@ void printQ4(bool f,int npp,int * index,Reservation ** reservation,int max){
 
                 mvwprintw(terminal,dist * yChunk,20,"%s;%s;%s;%s;%d;%.3f",id,stringBTime,stringETime,uId,rating,getTotalSpentOnReserv(reservation[*index],n));
 
-                ffree((void **) &id);
-                ffree((void **) &stringBTime);
-                ffree((void **) &stringETime);
-                ffree((void **) &uId);
+                ffree(id);
+                ffree(stringBTime);
+                ffree(stringETime);
+                ffree(uId);
                 destroyTime(bTime);
                 destroyTime(eTime);
             }
@@ -747,10 +747,10 @@ void printQ4(bool f,int npp,int * index,Reservation ** reservation,int max){
             mvwprintw(terminal,(dist * yChunk) + 5,20,"rating: %d",rating);
             mvwprintw(terminal,(dist * yChunk) + 6,20,"total_price: %0.3f",getTotalSpentOnReserv(reservation[*index],n));
 
-            ffree((void **) &id);
-            ffree((void **) &stringBTime);
-            ffree((void **) &stringETime);
-            ffree((void **) &uId);
+            ffree(id);
+            ffree(stringBTime);
+            ffree(stringETime);
+            ffree(uId);
             destroyTime(bTime);
             destroyTime(eTime);
         }
@@ -779,11 +779,11 @@ void printQ5(bool f,int npp,int* index,Flight** flight,int max){
             airline,
             planeModel);
             destroyTime(sDD);
-            ffree((void **) &fId);
-            ffree((void **) &sDepDate);
-            ffree((void **) &destination);
-            ffree((void **) &airline);
-            ffree((void **) &planeModel);
+            ffree(fId);
+            ffree(sDepDate);
+            ffree(destination);
+            ffree(airline);
+            ffree(planeModel);
             *index += 1;
             yChunk++;
             }
@@ -805,11 +805,11 @@ void printQ5(bool f,int npp,int* index,Flight** flight,int max){
         mvwprintw(terminal,(dist * yChunk) + 4,20,"airline: %s",airline);
         mvwprintw(terminal,(dist * yChunk) + 5,20,"plane_model: %s",planeModel);
         destroyTime(sDD);
-        ffree((void **) &fId);
-        ffree((void **) &sDepDate);
-        ffree((void **) &destination);
-        ffree((void **) &airline);
-        ffree((void **) &planeModel);
+        ffree(fId);
+        ffree(sDepDate);
+        ffree(destination);
+        ffree(airline);
+        ffree(planeModel);
         *index += 1;
         yChunk++;
         }
@@ -854,7 +854,7 @@ void printQ7(bool f,int npp,int * index,SingularRecord * table,int max){
             char * airport = getSRecordName(table,*index);
             int delay = getSRecordListElement(table,*index);
             mvwprintw(terminal,dist * yChunk,20,"%s;%d",airport,delay);
-            ffree((void **) &airport);
+            ffree(airport);
             yChunk++;
             *index += 1;
         }
@@ -867,7 +867,7 @@ void printQ7(bool f,int npp,int * index,SingularRecord * table,int max){
         mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*index + 1);
         mvwprintw(terminal,(dist * yChunk) + 1,20,"name: %s",airport);
         mvwprintw(terminal,(dist * yChunk) + 2,20,"median: %d",delay);
-        ffree((void **) &airport);
+        ffree(airport);
         yChunk++;
         *index += 1;
     }
