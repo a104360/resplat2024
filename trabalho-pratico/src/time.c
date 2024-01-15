@@ -46,7 +46,7 @@ void initTime(Time * tempo){
 
 void destroyTime(Time *time) {
     if(time == NULL) return; 
-    ffree((void **) &time);
+    ffree(time);
 }
 
 Time * createTime(){

@@ -5,6 +5,7 @@
 #include "../include/flight.h"
 #include "../include/reservation.h"
 #include "../include/passenger.h"
+#include "../include/passengers.h"
 #include "../include/time.h"
 
 /**
@@ -194,6 +195,37 @@ Flight * fligthCheck(const char *);
  * @return Pointer to passenger or NULL pointer
 */
 Passenger * passengerCheck(const char *,Users *,Flights *);
+
+/**
+ * @brief Validates the csv files and creates the users database
+ * @param folder Path to the folder
+ * @return Pointer to the created database
+*/
+Users * validateUsers(const char *);
+
+/**
+ * @brief Validates the csv files and creates the reservations database
+ * @param users Pointer to the users database
+ * @param folder Path to the folder
+ * @return Pointer to the created database
+*/
+Reservations * validateReservations(Users *,const char *);
+
+/**
+ * @brief Validates the csv files and creates the flights database
+ * @param folder Path to the folder
+ * @return Pointer to the created database
+*/
+Flights * validateFlights(const char *);
+
+/**
+ * @brief Validates the csv files and creates the passengers database
+ * @param users Pointer to the users database
+ * @param flights Pointer to the flights database
+ * @param folder Path to the folder
+ * @return Pointer to the created database
+*/
+Passengers * validatePassengers(Users *, Flights *,const char *);
 
 
 #endif

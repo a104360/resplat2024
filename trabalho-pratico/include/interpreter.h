@@ -52,4 +52,14 @@ char * getSecondParam(const char *);
 */
 void readEntryFile(const Users *,const Reservations *,const Flights *,const Passengers *,int, char **,double *,int *);
 
+/**
+ * @brief Reads the inputs passed by the user on the interactive mode
+ * @param Users Pointer to user's database 
+ * @param Reservations Pointer to Reservations's database 
+ * @param Flights Pointer to Flights's database 
+ * @param Passengers Pointer to Passengers's database 
+ * @param query Query to be executed
+*/
+void readQuery(const Users *,const Reservations *,const Flights *,const Passengers *,char *);
+
 #endif

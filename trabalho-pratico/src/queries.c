@@ -13,8 +13,6 @@
 #define BUFFERSIZE 100
 
 void query1(const Users * uDatabase, const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,const char * id,bool f){
-    //int rDatabaseSize = getDatabaseSize(rDatabase);
-    //int fDatabaseSize = getDatabaseSize(fDatabase);
     char * analisa = malloc(sizeof(char) * 5);
     strncpy(analisa,id,4);
     analisa[4] = '\0';
@@ -29,8 +27,8 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         user = lookupElement((const Users *) uDatabase,id);
 
         if(getUserAccountStatus(user) == false){
-            ffree((void **) &analisa);
-            outputQ1User(f,NULL,'\0',0,NULL,NULL,NULL,NULL,NULL);
+            ffree(analisa);
+            outputQ1User(f,NULL,'\0',0,NULL,NULL,0,0,0);
             return;
         }
 
@@ -41,28 +39,22 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         char * passaport = getUserPassport(user);
 
         Temporary * uFDatabase = getUserFlights((void *) fDatabase,(void *) pDatabase,id);
-        char * number_of_fights = malloc(sizeof(char) * 10);
-        snprintf(number_of_fights,10,"%d",getTempNum(uFDatabase));
+        int number_of_fights = getTempNum(uFDatabase);
+        destroyTemporary(uFDatabase);
 
         Temporary * uRDatabase = getAListOfSomething((void *) rDatabase,id,NULL,NULL,&allUserReservs);
-        char * number_of_reservations = malloc(sizeof(char) * 10);
-        snprintf(number_of_reservations,10,"%d",getTempNum(uRDatabase));
+        int number_of_reservations = getTempNum(uRDatabase);
 
         Reservation ** listReservs = (Reservation **) getTempList(uRDatabase);
-        char * total_spent = malloc(sizeof(char) * 10);
-        snprintf(total_spent,10,"%.3f",getTotalSpentByUser((void **) listReservs,getTempNum(uRDatabase)));
+        double total_spent = getTotalSpentByUser((void **) listReservs,number_of_reservations);
         free(listReservs);
-        destroyTemporary(uFDatabase);
         destroyTemporary(uRDatabase);
         
         outputQ1User((int)f,name,sex,age,country_code,passaport,number_of_fights,number_of_reservations,total_spent);
 
-        ffree((void **) &name);
-        ffree((void **) &country_code);
-        ffree((void **) &passaport);
-        ffree((void **) &number_of_fights);
-        ffree((void **) &number_of_reservations);
-        ffree((void **) &total_spent);
+        ffree(name);
+        ffree(country_code);
+        ffree(passaport);
         
         
         break;
@@ -71,7 +63,7 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         Flight * flight = NULL;
         flight = lookupElement(fDatabase,id);
         if(flight == NULL){
-            ffree((void **) &analisa);
+            ffree(analisa);
             outputQ1Flight(f,NULL,NULL,NULL,NULL,NULL,NULL,0,0);
             return;
         }
@@ -95,12 +87,12 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         
         destroyTime(sDD);
         destroyTime(sAD);
-        ffree((void **) &airline);
-        ffree((void **) &plane_model);
-        ffree((void **) &origin);
-        ffree((void **) &destination);
-        ffree((void **) &schedule_departure_date);
-        ffree((void **) &schedule_arrival_date);
+        ffree(airline);
+        ffree(plane_model);
+        ffree(origin);
+        ffree(destination);
+        ffree(schedule_departure_date);
+        ffree(schedule_arrival_date);
 
 
         break;
@@ -109,7 +101,7 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         Reservation * reserv = NULL;
         reserv = lookupElement(rDatabase,id);
         if(!reserv){
-            ffree((void **) &analisa);
+            ffree(analisa);
             outputQ1Reservation(f,NULL,NULL,-1,NULL,NULL,false,0,0);
             return;
         } 
@@ -129,23 +121,21 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
 
         destroyTime(begin);
         destroyTime(end);
-        ffree((void **) &hotel_id);
-        ffree((void **) &hotel_name);
-        ffree((void **) &begin_date);
-        ffree((void **) &end_date);
+        ffree(hotel_id);
+        ffree(hotel_name);
+        ffree(begin_date);
+        ffree(end_date);
         
         break;
     default:
         return;
         break;
     }
-    ffree((void **) &analisa);
+    ffree(analisa);
     return;
 }
 
 void query2(const Users * uDatabase, const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,const char * line,bool F){
-    //int rDatabaseSize = getDatabaseSize(rDatabase);
-    //int fDatabaseSize = getDatabaseSize(fDatabase);
     char * SRecord = strdup(line);
     char * token = NULL;
     char * saveprt = NULL;
@@ -153,7 +143,7 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
     User * user = lookupElement((const Users *) uDatabase,token);
     if(user == NULL){
         outputQ2(F,NULL,-1,NULL,-1);
-        ffree((void **) &SRecord);
+        ffree(SRecord);
         return;
     }
     token = strtok_r(NULL,"\n\0",&saveprt);
@@ -161,7 +151,7 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
 
     if(getUserAccountStatus(user) == false){
         outputQ2(F,NULL,-1,NULL,-1);
-        ffree((void **) &SRecord);
+        ffree(SRecord);
         return;
     }
     int flag = 0;
@@ -170,7 +160,7 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
     if(strcoll(token,"flights") == 0) flag = 2;
         else if(strcoll(token,"reservations") == 0) flag = 3;
     }
-    ffree((void **) &SRecord);
+    ffree(SRecord);
     char * id = getUserId(user);
     switch (flag)
     {
@@ -237,7 +227,7 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
         break;
     }
 
-    ffree((void **) &id);
+    ffree(id);
     return;
 }
 
@@ -257,7 +247,7 @@ void query4(Reservations * rDatabase,const char * id,bool f){
 
     outputQ4(f,rList,getTempNum(hDatabase));
 
-    ffree((void **) &rList);
+    ffree(rList);
     destroyTemporary(hDatabase);
 
     return;
@@ -293,15 +283,15 @@ void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * 
 
     list[0] = NULL;
     list[1] = NULL;
-    ffree((void **) &list);
+    ffree(list);
 
 
     outputQ6(f,n_airports,names,number);
 
-    for(int i = 0;i < getSRecordSize(airports);i++) ffree((void **) &names[i]);
-    ffree((void **) &names);
+    for(int i = 0;i < getSRecordSize(airports);i++) ffree(names[i]);
+    ffree(names);
 
-    ffree((void **) &number);
+    ffree(number);
 
     destroySRecord(&airports);
 
@@ -324,9 +314,9 @@ void query7(Flights * fDatabase,char * num, bool f){
     i++);
 
     outputQ7(f,allDelays,n);
-    for(int i = 0;i < max;ffree((void **) &(airports[i])),i++);
-    ffree((void **) &airports);
-    ffree((void **) &delays);
+    for(int i = 0;i < max;ffree((airports[i])),i++);
+    ffree(airports);
+    ffree(delays);
 
     destroySRecord(&allDelays);
 
@@ -365,7 +355,7 @@ void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit
 
     outputQ8(f,total);
 
-    ffree((void **) &rList);
+    ffree(rList);
     destroyTemporary(hDatabase);
 
     return;
@@ -381,7 +371,7 @@ void query9(Users * uDatabase, char * pre, bool f){
     //char ** users = getSRecordNames(preUsers);
     //int max = getSRecordSize(preUsers);
     Temporary * temp = getUsersPre(uDatabase,pre);
-    char ** preUsersIds = getTempAux(temp);
+    char ** preUsersIds = getTempAuxChar(temp);
     char ** preUsersNames = getTempListChar(temp);
     int max = getTempMax(temp);
 
@@ -393,10 +383,16 @@ void query9(Users * uDatabase, char * pre, bool f){
 
     //outputQ9(users,max,f);
     outputQ9(preUsersIds,preUsersNames,max,f);
-    //sort[0] = NULL;
-    //sort[1] = NULL;
-    //ffree((void **) &sort);
-    //free(preUsersIds);
+    sort[0] = NULL;
+    sort[1] = NULL;
+    ffree(sort);
+    for(int i = 0; i < max;i++){
+        ffree(preUsersIds[i]);
+    }
+    free(preUsersIds);
+    for(int i = 0; i < max;i++){
+        ffree(preUsersNames[i]);
+    }
     free(preUsersNames);
     destroyTemporaryChar(temp);
     return;

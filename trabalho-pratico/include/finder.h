@@ -93,8 +93,17 @@ SingularRecord * getDelays(void *);
 */
 void getAirportsDelays(gpointer,gpointer,gpointer);
 
+/**
+ * @brief Gets a temporary struct with all the ids and names of the users, whose names 
+ * match the prefix selected
+ * @param users Pointer to the users Database
+ * @param prefix Prefix to compared with the names
+*/
 Temporary * getUsersPre(void *, char *);
 
+/**
+ * @brief Compares the user name to the pretended prefix storing if they match
+*/
 void checkPre(gpointer, gpointer, gpointer);
 
 #endif

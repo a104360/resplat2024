@@ -37,25 +37,31 @@ Temporary * createTemporary(){
 void destroyTemporary(Temporary * temp){
     destroyTime(temp->begin);
     destroyTime(temp->end);
-    ffree((void **) &temp->id);
-    ffree((void **) &temp->list);
+    ffree(temp->id);
+    ffree(temp->list);
     temp->database = NULL;
     temp->num = 0;
     temp->sum = 0;
     temp->max = 0;
-    ffree((void **) &temp);
+    ffree(temp);
 }
 
 void destroyTemporaryChar(Temporary * temp){
-    ffree((void **) &temp->begin);
-    ffree((void **) &temp->end);
-    ffree((void **) &temp->id);
-    ffree((void **) &temp->list);
+    for(int i = 0;i < temp->max;i++){
+        ffree((((char **) temp->begin)[i]));
+    }
+    ffree(temp->begin);
+    ffree(temp->end);
+    ffree(temp->id);
+    for(int i = 0;i < temp->max;i++){
+        ffree((((char **) temp->list)[i]));
+    }
+    ffree(temp->list);
     temp->database = NULL;
     temp->num = 0;
     temp->sum = 0;
     temp->max = 0;
-    ffree((void **) &temp);
+    ffree(temp);
 }
 
 void setTempDatabase(Temporary * temp,void * database){
@@ -66,7 +72,7 @@ void * getTempDatabase(Temporary * temp){
 }
     
 void setTempId(Temporary * temp,char * id){
-    ffree((void **) &temp->id);
+    ffree(temp->id);
     temp->id = strdup(id);
 }
 char * getTempId(Temporary * temp){
@@ -74,12 +80,17 @@ char * getTempId(Temporary * temp){
 }
 
 void setTempList(Temporary * temp,void ** list){
-    ffree((void **) &temp->list);
+    ffree(temp->list);
     temp->list = list;
 }
 
 void setTempListElement(Temporary * temp,void * element,int position){
     temp->list[position] = element;
+}
+void setTempListElementChar(Temporary * temp,char * element,int position){
+    char ** list = (char **) temp->list;
+    if(list[position]) ffree(list[position]);
+    list[position] = strdup(element);
 }
 
 const void * getTempListElement(Temporary * temp,int position){
@@ -158,8 +169,8 @@ int getTempMax(Temporary * temp){
     return temp->max;
 }
 
-void setTempAux(Temporary * temp,void * element){
-    temp->begin = element;
+void setTempAux(Temporary * temp,char ** element){
+    temp->begin = (void *) element;
 }
 
 void setTempAuxElement(Temporary * temp, void * element, int position){
@@ -167,7 +178,23 @@ void setTempAuxElement(Temporary * temp, void * element, int position){
     aux[position] = element;
 }
 
+void setTempAuxElementChar(Temporary * temp,char * element,int position){
+    char ** list = (char **) temp->begin;
+    if(list[position]) ffree(list[position]);
+    list[position] = strdup(element);
+}
+
 void * getTempAux(Temporary * temp){
     return temp->begin;
 }
 
+
+char ** getTempAuxChar(Temporary * temp){
+    char ** list = (char **) temp->begin;
+    int max = temp->max;
+    char ** dup = malloc(sizeof(char *) * max);
+    for(int i = 0;i < max;i++){
+        dup[i] = strdup(list[i]);
+    }
+    return dup;
+}

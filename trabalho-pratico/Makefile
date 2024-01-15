@@ -1,7 +1,7 @@
 CC = gcc
 IDIR = ../include
 DEPS = $(IDIR)/$(wildcard *.h)
-CFLAGS= -g -Wall -Werror=discarded-qualifiers -I$(IDIR) `pkg-config --libs --cflags glib-2.0` -lncurses
+CFLAGS= -g -Wall -Werror=discarded-qualifiers -I$(IDIR) `pkg-config --libs --cflags glib-2.0` -lncurses -lrt
 EXE = programa-principal
 
 
@@ -24,6 +24,9 @@ $(EXE): $(OBJ)
 
 programa-testes: $(OBJ)
 	$(CC) -o $@ $^ $(CFLAGS) 
+
+menu: $(EXE)
+	./$(EXE)
 
 run: $(EXE)
 	./$(EXE) ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt

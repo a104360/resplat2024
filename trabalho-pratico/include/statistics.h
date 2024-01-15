@@ -36,7 +36,11 @@ int getHotelEarningsOfReserv(void *,int);
 */
 double averageRating(void *,const char *);
 
-
+/**
+ * @brief Calculates the median of an array of values
+ * @param values Pointer the first one of the values
+ * @param n Number of values
+*/
 int delayMedianAirport(int *,int);
 
 #endif
