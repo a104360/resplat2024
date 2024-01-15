@@ -47,11 +47,11 @@ static int areFilesEqual(const char *file1Path, const char *file2Path) {
     return 1;  // Return true if all lines match
 }
 
-static int validation(const char ** filePath){
+static int validation(const char ** filePath,char * folder){
     FILE *file1 = fopen(filePath[0], "r");
     char file2Path[60];
     memset(file2Path,'\0',60);
-    snprintf(file2Path,59,"../../li3_fr/dataset/data/users_errors.csv");
+    snprintf(file2Path,59,"%s/users_errors.csv",folder);
     FILE *file2 = fopen(file2Path, "r");
 
     if (file1 == NULL || file2 == NULL) {
@@ -92,7 +92,7 @@ static int validation(const char ** filePath){
 
     file1 = fopen(filePath[1], "r");
     memset(file2Path,'\0',60);
-    snprintf(file2Path,59,"../../li3_fr/dataset/data/reservations_errors.csv");
+    snprintf(file2Path,59,"%s/reservations_errors.csv",folder);
     file2 = fopen(file2Path, "r");
 
     if (file1 == NULL || file2 == NULL) {
@@ -133,7 +133,7 @@ static int validation(const char ** filePath){
 
     file1 = fopen(filePath[2], "r");
     memset(file2Path,'\0',60);
-    snprintf(file2Path,59,"../../li3_fr/dataset/data/flights_errors.csv");
+    snprintf(file2Path,59,"%s/flights_errors.csv",folder);
     file2 = fopen(file2Path, "r");
 
     if (file1 == NULL || file2 == NULL) {
@@ -174,7 +174,7 @@ static int validation(const char ** filePath){
 
     file1 = fopen(filePath[3], "r");
     memset(file2Path,'\0',60);
-    snprintf(file2Path,59,"../../li3_fr/dataset/data/passengers_errors.csv");
+    snprintf(file2Path,59,"%s/passengers_errors.csv",folder);
     file2 = fopen(file2Path, "r");
 
     if (file1 == NULL || file2 == NULL) {
@@ -216,7 +216,7 @@ static int validation(const char ** filePath){
     return 1;  // Return true if all lines match
 }
 
-void confirmar() {
+void confirmar(char ** argv) {
 
     char users[60];
     memset(users,'\0',60);
@@ -241,7 +241,7 @@ void confirmar() {
     files[2] = flights;
     files[3] = passengers;
 
-    validation((const char **) files);
+    validation((const char **) files,argv[1]);
 
     for(int i = 1;i <= 100;i++){
         char comp[100];
@@ -249,8 +249,8 @@ void confirmar() {
         snprintf(comp, 99, "./Resultados/command%d_output.txt",i);
         char correct[100];
         memset(correct,'\0',100);
-        snprintf(correct,99,"../../li3_fr/dataset/outputs/command%d_output.txt",i);
-        if(areFilesEqual((const char *) correct,(const char *) comp)){
+        snprintf(correct,99,"%s/command%d_output.txt",argv[3],i);
+        if(areFilesEqual((const char *)correct,(const char *)comp)){
             printf("Command %d is correct!\n",i);
         }else continue;
     }

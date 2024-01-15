@@ -241,9 +241,10 @@ void query3(Reservations * rDatabase,const char * id,bool f){
 void query4(Reservations * rDatabase,const char * id,bool f){
     Temporary * hDatabase = getAListOfSomething((void *) rDatabase,id,NULL,NULL,&allHotelReservs);
     Reservation ** rList = (Reservation **) getTempList(hDatabase);
-    mergeSort((void **) rList,getTempNum(hDatabase),"Reservation");
+    int n = getTempNum(hDatabase);
+    mergeSort((void **) rList,n,"Reservation");
 
-    outputQ4(f,rList,getTempNum(hDatabase));
+    outputQ4(f,rList,n);
 
     ffree(rList);
     destroyTemporary(hDatabase);
@@ -269,15 +270,17 @@ void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * 
     int fYear = atoi(year);
 
     SingularRecord * airports = getYearFlights(fDatabase, pDatabase, fYear);
+    int max = getSRecordSize(airports);
     char ** names = getSRecordNames(airports);
-    int * number = malloc(sizeof(int) * getSRecordSize(airports));
-    for(int i = 0;i < getSRecordSize(airports);number[i] = getSRecordListElement(airports,i),i++);
+    int * number = malloc(sizeof(int) * max);
+    for(int i = 0;i < max;number[i] = getSRecordListElement(airports,i),i++);
+    destroySRecord(&airports);
 
     
     void ** list = malloc(sizeof(void *) * 2);
     list[0] = (void *) number;
     list[1] = (void **) names;
-    mergeSort(list,getSRecordSize(airports),"Integers");
+    mergeSort(list,max,"Integers");
 
     list[0] = NULL;
     list[1] = NULL;
@@ -286,12 +289,11 @@ void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * 
 
     outputQ6(f,n_airports,names,number);
 
-    for(int i = 0;i < getSRecordSize(airports);i++) ffree(names[i]);
+    for(int i = 0;i < max;i++) ffree(names[i]);
     ffree(names);
 
     ffree(number);
 
-    destroySRecord(&airports);
 
 }
 

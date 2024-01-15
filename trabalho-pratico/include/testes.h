@@ -4,6 +4,6 @@
 /**
  * @brief Confirms if the parsing and the outputs are correct
 */
-void confirmar();
+void confirmar(char ** argv);
 
 #endif

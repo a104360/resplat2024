@@ -57,7 +57,7 @@ int main(int argc,char **argv){
         destroyDatabase(rDatabase);
     }
     if(argc == 4){
-        confirmar();
+        confirmar(argv);
     }
 
     //end time
