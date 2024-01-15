@@ -78,50 +78,55 @@ static bool checkPath(const char * path){
     memset(buffer,'\0',size + 20);
     strncpy(buffer,path,size);
     
-    if(path[size-1] == '/') strncat(buffer,"users.csv",10);
+    if(path[size] == '/') strncat(buffer,"users.csv",10);
     else strncat(buffer,"/users.csv",11);
-    FILE * test = fopen(buffer,"r");
-    if(test == NULL){
-        free(buffer);
-        return false;
-    }
-    fclose(test);
-
-    memset(buffer,'\0',size + 20);
-    strncpy(buffer,path,size);
-    
-    if(path[size-1] == '/') strncat(buffer,"reservations.csv",9);
-    else strncat(buffer,"/reservations.csv",10);
+    FILE * test = NULL;
     test = fopen(buffer,"r");
     if(test == NULL){
         free(buffer);
         return false;
     }
     fclose(test);
+    test = NULL;
 
     memset(buffer,'\0',size + 20);
     strncpy(buffer,path,size);
     
-    if(path[size-1] == '/') strncat(buffer,"flights.csv",9);
-    else strncat(buffer,"/flights.csv",10);
+    if(path[size-1] == '/') strncat(buffer,"reservations.csv",18);
+    else strncat(buffer,"/reservations.csv",18);
     test = fopen(buffer,"r");
     if(test == NULL){
         free(buffer);
         return false;
     }
     fclose(test);
+    test = NULL;
 
     memset(buffer,'\0',size + 20);
     strncpy(buffer,path,size);
     
-    if(path[size-1] == '/') strncat(buffer,"passengers.csv",9);
-    else strncat(buffer,"/passengers.csv",10);
+    if(path[size-1] == '/') strncat(buffer,"flights.csv",13);
+    else strncat(buffer,"/flights.csv",13);
     test = fopen(buffer,"r");
     if(test == NULL){
         free(buffer);
         return false;
     }
     fclose(test);
+    test = NULL;
+
+    memset(buffer,'\0',size + 20);
+    strncpy(buffer,path,size);
+    
+    if(path[size-1] == '/') strncat(buffer,"passengers.csv",16);
+    else strncat(buffer,"/passengers.csv",16);
+    test = fopen(buffer,"r");
+    if(test == NULL){
+        free(buffer);
+        return false;
+    }
+    fclose(test);
+    test = NULL;
 
     free(buffer);
     return true;
@@ -451,9 +456,9 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
     if(*fCount < 0) *fCount = 0;
     int yChunk = 1;
     if(f == false){ // Normal Mode
-        if(reservations && n1 > 0 && flights && n2 > 0){ // There is both reservations and flights to be written
+        if(reservations && *rCount < n1 && flights && *fCount < n2){ // There is both reservations and flights to be written
             int max = n1 + n2;
-            while(yChunk - 1 < max && yChunk - 1 < npp){
+            while(*command < max && yChunk - 1 < npp){
                 if(*rCount < n1 && *fCount < n2){ // Both the arrays have not reached their limit 
                     Time * rTime = getReservBeginDate(reservations[*rCount]);
                     Time * fTime = getFlightSDepartureDate(flights[*fCount]);
@@ -464,6 +469,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                         mvwprintw(terminal,dist * yChunk,20,"%s;%s;flight",fId,time);
                         yChunk++;
                         *fCount += 1;
+                        *command += 1;
                         ffree((void **) &time);
                         ffree((void **) &fId);
                     }
@@ -474,6 +480,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                         mvwprintw(terminal,dist * yChunk,20,"%s;%s;reservation",rId,time);
                         yChunk++;
                         *rCount += 1;
+                        *command += 1;
                         ffree((void **) &time);
                         ffree((void **) &rId);
                     }
@@ -489,6 +496,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     mvwprintw(terminal,dist * yChunk,20,"%s;%s;reservation",rId,time);
                     yChunk++;
                     *rCount += 1;
+                    *command += 1;
                     ffree((void **) &time);
                     ffree((void **) &rId);
                     destroyTime(rTime);
@@ -502,6 +510,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     mvwprintw(terminal,dist * yChunk,20,"%s;%s;flight",fId,time);
                     yChunk++;
                     *fCount += 1;
+                    *command += 1;
                     ffree((void **) &time);
                     ffree((void **) &fId);
                     destroyTime(fTime);
@@ -511,7 +520,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
             wrefresh(terminal);
             return;
         }else{
-            if(reservations && n1 > 0){ // There only is reservations to be written
+            if(reservations && *rCount < n1){ // There only is reservations to be written
                 while(*rCount < n1 && (yChunk - 1) < npp){
                     Time * rTime = getReservBeginDate(reservations[*rCount]);
                     char * time = timeToString(rTime);
@@ -520,13 +529,15 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     mvwprintw(terminal,dist * yChunk,20,"%s;%s",rId,time);
                     yChunk++;
                     *rCount += 1;
+                    *command += 1;
                     ffree((void **) &time);
                     ffree((void **) &rId);
                     destroyTime(rTime);
                 }
+                wrefresh(terminal);
                 return;
             }
-            if(flights && n2 > 0){ // There only is flights to be written
+            if(flights && *fCount < n2){ // There only is flights to be written
                 while(*fCount < n2 && yChunk - 1 < npp){
                     Time * fTime = getFlightSDepartureDate(flights[*fCount]);
                     char * time = timeToString(fTime);
@@ -535,15 +546,17 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     mvwprintw(terminal,dist * yChunk,20,"%s;%s",fId,time);
                     yChunk++;
                     *fCount += 1;
+                    *command += 1;
                     ffree((void **) &time);
                     ffree((void **) &fId);
                     destroyTime(fTime);
                 }
+                wrefresh(terminal);
                 return;
             }
         }
     }else{ // F Mode
-        if(reservations && n1 > 0 && flights && n2 > 0){ // There is both reservations and flights to be written
+        if(reservations && *rCount < n1 && flights && *fCount < n2){ // There is both reservations and flights to be written
             
             int max = n1 + n2;
 
@@ -628,7 +641,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
 
 
         }else{
-            if(reservations && n1 > 0 && !flights){ // There only is reservations to be written
+            if(reservations && *rCount < n2){ // There only is reservations to be written
                 while(*rCount < n1){
                     Time * rTime = getReservBeginDate(reservations[*rCount]);
                     char * time = timeToString(rTime);
@@ -646,7 +659,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                 }
                 return;
             }
-            if(flights && n2 > 0 && !reservations){ // There only is flights to be written
+            if(flights && *fCount < n2){ // There only is flights to be written
                 while(*fCount < n2){
                     Time * fTime = getFlightSDepartureDate(flights[*fCount]);
                     char * time = timeToString(fTime);
@@ -961,4 +974,12 @@ void menus(){
     wclear(terminal);
     delwin(terminal);
     endwin();
+}
+
+void dontWriteOnScreen(){
+    noecho();
+}
+
+void writeOnScreen(){
+    echo();
 }

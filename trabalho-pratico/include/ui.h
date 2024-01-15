@@ -45,4 +45,8 @@ int getInput();
 
 void menus();
 
+void dontWriteOnScreen();
+
+void writeOnScreen();
+
 #endif

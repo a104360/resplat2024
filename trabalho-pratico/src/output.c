@@ -66,10 +66,12 @@ void outputQ1User(int F, char * name, char sex, int age, char * country_code , c
         return;
     }
     printQ1User(F,name,sex,age,country_code,passport,number_of_flights,number_of_reservations,total_spent);
+    dontWriteOnScreen();
     int input = getInput();
     while(input != 0){
         input = getInput();
     }
+    writeOnScreen();
     return;
 }
 
@@ -122,8 +124,10 @@ void outputQ1Flight(int F, char * airline, char * plane_model , char * origin, c
         return;
     }
     printQ1Flight(F,airline,plane_model,origin,destination,schedule_departure_date,schedule_arrival_date,passengers,delay);
+    dontWriteOnScreen();
     int input = getInput();
     while(input != 0) input = getInput();
+    writeOnScreen();
 }
 
 
@@ -179,8 +183,10 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
         return;
     }
     printQ1Reservation(F,hotel_id,hotel_name,hotel_stars,begin_date,end_date,includes_breakfast,nights,total_price);
+    dontWriteOnScreen();
     int input = getInput();
     while(input != 0) input = getInput();
+    writeOnScreen();
 }
 
 
@@ -418,27 +424,49 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
     int rCount = 0;
     int fCount = 0;
     printQ2(f,&command,5,reservations,n1,&rCount,flights,n2,&fCount);
+    dontWriteOnScreen();
     int input = getInput();
     while(input != 0){
-        if(input == DOWN)printQ2(f,&command,5,reservations,n1,&rCount,flights,n2,&fCount);
+        if(input == DOWN){
+            printQ2(f,&command,5,reservations,n1,&rCount,flights,n2,&fCount);
+            input = getInput();
+            continue;
+        }
         if(input == UP){
             int temp = command;
-            while(command != temp - 10 && (rCount != 0 && fCount == 0)){
-                Time * r = getReservBeginDate(reservations[rCount]);
-                Time * f = getFlightSDepartureDate(flights[fCount]);
-                if(compareTimes(r,f)){
+            while(command != temp - 10 && command > 0){
+                if(rCount >= n1) rCount -= 1;
+                if(fCount >= n2) fCount -= 1;
+                if(rCount > 0 && fCount > 0){
+                    Time * r = getReservBeginDate(reservations[rCount]);
+                    Time * f = getFlightSDepartureDate(flights[fCount]);
+                    if(compareTimes(r,f)){
+                        rCount--;
+                    }else{
+                        fCount--;
+                    } 
+                    destroyTime(r);
+                    destroyTime(f);
+                    command--;
+                    continue;
+                }
+                if(rCount > 0){
                     rCount--;
-                }else{
+                    command--;
+                    continue;
+                }
+                if(fCount > 0){
                     fCount--;
-                } 
-                destroyTime(r);
-                destroyTime(f);
-                command--;
+                    command--;
+                    continue;
+                }
+                break;
             }
             printQ2(f,&command,5,reservations,n1,&rCount,flights,n2,&fCount);
         }
         input = getInput();
     }
+    writeOnScreen();
 }
 
 void outputQ3(bool f,double rating){
@@ -467,10 +495,12 @@ void outputQ3(bool f,double rating){
         return;
     }
     printQ3(f,rating);
+    dontWriteOnScreen();
     int input = getInput();
     while(input != 0){
         input = getInput();
     }
+    writeOnScreen();
 }
 
 void outputQ4(bool f,Reservation ** rList,int max){
@@ -549,6 +579,7 @@ void outputQ4(bool f,Reservation ** rList,int max){
     }
     int index = 0;
     printQ4(f,5,&index,rList,max);
+    dontWriteOnScreen();
     int input = getInput();
     while(input != 0){
         if(input == DOWN){
@@ -564,6 +595,7 @@ void outputQ4(bool f,Reservation ** rList,int max){
         }
         input = getInput();
     }
+    writeOnScreen();
 }
 
 void outputQ5(bool f, Flight ** fList,int max){
@@ -630,6 +662,7 @@ void outputQ5(bool f, Flight ** fList,int max){
     }
     int index = 0;
     printQ5(f,5,&index,fList,max);
+    dontWriteOnScreen();
     int input = getInput();
     while(input != 0){
         if(input == DOWN){
@@ -645,7 +678,7 @@ void outputQ5(bool f, Flight ** fList,int max){
         }
         input = getInput();
     }
-
+    writeOnScreen();
 }
 
 
@@ -684,6 +717,7 @@ void outputQ6(bool f,int n, char ** names, int * number){
     }
     int index = 0;
     printQ6(f,5,&index,n,names,number);
+    dontWriteOnScreen();
     int input = getInput();
     while(input != 0){
         if(input == DOWN){
@@ -699,6 +733,7 @@ void outputQ6(bool f,int n, char ** names, int * number){
         }
         input = getInput();
     }     
+    writeOnScreen();
 }
 
 void outputQ7(bool f,SingularRecord * temp,int max){
@@ -742,6 +777,7 @@ void outputQ7(bool f,SingularRecord * temp,int max){
     }
     int index = 0;
     printQ7(f,5,&index,temp,max);
+    dontWriteOnScreen();
     int input = getInput();
     while(input != 0){
         if(input == DOWN){
@@ -757,6 +793,7 @@ void outputQ7(bool f,SingularRecord * temp,int max){
         }
         input = getInput();
     }
+    writeOnScreen();
 }
 
 
@@ -786,8 +823,10 @@ void outputQ8(bool f, int revenue){
         return;
     }
     printQ8(f,revenue);
+    dontWriteOnScreen();
     int input = getInput();
     while(input != 0) input = getInput();
+    writeOnScreen();
 }
 
 void outputQ9(char ** ids,char ** names,int valids,bool f){
@@ -822,6 +861,7 @@ void outputQ9(char ** ids,char ** names,int valids,bool f){
     }
     int index = 0;
     printQ9(f,5,&index,ids,names,valids);
+    dontWriteOnScreen();
     int input = getInput();
     while(input != 0){
         if(input == DOWN){
@@ -837,4 +877,5 @@ void outputQ9(char ** ids,char ** names,int valids,bool f){
         }
         input = getInput();
     }
+    writeOnScreen();
 }
