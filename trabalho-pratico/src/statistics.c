@@ -47,7 +47,7 @@ int getHotelEarningsOfReserv(void * userReservs,int n){
 
 
 double averageRating(void * reservations, const char * id){
-    Temporary * temp = getAListOfSomething(reservations,id,NULL,NULL,&allHotelReservs);
+    Temporary * temp = getAListOfSomething(reservations,id,NULL,NULL,&countHotelReservs);
     int sumRatings = getTempSum(temp);
     int n = getTempNum(temp);
     double answer = (double) sumRatings / (double) n;  

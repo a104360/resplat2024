@@ -21,6 +21,8 @@
 Temporary * getAListOfSomething(void * ,const char * ,Time * ,Time * ,void (*func)());
 
 
+int countUserFlights(void *,const char *);
+
 /**
  * @brief Function to search all the flights user went on
  * @param flights Database of all flights
@@ -38,6 +40,10 @@ Temporary * getUserFlights(void * ,void * ,const char * );
  * @return A struct containing the list and some more information
 */
 Temporary * getFlightPassengers(void * ,void * ,const char * );
+
+
+void countHotelReservs(gpointer,gpointer,gpointer);
+
 
 /**
  * @brief Sees if the reservation belongs to the desired hotel

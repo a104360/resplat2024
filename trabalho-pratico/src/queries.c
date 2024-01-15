@@ -38,9 +38,7 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         char * country_code = getUserCountryCode(user);
         char * passaport = getUserPassport(user);
 
-        Temporary * uFDatabase = getUserFlights((void *) fDatabase,(void *) pDatabase,id);
-        int number_of_fights = getTempNum(uFDatabase);
-        destroyTemporary(uFDatabase);
+        int number_of_fights = countUserFlights((void *) pDatabase,id);
 
         Temporary * uRDatabase = getAListOfSomething((void *) rDatabase,id,NULL,NULL,&allUserReservs);
         int number_of_reservations = getTempNum(uRDatabase);

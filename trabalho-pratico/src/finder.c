@@ -28,6 +28,24 @@ Temporary * getAListOfSomething(void * database,const char * hotelId,Time * begi
     return temp;
 }
 
+int countUserFlights(void * travels,const char * userId){
+    Passengers * pDatabase = (Passengers *) travels;
+
+    int uFlights = 0;
+
+    int max = getNumAllPassengers(pDatabase);
+    Passenger ** list = getAllPassengers((pDatabase));
+
+    for(int pList = 0;pList < max;pList++){
+        char * pUId = getPassengerUserId((Passenger *)list[pList]);
+        if(!strcoll(pUId,userId)) uFlights++;
+        ffree(pUId);
+    }
+
+    ffree(list);
+
+    return uFlights;
+}
 
 Temporary * getUserFlights(void * fDatabase,void * travels,const char * userId){
     Flights * allFlights = (Flights *) fDatabase;
@@ -74,7 +92,7 @@ Temporary * getUserFlights(void * fDatabase,void * travels,const char * userId){
 
 
 Temporary * getFlightPassengers(void * fDatabase,void * travels,const char * flightId){
-    Database * allFlights = (Database *) fDatabase;
+    Flights * allFlights = (Flights *) fDatabase;
     Passengers * pDatabase = (Passengers *) travels;
 
     Temporary * book = createTemporary();
@@ -108,6 +126,40 @@ Temporary * getFlightPassengers(void * fDatabase,void * travels,const char * fli
     return book;
 }
 
+void countHotelReservs(gpointer key,gpointer value,gpointer hotelData){
+    Temporary * array = (Temporary *) hotelData;
+    Reservation * reservation = (Reservation *) value;
+    char * hotelId = getReservHotelId(reservation);
+    Time * beginDate = getReservBeginDate(reservation);
+    Time * endDate = getReservEndDate(reservation);
+    Time * beginLimit = getTempBegin(array);
+    Time * endLimit = getTempEnd(array);
+    char * wantedHotel = getTempId(array);
+
+    if(beginLimit != NULL && endLimit != NULL){
+        if (!strcoll(hotelId,wantedHotel) && 
+        (compareTimes(beginDate,endLimit) || compareTimes(beginDate,endLimit) == 10) && 
+        (compareTimes(beginLimit,endDate) || compareTimes(beginLimit,endDate) == 10)) {
+          int rating = getReservRating(reservation);
+          increaseTempSum(array,rating);
+          incTempNum(array);
+          i++;
+        }
+    }else{
+        if(!strcoll(hotelId,wantedHotel)) {
+          int rating = getReservRating(reservation);
+          increaseTempSum(array,rating);
+          incTempNum(array);
+          i++;
+        }
+    }
+    destroyTime(beginLimit);
+    destroyTime(endLimit);
+    destroyTime(beginDate);
+    destroyTime(endDate);
+    ffree(wantedHotel);
+    ffree(hotelId);
+}
 
 void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
     Temporary * array = (Temporary *) hotelData;
