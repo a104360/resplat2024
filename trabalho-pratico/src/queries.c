@@ -377,7 +377,7 @@ void query9(Users * uDatabase, char * pre, bool f){
     //char ** users = getSRecordNames(preUsers);
     //int max = getSRecordSize(preUsers);
     Temporary * temp = getUsersPre(uDatabase,pre);
-    char ** preUsersIds = getTempAux(temp);
+    char ** preUsersIds = getTempAuxChar(temp);
     char ** preUsersNames = getTempListChar(temp);
     int max = getTempMax(temp);
 
@@ -389,10 +389,16 @@ void query9(Users * uDatabase, char * pre, bool f){
 
     //outputQ9(users,max,f);
     outputQ9(preUsersIds,preUsersNames,max,f);
-    //sort[0] = NULL;
-    //sort[1] = NULL;
-    //ffree((void **) &sort);
-    //free(preUsersIds);
+    sort[0] = NULL;
+    sort[1] = NULL;
+    ffree((void **) &sort);
+    for(int i = 0; i < max;i++){
+        ffree((void **) &preUsersIds[i]);
+    }
+    free(preUsersIds);
+    for(int i = 0; i < max;i++){
+        ffree((void **) &preUsersNames[i]);
+    }
     free(preUsersNames);
     destroyTemporaryChar(temp);
     return;

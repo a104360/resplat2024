@@ -468,12 +468,7 @@ void getAirportsDelays(gpointer key,gpointer value,gpointer data){
 
 Temporary * getUsersPre(void * database, char * prefix){
     Users * uDatabase = (Users *) database;
-    /*SingularRecord * preUsers = createSRecord(10000);
 
-    Temporary * list = createTemporary();
-    setTempAux(list,preUsers);
-    setTempId(list,prefix);
-    */
     char ** preUsersIds = malloc(sizeof(char*) *10000);
     for(int j = 0;j < 10000;j++){
         preUsersIds[j] = NULL;
@@ -490,11 +485,6 @@ Temporary * getUsersPre(void * database, char * prefix){
 
     applyForEach(uDatabase,&checkPre,(void *)list);
 
-    //setTempAux(list,NULL);
-
-    //destroyTemporary(list);
-
-    //return preUsers;
     return list;
 }
 
@@ -519,5 +509,7 @@ void checkPre(gpointer key, gpointer value, gpointer data){
         setTempAuxElementChar(temp,userId,max);
         setTempMax(temp,max+1);
     }    
+    ffree((void **) &userName);
     ffree((void **) &userId);
+    ffree((void **) &prefix);
 }

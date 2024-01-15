@@ -47,9 +47,15 @@ void destroyTemporary(Temporary * temp){
 }
 
 void destroyTemporaryChar(Temporary * temp){
+    for(int i = 0;i < temp->max;i++){
+        ffree((void **) &(((char **) temp->begin)[i]));
+    }
     ffree((void **) &temp->begin);
     ffree((void **) &temp->end);
     ffree((void **) &temp->id);
+    for(int i = 0;i < temp->max;i++){
+        ffree((void **) &(((char **) temp->list)[i]));
+    }
     ffree((void **) &temp->list);
     temp->database = NULL;
     temp->num = 0;
@@ -182,3 +188,13 @@ void * getTempAux(Temporary * temp){
     return temp->begin;
 }
 
+
+char ** getTempAuxChar(Temporary * temp){
+    char ** list = (char **) temp->begin;
+    int max = temp->max;
+    char ** dup = malloc(sizeof(char *) * max);
+    for(int i = 0;i < max;i++){
+        dup[i] = strdup(list[i]);
+    }
+    return dup;
+}

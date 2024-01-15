@@ -184,4 +184,6 @@ void setTempAuxElementChar(Temporary *,char *,int);
 */
 void * getTempAux(Temporary *);
 
+char ** getTempAuxChar(Temporary *);
+
 #endif
