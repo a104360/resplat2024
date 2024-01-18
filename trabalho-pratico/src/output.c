@@ -771,18 +771,28 @@ void outputQ6(bool f,int n, char ** names, int * number){
         fclose(outputFile);
         return;
     }
+    cursorOff();
     int index = 0;
     printQ6(f,5,&index,n,names,number);
     dontWriteOnScreen();
     int input = getInput();
     while(input != 0){
         if(input == DOWN){
+            if(index >= n){
+                input = getInput();
+                continue;
+            }
             printQ6(f,5,&index,n,names,number);
             input = getInput();
             continue;
         }
         if(input == UP){
-            index -= 10;
+            int rewinder = 0;
+            while(rewinder < 2){
+                if(index > 0) index -= 1;
+                while(index > 0 && (index % 5) != 0) index -= 1;
+                rewinder++;
+            }
             printQ6(f,5,&index,n,names,number);
             input = getInput();
             continue;
@@ -790,6 +800,7 @@ void outputQ6(bool f,int n, char ** names, int * number){
         input = getInput();
     }     
     writeOnScreen();
+    cursorOn();
 }
 
 void outputQ7(bool f,SingularRecord * temp,int max){

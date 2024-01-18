@@ -1013,7 +1013,7 @@ void printQ5(bool f,int npp,int* index,Flight** flight,int max){
         }
         *index += 1;
         yChunk++;
-        while(*index < max && (*index % 5) != 0){
+        while(*index < max && (*index % npp) != 0){
             if(flight[*index]){
                 char * fId = getFlightId(flight[*index]);
                 Time * sDD = getFlightSDepartureDate(flight[*index]);
@@ -1062,7 +1062,7 @@ void printQ5(bool f,int npp,int* index,Flight** flight,int max){
     }
     *index += 1;
     yChunk++;
-    while(*index < max && (*index % 5) != 0){
+    while(*index < max && (*index % npp) != 0){
         if(*index < max && flight[*index]){
         char * fId = getFlightId(flight[*index]);
         Time * sDD = getFlightSDepartureDate(flight[*index]);
@@ -1094,25 +1094,37 @@ void printQ6(bool f,int npp,int * index,int max,char ** names,int * passengers){
     if(*index < 0) *index = 0;
     int yChunk = 1;
     if(f == false){
-        while(yChunk - 1 < npp && *index < max){
-            if(names[*index]){
-                mvwprintw(terminal,dist * yChunk,20,"%s;%d",names[*index],passengers[*index]);
-                yChunk++;
-                *index += 1;
-                continue;
+        if(*index < max && names[*index]){
+            mvwprintw(terminal,dist * yChunk,39,"%s;%d",names[*index],passengers[*index]);
+        }
+        yChunk++;
+        *index += 1;
+        while(*index < max && (*index % npp) != 0){
+            if(*index < max && names[*index]){
+                mvwprintw(terminal,dist * yChunk,39,"%s;%d",names[*index],passengers[*index]);
             }
+            yChunk++;
+            *index += 1;
+            continue;
         }
         wrefresh(terminal);
         return;
     }
-    while(yChunk - 1 < npp && *index < max){
-        if(names[*index]){
-            mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*index + 1);
-            mvwprintw(terminal,(dist * yChunk) + 1,20,"name: %s",names[*index]);
-            mvwprintw(terminal,(dist * yChunk) + 2,20,"passengers: %d",passengers[*index]);
-            yChunk++;
-            *index += 1;
+    if(*index < max && names[*index]){
+        mvwprintw(terminal,(dist * yChunk),35,"--- %d ---",*index + 1);
+        mvwprintw(terminal,(dist * yChunk) + 1,35,"name: %s",names[*index]);
+        mvwprintw(terminal,(dist * yChunk) + 2,35,"passengers: %d",passengers[*index]);
+    }
+    yChunk++;
+    *index += 1;
+    while(*index < max && (*index % npp) != 0){
+        if(*index < max && names[*index]){
+            mvwprintw(terminal,(dist * yChunk),35,"--- %d ---",*index + 1);
+            mvwprintw(terminal,(dist * yChunk) + 1,35,"name: %s",names[*index]);
+            mvwprintw(terminal,(dist * yChunk) + 2,35,"passengers: %d",passengers[*index]);
         }
+        yChunk++;
+        *index += 1;
     }
     wrefresh(terminal);
 }
