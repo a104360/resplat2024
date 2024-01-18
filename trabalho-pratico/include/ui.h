@@ -58,4 +58,15 @@ void dontWriteOnScreen();
 */
 void writeOnScreen();
 
+/**
+ * @brief Turns the cursor visible
+*/
+void cursorOn();
+
+
+/**
+ * @brief Removes the cursor from the screen
+*/
+void cursorOff();
+
 #endif

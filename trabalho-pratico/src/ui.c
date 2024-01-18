@@ -609,7 +609,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                 char * time = timeToString(fTime);
                 time[10] = '\0';
                 char * fId = getFlightId(flights[*fCount]);
-                mvwprintw(terminal,dist * yChunk,20,"%s;%sflight",fId,time);
+                mvwprintw(terminal,dist * yChunk,20,"%s;%s;flight",fId,time);
                 yChunk++;
                 *fCount += 1;
                 *command += 1;
@@ -621,7 +621,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     char * time = timeToString(fTime);
                     time[10] = '\0';
                     char * fId = getFlightId(flights[*fCount]);
-                    mvwprintw(terminal,dist * yChunk,20,"%s;%sflight",fId,time);
+                    mvwprintw(terminal,dist * yChunk,20,"%s;%s;flight",fId,time);
                     yChunk++;
                     *fCount += 1;
                     *command += 1;
@@ -876,7 +876,28 @@ void printQ4(bool f,int npp,int * index,Reservation ** reservation,int max){
     if(*index < 0) *index = 0;
     int yChunk = 1;
     if(f == false){
-        while(*index < max && yChunk - 1 < npp){
+        if(*index < max && reservation[*index]){
+            char * id = getReservId(reservation[*index]);
+            Time * bTime = getReservBeginDate(reservation[*index]);
+            Time * eTime = getReservEndDate(reservation[*index]);
+            char * stringBTime = timeToString(bTime);
+            char * stringETime = timeToString(eTime);
+            char * uId = getReservUserId(reservation[*index]);
+            int rating = getReservRating(reservation[*index]);
+            int n = numberOfDays(bTime,eTime);
+
+            mvwprintw(terminal,dist * yChunk,20,"%s;%s;%s;%s;%d;%.3f",id,stringBTime,stringETime,uId,rating,getTotalSpentOnReserv(reservation[*index],n));
+
+            ffree(id);
+            ffree(stringBTime);
+            ffree(stringETime);
+            ffree(uId);
+            destroyTime(bTime);
+            destroyTime(eTime);
+        }
+        *index += 1;
+        yChunk++;
+        while(*index < max && (*index % npp) != 0){
             if(reservation[*index]){
                 char * id = getReservId(reservation[*index]);
                 Time * bTime = getReservBeginDate(reservation[*index]);
@@ -902,7 +923,36 @@ void printQ4(bool f,int npp,int * index,Reservation ** reservation,int max){
         wrefresh(terminal);
         return;
     }
-    while(*index < max && yChunk - 1 < npp){
+
+    if(*index < max && reservation[*index]){
+        char * id = getReservId(reservation[*index]);
+        Time * bTime = getReservBeginDate(reservation[*index]);
+        Time * eTime = getReservEndDate(reservation[*index]);
+        char * stringBTime = timeToString(bTime);
+        char * stringETime = timeToString(eTime);
+        char * uId = getReservUserId(reservation[*index]);
+        int rating = getReservRating(reservation[*index]);
+        int n = numberOfDays(bTime,eTime);
+        
+        mvwprintw(terminal,(dist * yChunk) - 4,20,"--- %d ---",*index + 1);
+        mvwprintw(terminal,(dist * yChunk) - 3,20,"id: %s",id);
+        mvwprintw(terminal,(dist * yChunk) - 2,20,"begin_date: %s",stringBTime);
+        mvwprintw(terminal,(dist * yChunk) - 1,20,"end_date: %s",stringETime);
+        mvwprintw(terminal,(dist * yChunk) + 0,20,"user_id: %s",uId);
+        mvwprintw(terminal,(dist * yChunk) + 1,20,"rating: %d",rating);
+        mvwprintw(terminal,(dist * yChunk) + 2,20,"total_price: %0.3f",getTotalSpentOnReserv(reservation[*index],n));
+
+        ffree(id);
+        ffree(stringBTime);
+        ffree(stringETime);
+        ffree(uId);
+        destroyTime(bTime);
+        destroyTime(eTime);
+    }
+    *index += 1;
+    yChunk++;
+    int i = 1;
+    while(*index < max && (*index % npp) != 0){
         if(reservation[*index]){
             char * id = getReservId(reservation[*index]);
             Time * bTime = getReservBeginDate(reservation[*index]);
@@ -913,13 +963,15 @@ void printQ4(bool f,int npp,int * index,Reservation ** reservation,int max){
             int rating = getReservRating(reservation[*index]);
             int n = numberOfDays(bTime,eTime);
             
-            mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*index + 1);
-            mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",id);
-            mvwprintw(terminal,(dist * yChunk) + 2,20,"begin_date: %s",stringBTime);
-            mvwprintw(terminal,(dist * yChunk) + 3,20,"end_date: %s",stringETime);
-            mvwprintw(terminal,(dist * yChunk) + 4,20,"user_id: %s",uId);
-            mvwprintw(terminal,(dist * yChunk) + 5,20,"rating: %d",rating);
-            mvwprintw(terminal,(dist * yChunk) + 6,20,"total_price: %0.3f",getTotalSpentOnReserv(reservation[*index],n));
+            mvwprintw(terminal,(dist * yChunk) - 4 + i,20,"--- %d ---",*index + 1);
+            mvwprintw(terminal,(dist * yChunk) - 3 + i,20,"id: %s",id);
+            mvwprintw(terminal,(dist * yChunk) - 2 + i,20,"begin_date: %s",stringBTime);
+            mvwprintw(terminal,(dist * yChunk) - 1 + i,20,"end_date: %s",stringETime);
+            mvwprintw(terminal,(dist * yChunk) + 0 + i,20,"user_id: %s",uId);
+            mvwprintw(terminal,(dist * yChunk) + 1 + i,20,"rating: %d",rating);
+            mvwprintw(terminal,(dist * yChunk) + 2 + i,20,"total_price: %0.3f",getTotalSpentOnReserv(reservation[*index],n));
+            
+            i++;
 
             ffree(id);
             ffree(stringBTime);
@@ -931,6 +983,7 @@ void printQ4(bool f,int npp,int * index,Reservation ** reservation,int max){
         *index += 1;
         yChunk++;
     }
+    wrefresh(terminal);
 }
 
 void printQ5(bool f,int npp,int* index,Flight** flight,int max){
@@ -938,15 +991,14 @@ void printQ5(bool f,int npp,int* index,Flight** flight,int max){
     if(*index < 0) *index = 0;
     int yChunk = 1;
     if(f == false){
-        while(*index < max && yChunk - 1 < npp){
-            if(flight[*index]){
+        if(*index < max && flight[*index]){
             char * fId = getFlightId(flight[*index]);
             Time * sDD = getFlightSDepartureDate(flight[*index]);
             char * sDepDate = timeToString(sDD);
             char * destination = getFlightDestination(flight[*index]);
             char * airline = getFlightAirline(flight[*index]);
             char * planeModel = getFlightPlaneModel(flight[*index]);
-            mvwprintw(terminal,dist * yChunk,20,"%s;%s;%s;%s;%s",
+            mvwprintw(terminal,dist * yChunk,13,"%s;%s;%s;%s;%s",
             fId,
             sDepDate,
             destination,
@@ -958,35 +1010,81 @@ void printQ5(bool f,int npp,int* index,Flight** flight,int max){
             ffree(destination);
             ffree(airline);
             ffree(planeModel);
-            *index += 1;
-            yChunk++;
+        }
+        *index += 1;
+        yChunk++;
+        while(*index < max && (*index % 5) != 0){
+            if(flight[*index]){
+                char * fId = getFlightId(flight[*index]);
+                Time * sDD = getFlightSDepartureDate(flight[*index]);
+                char * sDepDate = timeToString(sDD);
+                char * destination = getFlightDestination(flight[*index]);
+                char * airline = getFlightAirline(flight[*index]);
+                char * planeModel = getFlightPlaneModel(flight[*index]);
+                mvwprintw(terminal,dist * yChunk,13,"%s;%s;%s;%s;%s",
+                fId,
+                sDepDate,
+                destination,
+                airline,
+                planeModel);
+                destroyTime(sDD);
+                ffree(fId);
+                ffree(sDepDate);
+                ffree(destination);
+                ffree(airline);
+                ffree(planeModel);
+                *index += 1;
+                yChunk++;
             }
         }
+        wrefresh(terminal);
         return;
     }
-    while(*index < max && yChunk - 1 < npp){
-        if(flight[*index]){
+    if(*index < max && flight[*index]){
         char * fId = getFlightId(flight[*index]);
         Time * sDD = getFlightSDepartureDate(flight[*index]);
         char * sDepDate = timeToString(sDD);
         char * destination = getFlightDestination(flight[*index]);
         char * airline = getFlightAirline(flight[*index]);
         char * planeModel = getFlightPlaneModel(flight[*index]);
-        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*index + 1);
-        mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",fId);
-        mvwprintw(terminal,(dist * yChunk) + 2,20,"schedule_departure_date: %s",sDepDate);
-        mvwprintw(terminal,(dist * yChunk) + 3,20,"destination: %s",destination);
-        mvwprintw(terminal,(dist * yChunk) + 4,20,"airline: %s",airline);
-        mvwprintw(terminal,(dist * yChunk) + 5,20,"plane_model: %s",planeModel);
+        mvwprintw(terminal,(dist * yChunk) - 3,20,"--- %d ---",*index + 1);
+        mvwprintw(terminal,(dist * yChunk) - 2,20,"id: %s",fId);
+        mvwprintw(terminal,(dist * yChunk) - 1,20,"schedule_departure_date: %s",sDepDate);
+        mvwprintw(terminal,(dist * yChunk) + 0,20,"destination: %s",destination);
+        mvwprintw(terminal,(dist * yChunk) + 1,20,"airline: %s",airline);
+        mvwprintw(terminal,(dist * yChunk) + 2,20,"plane_model: %s",planeModel);
         destroyTime(sDD);
         ffree(fId);
         ffree(sDepDate);
         ffree(destination);
         ffree(airline);
         ffree(planeModel);
+    }
+    *index += 1;
+    yChunk++;
+    while(*index < max && (*index % 5) != 0){
+        if(*index < max && flight[*index]){
+        char * fId = getFlightId(flight[*index]);
+        Time * sDD = getFlightSDepartureDate(flight[*index]);
+        char * sDepDate = timeToString(sDD);
+        char * destination = getFlightDestination(flight[*index]);
+        char * airline = getFlightAirline(flight[*index]);
+        char * planeModel = getFlightPlaneModel(flight[*index]);
+        mvwprintw(terminal,(dist * yChunk) - 3,20,"--- %d ---",*index + 1);
+        mvwprintw(terminal,(dist * yChunk) - 2,20,"id: %s",fId);
+        mvwprintw(terminal,(dist * yChunk) - 1,20,"schedule_departure_date: %s",sDepDate);
+        mvwprintw(terminal,(dist * yChunk) + 0,20,"destination: %s",destination);
+        mvwprintw(terminal,(dist * yChunk) + 1,20,"airline: %s",airline);
+        mvwprintw(terminal,(dist * yChunk) + 2,20,"plane_model: %s",planeModel);
+        destroyTime(sDD);
+        ffree(fId);
+        ffree(sDepDate);
+        ffree(destination);
+        ffree(airline);
+        ffree(planeModel);
+        }
         *index += 1;
         yChunk++;
-        }
     }
     wrefresh(terminal);
 }
@@ -1092,7 +1190,8 @@ int getInput(){
 
 void menus(){
     initscr();
-    cbreak();
+    raw();
+    cursorOn();
     keypad(stdscr,true);
 
     int scrWidth = 0,scrHeight = 0;
@@ -1156,4 +1255,12 @@ void dontWriteOnScreen(){
 
 void writeOnScreen(){
     echo();
+}
+
+void cursorOn(){
+    curs_set(1);
+}
+
+void cursorOff(){
+    curs_set(0);
 }

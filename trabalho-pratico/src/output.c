@@ -616,15 +616,25 @@ void outputQ4(bool f,Reservation ** rList,int max){
     int index = 0;
     printQ4(f,5,&index,rList,max);
     dontWriteOnScreen();
+    cursorOff();
     int input = getInput();
     while(input != 0){
         if(input == DOWN){
+            if(index >= max){
+                input = getInput();
+                continue;
+            }
             printQ4(f,5,&index,rList,max);
             input = getInput();
             continue;
         }
         if(input == UP){
-            index -= 10;
+            int rewinder = 0;
+            while(rewinder < 2){
+                if(index > 0) index -= 1;
+                while(index > 0 && (index % 5) != 0) index -= 1;
+                rewinder++;
+            }
             printQ4(f,5,&index,rList,max);
             input = getInput();
             continue;
@@ -632,6 +642,7 @@ void outputQ4(bool f,Reservation ** rList,int max){
         input = getInput();
     }
     writeOnScreen();
+    cursorOn();
 }
 
 void outputQ5(bool f, Flight ** fList,int max){
@@ -702,12 +713,21 @@ void outputQ5(bool f, Flight ** fList,int max){
     int input = getInput();
     while(input != 0){
         if(input == DOWN){
+            if(index >= max){
+                input = getInput();
+                continue;
+            }
             printQ5(f,5,&index,fList,max);
             input = getInput();
             continue;
         }
         if(input == UP){
-            index -= 10;
+            int rewinder = 0;
+            while(rewinder < 2){
+                if(index > 0) index -= 1;
+                while(index > 0 && (index % 5) != 0) index -= 1;
+                rewinder++;
+            }
             printQ5(f,5,&index,fList,max);
             input = getInput();
             continue;
