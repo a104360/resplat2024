@@ -492,8 +492,12 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                 temp++;
 
             }
-            rCount += 1;
-            fCount += 1;
+            if(rCount != 0 || fCount != 0){
+                rCount += 1;
+                fCount += 1;
+            }else{
+                command = 0;
+            }
             printQ2(f,&command,5,reservations,n1,&rCount,flights,n2,&fCount);
         }
         input = getInput();
