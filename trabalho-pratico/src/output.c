@@ -420,48 +420,80 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
         }
         if(outputFile != NULL) fclose(outputFile);
     }
-    int command = 1;
+    int command = 0;
     int rCount = 0;
     int fCount = 0;
+    int max = n1 + n2;
     printQ2(f,&command,5,reservations,n1,&rCount,flights,n2,&fCount);
     dontWriteOnScreen();
     int input = getInput();
     while(input != 0){
-        if(input == DOWN){
+        if(input == DOWN && command < max){
             printQ2(f,&command,5,reservations,n1,&rCount,flights,n2,&fCount);
             input = getInput();
             continue;
         }
         if(input == UP){
-            int temp = command;
-            while(command != temp - 10 && command > 0){
-                if(rCount >= n1) rCount -= 1;
-                if(fCount >= n2) fCount -= 1;
-                if(rCount > 0 && fCount > 0){
-                    Time * r = getReservBeginDate(reservations[rCount]);
-                    Time * f = getFlightSDepartureDate(flights[fCount]);
-                    if(compareTimes(r,f)){
-                        rCount--;
+            int temp = 0;
+            fCount -= 1;
+            rCount -= 1;
+            while(temp < 2){
+                if(command % 5 == 0){
+                    if(rCount > 0 && fCount > 0){
+                        Time * r = getReservBeginDate(reservations[rCount]);
+                        Time * f = getFlightSDepartureDate(flights[fCount]);
+                        if(compareTimes(r,f) == true){
+                            rCount--;
+                        }else{
+                            fCount--;
+                        } 
+                        destroyTime(r);
+                        destroyTime(f);
+                        command--;
                     }else{
-                        fCount--;
-                    } 
-                    destroyTime(r);
-                    destroyTime(f);
-                    command--;
-                    continue;
+                        if(rCount > 0){
+                            rCount--;
+                            command--;
+                        }
+                        if(fCount > 0){
+                            fCount--;
+                            command--;
+                        }
+                    }
                 }
-                if(rCount > 0){
-                    rCount--;
-                    command--;
-                    continue;
+
+                while((command % 5) != 0 && command >= 0){
+                    if(rCount > 0 && fCount > 0){
+                        Time * r = getReservBeginDate(reservations[rCount]);
+                        Time * f = getFlightSDepartureDate(flights[fCount]);
+                        if(compareTimes(r,f) == true){
+                            rCount--;
+                        }else{
+                            fCount--;
+                        } 
+                        destroyTime(r);
+                        destroyTime(f);
+                        command--;
+                        continue;
+                    }else{
+                        if(rCount > 0){
+                            rCount--;
+                            command--;
+                            continue;
+                        }
+                        if(fCount > 0){
+                            fCount--;
+                            command--;
+                            continue;
+                        }
+                    }
+                    break;
                 }
-                if(fCount > 0){
-                    fCount--;
-                    command--;
-                    continue;
-                }
-                break;
+                temp++;
+
             }
+            rCount += 1;
+            fCount += 1;
             printQ2(f,&command,5,reservations,n1,&rCount,flights,n2,&fCount);
         }
         input = getInput();

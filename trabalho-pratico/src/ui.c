@@ -451,14 +451,69 @@ void printQ1Reservation(bool F, char * hotel_id, char * hotel_name , int hotel_s
 
 void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int * rCount, Flight ** flights,int n2,int * fCount){
     NEWPAGE;
-    if(*command < 1) *command = 1;
+    if(*command < 0) *command = 0;
     if(*rCount < 0) *rCount = 0;
     if(*fCount < 0) *fCount = 0;
     int yChunk = 1;
     if(f == false){ // Normal Mode
         if(reservations && *rCount < n1 && flights && *fCount < n2){ // There is both reservations and flights to be written
             int max = n1 + n2;
-            while(*command < max && yChunk - 1 < npp){
+            if(*rCount < n1 && *fCount < n2){ // Both the arrays have not reached their limit 
+                Time * rTime = getReservBeginDate(reservations[*rCount]);
+                Time * fTime = getFlightSDepartureDate(flights[*fCount]);
+                if(compareTimes(rTime,fTime) == true){ // Flight is more recent that the reservation
+                    char * time = timeToString(fTime);
+                    time[10] = '\0';
+                    char * fId = getFlightId(flights[*fCount]);
+                    mvwprintw(terminal,dist * yChunk,20,"%s;%s;flight",fId,time);
+                    yChunk++;
+                    *fCount += 1;
+                    *command += 1;
+                    ffree(time);
+                    ffree(fId);
+                }
+                else{ // Reservation is more recent that the flight
+                    char * time = timeToString(rTime);
+                    time[10] = '\0';
+                    char * rId = getReservId(reservations[*rCount]);
+                    mvwprintw(terminal,dist * yChunk,20,"%s;%s;reservation",rId,time);
+                    yChunk++;
+                    *rCount += 1;
+                    *command += 1;
+                    ffree(time);
+                    ffree(rId);
+                }
+                destroyTime(rTime);
+                destroyTime(fTime);
+            }
+            if(*rCount < n1 && *fCount >= n2){ // Flights array have reached his limit
+                Time * rTime = getReservBeginDate(reservations[*rCount]);
+                char * time = timeToString(rTime);
+                time[10] = '\0';
+                char * rId = getReservId(reservations[*rCount]);
+                mvwprintw(terminal,dist * yChunk,20,"%s;%s;reservation",rId,time);
+                yChunk++;
+                *rCount += 1;
+                *command += 1;
+                ffree(time);
+                ffree(rId);
+                destroyTime(rTime);
+            }
+            if(*rCount >= n1 && *fCount < n2){ // Reservations array have reached his limit
+                Time * fTime = getFlightSDepartureDate(flights[*fCount]);
+                char * time = timeToString(fTime);
+                time[10] = '\0';
+                char * fId = getFlightId(flights[*fCount]);
+                mvwprintw(terminal,dist * yChunk,20,"%s;%s;flight",fId,time);
+                yChunk++;
+                *fCount += 1;
+                *command += 1;
+                ffree(time);
+                ffree(fId);
+                destroyTime(fTime);
+            }
+            
+            while(*command < max && ((*command) % (npp) != 0)){
                 if(*rCount < n1 && *fCount < n2){ // Both the arrays have not reached their limit 
                     Time * rTime = getReservBeginDate(reservations[*rCount]);
                     Time * fTime = getFlightSDepartureDate(flights[*fCount]);
@@ -516,12 +571,24 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     destroyTime(fTime);
                     continue;
                 }
+                break;
             }
             wrefresh(terminal);
             return;
         }else{
             if(reservations && *rCount < n1){ // There only is reservations to be written
-                while(*rCount < n1 && (yChunk - 1) < npp){
+                Time * rTime = getReservBeginDate(reservations[*rCount]);
+                char * time = timeToString(rTime);
+                time[10] = '\0';
+                char * rId = getReservId(reservations[*rCount]);
+                mvwprintw(terminal,dist * yChunk,20,"%s;%s;reservation",rId,time);
+                yChunk++;
+                *rCount += 1;
+                *command += 1;
+                ffree(time);
+                ffree(rId);
+                destroyTime(rTime);
+                while(*rCount < n1 && ((*command % (npp)) != 0)){
                     Time * rTime = getReservBeginDate(reservations[*rCount]);
                     char * time = timeToString(rTime);
                     time[10] = '\0';
@@ -538,7 +605,18 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                 return;
             }
             if(flights && *fCount < n2){ // There only is flights to be written
-                while(*fCount < n2 && yChunk - 1 < npp){
+                Time * fTime = getFlightSDepartureDate(flights[*fCount]);
+                char * time = timeToString(fTime);
+                time[10] = '\0';
+                char * fId = getFlightId(flights[*fCount]);
+                mvwprintw(terminal,dist * yChunk,20,"%s;%sflight",fId,time);
+                yChunk++;
+                *fCount += 1;
+                *command += 1;
+                ffree(time);
+                ffree(fId);
+                destroyTime(fTime);
+                while(*fCount < n2 && (*command % (npp) != 0)){
                     Time * fTime = getFlightSDepartureDate(flights[*fCount]);
                     char * time = timeToString(fTime);
                     time[10] = '\0';
@@ -554,13 +632,15 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                 wrefresh(terminal);
                 return;
             }
+            wrefresh(terminal);
+            return;
         }
     }else{ // F Mode
         if(reservations && *rCount < n1 && flights && *fCount < n2){ // There is both reservations and flights to be written
             
             int max = n1 + n2;
 
-            while(*rCount + *fCount + 2 < max && yChunk - 1 < npp){
+            while(*rCount + *fCount + 2 < max && (*command % (npp) != 0)){
                 if(*rCount < n1 && *fCount < n2){ // Both the arrays have not reached their limit 
                     Time * rTime = getReservBeginDate(reservations[*rCount]);
                     Time * fTime = getFlightSDepartureDate(flights[*fCount]);
@@ -568,7 +648,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                         char * time = timeToString(fTime);
                         time[10] = '\0';
                         char * fId = getFlightId(flights[*fCount]);
-                        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command);
+                        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command + 1);
                         mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",fId);
                         mvwprintw(terminal,(dist * yChunk) + 2,20,"date: %s",time);
                         mvwprintw(terminal,(dist * yChunk) + 3,20,"type: flight");
@@ -582,7 +662,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                         char * time = timeToString(rTime);
                         time[10] = '\0';
                         char * rId = getReservId(reservations[*rCount]);
-                        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command);
+                        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command + 1);
                         mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",rId);
                         mvwprintw(terminal,(dist * yChunk) + 2,20,"date: %s",time);
                         mvwprintw(terminal,(dist * yChunk) + 3,20,"type: reservation");
@@ -597,7 +677,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     continue;
                 }
                 if(*rCount < n1 && *fCount >= n2){ // Flights array have reached his limit, but the reservations has not
-                    while (*rCount < n1 && yChunk - 1 < npp)
+                    while (*rCount < n1 && (*command % (npp) != 0))
                     {                
                         Time * rTime = getReservBeginDate(reservations[*rCount]);
                         char * time = timeToString(rTime);
@@ -617,7 +697,7 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                     return;
                 }
                 if(reservations && flights && *rCount == n1 && *fCount < n2){ // Reservations array have reached his limit but the flights have not
-                    while (*fCount < n2 && yChunk - 1 < npp)
+                    while (*fCount < n2 && (*command % (npp) != 0))
                     {
                         Time * fTime = getFlightSDepartureDate(flights[*fCount]);
                         char * time = timeToString(fTime);
@@ -642,12 +722,25 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
 
         }else{
             if(reservations && *rCount < n2){ // There only is reservations to be written
-                while(*rCount < n1){
+                Time * rTime = getReservBeginDate(reservations[*rCount]);
+                char * time = timeToString(rTime);
+                time[10] = '\0';
+                char * rId = getReservId(reservations[*rCount]);
+                mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command + 1);
+                mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",rId);
+                mvwprintw(terminal,(dist * yChunk) + 2,20,"date: %s",time);
+                yChunk++;
+                *rCount += 1;
+                *command += 1;
+                ffree(time);
+                ffree(rId);
+                destroyTime(rTime);
+                while(*rCount < n1 && (*command % (npp) != 0)){
                     Time * rTime = getReservBeginDate(reservations[*rCount]);
                     char * time = timeToString(rTime);
                     time[10] = '\0';
                     char * rId = getReservId(reservations[*rCount]);
-                    mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command);
+                    mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command + 1);
                     mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",rId);
                     mvwprintw(terminal,(dist * yChunk) + 2,20,"date: %s",time);
                     yChunk++;
@@ -660,7 +753,20 @@ void printQ2(bool f,int * command,int npp,Reservation ** reservations,int n1,int
                 return;
             }
             if(flights && *fCount < n2){ // There only is flights to be written
-                while(*fCount < n2){
+                Time * fTime = getFlightSDepartureDate(flights[*fCount]);
+                char * time = timeToString(fTime);
+                time[10] = '\0';
+                char * fId = getFlightId(flights[*fCount]);
+                mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*command + 1);
+                mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",fId);
+                mvwprintw(terminal,(dist * yChunk) + 2,20,"date: %s",time);
+                yChunk++;
+                *fCount += 1;
+                *command += 1;
+                ffree(time);
+                ffree(fId);
+                destroyTime(fTime);
+                while(*fCount < n2 && (*command % (npp) != 0)){
                     Time * fTime = getFlightSDepartureDate(flights[*fCount]);
                     char * time = timeToString(fTime);
                     time[10] = '\0';
