@@ -492,7 +492,7 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
                 temp++;
 
             }
-            if(rCount != 0 || fCount != 0){
+            if(rCount != 0 && fCount != 0){
                 rCount += 1;
                 fCount += 1;
             }else{
