@@ -1178,13 +1178,14 @@ void printQ7(bool f,int npp,int * index,SingularRecord * table,int max){
 
 void printQ8(bool f,int revenue){
     NEWPAGE;
+    int offset = dist + 15;
     if(f == false){
-        mvwprintw(terminal,dist,20,"%d",revenue);
+        mvwprintw(terminal,offset,60,"%d",revenue);
         wrefresh(terminal);
         return;
     }
-    mvwprintw(terminal,dist,20,"--- 1 ---");
-    mvwprintw(terminal,dist + 1,20,"revenue: %d",revenue);
+    mvwprintw(terminal,offset,60,"--- 1 ---");
+    mvwprintw(terminal,offset + 1,60,"revenue: %d",revenue);
     wrefresh(terminal);
 }
 
@@ -1192,7 +1193,12 @@ void printQ9(bool f,int npp,int * index,char ** ids,char ** names,int max){
     NEWPAGE;
     int yChunk = 1;
     if(f == false){
-        while(yChunk - 1 < npp && *index < max){
+        if(*index < max && names[*index] && ids[*index]){
+            mvwprintw(terminal,dist * yChunk,20,"%s;%s",ids[*index],names[*index]);
+        }
+        yChunk++;
+        *index += 1;
+        while(*index < max && (*index % npp) != 0){
             mvwprintw(terminal,dist * yChunk,20,"%s;%s",ids[*index],names[*index]);
             yChunk++;
             *index += 1;
@@ -1200,7 +1206,14 @@ void printQ9(bool f,int npp,int * index,char ** ids,char ** names,int max){
         wrefresh(terminal);
         return;
     }
-    while(yChunk - 1 < npp && *index < max){
+    if(*index < max && names[*index] && ids[*index]){
+        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*index + 1);
+        mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",ids[*index]);
+        mvwprintw(terminal,(dist * yChunk) + 2,20,"name: %s",names[*index]);
+    }
+    yChunk++;
+    *index += 1;
+    while(*index < max && (*index % npp) != 0){
         mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*index + 1);
         mvwprintw(terminal,(dist * yChunk) + 1,20,"id: %s",ids[*index]);
         mvwprintw(terminal,(dist * yChunk) + 2,20,"name: %s",names[*index]);

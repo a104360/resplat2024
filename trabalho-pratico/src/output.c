@@ -901,9 +901,11 @@ void outputQ8(bool f, int revenue){
         return;
     }
     printQ8(f,revenue);
+    cursorOff();
     dontWriteOnScreen();
     int input = getInput();
     while(input != 0) input = getInput();
+    cursorOn();
     writeOnScreen();
 }
 
@@ -938,22 +940,33 @@ void outputQ9(char ** ids,char ** names,int valids,bool f){
         return;
     }
     int index = 0;
+    cursorOff();
     printQ9(f,5,&index,ids,names,valids);
     dontWriteOnScreen();
     int input = getInput();
     while(input != 0){
         if(input == DOWN){
+            if(index >= valids){
+                input = getInput();
+                continue;
+            }
             printQ9(f,5,&index,ids,names,valids);
             input = getInput();
             continue;
         }
         if(input == UP){
-            index -= 10;
+            int rewinder = 0;
+            while(rewinder < 2){
+                if(index > 0) index -= 1;
+                while(index > 0 && (index % 5) != 0) index -= 1;
+                rewinder++;
+            }
             printQ9(f,5,&index,ids,names,valids);
             input = getInput();
             continue;
         }
         input = getInput();
     }
+    cursorOn();
     writeOnScreen();
 }
