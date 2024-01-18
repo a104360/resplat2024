@@ -301,7 +301,8 @@ void query7(Flights * fDatabase,char * num, bool f){
     SingularRecord * allDelays = getDelays((void *)fDatabase);
     int n = atoi(num);
     int max = getSRecordSize(allDelays);
-    int * delays = malloc(sizeof(int) * max);
+    if(max < n) n = max;
+    /*int * delays = malloc(sizeof(int) * max);
     for(int i = 0;i < max;
     delays[i] = -1,
     delays[i] = getSRecordListElement(allDelays,i),
@@ -311,12 +312,12 @@ void query7(Flights * fDatabase,char * num, bool f){
     for(int i = 0;i < max;
     airports[i] = NULL,
     airports[i] = getSRecordName(allDelays,i),
-    i++);
+    i++);*/
 
     outputQ7(f,allDelays,n);
-    for(int i = 0;i < max;ffree((airports[i])),i++);
-    ffree(airports);
-    ffree(delays);
+    //for(int i = 0;i < max;ffree((airports[i])),i++);
+    //ffree(airports);
+    //ffree(delays);
 
     destroySRecord(&allDelays);
 

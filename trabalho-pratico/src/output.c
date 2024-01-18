@@ -842,24 +842,35 @@ void outputQ7(bool f,SingularRecord * temp,int max){
         fclose(outputFile);
         return;
     }
+    cursorOff();
     int index = 0;
     printQ7(f,5,&index,temp,max);
     dontWriteOnScreen();
     int input = getInput();
     while(input != 0){
         if(input == DOWN){
+            if(index >= max){
+                input = getInput();
+                continue;
+            }
             printQ7(f,5,&index,temp,max);
             input = getInput();
             continue;
         }
         if(input == UP){
-            index -= 10;
+            int rewinder = 0;
+            while(rewinder < 2){
+                if(index > 0) index -= 1;
+                while(index > 0 && (index % 5) != 0) index -= 1;
+                rewinder++;
+            }
             printQ7(f,5,&index,temp,max);
             input = getInput();
             continue;
         }
         input = getInput();
     }
+    cursorOn();
     writeOnScreen();
 }
 

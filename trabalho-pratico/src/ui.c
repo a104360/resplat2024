@@ -1134,7 +1134,15 @@ void printQ7(bool f,int npp,int * index,SingularRecord * table,int max){
     if(*index < 0) *index = 0;
     int yChunk = 1;
     if(f == false){
-        while(yChunk - 1 < npp && *index < max){
+        if(*index < max){
+            char * airport = getSRecordName(table,*index);
+            int delay = getSRecordListElement(table,*index);
+            mvwprintw(terminal,dist * yChunk,20,"%s;%d",airport,delay);
+            ffree(airport);
+        }
+        yChunk++;
+        *index += 1;
+        while(*index < max && (*index % npp) != 0){
             char * airport = getSRecordName(table,*index);
             int delay = getSRecordListElement(table,*index);
             mvwprintw(terminal,dist * yChunk,20,"%s;%d",airport,delay);
@@ -1145,7 +1153,17 @@ void printQ7(bool f,int npp,int * index,SingularRecord * table,int max){
         wrefresh(terminal);
         return;
     }
-    while(yChunk - 1 < npp && *index < max){
+    if(*index < max){
+        char * airport = getSRecordName(table,*index);
+        int delay = getSRecordListElement(table,*index);
+        mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*index + 1);
+        mvwprintw(terminal,(dist * yChunk) + 1,20,"name: %s",airport);
+        mvwprintw(terminal,(dist * yChunk) + 2,20,"median: %d",delay);
+        ffree(airport);
+    }
+    yChunk++;
+    *index += 1;
+    while(*index < max && (*index % npp) != 0){
         char * airport = getSRecordName(table,*index);
         int delay = getSRecordListElement(table,*index);
         mvwprintw(terminal,(dist * yChunk),20,"--- %d ---",*index + 1);
