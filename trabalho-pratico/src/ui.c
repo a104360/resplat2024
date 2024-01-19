@@ -1375,6 +1375,7 @@ void menus(){
         NEWPAGE;
         wclear(search);
         box(search,0,0);
+        welcome(terminal,windowWidth,windowHeight);
         requestSomething(terminal,windowWidth,windowHeight,"Por favor, insira a query e parametros (h para ajuda).");
         wrefresh(search);
         query = getQuery(search,yW,xW,windowHeight,windowWidth);
