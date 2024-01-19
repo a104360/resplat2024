@@ -2,6 +2,7 @@
 #include "../include/statistics.h"
 #include "../include/parser.h"
 #include "../include/interpreter.h"
+#include "../include/utils.h"
 #include <ncurses.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -13,8 +14,12 @@ WINDOW * terminal;
 int dist;
 
 #define NEWPAGE wclear(terminal);\
-    box(terminal,0,0);\
+    wborder(terminal,(chtype) 'X',(chtype) 'X',(chtype) 'x',(chtype) 'x',(chtype) '/',(chtype) '\\',(chtype) '\\',(chtype) '/');\
 
+
+static void welcome(WINDOW * main,int width,int height){
+    mvwprintw(main,0.1 * height,(int)((width - 42)/ 2),"Bem-vindo à plataforma de reservas RESPLAT 2024");
+}
 
 static WINDOW * drawMainMenu(int bWidth, int bHeight) {
     int width = bWidth * 0.70;
@@ -23,8 +28,9 @@ static WINDOW * drawMainMenu(int bWidth, int bHeight) {
     int y = 0.06 * bHeight;
     WINDOW *main = newwin(height, width, y, x);
     refresh();
-    box(main, 0, 0);
-    mvwprintw(main,0.1 * height,(int)((width - 42)/ 2),"Bem-vindo à nossa plataforma de reservas");
+    wborder(main,(chtype) 'X',(chtype) 'X',(chtype) 'x',(chtype) 'x',(chtype) '/',(chtype) '\\',(chtype) '\\',(chtype) '/');
+    //mvwprintw(main,0.1 * height,(int)((width - 42)/ 2),"Bem-vindo à nossa plataforma de reservas");
+    welcome(main,width,height);
     wrefresh(main);
     return main;
 }
@@ -54,11 +60,13 @@ static void warning(int yW,int xW,int heightW,int widthW,const char * line){
     mvwprintw(warning,1,5,"%s inserido é inválido.",line);
     mvwprintw(warning,3,5,"Por favor, tentar de novo.");
     box(warning,0,0);
+    cursorOff();
     wrefresh(warning);
     getch();
     wclear(warning);
     wrefresh(warning);
     delwin(warning);
+    cursorOn();
     refresh();
 }
 
@@ -73,6 +81,8 @@ static void newSearch(WINDOW * search,char * buffer,int max){
 }
 
 static bool checkPath(const char * path){
+    if(path == NULL) return false;
+    if(path[0] == '\0') return false;
     int size = strlen(path);
     char * buffer = malloc(sizeof(char) * (size + 20));
     memset(buffer,'\0',size + 20);
@@ -144,10 +154,15 @@ static bool checkPath(const char * path){
 }*/
 
 static bool checkQuery(const char * line){
+    if(line == NULL) return false;
     char * dup = strdup(line);
     char * token = NULL;
     char * saveptr = NULL;
     token = strtok_r(dup," ",&saveptr);
+    if(token == NULL){
+        ffree(dup);
+        return false;
+    }
     if(strlen(token) > 2){
         free(dup);
         return false;
@@ -332,13 +347,58 @@ static bool checkQuery(const char * line){
     return true;
 }
 
+static void help(int width){
+    mvwprintw(terminal,9,width * 0.3,"Função  Exemplo do input");
+    mvwprintw(terminal,11,width * 0.3,"1       Book0000033110");
+    mvwprintw(terminal,12,width * 0.3,"1F      JéssiTavares910");
+    mvwprintw(terminal,14,width * 0.3,"2       JéssiTavares910");
+    mvwprintw(terminal,15,width * 0.3,"2F      JéssiTavares910 flights");
+    mvwprintw(terminal,17,width * 0.3,"3       HTL1001");
+    mvwprintw(terminal,18,width * 0.3,"3F      HTL1002");
+    mvwprintw(terminal,20,width * 0.3,"4       HTL1001");
+    mvwprintw(terminal,21,width * 0.3,"4F      HTL1002");
+    mvwprintw(terminal,23,width * 0.3,"5       LIS \"2021/01/01 00:00:00\" \"2022/12/31 23:59:59\"");
+    mvwprintw(terminal,24,width * 0.3,"5F      AMS \"2021/01/01 00:00:00\" \"2024/01/01 23:59:59\"");
+    mvwprintw(terminal,26,width * 0.3,"6       2023 10");
+    mvwprintw(terminal,27,width * 0.3,"6F      2023 10");
+    mvwprintw(terminal,29,width * 0.3,"7       10");
+    mvwprintw(terminal,30,width * 0.3,"7F      20");
+    mvwprintw(terminal,32,width * 0.3,"8       HTL1001 2023/05/02 2023/05/02");
+    mvwprintw(terminal,33,width * 0.3,"8F      HTL1001 2021/01/01 2022/01/01");
+    mvwprintw(terminal,35,width * 0.3,"9       J");
+    mvwprintw(terminal,36,width * 0.3,"9F      \"João M\"");
+}
+
+static void printHelp(WINDOW * search,int yW, int xW,int heightW,int widthW,char * buffer){
+    NEWPAGE;
+    welcome(terminal,(int) widthW,(int) heightW * 0.9);
+    help(widthW);
+    wrefresh(terminal);
+    newSearch(search,buffer,100);
+    
+    while(checkQuery(buffer) != true){
+        if(strlen(buffer) == 1 && (buffer[0] == 'q' || buffer[0] == 'Q')){
+            return;
+        }
+        cursorOff();
+        warning(yW,xW,heightW,widthW,"Query");
+        help(widthW);
+        wrefresh(terminal);
+        cursorOn();
+        newSearch(search,buffer,100);
+        refresh();
+    }
+}
+
 static char * getPath(WINDOW * search,int yW, int xW,int heightW,int widthW){
     char * buffer = malloc(sizeof(char) * 51);
-    mvwprintw(search, 1, 1, "> ");
-    wrefresh(search);
-    wgetnstr(search, buffer, 50);
+    newSearch(search,buffer,50);
 
     while(checkPath(buffer) != true){
+        if(buffer && (buffer[0] == 'q' || buffer[0] == 'Q')){
+            ffree(buffer);
+            return NULL;
+        }
         warning(yW,xW,heightW,widthW,"Path");
         newSearch(search,buffer,50);
     }
@@ -348,8 +408,25 @@ static char * getPath(WINDOW * search,int yW, int xW,int heightW,int widthW){
 static char * getQuery(WINDOW * search,int yW, int xW,int heightW,int widthW){
     char * buffer = malloc(sizeof(char) * 101);
     newSearch(search,buffer,100);
+    int len = strlen(buffer);
+
+
+    if(len == 1 && (buffer[0] == 'h' || buffer[0] == 'H')){
+        printHelp(search,yW,xW,heightW,widthW,buffer);
+        if(strlen(buffer) == 1 || ((buffer[0] == 'q' || buffer[0] == 'Q'))){
+            ffree(buffer);
+            return NULL;
+        }
+    }
 
     while(checkQuery(buffer) != true){
+        if(buffer && (buffer[0] == 'h' || buffer[0] == 'H')){
+            printHelp(search,yW,xW,heightW,widthW,buffer);
+        }
+        if(buffer && (buffer[0] == 'q' || buffer[0] == 'Q')){
+            ffree(buffer);
+            return NULL;
+        }
         warning(yW,xW,heightW,widthW,"Query");
         newSearch(search,buffer,100);
         refresh();
@@ -390,7 +467,7 @@ void printQ1User(bool F, char * name, char sex, int age, char * country_code ,
             char * passport , int number_of_flights, int number_of_reservations,double total_spent){
     noecho();
     NEWPAGE;
-    if(F == false)mvwprintw(terminal,dist,20,"%s;%c;%d;%s;%s;%d;%d,%.3f",name,sex,age,country_code,passport,number_of_flights,number_of_reservations,total_spent);
+    if(F == false)mvwprintw(terminal,dist + 20,40,"%s;%c;%d;%s;%s;%d;%d,%.3f",name,sex,age,country_code,passport,number_of_flights,number_of_reservations,total_spent);
     else {
         mvwprintw(terminal,dist,20,"--- 1 ---");
         mvwprintw(terminal,dist + 1,20,"name: %s",name);
@@ -1254,12 +1331,20 @@ void menus(){
 
     terminal = drawMainMenu(width,height);
     keypad(terminal,true);
-    requestSomething(terminal,windowWidth,windowHeight,"Por favor, insira o path para os csvs.");
+    requestSomething(terminal,windowWidth,windowHeight,"Por favor, insira o path para os ficheiros CSV.");
 
 
     WINDOW * search = drawSearchBox(width,height);
 
     char * buffer = getPath(search,yW,xW,windowHeight,windowWidth);
+    if(buffer == NULL){
+        wclear(search);
+        delwin(search);
+        wclear(terminal);
+        delwin(terminal);
+        endwin();
+        return;
+    }
 
     Users * uDatabase = validateUsers(buffer);
 
@@ -1284,9 +1369,20 @@ void menus(){
     wrefresh(search);
 
     char * query = getQuery(search,yW,xW,windowHeight,windowWidth);
-    
-    readQuery(uDatabase,rDatabase,fDatabase,pDatabase,query);
-
+    while(query != NULL){
+        readQuery(uDatabase,rDatabase,fDatabase,pDatabase,query);
+        ffree(query);
+        NEWPAGE;
+        wclear(search);
+        box(search,0,0);
+        requestSomething(terminal,windowWidth,windowHeight,"Por favor, insira a query e parametros (h para ajuda).");
+        wrefresh(search);
+        query = getQuery(search,yW,xW,windowHeight,windowWidth);
+    }
+    destroyDatabase(uDatabase);
+    destroyDatabase(rDatabase);
+    destroyDatabase(fDatabase);
+    destroyPassengers(pDatabase);
     wclear(terminal);
     delwin(terminal);
     endwin();

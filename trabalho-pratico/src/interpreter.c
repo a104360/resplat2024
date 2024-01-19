@@ -78,6 +78,11 @@ char * getSecondParam(const char * line){
 
 
 void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,char * line){
+    if(line == NULL) return;
+    if(line[0] == 'q' || line[0] == 'Q'){
+        ffree(line);
+        return;
+    }
     switch (line[0])
         {
 
@@ -88,7 +93,7 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
 
             //QUERIE 10
             if(line[1] == '0'){
-                if(line[2] == 'F'){
+                if(line[2] == 'F' || line[2] == 'f'){
                         query10(&line[4]);
 
                     
@@ -105,7 +110,7 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
 
                 //start time
 
-                if(line[1] == 'F'){
+                if(line[1] == 'F' || line[1] == 'f'){
                     query1((const Users *) uDatabase,(const Reservations *) rDatabase,(const Flights *) fDatabase,(const Passengers *) pDatabase,&line[3],true);
                     
                 }else {
@@ -124,7 +129,7 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
 
             //start time
 
-            if(line[1] == 'F'){
+            if(line[1] == 'F' || line[1] == 'f'){
                     query2((const Users * ) uDatabase,(const Reservations * ) rDatabase,(const Flights * ) fDatabase,(const Passengers *) pDatabase,&line[3],true);
                     
                 }else {
@@ -143,7 +148,7 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
 
             //start time
 
-            if(line[1] == 'F'){
+            if(line[1] == 'F' || line[1] == 'f'){
                     query3((Reservations * ) rDatabase,&line[3],true);
                     
                 }else {
@@ -162,7 +167,7 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
 
             //start time
 
-            if(line[1] == 'F'){
+            if(line[1] == 'F' || line[1] == 'f'){
                     query4((Reservations *) rDatabase,&line[3],true);
                     
                 }else {
@@ -183,7 +188,7 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
 
             Time * firstDate = dateQ5(&line[7]);
             Time * secondDate = dateQ5(&line[29]);
-            if(line[1] == 'F'){
+            if(line[1] == 'F' || line[1] == 'f'){
                     char * airport = airportName(&line[3]);
                     query5((const Flights * ) fDatabase,firstDate,secondDate,airport,true);
                     destroyTime(firstDate);
@@ -208,7 +213,7 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
 
             //start time
 
-            if(line[1] == 'F'){
+            if(line[1] == 'F' || line[1] == 'f'){
                 char * year = airportName(&line[3]);
                 char * nAirports = getSecondParam(&line[3]);
                 query6((const Flights *) fDatabase,(const Passengers *) pDatabase,year,nAirports,true);
@@ -236,7 +241,7 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
 
             //start time
 
-            if(line[1] == 'F'){
+            if(line[1] == 'F' || line[1] == 'f'){
                     
                     query7((Flights *) fDatabase,&line[3],true);
                     
@@ -256,7 +261,7 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
 
             //start time
 
-            if(line[1] == 'F'){
+            if(line[1] == 'F' || line[1] == 'f'){
                     char * aux = strdup(line);
                     char * token = NULL;
                     char * saveptr = aux;
@@ -306,7 +311,7 @@ void readQuery(const Users * uDatabase,const Reservations * rDatabase,const Flig
 
             //start time
 
-            if(line[1] == 'F'){
+            if(line[1] == 'F' || line[1] == 'f'){
                     query9((Users *) uDatabase,limpaToken(&line[3]),true);
                     
                 }else {

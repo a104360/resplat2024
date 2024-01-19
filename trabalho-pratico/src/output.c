@@ -65,6 +65,7 @@ void outputQ1User(int F, char * name, char sex, int age, char * country_code , c
         fclose(outputFile);
         return;
     }
+    cursorOff();
     printQ1User(F,name,sex,age,country_code,passport,number_of_flights,number_of_reservations,total_spent);
     dontWriteOnScreen();
     int input = getInput();
@@ -72,6 +73,7 @@ void outputQ1User(int F, char * name, char sex, int age, char * country_code , c
         input = getInput();
     }
     writeOnScreen();
+    cursorOn();
     return;
 }
 
@@ -123,11 +125,13 @@ void outputQ1Flight(int F, char * airline, char * plane_model , char * origin, c
         fclose(outputFile);
         return;
     }
+    cursorOff();
     printQ1Flight(F,airline,plane_model,origin,destination,schedule_departure_date,schedule_arrival_date,passengers,delay);
     dontWriteOnScreen();
     int input = getInput();
     while(input != 0) input = getInput();
     writeOnScreen();
+    cursorOn();
 }
 
 
@@ -182,11 +186,13 @@ void outputQ1Reservation(int F, char * hotel_id, char * hotel_name , int hotel_s
         fclose(outputFile);
         return;
     }
+    cursorOff();
     printQ1Reservation(F,hotel_id,hotel_name,hotel_stars,begin_date,end_date,includes_breakfast,nights,total_price);
     dontWriteOnScreen();
     int input = getInput();
     while(input != 0) input = getInput();
     writeOnScreen();
+    cursorOn();
 }
 
 
@@ -420,6 +426,7 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
         }
         if(outputFile != NULL) fclose(outputFile);
     }
+    cursorOff();
     int command = 0;
     int rCount = 0;
     int fCount = 0;
@@ -502,6 +509,7 @@ void outputQ2(bool f,Reservation ** reservations,int n1, Flight ** flights,int n
         }
         input = getInput();
     }
+    cursorOn();
     writeOnScreen();
 }
 
@@ -530,6 +538,7 @@ void outputQ3(bool f,double rating){
         fclose(outputFile);
         return;
     }
+    cursorOff();
     printQ3(f,rating);
     dontWriteOnScreen();
     int input = getInput();
@@ -537,6 +546,7 @@ void outputQ3(bool f,double rating){
         input = getInput();
     }
     writeOnScreen();
+    cursorOn();
 }
 
 void outputQ4(bool f,Reservation ** rList,int max){
@@ -707,6 +717,7 @@ void outputQ5(bool f, Flight ** fList,int max){
         fclose(outputFile);
         return;
     }
+    cursorOff();
     int index = 0;
     printQ5(f,5,&index,fList,max);
     dontWriteOnScreen();
@@ -735,6 +746,7 @@ void outputQ5(bool f, Flight ** fList,int max){
         input = getInput();
     }
     writeOnScreen();
+    cursorOn();
 }
 
 
