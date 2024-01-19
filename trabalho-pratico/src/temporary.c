@@ -103,6 +103,12 @@ void ** getTempList(Temporary * temp){
     return list;
 }
 
+Flight ** getTempListFlights(Temporary * temp){
+    Flight ** list = malloc(sizeof(Flight *) * temp->num);
+    for(int i = 0;i < temp->num;copyFlight(list[i],temp->list[i]),i++);
+    return list;
+}
+
 char ** getTempListChar(Temporary * temp){
     char ** list = malloc(sizeof(char *)* temp->max);
     for(int i = 0; i < temp->max; i++){
