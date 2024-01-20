@@ -3,6 +3,7 @@
 #include "../include/utils.h"
 #include "../include/time.h"
 #include "../include/flight.h"
+#include "../include/reservation.h"
 
 /**
  * @brief Struct to be used on Iterations over the databases
@@ -22,6 +23,8 @@ Temporary * createTemporary();
 void destroyTemporary(Temporary *);
 
 void destroyTemporaryFlight(Temporary *);
+
+void destroyTemporaryReservation(Temporary *);
 
 void destroyTemporaryChar(Temporary *);
 
@@ -97,6 +100,10 @@ char ** getTempListChars(Temporary *);
  * @param position Position in which the name will be stored
 */
 void setTempListElementChar(Temporary *,char *,int);
+
+void setTempListElementReservation(Temporary *,Reservation *,int);
+
+Reservation ** getTempListReservations(Temporary *);
 
 /**
  * @brief Gets the pointer stored in a specific position

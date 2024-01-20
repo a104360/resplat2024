@@ -90,6 +90,7 @@ size_t getReservSize(){
 }
 
 void setReservId(Reservation * reserv,const char * line){
+    if(!reserv) return;
     if(reserv->id){
         free(reserv->id);
         reserv->id = NULL;
@@ -109,6 +110,7 @@ char *getReservId(Reservation * reserv){
 
 
 void setReservUserId(Reservation * reserv,const char * line){
+    if(!reserv) return;
     if(reserv->user_id){
         free(reserv->user_id);
         reserv->user_id = NULL;
@@ -126,6 +128,7 @@ char *getReservUserId(Reservation * reserv){
 
 
   void setReservHotelId(Reservation * reserv,const char * line){
+    if(!reserv) return;
     if(reserv->hotel_id){
         if(strlen(line) > strlen(reserv->hotel_id)){
             char * temp = realloc(reserv->hotel_id,strlen(line)+ 1);
@@ -143,8 +146,11 @@ char *getReservUserId(Reservation * reserv){
 }
 
  char *getReservHotelId(Reservation * reserv){
+    if(!reserv) return NULL;
      if(reserv->hotel_id){
-        char * hotel_id =strdup(reserv->hotel_id);
+        char * hotel_id = NULL;
+        
+        hotel_id = strdup(reserv->hotel_id);
         return hotel_id;
     }
     return NULL;
@@ -152,25 +158,19 @@ char *getReservUserId(Reservation * reserv){
 
 
   void setReservHotelName(Reservation * reserv,const char * line){
+    if(!reserv) return;
     if(reserv->hotel_name){
-        if(strlen(line) > strlen(reserv->hotel_name)){
-            char * temp = realloc(reserv->hotel_name,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            reserv->hotel_name = temp;
-            return;
-        }else{
-            strncpy(reserv->hotel_name,line,strlen(reserv->hotel_name));
-            reserv->hotel_name[strlen(reserv->hotel_name)] = '\0';
-            return;
-        }
+        ffree(reserv->hotel_name);
+        reserv->hotel_name = strdup(line);
     }
-    reserv->hotel_name =strdup(line);
+    reserv->hotel_name = strdup(line);
 }
 
  char *getReservHotelName(Reservation * reserv){
      if(reserv->hotel_name){
-        char * hotel_name =strdup(reserv->hotel_name);
+        char * hotel_name = NULL;
+        if(hotel_name) hotel_name[0] = '\0';
+        hotel_name = strdup(reserv->hotel_name);
         return hotel_name;
     }
     return NULL;
@@ -344,40 +344,31 @@ void copyReservation(Reservation * dest,Reservation * src){
     Time * reservEndDate = getReservEndDate(src);
 
 
-    setReservId(dest,getReservId(src));
-    setReservUserId(dest,getReservUserId(src));
-    setReservHotelId(dest,getReservHotelId(src));
-    setReservHotelName(dest,getReservHotelName(src));
+    setReservId(dest,reservId);
+    setReservUserId(dest,reservUserId);
+    setReservHotelId(dest,reservHotelId);
+    setReservHotelName(dest,reservHotelName);
     setReservHotelStars(dest,getReservHotelStars(src));
     setReservCityTax(dest,getReservCityTax(src));
-    setReservHotelAddress(dest,getReservHotelAddress(src));
-    setReservBeginDate(dest,getReservBeginDate(src));
-    setReservEndDate(dest,getReservEndDate(src));
+    setReservHotelAddress(dest,reservHotelAddress);
+    setReservBeginDate(dest,reservBeginDate);
+    setReservEndDate(dest,reservEndDate);
     setReservPricePerNight(dest,getReservPricePerNight(src));
     setReservBreakfast(dest,getReservBreakfast(src));
-    setReservRoomDetails(dest,getReservRoomDetails(src));
+    setReservRoomDetails(dest,reservRoomDetails);
     setReservRating(dest,getReservRating(src));
-    setReservComment(dest,getReservComment(src));
+    setReservComment(dest,reservComment);
 
 
-    free(reservId);
-    reservId = NULL;
-    free(reservUserId);
-    reservUserId = NULL;
-    free(reservHotelId);
-    reservHotelId = NULL;
-    free(reservHotelName);
-    reservHotelName = NULL;
-    free(reservHotelAddress);
-    reservHotelAddress = NULL;
-    free(reservRoomDetails);
-    reservRoomDetails = NULL;
-    free(reservComment);
-    reservComment = NULL;
-    free(reservBeginDate);
-    reservBeginDate = NULL;
-    free(reservEndDate);
-    reservEndDate = NULL;
+    ffree(reservId);
+    ffree(reservUserId);
+    ffree(reservHotelId);
+    ffree(reservHotelName);
+    ffree(reservHotelAddress);
+    ffree(reservRoomDetails);
+    ffree(reservComment);
+    ffree(reservBeginDate);
+    ffree(reservEndDate);
 }
 
 

@@ -15,6 +15,5 @@ void ffree(void *);
 */
 void initArrays(void ***,int);
 
-int extendArray(void ***,int);
-
+int extendArray(void ***,int,int);
 #endif

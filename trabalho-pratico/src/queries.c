@@ -240,14 +240,15 @@ void query3(Reservations * rDatabase,const char * id,bool f){
 
 void query4(Reservations * rDatabase,const char * id,bool f){
     Temporary * hDatabase = getAListOfSomething((void *) rDatabase,id,NULL,NULL,&allHotelReservs);
-    Reservation ** rList = (Reservation **) getTempList(hDatabase);
+    Reservation ** rList = (Reservation **) getTempListReservations(hDatabase);
     int n = getTempNum(hDatabase);
     mergeSort((void **) rList,n,"Reservation");
 
     outputQ4(f,rList,n);
 
+    for(int i = 0;i < n;destroyReservation(rList[i]),i++);
     ffree(rList);
-    destroyTemporary(hDatabase);
+    destroyTemporaryReservation(hDatabase);
 
     return;
 }
@@ -260,7 +261,8 @@ void query5(const Flights * fDatabase,Time * ti,Time * tf,const char * name,bool
 
     outputQ5(f,fList,max);
 
-    for(int j = 0;j < max;ffree(fList[j]),j++);
+    for(int j = 0;j < max;destroyFlight(fList[j]),j++);
+    ffree(fList);
     destroyTemporaryFlight(airportFlights);
 }
 
@@ -327,7 +329,7 @@ void query7(Flights * fDatabase,char * num, bool f){
 void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit,bool f){
     Temporary * hDatabase = getAListOfSomething((void *) rDatabase,id,lLimit,uLimit,&allHotelReservs);
     
-    Reservation ** rList = (Reservation **) getTempList(hDatabase);
+    Reservation ** rList = (Reservation **) getTempListReservations(hDatabase);
 
     int total = 0;
 
@@ -356,8 +358,9 @@ void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit
 
     outputQ8(f,total);
 
+    for(int i = 0;i < max;destroyReservation(rList[i]),i++);
     ffree(rList);
-    destroyTemporary(hDatabase);
+    destroyTemporaryReservation(hDatabase);
 
     return;
 }

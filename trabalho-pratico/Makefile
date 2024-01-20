@@ -48,7 +48,13 @@ debug: $(EXE).debug
 grind: $(EXE).debug
 	valgrind -s --leak-check=full --show-leak-kinds=all --log-file=valgrind-out.txt ./$(EXE).debug ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt
 
+grindBig: $(EXE).debug
+	valgrind -s --leak-check=full --show-leak-kinds=all --log-file=valgrind-out.txt ./$(EXE).debug ../../data_large/data ../../data_large/input.txt
+
 memo: grind
+	cat valgrind-out.txt
+
+memoBig: grindBig
 	cat valgrind-out.txt
 
 clean:

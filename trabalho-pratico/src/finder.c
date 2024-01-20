@@ -24,6 +24,7 @@ Temporary * getAListOfSomething(void * database,const char * hotelId,Time * begi
     setTempBegin(temp,begin);
     setTempEnd(temp,end);
     i = 0;
+    setTempNum(temp,0);
     applyForEach(database,func,(void *)temp);
     return temp;
 }
@@ -175,56 +176,16 @@ void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
         if (!strcoll(hotelId,wantedHotel) && 
         (compareTimes(beginDate,endLimit) || compareTimes(beginDate,endLimit) == 10) && 
         (compareTimes(beginLimit,endDate) || compareTimes(beginLimit,endDate) == 10)) {
-          if(i == getTempMax(array)){
-            void ** list = getTempList(array);
-            void ** aux = realloc(list,(getTempMax(array) * 2) * sizeof(void *));
-            if(!aux){
-                fprintf(stderr,"Error allocating memory for the list");
-                ffree(hotelId);
-                destroyTime(beginDate);
-                destroyTime(endDate);
-                destroyTime(beginLimit);
-                destroyTime(endLimit);
-                ffree(wantedHotel);
-                ffree(list);
-                return;
-            }
-            list = aux;
-            setTempList(array,list);         
-            setTempMax(array,getTempMax(array) * 2);
-            ffree(aux);
-          }
-          setTempListElement(array,reservation,i);
+          setTempListElementReservation(array,reservation,i);
           int rating = getReservRating(reservation);
-          //setTempSum(array,getTempSum(array) + rating);
           increaseTempSum(array,rating);
           incTempNum(array);
           i++;
         }
     }else{
         if(!strcoll(hotelId,wantedHotel)) {
-          if(i == getTempMax(array)){
-           void ** list = getTempList(array);
-            void ** aux = realloc(list,(getTempMax(array) * 2) * sizeof(void *));
-            if(!aux){
-                fprintf(stderr,"Error allocating memory for the list");
-                ffree(hotelId);
-                destroyTime(beginDate);
-                destroyTime(endDate);
-                destroyTime(beginLimit);
-                destroyTime(endLimit);
-                ffree(wantedHotel);
-                ffree(list);
-                return;
-            }
-            list = aux;
-            setTempList(array,list);         
-            setTempMax(array,getTempMax(array) * 2);
-            ffree(aux);     
-          }
-          setTempListElement(array,reservation,i);
+          setTempListElementReservation(array,reservation,i);
           int rating = getReservRating(reservation);
-          //setTempSum(array,getTempSum(array) + rating);
           increaseTempSum(array,rating);
           incTempNum(array);
           i++;

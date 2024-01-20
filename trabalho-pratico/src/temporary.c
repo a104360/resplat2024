@@ -62,6 +62,21 @@ void destroyTemporaryFlight(Temporary * temp){
     ffree(temp);
 }
 
+void destroyTemporaryReservation(Temporary * temp){
+    destroyTime(temp->begin);
+    destroyTime(temp->end);
+    ffree(temp->id);
+    for(int i = 0;i < temp->max;i++){
+        destroyReservation((((Reservation **) temp->list)[i]));
+    }
+    ffree(temp->list);
+    temp->database = NULL;
+    temp->num = 0;
+    temp->sum = 0;
+    temp->max = 0;
+    ffree(temp);
+}
+
 void destroyTemporaryChar(Temporary * temp){
     for(int i = 0;i < temp->max;i++){
         ffree((((char **) temp->begin)[i]));
@@ -105,10 +120,38 @@ void setTempListElement(Temporary * temp,void * element,int position){
     temp->list[position] = element;
 }
 
+void setTempListElementReservation(Temporary * temp,Reservation * element,int position){
+    Reservation ** list = (Reservation **) temp->list;
+    if(temp->num >= temp->max){
+        if(extendArray(&temp->list,temp->num,temp->num * 2) == 0) return;
+        setTempMax(temp,temp->num * 2);
+    }
+    
+    if(list[position] && temp->list[position]){
+        copyReservation(temp->list[position],element);
+        return;
+    }
+    list[position] = createReservation();
+    temp->list[position] = list[position];
+    copyReservation(temp->list[position],element);
+}
+
+
+Reservation ** getTempListReservations(Temporary * temp){
+    int max = temp->num;
+    Reservation ** list = malloc(sizeof(Reservation *) * max);
+    for(int i = 0;i < max;i++){
+        list[i] = NULL;
+        list[i] = createReservation();
+        copyReservation(list[i],temp->list[i]);
+    }
+    return list;
+}
+
 void setTempListFlight(Temporary * temp,Flight * element,int position){
     Flight ** list = (Flight **) temp->list;
     if(temp->num >= temp->max){
-        if(extendArray(&temp->list,temp->num * 2) == 0) return;
+        if(extendArray(&temp->list,temp->num,temp->num * 2) == 0) return;
         setTempMax(temp,temp->num * 2);
     }
     if(list[position]) {
@@ -122,7 +165,7 @@ void setTempListFlight(Temporary * temp,Flight * element,int position){
 void setTempListElementChar(Temporary * temp,char * element,int position){
     char ** list = (char **) temp->list;
     if(temp->num >= temp->max){
-        if(extendArray((void ***) &temp->list,temp->num * 2) == 1) setTempMax(temp,temp->num * 2);
+        if(extendArray((void ***) &temp->list,temp->num,temp->num * 2) == 1) setTempMax(temp,temp->num * 2);
         else return;
     }
     if(list[position]) ffree(list[position]);
