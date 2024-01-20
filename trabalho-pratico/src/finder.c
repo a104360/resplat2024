@@ -19,10 +19,10 @@ Temporary * getAListOfSomething(void * database,const char * hotelId,Time * begi
     void ** list = NULL; //= malloc(sizeof(void *) * 500);
     initArrays(&list,500);
     setTempList(temp,list);
+    setTempMax(temp,500);
     if(hotelId) setTempId(temp,(char *) hotelId);
     setTempBegin(temp,begin);
     setTempEnd(temp,end);
-    setTempMax(temp,500);
     i = 0;
     applyForEach(database,func,(void *)temp);
     return temp;
@@ -268,19 +268,18 @@ void checkAirports(gpointer key,gpointer value,gpointer flightData){
     Time * endLimit = getTempEnd(database);
     char * airport = getTempId(database);
 
-
     if(beginLimit && endLimit){
         if(!strcoll(airport,origin) && 
         compareTimes(sDepartureDate,endLimit)==true && 
         compareTimes(beginLimit,SArrivalDate)==true){
-            setTempListElement(database,(void *) value,i);
+            setTempListFlight(database,flight,i);
             i++;
             incTempNum(database);
         }
     }
     else{
         if(!strcoll(airport,origin)){
-            setTempListElement(database,(void *) value,i);
+            setTempListFlight(database,flight,i);
             i++;
             incTempNum(database);
         }
@@ -541,6 +540,7 @@ Temporary * getUsersPre(void * database, char * prefix){
     Temporary * list = createTemporary();
     setTempAux(list,(void *) preUsersIds);
     setTempList(list,(void **)preUsersNames);
+    setTempMax(list,10000);
     setTempId(list,prefix);
 
     applyForEach(uDatabase,&checkPre,(void *)list);
@@ -563,11 +563,11 @@ void checkPre(gpointer key, gpointer value, gpointer data){
     if(nameSize < preSize) return;
 
 
-    if(strncmp(userName,prefix,strlen(prefix))==0 && status ==1){
-        int max = getTempMax(temp);
-        setTempListElementChar(temp,userName,max);
-        setTempAuxElementChar(temp,userId,max);
-        setTempMax(temp,max+1);
+    if(strncmp(userName,prefix,preSize)==0 && status ==1){
+        int num = getTempNum(temp);
+        setTempListElementChar(temp,userName,num);
+        setTempAuxElementChar(temp,userId,num);
+        setTempNum(temp,num+1);
     }    
     ffree(userName);
     ffree(userId);

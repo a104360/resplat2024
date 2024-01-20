@@ -1,4 +1,5 @@
 #include "../include/temporary.h"
+#include "../include/utils.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -46,6 +47,21 @@ void destroyTemporary(Temporary * temp){
     ffree(temp);
 }
 
+void destroyTemporaryFlight(Temporary * temp){
+    destroyTime(temp->begin);
+    destroyTime(temp->end);
+    ffree(temp->id);
+    for(int i = 0;i < temp->max;i++){
+        destroyFlight((((Flight **) temp->list)[i]));
+    }
+    ffree(temp->list);
+    temp->database = NULL;
+    temp->num = 0;
+    temp->sum = 0;
+    temp->max = 0;
+    ffree(temp);
+}
+
 void destroyTemporaryChar(Temporary * temp){
     for(int i = 0;i < temp->max;i++){
         ffree((((char **) temp->begin)[i]));
@@ -76,6 +92,7 @@ void setTempId(Temporary * temp,char * id){
     temp->id = strdup(id);
 }
 char * getTempId(Temporary * temp){
+    if(!temp->id) return NULL;
     return strdup(temp->id);
 }
 
@@ -87,8 +104,27 @@ void setTempList(Temporary * temp,void ** list){
 void setTempListElement(Temporary * temp,void * element,int position){
     temp->list[position] = element;
 }
+
+void setTempListFlight(Temporary * temp,Flight * element,int position){
+    Flight ** list = (Flight **) temp->list;
+    if(temp->num >= temp->max){
+        if(extendArray(&temp->list,temp->num * 2) == 0) return;
+        setTempMax(temp,temp->num * 2);
+    }
+    if(list[position]) {
+        copyFlight(temp->list[position],element);
+        return;
+    }
+    list[position] = createFlight();
+    copyFlight(temp->list[position],element);
+}
+
 void setTempListElementChar(Temporary * temp,char * element,int position){
     char ** list = (char **) temp->list;
+    if(temp->num >= temp->max){
+        if(extendArray((void ***) &temp->list,temp->num * 2) == 1) setTempMax(temp,temp->num * 2);
+        else return;
+    }
     if(list[position]) ffree(list[position]);
     list[position] = strdup(element);
 }
@@ -103,19 +139,40 @@ void ** getTempList(Temporary * temp){
     return list;
 }
 
+Flight * getTempListFlight(Temporary * temp,int position){
+    Flight * flight = createFlight();
+    if(temp->list[position]){
+        copyFlight(flight,temp->list[position]);
+        return flight;
+    }
+    return NULL;
+}
+
 Flight ** getTempListFlights(Temporary * temp){
     Flight ** list = malloc(sizeof(Flight *) * temp->num);
-    for(int i = 0;i < temp->num;copyFlight(list[i],temp->list[i]),i++);
+    for(int i = 0;i < temp->num;i++){
+        list[i] = createFlight();
+        Flight * flight = (Flight *) temp->list[i];
+        copyFlight(list[i],flight);
+    }
     return list;
 }
 
-char ** getTempListChar(Temporary * temp){
-    char ** list = malloc(sizeof(char *)* temp->max);
-    for(int i = 0; i < temp->max; i++){
+char * getTempListCharElement(Temporary * temp, int position){
+    char ** list = (char **) temp->list;
+    if(list[position]){
+        return strdup(list[position]);
+    }
+    return NULL;
+}
+
+char ** getTempListChars(Temporary * temp){
+    char ** list = malloc(sizeof(char *)* temp->num);
+    for(int i = 0; i < temp->num; i++){
+        list[i] = NULL;
         char * aux = (char *) temp->list[i];
         list[i] = strdup(aux);
     }
-
     return list;
 }
 
@@ -197,7 +254,7 @@ void * getTempAux(Temporary * temp){
 
 char ** getTempAuxChar(Temporary * temp){
     char ** list = (char **) temp->begin;
-    int max = temp->max;
+    int max = temp->num;
     char ** dup = malloc(sizeof(char *) * max);
     for(int i = 0;i < max;i++){
         dup[i] = strdup(list[i]);

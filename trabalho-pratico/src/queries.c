@@ -254,14 +254,14 @@ void query4(Reservations * rDatabase,const char * id,bool f){
 
 void query5(const Flights * fDatabase,Time * ti,Time * tf,const char * name,bool f){
     Temporary * airportFlights = getAListOfSomething((void *) fDatabase,name,ti,tf,&checkAirports);
-    Flight ** fList = (Flight **) getTempList(airportFlights);
+    Flight ** fList = (Flight **) getTempListFlights(airportFlights);
     int max = getTempNum(airportFlights);
     mergeSort((void **) fList,max,"Flight");
 
     outputQ5(f,fList,max);
 
-    free(fList);
-    destroyTemporary(airportFlights);
+    for(int j = 0;j < max;ffree(fList[j]),j++);
+    destroyTemporaryFlight(airportFlights);
 }
 
 void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * year, const char * n,bool f){
@@ -373,8 +373,8 @@ void query9(Users * uDatabase, char * pre, bool f){
     //int max = getSRecordSize(preUsers);
     Temporary * temp = getUsersPre(uDatabase,pre);
     char ** preUsersIds = getTempAuxChar(temp);
-    char ** preUsersNames = getTempListChar(temp);
-    int max = getTempMax(temp);
+    char ** preUsersNames = getTempListChars(temp);
+    int max = getTempNum(temp);
 
     void ** sort = malloc(sizeof(void *) * 2);
     sort[0] = preUsersNames;

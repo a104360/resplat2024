@@ -47,52 +47,19 @@ typedef struct flight{
 
   void destroyFlight(Flight * f) {
     if (f != NULL) {
-        if(f->id != NULL){
-            free(f->id);
-            f->id = NULL;
-        } 
-        
-        if(f->airline != NULL){
-            free(f->airline);
-            f->airline = NULL;
-        } 
-        
-        if(f->plane_model != NULL){
-            free(f->plane_model);
-            f->plane_model = NULL;
-        } 
-        
-        if(f->origin != NULL){
-            free(f->origin);
-            f->origin = NULL;
-        } 
-        
-        if(f->destination != NULL){
-            free(f->destination);
-            f->destination = NULL;
-        } 
-        
-        if(f->schedule_departure_date != NULL) destroyTime(f->schedule_departure_date); 
-        if(f->schedule_arrival_date != NULL) destroyTime(f->schedule_arrival_date); 
-        if(f->real_departure_date != NULL) destroyTime(f->real_departure_date); 
-        if(f->real_arrival_date != NULL) destroyTime(f->real_arrival_date); 
-        if(f->pilot != NULL){
-            free(f->pilot);
-            f->pilot = NULL;
-        } 
-        
-        if(f->copilot != NULL){
-            free(f->copilot);
-            f->copilot = NULL;
-        } 
-        
-        if(f->notes != NULL){
-            free(f->notes);
-            f->notes = NULL;
-        } 
-        
-        free(f); 
-        f = NULL;
+        ffree(f->id);
+        ffree(f->airline);
+        ffree(f->plane_model);
+        ffree(f->origin);
+        ffree(f->destination);
+        destroyTime(f->schedule_departure_date); 
+        destroyTime(f->schedule_arrival_date); 
+        destroyTime(f->real_departure_date); 
+        destroyTime(f->real_arrival_date); 
+        ffree(f->pilot);
+        ffree(f->copilot);
+        ffree(f->notes);
+        ffree(f); 
     }
 }
 
@@ -100,8 +67,7 @@ typedef struct flight{
 void setFlightId(Flight * flight,const char * line){
     if(flight == NULL) return;
     if(flight->id) {
-        free(flight->id);
-        flight->id = NULL;
+        ffree(flight->id);
     }
     flight->id = strdup(line);
 }
@@ -119,8 +85,7 @@ char *getFlightId(Flight * flight){
 void setFlightAirline(Flight * flight,const char * line){
     if(flight == NULL) return;
     if(flight->airline) {
-        free(flight->airline);
-        flight->airline = NULL;
+        ffree(flight->airline);
     }
     flight->airline = strdup(line);
 }
@@ -177,8 +142,7 @@ unsigned int getFlightTotalSeats(Flight * flight){
 void setFlightOrigin(Flight * flight,const char * line){
     if(flight == NULL) return;
     if(flight->origin) {
-        free(flight->origin);
-        flight->origin = NULL;
+        ffree(flight->origin);
     }
     flight->origin = strdup(line);
 }
@@ -196,8 +160,7 @@ char *getFlightOrigin(Flight * flight){
   void setFlightDestination(Flight * flight,const char * line){
     if(flight == NULL) return;
     if(flight->destination) {
-        free(flight->destination);
-        flight->destination = NULL;
+        ffree(flight->destination);
     }
     flight->destination = strdup(line);
 }
@@ -405,28 +368,16 @@ void copyFlight(Flight * dest,Flight * src){
     setFlightNotes(dest,flightNotes);
 
 
-    free(flightId);
-    flightId = NULL;
-    free(flightAirline);
-    flightAirline = NULL;
-    free(flightPlaneModel);
-    flightPlaneModel = NULL;
-    free(flightOrigin);
-    flightOrigin = NULL;
-    free(flightDestination);
-    flightDestination = NULL;
-    free(flightPilot);
-    flightPilot = NULL;
-    free(flightCopilot);
-    flightCopilot = NULL;
-    free(flightNotes);
-    flightNotes = NULL;
-    free(flightSDepartureDate);
-    flightSDepartureDate = NULL;
-    free(flightSArrivalDate);
-    flightSArrivalDate = NULL;
-    free(flightRDepartureDate);
-    flightRDepartureDate = NULL;
-    free(flightRArrivalDate);
-    flightRArrivalDate = NULL;
+    ffree(flightId);
+    ffree(flightAirline);
+    ffree(flightPlaneModel);
+    ffree(flightOrigin);
+    ffree(flightDestination);
+    ffree(flightPilot);
+    ffree(flightCopilot);
+    ffree(flightNotes);
+    destroyTime(flightSDepartureDate);
+    destroyTime(flightSArrivalDate);
+    destroyTime(flightRDepartureDate);
+    destroyTime(flightRArrivalDate);
 }

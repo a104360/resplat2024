@@ -21,6 +21,8 @@ Temporary * createTemporary();
 */
 void destroyTemporary(Temporary *);
 
+void destroyTemporaryFlight(Temporary *);
+
 void destroyTemporaryChar(Temporary *);
 
 /**
@@ -73,11 +75,20 @@ void setTempListElement(Temporary *, void *, int );
  */
 void **getTempList(Temporary *);
 
+void setTempListFlight(Temporary *,Flight *,int);
+
+Flight * getTempListFlight(Temporary *,int);
+
+Flight ** getTempListFlights(Temporary *);
+
+char * getTempListCharElement(Temporary *,int);
+
+
 /**
  * @brief Gets the names stored on an primary pointer
  * @param temp Pointer to the temporary struct
 */
-char ** getTempListChar(Temporary *);
+char ** getTempListChars(Temporary *);
 
 /**
  * @brief Sets a name to a specific position
