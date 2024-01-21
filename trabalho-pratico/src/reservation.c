@@ -157,7 +157,7 @@ char *getReservUserId(Reservation * reserv){
 }
 
 
-  void setReservHotelName(Reservation * reserv,const char * line){
+void setReservHotelName(Reservation * reserv,const char * line){
     if(!reserv) return;
     if(reserv->hotel_name){
         ffree(reserv->hotel_name);
@@ -166,31 +166,30 @@ char *getReservUserId(Reservation * reserv){
     reserv->hotel_name = strdup(line);
 }
 
- char *getReservHotelName(Reservation * reserv){
-     if(reserv->hotel_name){
-        char * hotel_name = NULL;
-        if(hotel_name) hotel_name[0] = '\0';
-        hotel_name = strdup(reserv->hotel_name);
-        return hotel_name;
+char *getReservHotelName(Reservation * reserv){
+    if(!reserv) return NULL;
+    if(reserv->hotel_name){
+        char * name = strdup((const char *)reserv->hotel_name);
+        return name;
     }
     return NULL;
 }
 
 
-  void setReservHotelStars(Reservation * reserv,const unsigned int n){
+void setReservHotelStars(Reservation * reserv,const unsigned int n){
     reserv->hotel_stars = n;
 }
 
- unsigned int getReservHotelStars(Reservation * reserv){
+unsigned int getReservHotelStars(Reservation * reserv){
     return reserv->hotel_stars;
 }
 
 
-  void setReservCityTax(Reservation * reserv,const int n){
+void setReservCityTax(Reservation * reserv,const int n){
     reserv->city_tax = n;
 }
 
- int getReservCityTax(Reservation * reserv){
+int getReservCityTax(Reservation * reserv){
     return reserv->city_tax;
 }
 

@@ -133,7 +133,7 @@ void setTempListElementReservation(Temporary * temp,Reservation * element,int po
     }
     list[position] = createReservation();
     temp->list[position] = list[position];
-    copyReservation(temp->list[position],element);
+    copyReservation((Reservation *)list[position],element);
 }
 
 

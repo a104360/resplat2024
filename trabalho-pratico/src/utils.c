@@ -20,10 +20,12 @@ void initArrays(void *** ptr, int max){
 }
 
 
-int extendArray(void *** ptr,int old,int new){
-    void ** nPtr = realloc(*ptr,sizeof(void *) * new);
-    if(nPtr == NULL) return 0;
-    *ptr = nPtr;
-    for(int i = old;i < new;(*ptr)[i] = NULL,i++);
+int extendArray(void ***ptr, int old, int new) {
+    *ptr = realloc(*ptr, sizeof(void *) * new);
+
+    if (*ptr == NULL)
+        return 0;
+    for (int i = old; i < new; (*ptr)[i++] = NULL);
+
     return 1;
 }
