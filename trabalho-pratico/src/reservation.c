@@ -160,7 +160,7 @@ char *getReservUserId(Reservation * reserv){
 void setReservHotelName(Reservation * reserv,const char * line){
     if(!reserv) return;
     if(reserv->hotel_name){
-        ffree(reserv->hotel_name);
+        ffree((void **) &reserv->hotel_name);
         reserv->hotel_name = strdup(line);
     }
     reserv->hotel_name = strdup(line);
@@ -359,15 +359,15 @@ void copyReservation(Reservation * dest,Reservation * src){
     setReservComment(dest,reservComment);
 
 
-    ffree(reservId);
-    ffree(reservUserId);
-    ffree(reservHotelId);
-    ffree(reservHotelName);
-    ffree(reservHotelAddress);
-    ffree(reservRoomDetails);
-    ffree(reservComment);
-    ffree(reservBeginDate);
-    ffree(reservEndDate);
+    ffree((void **) &reservId);
+    ffree((void **) &reservUserId);
+    ffree((void **) &reservHotelId);
+    ffree((void **) &reservHotelName);
+    ffree((void **) &reservHotelAddress);
+    ffree((void **) &reservRoomDetails);
+    ffree((void **) &reservComment);
+    ffree((void **) &reservBeginDate);
+    ffree((void **) &reservEndDate);
 }
 
 

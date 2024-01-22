@@ -51,7 +51,7 @@ MultipleRecord * createMRecord(int num){
 
 void setMRecordNamesElement(MultipleRecord * temp,int position,char * element){
     if(!element) return;
-    if(temp->names[position]) ffree(temp->names[position]);
+    if(temp->names[position]) ffree((void **) &temp->names[position]);
     temp->names[position] = strdup(element);
 }
 
@@ -111,19 +111,19 @@ int getMRecordSize(MultipleRecord * temp){
 void destroyMRecord(MultipleRecord *temp) {
     // Free the memory for the 'list' array
     for (int i = 0; i < temp->max; i++) {
-        ffree(temp->list[i]);
+        ffree((void **) &temp->list[i]);
     }
-    ffree((temp->list));
+    ffree((void **) &(temp->list));
 
     // Free the memory for the 'listSize' array
-    ffree(temp->listSize);
+    ffree((void **) &temp->listSize);
 
     // Free the memory for the 'names' array
     for (int i = 0; i < temp->max; i++) {
-        ffree(temp->names[i]);
+        ffree((void **) &temp->names[i]);
     }
-    ffree(temp->names);
+    ffree((void **) &temp->names);
 
     // Free the memory for the 'temp' structure itself
-    ffree(temp);
+    ffree((void **) &temp);
 }

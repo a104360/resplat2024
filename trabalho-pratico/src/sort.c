@@ -284,7 +284,7 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
             // The left array is out 
             if(i == left_length && j < right_length){ 
                 integers[k] = temp_right[j]; // Change the delay 
-                ffree(names[k]);
+                ffree((void **) &names[k]);
                 names[k] = strdup(swapNamesRight[j]);
                 j++;
                 continue;
@@ -293,7 +293,7 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
             if(j == right_length && i < left_length){
                 integers[k] = temp_left[i];
 
-                ffree(names[k]);
+                ffree((void **) &names[k]);
                 names[k] = strdup(swapNamesLeft[i]);
 
                 i++;
@@ -307,14 +307,14 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
                     if(strcoll(swapNamesLeft[i],swapNamesRight[j]) < 0){
                     //if(strcmp(swapNamesRight[j],swapNamesLeft[i])){    
                         integers[k] = temp_left[i];
-                        ffree(names[k]);
+                        ffree((void **) &names[k]);
                         names[k] = strdup(swapNamesLeft[i]);
                         i++;
                         continue;
                     }
                 }
                 integers[k] = temp_right[j];
-                ffree(names[k]);
+                ffree((void **) &names[k]);
                 names[k] = strdup(swapNamesRight[j]);
 
                 j++;
@@ -327,7 +327,7 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
             {
                 integers[k] = temp_left[i];
                 
-                ffree(names[k]);
+                ffree((void **) &names[k]);
                 names[k] = strdup(swapNamesLeft[i]);
                 
                 
@@ -337,12 +337,12 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
             //destroyTime(right);
             //destroyTime(left);
         }  
-        ffree(temp_left);
-        ffree(temp_right);
-        for(int i = 0;i < left_length;i++) ffree(swapNamesLeft[i]);
-        for(int i = 0;i < right_length;i++) ffree(swapNamesRight[i]);
-        ffree(swapNamesLeft);
-        ffree(swapNamesRight);
+        ffree((void **) &temp_left);
+        ffree((void **) &temp_right);
+        for(int i = 0;i < left_length;i++) ffree((void **) &swapNamesLeft[i]);
+        for(int i = 0;i < right_length;i++) ffree((void **) &swapNamesRight[i]);
+        ffree((void **) &swapNamesLeft);
+        ffree((void **) &swapNamesRight);
     }
     if(!strcoll(type,"String")){
         char ** names = (char **) a[0];
@@ -371,20 +371,20 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
         for (i = 0, j = 0, k = l; k <= r; k++){
             // The left array is out 
             if(i == left_length && j < right_length){
-                ffree(names[k]);
+                ffree((void **) &names[k]);
                 names[k] = strdup(swapNamesRight[j]);
 
-                ffree(ids[k]);
+                ffree((void **) &ids[k]);
                 ids[k] = strdup(swapIdsRight[j]);
                 j++;
                 continue;
             }
 
             if(j == right_length && i < left_length){
-                ffree(names[k]);
+                ffree((void **) &names[k]);
                 names[k] = strdup(swapNamesLeft[i]);
 
-                ffree(ids[k]);
+                ffree((void **) &ids[k]);
                 ids[k] = strdup(swapIdsLeft[i]);
 
                 i++;
@@ -396,18 +396,18 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
             {
                 if(!strcoll(swapNamesLeft[i],swapNamesRight[j])){
                     if(strcoll(swapIdsLeft[i],swapIdsRight[j]) < 0){
-                        ffree(ids[k]);
+                        ffree((void **) &ids[k]);
                         ids[k] = strdup(swapIdsLeft[i]);
 
-                        ffree(names[k]);
+                        ffree((void **) &names[k]);
                         names[k] = strdup(swapNamesLeft[i]);
                         i++;
                         continue;
                     }
                 }
-                ffree(ids[k]);
+                ffree((void **) &ids[k]);
                 ids[k] = strdup(swapIdsRight[j]);
-                ffree(names[k]);
+                ffree((void **) &names[k]);
                 names[k] = strdup(swapNamesRight[j]);
 
                 j++;
@@ -418,9 +418,9 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
             // element from the swapNamesRight array into the next element in array a
             else
             {
-                ffree(ids[k]);
+                ffree((void **) &ids[k]);
                 ids[k] = strdup(swapIdsLeft[i]);
-                ffree(names[k]);
+                ffree((void **) &names[k]);
                 names[k] = strdup(swapNamesLeft[i]);
                 
                 
@@ -430,17 +430,17 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
         }  
 
         for(int i = 0;i < left_length;i++) 
-            ffree(swapIdsLeft[i]);
+            ffree((void **) &swapIdsLeft[i]);
         for(int i = 0;i < right_length;i++) 
-            ffree(swapIdsRight[i]);
-        ffree(swapIdsLeft);
-        ffree(swapIdsRight);
+            ffree((void **) &swapIdsRight[i]);
+        ffree((void **) &swapIdsLeft);
+        ffree((void **) &swapIdsRight);
         for(int i = 0;i < left_length;i++) 
-            ffree(swapNamesLeft[i]);
+            ffree((void **) &swapNamesLeft[i]);
         for(int i = 0;i < right_length;i++) 
-            ffree(swapNamesRight[i]);
-        ffree(swapNamesLeft);
-        ffree(swapNamesRight);
+            ffree((void **) &swapNamesRight[i]);
+        ffree((void **) &swapNamesLeft);
+        ffree((void **) &swapNamesRight);
         }
 
 

@@ -47,19 +47,19 @@ typedef struct flight{
 
   void destroyFlight(Flight * f) {
     if (f != NULL) {
-        ffree(f->id);
-        ffree(f->airline);
-        ffree(f->plane_model);
-        ffree(f->origin);
-        ffree(f->destination);
+        ffree((void **) &f->id);
+        ffree((void **) &f->airline);
+        ffree((void **) &f->plane_model);
+        ffree((void **) &f->origin);
+        ffree((void **) &f->destination);
         destroyTime(f->schedule_departure_date); 
         destroyTime(f->schedule_arrival_date); 
         destroyTime(f->real_departure_date); 
         destroyTime(f->real_arrival_date); 
-        ffree(f->pilot);
-        ffree(f->copilot);
-        ffree(f->notes);
-        ffree(f); 
+        ffree((void **) &f->pilot);
+        ffree((void **) &f->copilot);
+        ffree((void **) &f->notes);
+        ffree((void **) &f); 
     }
 }
 
@@ -67,7 +67,7 @@ typedef struct flight{
 void setFlightId(Flight * flight,const char * line){
     if(flight == NULL) return;
     if(flight->id) {
-        ffree(flight->id);
+        ffree((void **) &flight->id);
     }
     flight->id = strdup(line);
 }
@@ -85,7 +85,7 @@ char *getFlightId(Flight * flight){
 void setFlightAirline(Flight * flight,const char * line){
     if(flight == NULL) return;
     if(flight->airline) {
-        ffree(flight->airline);
+        ffree((void **) &flight->airline);
     }
     flight->airline = strdup(line);
 }
@@ -142,7 +142,7 @@ unsigned int getFlightTotalSeats(Flight * flight){
 void setFlightOrigin(Flight * flight,const char * line){
     if(flight == NULL) return;
     if(flight->origin) {
-        ffree(flight->origin);
+        ffree((void **) &flight->origin);
     }
     flight->origin = strdup(line);
 }
@@ -160,7 +160,7 @@ char *getFlightOrigin(Flight * flight){
   void setFlightDestination(Flight * flight,const char * line){
     if(flight == NULL) return;
     if(flight->destination) {
-        ffree(flight->destination);
+        ffree((void **) &flight->destination);
     }
     flight->destination = strdup(line);
 }
@@ -368,14 +368,14 @@ void copyFlight(Flight * dest,Flight * src){
     setFlightNotes(dest,flightNotes);
 
 
-    ffree(flightId);
-    ffree(flightAirline);
-    ffree(flightPlaneModel);
-    ffree(flightOrigin);
-    ffree(flightDestination);
-    ffree(flightPilot);
-    ffree(flightCopilot);
-    ffree(flightNotes);
+    ffree((void **) &flightId);
+    ffree((void **) &flightAirline);
+    ffree((void **) &flightPlaneModel);
+    ffree((void **) &flightOrigin);
+    ffree((void **) &flightDestination);
+    ffree((void **) &flightPilot);
+    ffree((void **) &flightCopilot);
+    ffree((void **) &flightNotes);
     destroyTime(flightSDepartureDate);
     destroyTime(flightSArrivalDate);
     destroyTime(flightRDepartureDate);

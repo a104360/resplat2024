@@ -38,61 +38,61 @@ Temporary * createTemporary(){
 void destroyTemporary(Temporary * temp){
     destroyTime(temp->begin);
     destroyTime(temp->end);
-    ffree(temp->id);
-    ffree(temp->list);
+    ffree((void **) &temp->id);
+    ffree((void **) &temp->list);
     temp->database = NULL;
     temp->num = 0;
     temp->sum = 0;
     temp->max = 0;
-    ffree(temp);
+    ffree((void **) &temp);
 }
 
 void destroyTemporaryFlight(Temporary * temp){
     destroyTime(temp->begin);
     destroyTime(temp->end);
-    ffree(temp->id);
+    ffree((void **) &temp->id);
     for(int i = 0;i < temp->max;i++){
         destroyFlight((((Flight **) temp->list)[i]));
     }
-    ffree(temp->list);
+    ffree((void **) &temp->list);
     temp->database = NULL;
     temp->num = 0;
     temp->sum = 0;
     temp->max = 0;
-    ffree(temp);
+    ffree((void **) &temp);
 }
 
 void destroyTemporaryReservation(Temporary * temp){
     destroyTime(temp->begin);
     destroyTime(temp->end);
-    ffree(temp->id);
+    ffree((void **) &temp->id);
     for(int i = 0;i < temp->max;i++){
         destroyReservation((((Reservation **) temp->list)[i]));
     }
-    ffree(temp->list);
+    ffree((void **) &temp->list);
     temp->database = NULL;
     temp->num = 0;
     temp->sum = 0;
     temp->max = 0;
-    ffree(temp);
+    ffree((void **) &temp);
 }
 
 void destroyTemporaryChar(Temporary * temp){
     for(int i = 0;i < temp->max;i++){
-        ffree((((char **) temp->begin)[i]));
+        ffree((void **) &(((char **) temp->begin)[i]));
     }
-    ffree(temp->begin);
-    ffree(temp->end);
-    ffree(temp->id);
+    ffree((void **) &temp->begin);
+    ffree((void **) &temp->end);
+    ffree((void **) &temp->id);
     for(int i = 0;i < temp->max;i++){
-        ffree((((char **) temp->list)[i]));
+        ffree((void **) &(((char **) temp->list)[i]));
     }
-    ffree(temp->list);
+    ffree((void **) &temp->list);
     temp->database = NULL;
     temp->num = 0;
     temp->sum = 0;
     temp->max = 0;
-    ffree(temp);
+    ffree((void **) &temp);
 }
 
 void setTempDatabase(Temporary * temp,void * database){
@@ -103,7 +103,7 @@ void * getTempDatabase(Temporary * temp){
 }
     
 void setTempId(Temporary * temp,char * id){
-    ffree(temp->id);
+    ffree((void **) &temp->id);
     temp->id = strdup(id);
 }
 char * getTempId(Temporary * temp){
@@ -112,7 +112,7 @@ char * getTempId(Temporary * temp){
 }
 
 void setTempList(Temporary * temp,void ** list){
-    ffree(temp->list);
+    ffree((void **) &temp->list);
     temp->list = list;
 }
 
@@ -167,7 +167,7 @@ void setTempListElementChar(Temporary * temp,char * element,int position){
         if(extendArray((void ***) &temp->list,temp->num,temp->num * 2) == 1) setTempMax(temp,temp->num * 2);
         else return;
     }
-    if(list[position]) ffree(list[position]);
+    if(list[position]) ffree((void **) &list[position]);
     list[position] = strdup(element);
 }
 
@@ -284,7 +284,7 @@ void setTempAuxElement(Temporary * temp, void * element, int position){
 
 void setTempAuxElementChar(Temporary * temp,char * element,int position){
     char ** list = (char **) temp->begin;
-    if(list[position]) ffree(list[position]);
+    if(list[position]) ffree((void **) &list[position]);
     list[position] = strdup(element);
 }
 
