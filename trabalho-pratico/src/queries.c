@@ -255,6 +255,9 @@ void query4(Reservations * rDatabase,const char * id,bool f){
 
 void query5(const Flights * fDatabase,Time * ti,Time * tf,const char * name,bool f){
     Temporary * airportFlights = getAListOfSomething((void *) fDatabase,name,ti,tf,&checkAirports);
+    if(!strcoll(name,"VIE")){
+        int n = 0;
+    }
     Flight ** fList = (Flight **) getTempListFlights(airportFlights);
     int max = getTempNum(airportFlights);
     mergeSort((void **) fList,max,"Flight");

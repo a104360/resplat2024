@@ -153,11 +153,11 @@ void setTempListFlight(Temporary * temp,Flight * element,int position){
         if(extendArray(&temp->list,temp->num,temp->num * 2) == 0) return;
         setTempMax(temp,temp->num * 2);
     }
-    if(list[position]) {
+    if(temp->list[position]) {
         copyFlight(temp->list[position],element);
         return;
     }
-    list[position] = createFlight();
+    temp->list[position] = (void *) createFlight();
     copyFlight(temp->list[position],element);
 }
 
@@ -194,8 +194,7 @@ Flight ** getTempListFlights(Temporary * temp){
     Flight ** list = malloc(sizeof(Flight *) * temp->num);
     for(int i = 0;i < temp->num;i++){
         list[i] = createFlight();
-        Flight * flight = (Flight *) temp->list[i];
-        copyFlight(list[i],flight);
+        copyFlight(list[i],(Flight *)temp->list[i]);
     }
     return list;
 }

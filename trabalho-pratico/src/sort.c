@@ -118,23 +118,24 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
         free(temp_right);
     }
     if(!strcoll(type,"Flight")){
-
-        Flight ** flights = (Flight **) a;
+        if(r == 1455){
+            r = 1455;
+        }
 
         // create temporary arrays to store these portions
-        Flight ** temp_left = malloc(sizeof(struct flight *) * left_length);
-        Flight ** temp_right = malloc(sizeof(struct flight *) * right_length);
+        Flight ** temp_left = malloc(sizeof(Flight *) * left_length);
+        Flight ** temp_right = malloc(sizeof(Flight *) * right_length);
 
         // used as index/counter variables for the 3 arrays a, temp_left, temp_right
         int i, j, k;
 
         // copy the left portion into the temp_left array
-        for (int i = 0; i < left_length; i++)
-            temp_left[i] = flights[l + i];
+        for (i = 0; i < left_length; i++)
+            temp_left[i] = (Flight *) a[l + i];
 
         // copy the right portion into the temp_right array
-        for (int i = 0; i < right_length; i++)
-            temp_right[i] = flights[m + 1 + i];
+        for (i = 0; i < right_length; i++)
+            temp_right[i] = (Flight *) a[m + 1 + i];
 
         // Use i to move through the indexes of temp_left, j to move through the 
         // indexes of temp_right, and k to move through the portion of the array 
@@ -152,13 +153,13 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
             // the array a
 
             if(i == left_length && j < right_length){
-                flights[k] = temp_right[j];
+                a[k] = (void *) temp_right[j];
                 j++;
                 continue;
             }
 
             if(j == right_length && i < left_length){
-                flights[k] = temp_left[i];
+                a[k] = (void *) temp_left[i];
                 i++;
                 continue;
             }
@@ -173,18 +174,20 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
                 if(n == 10){
                     char * leftId = getFlightId(temp_left[i]);
                     char * rightId = getFlightId(temp_right[j]);
-                    if(strcoll(leftId,rightId) < 0){
-                        flights[k] = temp_left[i];
-                        i++;
-                    }else{
-                        flights[k] = temp_right[j];
-                        j++;
-                    }
-                    free(leftId);
-                    free(rightId);
+                    if(leftId && rightId){ // retirar
+                        if(strcoll(leftId,rightId) < 0){
+                            a[k] = (void *) temp_left[i];
+                            i++;
+                        }else{
+                            a[k] = (void *) temp_right[j];
+                            j++;
+                        }
+                        free(leftId);
+                        free(rightId);
+                    } // retirar
                 }
                 else{
-                    flights[k] = temp_right[j];
+                    a[k] = (void *) temp_right[j];
                     j++;
                 }
             }
@@ -197,17 +200,17 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
                     char * leftId = getFlightId(temp_left[i]);
                     char * rightId = getFlightId(temp_right[j]);
                     if(strcoll(leftId,rightId) < 0){
-                        flights[k] = temp_left[i];
+                        a[k] = (void *) temp_left[i];
                         i++;
                     }else{
-                        flights[k] = temp_right[j];
+                        a[k] = (void *) temp_right[j];
                         j++;
                     }
                     free(leftId);
                     free(rightId);
                 }
                 else{
-                    flights[k] = temp_left[i];
+                    a[k] = (void *) temp_left[i];
                     i++;
                 }
             }

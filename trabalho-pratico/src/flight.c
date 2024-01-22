@@ -75,7 +75,7 @@ void setFlightId(Flight * flight,const char * line){
 char *getFlightId(Flight * flight){
     if(flight == NULL) return NULL;
     if(flight->id){
-        char * id =strdup(flight->id);
+        char * id = strdup(flight->id);
         return id;
     }
     return NULL;
