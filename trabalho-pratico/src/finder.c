@@ -221,9 +221,6 @@ void allUserReservs(gpointer key ,gpointer value,gpointer userData){
 
 void checkAirports(gpointer key,gpointer value,gpointer flightData){
     Flight * flight = (Flight *) value;
-    if(i == 500){
-        i = 500;
-    }
     Temporary * database = (Temporary *) flightData;
     char * origin = getFlightOrigin(flight);
     Time * sDepartureDate = getFlightSDepartureDate(flight);

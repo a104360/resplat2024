@@ -118,10 +118,7 @@ static void mergeSortedArrays(void ** a, int l, int m, int r,const char * type)
         free(temp_right);
     }
     if(!strcoll(type,"Flight")){
-        if(r == 1455){
-            r = 1455;
-        }
-
+        
         // create temporary arrays to store these portions
         Flight ** temp_left = malloc(sizeof(Flight *) * left_length);
         Flight ** temp_right = malloc(sizeof(Flight *) * right_length);
