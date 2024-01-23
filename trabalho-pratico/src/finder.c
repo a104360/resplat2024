@@ -9,6 +9,7 @@
 #include "../include/temporary.h"
 #include "../include/time.h"
 #include "../include/user.h"
+#include <ctype.h>
 #include <glib.h>
 
 
@@ -410,6 +411,7 @@ void countFPassengers(const void * pDatabase,const void * fDatabase,void * recor
 
 SingularRecord * getDelays(void * database){
     MultipleRecord * temp = createMRecord(30);
+    i = 0;
     applyForEach(database,&getAirportsDelays,(void *)temp); // Fill up MRcreateMRecord with information
 
     int max = getMRecordSize(temp); // Get then number of different airports
@@ -419,12 +421,12 @@ SingularRecord * getDelays(void * database){
     for(int j = 0;j < max;j++){
         int * array = (int *) getMRecordList(temp,j);
         mergeSort((void **)&array,getMRecordListSize(temp,j),"Int");
-        setMRecordList(temp,j,array,getMRecordListSize(temp,j));
+        //setMRecordList(temp,j,array,getMRecordListSize(temp,j));
         allDelays[j] = delayMedianAirport(array,getMRecordListSize(temp,j));
         airports[j] = getMRecordNamesElement(temp,j);
         ffree((void **) &array);
     }
-    destroyMRecord(temp);
+    destroyMRecord(&temp);
     void ** aux = malloc(sizeof(void *) * 2);
     aux[0] = (void *) allDelays;
     aux[1] = (void *) airports;
@@ -444,48 +446,61 @@ void getAirportsDelays(gpointer key,gpointer value,gpointer data){
     MultipleRecord * temp = (MultipleRecord *) data; // Cast for the temp struct
     Flight * flight = (Flight *) value; // Cast for the flight that is being analysed
 
+    if(i == 11247){
+        i = i;
+    }
 
     int delay = getFlightDelay(flight); // Get the delay 
     char * origin = getFlightOrigin((Flight *)value); // Get the airport of the flight
-    int max = getMRecordSize(temp); // Get how many differents airports I have on the list
+    int max = getMRecordSize((MultipleRecord *)data); // Get how many differents airports I have on the list
 
+    
     bool flag = false; // Flag to check if the airport is already on the list
 
     if(max == 0){ // Case of the first iteration
 
         // Set the first airport for the first 
         // element of the airports list
-        setMRecordNamesElement(temp,0,origin); 
+        setMRecordNamesElement((MultipleRecord *) data,0,origin); 
 
         // Set the first flight delay for the first 
         // element of the delays list
-        setMRecordListElement(temp,0,0,delay);
-        incMRecordListSize(temp,0);
-        incMRecordSize(temp); // Increments the number of diferents airports
+        setMRecordListElement((MultipleRecord *) data,0,0,delay);
+        incMRecordListSize((MultipleRecord *) data,0);
+        incMRecordSize((MultipleRecord *) data); // Increments the number of diferents airports
+        
         ffree((void **) &origin);
+        i++;
         return;
     }
 
     for(int j = 0;j < max;j++){ // Checks if the airport is already on the list
-        char * listOrigin = getMRecordNamesElement(temp,j);
+        char * listOrigin = getMRecordNamesElement((MultipleRecord *) data,j);
         if(!strcoll(listOrigin,origin)){
             ffree((void **) &origin);
-            setMRecordListElement(temp,j,getMRecordListSize(temp,j),delay); // Sets the delay for the respetive position
-            incMRecordListSize(temp,j);
+            int position = getMRecordListSize((MultipleRecord *) data,j);
+            setMRecordListElement((MultipleRecord *) data,j,position,delay); // Sets the delay for the respetive position
+            incMRecordListSize((MultipleRecord *) data,j);
             flag = true;
             ffree((void **) &listOrigin);
             ffree((void **) &origin);
+            i++;
             return;
         }
         ffree((void **) &listOrigin);
     }
+
     if(flag == false){
-        setMRecordNamesElement(temp,max,(void *)origin);
-        setMRecordListElement(temp,getMRecordSize(temp),0,delay);
-        incMRecordListSize(temp,getMRecordSize(temp));
-        incMRecordSize(temp);
+        if(origin[0] == '\0'){
+            origin = origin;
+        }
+        setMRecordNamesElement((MultipleRecord *) data,max,(void *)origin);
+        setMRecordListElement((MultipleRecord *) data,getMRecordSize((MultipleRecord *) data),0,delay);
+        incMRecordListSize((MultipleRecord *) data,getMRecordSize((MultipleRecord *) data));
+        incMRecordSize((MultipleRecord *) data);
     }
     ffree((void **) &origin);
+    i++;
 }
 
 Temporary * getUsersPre(void * database, char * prefix){
