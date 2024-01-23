@@ -446,9 +446,6 @@ void getAirportsDelays(gpointer key,gpointer value,gpointer data){
     MultipleRecord * temp = (MultipleRecord *) data; // Cast for the temp struct
     Flight * flight = (Flight *) value; // Cast for the flight that is being analysed
 
-    if(i == 11247){
-        i = i;
-    }
 
     int delay = getFlightDelay(flight); // Get the delay 
     char * origin = getFlightOrigin((Flight *)value); // Get the airport of the flight
@@ -477,13 +474,12 @@ void getAirportsDelays(gpointer key,gpointer value,gpointer data){
     for(int j = 0;j < max;j++){ // Checks if the airport is already on the list
         char * listOrigin = getMRecordNamesElement((MultipleRecord *) data,j);
         if(!strcoll(listOrigin,origin)){
+            ffree((void **) &listOrigin);
             ffree((void **) &origin);
             int position = getMRecordListSize((MultipleRecord *) data,j);
             setMRecordListElement((MultipleRecord *) data,j,position,delay); // Sets the delay for the respetive position
             incMRecordListSize((MultipleRecord *) data,j);
             flag = true;
-            ffree((void **) &listOrigin);
-            ffree((void **) &origin);
             i++;
             return;
         }
@@ -491,10 +487,7 @@ void getAirportsDelays(gpointer key,gpointer value,gpointer data){
     }
 
     if(flag == false){
-        if(origin[0] == '\0'){
-            origin = origin;
-        }
-        setMRecordNamesElement((MultipleRecord *) data,max,(void *)origin);
+        setMRecordNamesElement((MultipleRecord *) data,max,origin);
         setMRecordListElement((MultipleRecord *) data,getMRecordSize((MultipleRecord *) data),0,delay);
         incMRecordListSize((MultipleRecord *) data,getMRecordSize((MultipleRecord *) data));
         incMRecordSize((MultipleRecord *) data);

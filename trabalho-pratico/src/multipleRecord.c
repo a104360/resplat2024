@@ -129,6 +129,7 @@ void destroyMRecord(MultipleRecord **temp) {
 
     // Free the memory for the 'listSize' array
     ffree((void **) &(*temp)->listSize);
+    ffree((void **) &(*temp)->listMaxSize);
 
     // Free the memory for the 'names' array
     for (int i = 0; i < (*temp)->max; i++) {
