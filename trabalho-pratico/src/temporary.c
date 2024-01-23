@@ -148,7 +148,6 @@ Reservation ** getTempListReservations(Temporary * temp){
 }
 
 void setTempListFlight(Temporary * temp,Flight * element,int position){
-    Flight ** list = (Flight **) temp->list;
     if(temp->num >= temp->max){
         if(extendArray(&temp->list,temp->num,temp->num * 2) == 0) return;
         setTempMax(temp,temp->num * 2);

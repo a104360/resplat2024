@@ -443,7 +443,6 @@ SingularRecord * getDelays(void * database){
 }
 
 void getAirportsDelays(gpointer key,gpointer value,gpointer data){
-    MultipleRecord * temp = (MultipleRecord *) data; // Cast for the temp struct
     Flight * flight = (Flight *) value; // Cast for the flight that is being analysed
 
 

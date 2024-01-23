@@ -750,7 +750,7 @@ void outputQ5(bool f, Flight ** fList,int max){
 }
 
 
-void outputQ6(bool f,int n, char ** names, int * number){
+void outputQ6(bool f,int n, char ** names, int * number,int exists){
     if(interactive == false){
         commandAtual++;
         
@@ -766,16 +766,17 @@ void outputQ6(bool f,int n, char ** names, int * number){
             perror("Query 6 command line did not open, probably file name wrong.\n");
             return;
         }
-        
+        int maxIndex = n;
+        if(exists < n) maxIndex = exists;
         if(f == true){
-            for(int j=0; j<n; j++){
+            for(int j=0; j < maxIndex; j++){
                 if(j!=0) fprintf(outputFile,"\n");
                 fprintf(outputFile,"--- %d ---\n",j + 1);
                 fprintf(outputFile,"name: %s\n",names[j]);
                 fprintf(outputFile,"passengers: %d\n",number[j]);
             }
         }else{
-            for(int k=0; k<n; k++){
+            for(int k=0; k < maxIndex; k++){
             fprintf(outputFile,"%s;%d\n",names[k],number[k]);
             }
         }

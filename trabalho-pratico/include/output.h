@@ -88,8 +88,9 @@ void outputQ5(bool,Flight **,int);
  * @param n Number of sets to be displayed
  * @param names Array with the names of the airports
  * @param passengers Array with the passengers of each airport
+ * @param existent Number of names that exists
 */
-void outputQ6(bool,int,char **,int *);
+void outputQ6(bool,int,char **,int *,int);
 
 /**
  * @brief Writes on a text file the outputs of the query 7

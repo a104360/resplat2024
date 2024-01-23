@@ -289,7 +289,7 @@ void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * 
     ffree((void **) &list);
 
 
-    outputQ6(f,n_airports,names,number);
+    outputQ6(f,n_airports,names,number,max);
 
     for(int i = 0;i < max;i++) ffree((void **) &names[i]);
     ffree((void **) &names);
