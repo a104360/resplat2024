@@ -37,7 +37,7 @@ test: programa-testes
 	./programa-testes ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt ../../li3_fr/dataset/outputs
 
 bigTest: programa-testes
-	./programa-testes ../../data_large/data ../../data_large/input.txt/ ../../data_large/outputs
+	./programa-testes ../../data_large/data ../../data_large/input.txt ../../data_large/outputs
 
 $(EXE).debug: $(OBJ)
 	$(CC) -o $(EXE).debug $^ $(CFLAGS)
