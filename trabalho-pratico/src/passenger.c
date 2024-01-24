@@ -1,4 +1,5 @@
 #include "../include/passenger.h"
+#include "../include/utils.h"
 #include <stdlib.h>
 #include <string.h>
 
@@ -25,16 +26,9 @@ typedef struct passenger{
 
   void destroyPassenger(Passenger * p) {
     if (p != NULL) {
-        if(p->flight_id != NULL){
-            free(p->flight_id); 
-            p->flight_id = NULL;
-        }
-        if(p->user_id != NULL){
-            free(p->user_id); 
-            p->user_id = NULL;
-        }
-        free(p); 
-        p = NULL;
+        ffree((void **) &p->flight_id); 
+        ffree((void **) &p->user_id); 
+        ffree((void **) &p); 
     }
 }
 
@@ -102,15 +96,15 @@ size_t getPassengerSize(){
 
 void copyPassenger(Passenger * dest,Passenger * src){
     if(dest == NULL || src == NULL) return;
+    
     char * passengerFlightId = getPassengerFlightId(src);
-    char * passengerUserId = getPassengerUserId(src);
-
     setPassengerFlightId(dest,passengerFlightId);
+    ffree((void **) &passengerFlightId);
+    
+    
+    char * passengerUserId = getPassengerUserId(src);
     setPassengerUserId(dest,passengerUserId);
+    ffree((void **) &passengerUserId);
 
-    free(passengerFlightId);
-    passengerFlightId = NULL;
-    free(passengerUserId);
-    passengerUserId = NULL;
 }
 

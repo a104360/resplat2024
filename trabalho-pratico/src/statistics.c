@@ -50,8 +50,8 @@ double averageRating(void * reservations, const char * id){
     Temporary * temp = getAListOfSomething(reservations,id,NULL,NULL,&countHotelReservs);
     int sumRatings = getTempSum(temp);
     int n = getTempNum(temp);
-    double answer = (double) sumRatings / (double) n;  
     destroyTemporary(temp);
+    double answer = (double) sumRatings / (double) n;  
     return (double) answer;
 }
 

@@ -10,8 +10,7 @@ static int areFilesEqual(const char *file1Path, const char *file2Path) {
     FILE *file2 = fopen(file2Path, "r");
 
     if (file1 == NULL || file2 == NULL) {
-        perror("Error opening files");
-        return 0;  // Return false if there was an error opening files
+        return -129;  // Return false if there was an error opening files
     }
 
     char line1[MAX_LINE_LENGTH], line2[MAX_LINE_LENGTH];
@@ -243,19 +242,26 @@ void confirmar(char ** argv) {
 
     validation((const char **) files,argv[1]);
 
-    for(int i = 1;i <= 100;i++){
+    for(int i = 1;1;i++){
         char comp[100];
         memset(comp,'\0',100);
         snprintf(comp, 99, "./Resultados/command%d_output.txt",i);
         char correct[100];
         memset(correct,'\0',100);
         snprintf(correct,99,"%s/command%d_output.txt",argv[3],i);
-        if(areFilesEqual((const char *)correct,(const char *)comp)){
-            printf("Command %d is correct!\n",i);
-        }else continue;
+        switch(areFilesEqual((const char *)correct,(const char *)comp)){
+            case 1:
+                printf("Command %d is correct!\n",i);
+                break;
+            case 0:
+                continue;
+                break;
+            case -129:
+                free(files);
+                return;
+                break;
+        }
     }
-    
     free(files);
-
 }
 

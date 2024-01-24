@@ -56,8 +56,8 @@ void destroyUser(User *user) {
         ffree((void **) &user->country_code);
         ffree((void **) &user->address);
         ffree((void **) &user->pay_method);
-        if(user->account_creation != NULL) destroyTime(user->account_creation);
-        if(user->birth_date != NULL) destroyTime(user->birth_date);
+        destroyTime(user->account_creation);
+        destroyTime(user->birth_date);
         
         ffree((void **) &user);
     }
@@ -347,11 +347,17 @@ void setUserPayMethod(User * user ,const char * line){
 int getUserAge(User * user){
     Time * userBday = getUserBday(user);
     int n = PYEAR - (getYear(userBday));
-    if(PMON >= getMon(userBday)){
-        if(PDAY >= getMday(userBday)){
-            destroyTime(userBday);
-            return n + 1;
-        }
+    if(PMON > getMon(userBday)){
+        destroyTime(userBday);
+        return n;
+    }
+    if(PMON < getMon(userBday)){
+        destroyTime(userBday);
+        return n + 1;
+    }
+    if(PDAY <= getMday(userBday)){
+        destroyTime(userBday);
+        return n + 1;
     }
     destroyTime(userBday);
     return n;
@@ -359,36 +365,17 @@ int getUserAge(User * user){
 
 void copyUser(User * dest,User * src){
     if(src == NULL) return;
-    char * uId = getUserId(src);
-    char * uName = getUserName(src);
-    char * uEmail = getUserEmail(src);
-    char * uPhone = getUserPhone(src);
-    char * uPassport = getUserPassport(src);
-    char * uCountry = getUserCountryCode(src);
-    char * uAddress = getUserAddress(src);
-    char * uPay = getUserPayMethod(src);
-    Time * bDay = getUserBday(src);
-    Time * accCreation = getUserAccountCreation(src);
-    setUserId(dest,uId);
-    setUserName(dest,uName);
-    setUserEmail(dest,uEmail);
-    setUserPhone(dest,uPhone);
-    setUserBday(dest,bDay);
+    char * uId = getUserId(src);                        setUserId(dest,uId);                        ffree((void **) &uId);
+    char * uName = getUserName(src);                    setUserName(dest,uName);                    ffree((void **) &uName);
+    char * uEmail = getUserEmail(src);                  setUserEmail(dest,uEmail);                  ffree((void **) &uEmail);
+    char * uPhone = getUserPhone(src);                  setUserPhone(dest,uPhone);                  ffree((void **) &uPhone);
+    char * uPassport = getUserPassport(src);            setUserPassport(dest,uPassport);            ffree((void **) &uPassport);
+    char * uCountry = getUserCountryCode(src);          setUserCountryCode(dest,uCountry);          ffree((void **) &uCountry);
+    char * uAddress = getUserAddress(src);              setUserAddress(dest,uAddress);              ffree((void **) &uAddress);
+    char * uPay = getUserPayMethod(src);                setUserPayMethod(dest,uPay);                ffree((void **) &uPay);
+    Time * bDay = getUserBday(src);                     setUserBday(dest,bDay);                     ffree((void **) &bDay);
+    Time * accCreation = getUserAccountCreation(src);   setUserAccountCreation(dest,accCreation);   ffree((void **) &accCreation);
+    
     setUserSex(dest,getUserSex(src));
-    setUserPassport(dest,uPassport);
-    setUserCountryCode(dest,uCountry);
-    setUserAddress(dest,uAddress);
-    setUserAccountCreation(dest,accCreation);
-    setUserPayMethod(dest,uPay);
     setUserAccountStatus(dest,getUserAccountStatus(src));
-    ffree((void **) &uId);
-    ffree((void **) &uName);
-    ffree((void **) &uEmail);
-    ffree((void **) &uPhone);
-    ffree((void **) &uPassport);
-    ffree((void **) &uCountry);
-    ffree((void **) &uAddress);
-    ffree((void **) &uPay);
-    ffree((void **) &bDay);
-    ffree((void **) &accCreation);
 }

@@ -6,12 +6,12 @@
 
 
 typedef struct time{
-    int sec;         /* seconds,  range 0 to 59          */
-    int min;         /* minutes, range 0 to 59           */
-    int hour;        /* hours, range 0 to 23             */
-    int mday;        /* day of the month, range 1 to 31  */
-    int mon;         /* month, range 1 to 12             */
-    int year;        /* The number of years since 0      */
+    short int sec;         /* seconds,  range 0 to 59          */
+    short int min;         /* minutes, range 0 to 59           */
+    short int hour;        /* hours, range 0 to 23             */
+    short int mday;        /* day of the month, range 1 to 31  */
+    short int mon;         /* month, range 1 to 12             */
+    short int year;        /* The number of years since 0      */
 } Time;
 
 

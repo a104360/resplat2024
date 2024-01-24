@@ -99,7 +99,7 @@ Temporary * getFlightPassengers(void * fDatabase,void * travels,const char * fli
 
     Temporary * book = createTemporary();
 
-    void ** list = NULL;// = malloc(sizeof(void *) * g_hash_table_size((GHashTable *) allFlights)); 
+    void ** list = NULL;
     initArrays(&list,getDatabaseSize(allFlights));
     setTempList(book,list);
     
@@ -116,7 +116,6 @@ Temporary * getFlightPassengers(void * fDatabase,void * travels,const char * fli
     for(int passengersList = 0;passengersList < max;passengersList++){
         char * flight_id = getPassengerFlightId(pList[passengersList]);
         if(!strcoll(flight_id,flightId)){
-            //setTempListElement(book,(void *) lookupPassengerFID(pDatabase,flight_id),getTempNum(book));
             incTempNum(book);
             
         }
@@ -257,7 +256,7 @@ void checkAirports(gpointer key,gpointer value,gpointer flightData){
 
 SingularRecord * getYearFlights(const void * database,const void * databasep, const int fYear){
     Flights * fDatabase = (Flights *) database;
-    SingularRecord * airports = createSRecord(50);
+    SingularRecord * airports = createSRecord(30);
 
     i = 0;
     applyForEach(fDatabase,&yearFlight,airports);

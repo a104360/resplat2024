@@ -332,42 +332,24 @@ const unsigned int getReservRating(const Reservation * reserv){
 
 
 void copyReservation(Reservation * dest,Reservation * src){
-    char * reservId = getReservId(src);
-    char * reservUserId = getReservUserId(src);
-    char * reservHotelId = getReservHotelId(src);
-    char * reservHotelName = getReservHotelName(src);
-    char * reservHotelAddress = getReservHotelAddress(src);
-    char * reservRoomDetails = getReservRoomDetails(src);
-    char * reservComment = getReservComment(src);
-    Time * reservBeginDate = getReservBeginDate(src);
-    Time * reservEndDate = getReservEndDate(src);
+    char * reservId = getReservId(src);                     setReservId(dest,reservId);                     ffree((void **) &reservId);
+    char * reservUserId = getReservUserId(src);             setReservUserId(dest,reservUserId);             ffree((void **) &reservUserId);
+    char * reservHotelId = getReservHotelId(src);           setReservHotelId(dest,reservHotelId);           ffree((void **) &reservHotelId);
+    char * reservHotelName = getReservHotelName(src);       setReservHotelName(dest,reservHotelName);       ffree((void **) &reservHotelName);
+    char * reservHotelAddress = getReservHotelAddress(src); setReservHotelAddress(dest,reservHotelAddress); ffree((void **) &reservHotelAddress);
+    char * reservRoomDetails = getReservRoomDetails(src);   setReservRoomDetails(dest,reservRoomDetails);   ffree((void **) &reservRoomDetails);
+    char * reservComment = getReservComment(src);           setReservComment(dest,reservComment);           ffree((void **) &reservComment);
+    Time * reservBeginDate = getReservBeginDate(src);       setReservBeginDate(dest,reservBeginDate);       ffree((void **) &reservBeginDate);
+    Time * reservEndDate = getReservEndDate(src);           setReservEndDate(dest,reservEndDate);           ffree((void **) &reservEndDate);
 
 
-    setReservId(dest,reservId);
-    setReservUserId(dest,reservUserId);
-    setReservHotelId(dest,reservHotelId);
-    setReservHotelName(dest,reservHotelName);
     setReservHotelStars(dest,getReservHotelStars(src));
     setReservCityTax(dest,getReservCityTax(src));
-    setReservHotelAddress(dest,reservHotelAddress);
-    setReservBeginDate(dest,reservBeginDate);
-    setReservEndDate(dest,reservEndDate);
     setReservPricePerNight(dest,getReservPricePerNight(src));
     setReservBreakfast(dest,getReservBreakfast(src));
-    setReservRoomDetails(dest,reservRoomDetails);
     setReservRating(dest,getReservRating(src));
-    setReservComment(dest,reservComment);
 
 
-    ffree((void **) &reservId);
-    ffree((void **) &reservUserId);
-    ffree((void **) &reservHotelId);
-    ffree((void **) &reservHotelName);
-    ffree((void **) &reservHotelAddress);
-    ffree((void **) &reservRoomDetails);
-    ffree((void **) &reservComment);
-    ffree((void **) &reservBeginDate);
-    ffree((void **) &reservEndDate);
 }
 
 

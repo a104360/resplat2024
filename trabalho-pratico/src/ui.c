@@ -142,17 +142,6 @@ static bool checkPath(const char * path){
     return true;
 }
 
-/*static bool checkMode(const char * mode){
-    char * dup = strdup(mode);
-    dup[1] = '\0';
-    if(!strcasecmp(dup,"t") || !strcasecmp(dup,"f")){
-        free(dup);
-        return true;
-    }
-    free(dup);
-    return false;
-}*/
-
 static bool checkQuery(const char * line){
     if(line == NULL) return false;
     char * dup = strdup(line);
@@ -433,32 +422,6 @@ static char * getQuery(WINDOW * search,int yW, int xW,int heightW,int widthW){
     }
     return buffer;
 }
-
-
-/*static bool getMode(WINDOW * search,int yW, int xW,int heightW,int widthW){
-    char * buffer = malloc(sizeof(char) * 2);
-    newSearch(search,buffer,2);
-
-    while(checkMode(buffer) != true){
-        warning(yW,xW,heightW,widthW,"Mode");
-        newSearch(search,buffer,2);
-        refresh();
-    }
-    if(!strcasecmp(buffer,"f")){
-        wclear(search);
-        box(search,0,0);
-        wrefresh(search);
-        free(buffer);
-        return false;
-    }
-    wclear(search);
-    box(search,0,0);
-    wrefresh(search);
-    free(buffer);
-    return true;
-}*/
-
-
 
 
 
