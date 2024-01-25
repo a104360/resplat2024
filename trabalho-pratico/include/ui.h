@@ -39,19 +39,77 @@ void printQ1Reservation(bool,char *,char *,int, char *, char *,bool,int,double);
 */
 void printQ2(bool,int *,int,Reservation **,int,int *,Flight **,int,int *);
 
+/**
+ * @brief Prints chuncks of the query 3
+ * @param f Mode
+ * @param rating Hotel average rating
+*/
 void printQ3(bool,double);
+
+/**
+ * @brief Prints chuncks of the query 4
+ * @param f Mode
+ * @param npp Number of chunks per page
+ * @param reservation Reservations to be displayed 
+ * @param max Number of Reservations 
+*/
 
 void printQ4(bool,int,int *,Reservation **,int);
 
+/**
+ * @brief Prints chuncks of the query 5
+ * @param f Mode
+ * @param npp Number of chunks per page
+ * @param flight Flights to be displayed
+ * @param max Number of Flights
+*/
+
 void printQ5(bool,int,int*,Flight**,int);
+
+/**
+ * @brief Prints chuncks of the query 6
+ * @param f Mode
+ * @param npp Number of chunks per page
+ * @param max Number of airports / passengers
+ * @param names Airports to be displayed
+ * @param passengers Number of passengers per airport to be displayed
+*/
 
 void printQ6(bool,int,int*,int,char **,int *);
 
+/**
+ * @brief Prints chuncks of the query 7
+ * @param f Mode
+ * @param npp Number of chunks per page
+ * @param table Airports informations to be displayed
+ * @param max Number of airports 
+*/
+
+
 void printQ7(bool,int,int *,SingularRecord *,int);
+
+/**
+ * @brief Prints chuncks of the query 8
+ * @param f Mode
+ * @param revenue Hotel revenue between two dates
+*/
 
 void printQ8(bool,int);
 
+/**
+ * @brief Prints chuncks of the query 2
+ * @param f Mode
+ * @param npp Number of chunks per page
+ * @param ids Users ids to be displayed
+ * @param names Users names to be displayed
+ * @param max Number of users names/ids
+*/
+
 void printQ9(bool,int,int *,char **,char **,int);
+
+/**
+ * @brief commands used in the menu
+*/
 
 int getInput();
 
