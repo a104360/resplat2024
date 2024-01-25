@@ -28,7 +28,6 @@ void query1(const Users *, const Reservations *,const Flights *,const Passengers
 */
 void query2(const Users * ,const Reservations *,const Flights *,const Passengers *,const char *,bool);
 
-//apresentar classificacao media de um hotel, atraves do identificador
 /**
  * @brief Presents the average rating of an hotel, by its id
  * @param reservations Pointer to the reservations database
@@ -37,7 +36,6 @@ void query2(const Users * ,const Reservations *,const Flights *,const Passengers
 */
 void query3(Reservations *,const char *,bool);
 
-//listar reservas de um hotel ordenadas pela data de inicio (recente -> antiga) (Se houver 2 mesma data, usar id)
 /**
  * @brief List reservations of an hotel, sorted by begin date
  * @param reservations Pointer to the reservations database
@@ -47,7 +45,6 @@ void query3(Reservations *,const char *,bool);
 */
 void query4(Reservations *,const char *,bool);
 
-//listar voos com origem num dado aeroporto, entre 2 datas, ordenados por data partida estimada (antiga -> recente) (se houver 2, usar id)
 /**
  * @brief List flight that depart from an airport, between 2 dates, sorted by the schedule departure date
  * @param flights Pointer to the flights database
@@ -58,7 +55,6 @@ void query4(Reservations *,const char *,bool);
 */
 void query5(const Flights *,Time *,Time *,const char *,bool);
 
-//listar top N aeroportos com mais passageiros, para um dado ano. Contabilizar voos com data estimada de partida nesse ano. (se 2, usar nome)
 /**
  * @brief Presents the top N airports with the most amount of passengers, in a year
  * @param flights Pointer to the flights database
@@ -70,7 +66,6 @@ void query5(const Flights *,Time *,Time *,const char *,bool);
 */
 void query6(const Flights *,const Passengers *,const char *, const char *,bool);
 
-//listar top N aeroportos com maior mediana de atrasos. Valor atraso em segundos. (se 2, usar nome)
 /**
  * @brief Presents the top N airports with the most median of flight delays
  * @param flights Pointer to the flights database
@@ -80,7 +75,6 @@ void query6(const Flights *,const Passengers *,const char *, const char *,bool);
 */
 void query7(Flights *,char *,bool);
 
-//Apresentar receita total,de um hotel entre 2 datas, apartir do identificador. (usar preco/1noite * num_noites)
 /**
  * @brief Present the total revenue from an hotel between 2 dates, from the hotel id
  * @param reservations Pointer to the reservations database
@@ -91,8 +85,14 @@ void query7(Flights *,char *,bool);
 */
 void query8(Reservations *,const char *,Time *,Time *,bool);
 
-//listar todos os users cujo nome começa com o prefixo do argumento, ordenados por nome (crescente) (se 2, usar id)
-void query9();
+/**
+ * @brief Presents all the users whose names begin with the string provided,
+ * sorted by name, or id, if the names are the same, on ascending order
+ * @param users Pointer to the users database
+ * @param prefix String with the prefix to search the users
+ * @param f Mode of the outputs
+*/
+void query9(Users *, char *, bool);
 
 //Apresentar metricas gerais:
 /*  num_novos_users; 

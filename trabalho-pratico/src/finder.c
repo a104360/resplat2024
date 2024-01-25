@@ -10,6 +10,7 @@
 #include "../include/time.h"
 #include "../include/user.h"
 #include <ctype.h>
+#include <string.h>
 #include <glib.h>
 
 
@@ -112,15 +113,45 @@ Temporary * getFlightPassengers(void * fDatabase,void * travels,const char * fli
         fprintf(stderr, "Error: Memory allocation failed for book->list.\n");
         return book;
     }
+   
+
     
-    for(int passengersList = 0;passengersList < max;passengersList++){
-        char * flight_id = getPassengerFlightId(pList[passengersList]);
-        if(!strcoll(flight_id,flightId)){
-            incTempNum(book);
-            
-        }
-        free(flight_id);
+    int j = 0;
+    char * flight_id = getPassengerFlightId(pList[j]);
+
+    int compare = 0;
+    compare = strcoll(flight_id,flightId);
+
+    for(;compare != 0 && j < max;){
+        ffree((void **)&flight_id);
+        j += 10;
+        flight_id = getPassengerFlightId(pList[j]);
+        compare = strcoll(flight_id,flightId);
     }
+
+
+    for(;compare == 0 && j > 0;){
+        j--;
+        ffree((void **)&flight_id);
+        flight_id = getPassengerFlightId(pList[j]);
+        compare = strcoll(flight_id,flightId);
+    }
+
+
+    j++;
+    ffree((void **) &flight_id);
+
+    flight_id = getPassengerFlightId(pList[j]);
+    while(!strcoll(flight_id,flightId)){
+        incTempNum(book);
+        ffree((void **) &flight_id);
+        j++;
+        flight_id = getPassengerFlightId(pList[j]);
+        continue;
+    }
+    ffree((void **) &flight_id);
+
+
     
     ffree((void **) &pList);
 
@@ -392,18 +423,29 @@ void countFPassengers(const void * pDatabase,const void * fDatabase,void * recor
             char * aux = getPassengerFlightId(p[j]);
             if(!strcoll(aux,id)){
                 ffree((void **) &aux);
-                j++;
+                j += 10;
                 continue;
             }
             ffree((void **) &aux);
+            for(int z = 1;z < 11;z++){
+                aux = getPassengerFlightId(p[j - z]);
+                if(!strcoll(aux,id)){
+                    j -= z;
+                    j++;
+                    ffree((void **) &aux);
+                    break;
+                }
+                ffree((void **) &aux);
+            }
+            
             break;
         }
         
         year1 = 0;
         destroyTime(time1);
 
-        ffree((void **) &id);
         k = j;
+        ffree((void **) &id);
     }
     ffree((void **) &p);
 }

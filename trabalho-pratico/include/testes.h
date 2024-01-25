@@ -3,7 +3,8 @@
 
 /**
  * @brief Confirms if the parsing and the outputs are correct
+ * @param argv Paths to open the CSVs, input.txt and Resultados
 */
-void confirmar(char ** argv);
+void confirmar(char **);
 
 #endif

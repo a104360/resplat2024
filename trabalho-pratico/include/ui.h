@@ -7,6 +7,18 @@
 #include "../include/passengers.h"
 #include "../include/singularRecord.h"
 
+/**
+ * @brief Prints user details for Query 1
+ * @param f Mode
+ * @param name Username
+ * @param sex User sex
+ * @param age User age
+ * @param countryCode Country code
+ * @param passport Passport
+ * @param flights Number of flights
+ * @param seatNumber Number of reservations
+ * @param cost Total speant
+ */
 void printQ1User(bool,char *,char,int,char *,char *,int,int,double);
 
 void printQ1Flight(bool, char *, char *, char *,char *,char *,char *,int,int);

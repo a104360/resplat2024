@@ -1,9 +1,7 @@
 #include "../include/statistics.h"
 #include "../include/reservation.h"
-#include "../include/database.h"
 #include "../include/finder.h"
 #include "../include/temporary.h"
-#include <glib.h>
 
 
 double getTotalSpentByUser(void ** userReservs,int max){

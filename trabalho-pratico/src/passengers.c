@@ -1,5 +1,6 @@
 #include "../include/passengers.h"
 #include "../include/passenger.h"
+#include "../include/utils.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <glib.h>
@@ -94,8 +95,6 @@ void destroyPassengers(Passengers * database){
     for(int i = 0;i < database->numPassengers;i++){
         destroyPassenger(database->passengers[i]);
     }
-    free(database->passengers);
-    database->passengers = NULL;
-    free(database);
-    database = NULL;
+    ffree((void **) &database->passengers);
+    ffree((void **) &database);
 }   

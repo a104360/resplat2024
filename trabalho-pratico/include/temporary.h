@@ -22,10 +22,22 @@ Temporary * createTemporary();
 */
 void destroyTemporary(Temporary *);
 
+/**
+ * @brief Function that frees all the struct fields, when flights are stored in
+ * the struct
+*/
 void destroyTemporaryFlight(Temporary *);
 
+/**
+ * @brief Function that frees all the struct fields, when reservations are stored in
+ * the struct
+*/
 void destroyTemporaryReservation(Temporary *);
 
+/**
+ * @brief Function that frees all the struct fields, when strings are stored in
+ * the struct
+*/
 void destroyTemporaryChar(Temporary *);
 
 /**
@@ -78,18 +90,44 @@ void setTempListElement(Temporary *, void *, int );
  */
 void **getTempList(Temporary *);
 
+/**
+ * @brief Sets the Flight on the temporary
+ * @param temp Pointer to the temporary struct
+ * @param flight Flight to be inserted on trhe 
+ * temporary
+ * @param position Position on where the flight will be put
+*/
 void setTempListFlight(Temporary *,Flight *,int);
 
+/**
+ * @brief Gets the Flight from the temporary
+ * @param temp Pointer to the temporary struct
+ * @param position Position from where the flight will be draw
+ * @return Flight on the position
+*/
 Flight * getTempListFlight(Temporary *,int);
 
+/**
+ * @brief Gets the all Flights from the temporary
+ * @param temp Pointer to the temporary struct
+ * @return Flights on the temporary
+*/
 Flight ** getTempListFlights(Temporary *);
 
+/**
+ * @brief Gets the name stored in the temporary 
+ * on the position
+ * @param temp Pointer to the struct temporary
+ * @param position Position the name is on 
+ * @return Name on the position
+*/
 char * getTempListCharElement(Temporary *,int);
 
 
 /**
  * @brief Gets the names stored on an primary pointer
  * @param temp Pointer to the temporary struct
+ * @return Names of the temporary
 */
 char ** getTempListChars(Temporary *);
 
@@ -101,8 +139,21 @@ char ** getTempListChars(Temporary *);
 */
 void setTempListElementChar(Temporary *,char *,int);
 
+
+/**
+ * @brief Sets a reservations to a specific position
+ * @param temp Pointer to the temporary struct
+ * @param reservations reservations to be stored in the primary 
+ * group of reservations
+ * @param position Position in which the reservations will be stored
+*/
 void setTempListElementReservation(Temporary *,Reservation *,int);
 
+/**
+ * @brief Gets all reservations on the temporary
+ * @param temp Pointer to the temporary struct
+ * @return Reservations in the temporary struct
+*/
 Reservation ** getTempListReservations(Temporary *);
 
 /**
