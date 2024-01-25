@@ -119,7 +119,7 @@ char * timeToString(Time * time){
     if(time->hour == 0 && time->min == 0 && time->sec == 0){
         char * string = malloc(sizeof(char) * 11);
         if(string == NULL) return NULL;
-        snprintf(string,11,"%d/%02d/%02d",time->year,time->mon,time->mday);
+        snprintf(string,11,"%hd/%02hd/%02hd",time->year,time->mon,time->mday);
         return string;
     }
 
@@ -131,7 +131,7 @@ char * timeToString(Time * time){
         return NULL;
     }
 
-        snprintf(dateString, 20, "%d/%02d/%02d %02d:%02d:%02d",
+        snprintf(dateString, 20, "%hd/%02hd/%02hd %02hd:%02hd:%02hd",
                 time->year, time->mon, time->mday,
                 time->hour, time->min, time->sec);
 

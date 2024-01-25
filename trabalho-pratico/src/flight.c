@@ -66,9 +66,9 @@ typedef struct flight{
 
 void setFlightId(Flight * flight,const char * line){
     if(flight == NULL) return;
-    if(flight->id) {
-        ffree((void **) &flight->id);
-    }
+
+    ffree((void **) &flight->id);
+
     flight->id = strdup(line);
 }
 
@@ -84,9 +84,9 @@ char *getFlightId(Flight * flight){
   
 void setFlightAirline(Flight * flight,const char * line){
     if(flight == NULL) return;
-    if(flight->airline) {
-        ffree((void **) &flight->airline);
-    }
+
+    ffree((void **) &flight->airline);
+
     flight->airline = strdup(line);
 }
 
@@ -102,19 +102,9 @@ char *getFlightAirline(Flight * flight){
 
 void setFlightPlaneModel(Flight * flight,const char * line){
     if(flight == NULL) return;
-    if(flight->plane_model) {
-        if(strlen(line) > strlen(flight->plane_model)){
-            char * temp = realloc(flight->plane_model,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            flight->plane_model = temp;
-            return;
-        }else{
-            strncpy(flight->plane_model,line,strlen(flight->plane_model));
-            flight->plane_model[strlen(flight->plane_model)] = '\0';
-            return;
-        }
-    }
+
+    ffree((void **) &flight->plane_model);
+
     flight->plane_model =strdup(line);
 }
 
@@ -141,9 +131,9 @@ unsigned int getFlightTotalSeats(Flight * flight){
 
 void setFlightOrigin(Flight * flight,const char * line){
     if(flight == NULL) return;
-    if(flight->origin) {
-        ffree((void **) &flight->origin);
-    }
+
+    ffree((void **) &flight->origin);
+
     flight->origin = strdup(line);
 }
 
@@ -159,9 +149,7 @@ char *getFlightOrigin(Flight * flight){
 
   void setFlightDestination(Flight * flight,const char * line){
     if(flight == NULL) return;
-    if(flight->destination) {
-        ffree((void **) &flight->destination);
-    }
+    ffree((void **) &flight->destination);
     flight->destination = strdup(line);
 }
 
@@ -245,19 +233,9 @@ Time *getFlightRArrivalDate(Flight * flight){
 
 void setFlightPilot(Flight * flight,const char * line){
     if(flight == NULL) return;
-    if(flight->pilot) {
-        if(strlen(line) > strlen(flight->pilot)){
-            char * temp = realloc(flight->pilot,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            flight->pilot = temp;
-            return;
-        }else{
-            strncpy(flight->pilot,line,strlen(flight->pilot));
-            flight->pilot[strlen(flight->pilot)] = '\0';
-            return;
-        }
-    }
+
+    ffree((void **) &flight->pilot);
+
     flight->pilot =strdup(line);
 }
 
@@ -273,26 +251,16 @@ char *getFlightPilot(Flight * flight){
 
 void setFlightCopilot(Flight * flight,const char * line){
     if(flight == NULL) return;
-    if(flight->copilot) {
-        if(strlen(line) > strlen(flight->copilot)){
-            char * temp = realloc(flight->copilot,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            flight->copilot = temp;
-            return;
-        }else{
-            strncpy(flight->copilot,line,strlen(flight->copilot));
-            flight->copilot[strlen(flight->copilot)] = '\0';
-            return;
-        }
-    }
-    flight->copilot =strdup(line);
+    
+    ffree((void **) &flight->copilot);
+    
+    flight->copilot = strdup(line);
 }
 
 char *getFlightCopilot(Flight * flight){
     if(flight == NULL) return NULL;
     if(flight->copilot){
-        char * copilot =strdup(flight->copilot);
+        char * copilot = strdup(flight->copilot);
         return copilot;
     }
     return NULL;
@@ -301,19 +269,9 @@ char *getFlightCopilot(Flight * flight){
 
 void setFlightNotes(Flight * flight,const char * line){
     if(line == NULL || flight == NULL) return;
-    if(flight->notes) {
-        if(strlen(line) > strlen(flight->notes)){
-            char * temp = realloc(flight->notes,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            flight->notes = temp;
-            return;
-        }else{
-            strncpy(flight->notes,line,strlen(flight->notes));
-            flight->notes[strlen(flight->notes)] = '\0';
-            return;
-        }
-    }
+
+    ffree((void **) &flight->notes);
+    
     flight->notes =strdup(line);
 }
 

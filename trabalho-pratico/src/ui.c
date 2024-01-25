@@ -86,7 +86,7 @@ static bool checkPath(const char * path){
     int size = strlen(path);
     char * buffer = malloc(sizeof(char) * (size + 20));
     memset(buffer,'\0',size + 20);
-    strncpy(buffer,path,size);
+    strcpy(buffer,path);
     
     if(path[size] == '/') strncat(buffer,"users.csv",10);
     else strncat(buffer,"/users.csv",11);

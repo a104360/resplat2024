@@ -703,7 +703,7 @@ User * userCheck(const char * line){
             //Comment
             setReservComment(reservation,token);
             
-            strncpy(aux,line,strlen(line));
+            strcpy(aux,line);
             ffree((void **)&aux);
             aux = NULL;
             return reservation;
@@ -722,7 +722,7 @@ User * userCheck(const char * line){
             if(!rating){ ERRORSR(aux,reservation); }
             setReservRating(reservation, rating);
             if(saveptr[0] == ';'){
-                strncpy(aux,line,strlen(line));
+                strcpy(aux,line);
                 ffree((void **)&aux);
                 aux = NULL;
                 return reservation;
@@ -733,7 +733,7 @@ User * userCheck(const char * line){
             //Comment
             setReservComment(reservation,token);
             
-            strncpy(aux,line,strlen(line));
+            strcpy(aux,line);
             ffree((void **)&aux);
             aux = NULL;
             return reservation;
@@ -752,7 +752,7 @@ User * userCheck(const char * line){
         if(rating == 0){ ERRORSR(aux,reservation);}
         setReservRating(reservation,rating);
         if(saveptr[0] == ';'){
-                strncpy(aux,line,strlen(line));
+                strcpy(aux,line);
                 ffree((void **)&aux);
                 aux = NULL;
                 return reservation;
@@ -763,7 +763,7 @@ User * userCheck(const char * line){
         //Comment
         setReservComment(reservation,token);
         
-        strncpy(aux,line,strlen(line));
+        strcpy(aux,line);
         ffree((void **)&aux);
         aux = NULL;
         return reservation;
@@ -778,7 +778,7 @@ User * userCheck(const char * line){
     if(!rating){ ERRORSR(aux,reservation);}
     setReservRating(reservation,rating);
     if(saveptr[0] == ';' || saveptr[0] == '\n' || saveptr[0] == '\0'){
-        strncpy(aux,line,strlen(line));
+        strcpy(aux,line);
         ffree((void **)&aux);
         aux = NULL;
         return reservation;
@@ -787,8 +787,7 @@ User * userCheck(const char * line){
 
     //Comment
     setReservComment(reservation,token);
-    
-    strncpy(aux,line,strlen(line));
+    strcpy(aux,line);
     ffree((void **)&aux);
     aux = NULL;
     return reservation;
@@ -979,10 +978,11 @@ Passenger * passengerCheck(const char * line,Users * uDatabase,Flights * fDataba
 Users * validateUsers(const char * folderPath){
     size_t argSize = 0;
     argSize = strlen(folderPath);
+    char * storeFgets = NULL;
     char * filePath = NULL;
     filePath = malloc(argSize + 20); // malloc
     memset(filePath,'\0',argSize + 20);
-    strncpy(filePath,folderPath,argSize);
+    strcpy(filePath,folderPath);
 
 
     // Create Users Database
@@ -1009,11 +1009,11 @@ Users * validateUsers(const char * folderPath){
 
     Users * uDatabase = createDatabase(&destroyUser); // initDatabase
 
-    fgets(userData,BUFFERSIZE,userFile);
+    storeFgets = fgets(userData,BUFFERSIZE,userFile);
 
     fprintf(userErrors,"%s",userData);
 
-    while(fgets(userData,BUFFERSIZE,userFile)){
+    while((storeFgets = fgets(userData,BUFFERSIZE,userFile)) != NULL){
 
         User * uBuffer = NULL;
 
@@ -1059,15 +1059,16 @@ Users * validateUsers(const char * folderPath){
 Reservations * validateReservations(Users * uDatabase, const char * folderPath){
     size_t argSize = 0;
     argSize = strlen(folderPath);
+    char * storeFgets = NULL;
     char * filePath = NULL;
     filePath = malloc(argSize + 20);
     memset(filePath,'\0',argSize + 20);
-    strncpy(filePath,folderPath,argSize);
+    strcpy(filePath,folderPath);
 
     memset(filePath,'\0',argSize + 20);
     
         // Create Reservations Database
-        strncpy(filePath,folderPath,argSize);
+        strcpy(filePath,folderPath);
         strncat(filePath,"/reservations.csv",19);
 
         filePath[argSize + 1 + 17 + 1] = '\0';
@@ -1091,11 +1092,11 @@ Reservations * validateReservations(Users * uDatabase, const char * folderPath){
 
         Reservations * rDatabase = createDatabase(&destroyReservation);
 
-        fgets(reservationData,BUFFERSIZE,reservationsFile);
+        storeFgets = fgets(reservationData,BUFFERSIZE,reservationsFile);
 
         fprintf(reservationsErrors,"%s",reservationData);
 
-        while(fgets(reservationData,BUFFERSIZE,reservationsFile)){
+        while((storeFgets = fgets(reservationData,BUFFERSIZE,reservationsFile)) != NULL){
 
             Reservation * rBuffer = NULL;
 
@@ -1138,13 +1139,13 @@ Flights * validateFlights(const char * folderPath){
     char * filePath = NULL;
     filePath = malloc(argSize + 20);
     memset(filePath,'\0',argSize + 20);
-    strncpy(filePath,folderPath,argSize);
+    strcpy(filePath,folderPath);
 
-    memset(filePath,'\0',argSize + 20);
+    memset(filePath,'\0',argSize + 20); // CORRIGIR
     
 
         //Create Flights Database
-        strncpy(filePath,folderPath,argSize);
+        strcpy(filePath,folderPath);
         strncat(filePath,"/flights.csv",14);
 
         FILE * flightFile = NULL;
@@ -1240,14 +1241,15 @@ Flights * validateFlights(const char * folderPath){
 Passengers * validatePassengers(Users * uDatabase,Flights * fDatabase,const char * folderPath){
     size_t argSize = 0;
     argSize = strlen(folderPath);
+    char * storeFgets = NULL;
     char * filePath = NULL;
     filePath = malloc(argSize + 20);
     memset(filePath,'\0',argSize + 20);
-    strncpy(filePath,folderPath,argSize);
+    strcpy(filePath,folderPath);
 
     memset(filePath,'\0',argSize + 20);
 
-        strncpy(filePath,folderPath,argSize);
+        strcpy(filePath,folderPath);
         strncat(filePath,"/passengers.csv",17);
 
         FILE * passengersFile = NULL;
@@ -1273,11 +1275,11 @@ Passengers * validatePassengers(Users * uDatabase,Flights * fDatabase,const char
 
         Passengers * pDatabase = createPassengerDatabase();
         
-        fgets(passengersData,BUFFERSIZE,passengersFile);
+        storeFgets = fgets(passengersData,BUFFERSIZE,passengersFile);
 
         fprintf(passengersErrors,"%s",passengersData);
 
-        while(fgets(passengersData,BUFFERSIZE,passengersFile)){
+        while((storeFgets = fgets(passengersData,BUFFERSIZE,passengersFile)) != NULL){
 
             Passenger * pBuffer = NULL;
 

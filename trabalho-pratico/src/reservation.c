@@ -50,38 +50,18 @@ void initReservation(Reservation * reservation){
 
 void destroyReservation(Reservation * r) {
     if (r != NULL) {
-        if(r->id) {
-            free(r->id);
-            r->id = NULL;
-        } 
-        if(r->user_id) {
-            free(r->user_id);
-            r->user_id = NULL;
-        } 
-        if(r->hotel_id) {
-            free(r->hotel_id);
-            r->hotel_id = NULL;
-        } 
-        if(r->hotel_name) {
-            free(r->hotel_name);
-            r->hotel_name = NULL;
-        } 
-        if(r->address) {
-            free(r->address);
-            r->address = NULL;
-        } 
-        if(r->begin_date) destroyTime(r->begin_date); 
-        if(r->end_date) destroyTime(r->end_date); 
-        if(r->room_details) {
-            free(r->room_details);
-            r->room_details = NULL;
-        } 
-        if(r->comment) {
-            free(r->comment);
-            r->comment = NULL;
-        } 
-        free(r); 
-        r = NULL;
+        ffree((void **) &r->id);
+        ffree((void **) &r->user_id);
+        ffree((void **) &r->hotel_id);
+        ffree((void **) &r->hotel_name);
+        ffree((void **) &r->address);
+        destroyTime(r->begin_date); 
+        destroyTime(r->end_date); 
+        ffree((void **) &r->room_details);
+        ffree((void **) &r->comment);
+
+
+        ffree((void **) &r); 
     }
 }
 
@@ -91,10 +71,9 @@ size_t getReservSize(){
 
 void setReservId(Reservation * reserv,const char * line){
     if(!reserv) return;
-    if(reserv->id){
-        free(reserv->id);
-        reserv->id = NULL;
-    }
+    
+    ffree((void **) &reserv->id);
+
     reserv->id = strdup(line);
 }
 
@@ -111,10 +90,9 @@ char *getReservId(Reservation * reserv){
 
 void setReservUserId(Reservation * reserv,const char * line){
     if(!reserv) return;
-    if(reserv->user_id){
-        free(reserv->user_id);
-        reserv->user_id = NULL;
-    }
+    
+    ffree((void **) &reserv->user_id);
+
     reserv->user_id = strdup(line);
 }
 
@@ -129,19 +107,9 @@ char *getReservUserId(Reservation * reserv){
 
   void setReservHotelId(Reservation * reserv,const char * line){
     if(!reserv) return;
-    if(reserv->hotel_id){
-        if(strlen(line) > strlen(reserv->hotel_id)){
-            char * temp = realloc(reserv->hotel_id,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            reserv->hotel_id = temp;
-            return;
-        }else{
-            strncpy(reserv->hotel_id,line,strlen(reserv->hotel_id));
-            reserv->hotel_id[strlen(reserv->hotel_id)] = '\0';
-            return;
-        }
-    }
+    
+    ffree((void **) &reserv->hotel_id);
+
     reserv->hotel_id =strdup(line);
 }
 
@@ -149,7 +117,6 @@ char *getReservUserId(Reservation * reserv){
     if(!reserv) return NULL;
      if(reserv->hotel_id){
         char * hotel_id = NULL;
-        
         hotel_id = strdup(reserv->hotel_id);
         return hotel_id;
     }
@@ -159,10 +126,9 @@ char *getReservUserId(Reservation * reserv){
 
 void setReservHotelName(Reservation * reserv,const char * line){
     if(!reserv) return;
-    if(reserv->hotel_name){
-        ffree((void **) &reserv->hotel_name);
-        reserv->hotel_name = strdup(line);
-    }
+    
+    ffree((void **) &reserv->hotel_name);
+    
     reserv->hotel_name = strdup(line);
 }
 
@@ -195,19 +161,8 @@ int getReservCityTax(Reservation * reserv){
 
 
   void setReservHotelAddress(Reservation * reserv,const char * line){
-    if(reserv->address){
-        if(strlen(line) > strlen(reserv->address)){
-            char * temp = realloc(reserv->address,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            reserv->address = temp;
-            return;
-        }else{
-            strncpy(reserv->address,line,strlen(reserv->address));
-            reserv->address[strlen(reserv->address)] = '\0';
-            return;
-        }
-    }
+    ffree((void **)&reserv->address);
+
     reserv->address =strdup(line);
 }
 
@@ -270,19 +225,9 @@ void setReservEndDate(Reservation * reserv,Time * tempo){
 
   void setReservRoomDetails(Reservation * reserv,const char * line){
     if(line == NULL) return;
-    if(reserv->room_details){
-        if(strlen(line) > strlen(reserv->room_details)){
-            char * temp = realloc(reserv->room_details,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            reserv->room_details = temp;
-            return;
-        }else{
-            strncpy(reserv->room_details,line,strlen(reserv->room_details));
-            reserv->room_details[strlen(reserv->room_details)] = '\0';
-            return;
-        }
-    }
+    
+    ffree((void **) &reserv->room_details);
+    
     reserv->room_details =strdup(line);
 }
 
@@ -306,19 +251,9 @@ const unsigned int getReservRating(const Reservation * reserv){
 
   void setReservComment(Reservation * reserv,const char * line){
     if(line == NULL) return;
-    if(reserv->comment) {
-        if(strlen(line) > strlen(reserv->comment)){
-            char * temp = realloc(reserv->comment,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            reserv->comment = temp;
-            return;
-        }else{
-            strncpy(reserv->comment,line,strlen(reserv->comment));
-            reserv->comment[strlen(reserv->comment)] = '\0';
-            return;
-        }
-    }
+    
+    ffree((void **) &reserv->comment);
+    
     reserv->comment = strdup(line);
 }
 

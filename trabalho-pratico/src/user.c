@@ -69,20 +69,9 @@ void setUserId(User * user, const char * line){
     if(line == NULL) return;
     if (user == NULL) return;
 
-    if (user->id != NULL) {
-        if(strlen(line) > strlen(user->id)){
-            char * temp = realloc(user->id,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            user->id = temp;
-            return;
-        }else{
-            strncpy(user->id,line,strlen(user->id));
-            user->id[strlen(user->id)] = '\0';
-            return;
-        }
-    }
-    if (line) user->id = strdup(line); 
+    ffree((void **) &user->id);
+
+    user->id = strdup(line); 
 }
 
 
@@ -97,19 +86,9 @@ void setUserId(User * user, const char * line){
 
   void setUserName(User * user,const char * line){
     if(line == NULL) return;
-    if(user->name) {
-        if(strlen(line) > strlen(user->name)){
-            char * temp = realloc(user->name,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            user->name = temp;
-            return;
-        }else{
-            strncpy(user->name,line,strlen(user->name));
-            user->name[strlen(user->name)] = '\0';
-            return;
-        }
-    }
+    
+    ffree((void **) &user->name);
+
     if(line) user->name =strdup(line);
 }
 
@@ -124,19 +103,9 @@ void setUserId(User * user, const char * line){
 
  void setUserEmail(User * user,const char * line){
     if(line == NULL) return;
-    if(user->email != NULL) {
-        if(strlen(line) > strlen(user->email)){
-            char * temp = realloc(user->email,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            user->email = temp;
-            return;
-        }else{
-            strncpy(user->email,line,strlen(user->email));
-            user->email[strlen(user->email)] = '\0';
-            return;
-        }
-    }
+    
+    ffree((void **) &user->email);
+
     user->email = strdup(line);
 }
 
@@ -151,19 +120,9 @@ void setUserId(User * user, const char * line){
  void setUserPhone(User * user,const char * line){
     if(line == NULL) return;
     if(user == NULL) return;
-    if(user->phone_number != NULL){
-        if(strlen(line) > strlen(user->phone_number)){
-            char * temp = realloc(user->phone_number,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            user->phone_number = temp;
-            return;
-        }else{
-            strncpy(user->phone_number,line,strlen(user->phone_number));
-            user->phone_number[strlen(user->phone_number)] = '\0';
-            return;
-        }
-    }
+    
+    ffree((void **) &user->phone_number);
+
     user->phone_number = strdup(line);
 }
 
@@ -204,19 +163,9 @@ void setUserSex(User * user ,const char line){
   void setUserPassport(User * user ,const char * line){
     if(user == NULL) return;
     if(line == NULL) return;
-    if(user->passport){
-        if(strlen(line) > strlen(user->passport)){
-            char * temp = realloc(user->passport,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            user->passport = temp;
-            return;
-        }else{
-            strncpy(user->passport,line,strlen(user->passport));
-            user->passport[strlen(user->passport)] = '\0';
-            return;
-        }
-    }
+    
+    ffree((void **) &user->passport);
+
     user->passport =strdup(line);
 }
 
@@ -232,19 +181,9 @@ void setUserSex(User * user ,const char line){
  void setUserCountryCode(User * user ,const char * line){
     if(user == NULL) return;
     if(line == NULL) return;
-    if(user->country_code) {
-        if(strlen(line) > strlen(user->country_code)){
-            char * temp = realloc(user->country_code,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            user->country_code = temp;
-            return;
-        }else{
-            strncpy(user->country_code,line,strlen(user->country_code));
-            user->country_code[strlen(user->country_code)] = '\0';
-            return;
-        }
-    }
+    
+    ffree((void **) &user->country_code);
+
     user->country_code =strdup(line);
 }
 
@@ -260,19 +199,9 @@ void setUserSex(User * user ,const char line){
  void setUserAddress(User * user ,const char * line){
     if(user == NULL) return;
     if(line == NULL) return;
-    if(user->address) {
-        if(strlen(line) > strlen(user->address)){
-            char * temp = realloc(user->address,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            user->address = temp;
-            return;
-        }else{
-            strncpy(user->address,line,strlen(user->address));
-            user->address[strlen(user->address)] = '\0';
-            return;
-        }
-    }
+    
+    ffree((void **) &user->address);
+
     user->address = strdup(line);
 }
 
@@ -305,19 +234,9 @@ void setUserAccountCreation(User * user ,Time *tempo){
 void setUserPayMethod(User * user ,const char * line){
     if(user == NULL) return;
     if(line == NULL) return;
-    if(user->pay_method) {
-        if(strlen(line) > strlen(user->pay_method)){
-            char * temp = realloc(user->pay_method,strlen(line)+ 1);
-            strncpy(temp,line,strlen(line));
-            temp[strlen(line)] = '\0';
-            user->pay_method = temp;
-            return;
-        }else{
-            strncpy(user->pay_method,line,strlen(user->pay_method));
-            user->pay_method[strlen(user->pay_method)] = '\0';
-            return;
-        }
-    }
+    
+    ffree((void **) &user->pay_method);
+    
     user->pay_method = strdup(line);
 }
 
@@ -346,22 +265,64 @@ void setUserPayMethod(User * user ,const char * line){
 
 int getUserAge(User * user){
     Time * userBday = getUserBday(user);
+
+
     int n = PYEAR - (getYear(userBday));
+
+
     if(PMON > getMon(userBday)){
         destroyTime(userBday);
         return n;
     }
+
     if(PMON < getMon(userBday)){
         destroyTime(userBday);
-        return n + 1;
+        return n - 1;
     }
-    if(PDAY <= getMday(userBday)){
+
+    if(PDAY < getMday(userBday)){
         destroyTime(userBday);
-        return n + 1;
+        return n - 1;
     }
+
     destroyTime(userBday);
-    return n;
+    return n - 1;
 }
+/*  
+#include <stdio.h>
+
+struct date {
+    int year;
+    int mon;
+    int day;
+    int hour;
+    int min;
+    int sec;
+};
+
+int main()
+{
+    struct date present;
+    present.year = 2023;
+    present.mon = 10;
+    present.day = 1;
+    
+    struct date new;
+    new.year = 1960;
+    new.mon = 2;
+    new.day = 22;
+    
+    int age = present.year - new.year;
+    
+    if((present.mon > new.mon) || (present.mon == new.mon && present.day > new.day)){
+        age -= 1;
+    }
+    
+    printf("O gajo tem %d anos de idade",age);
+
+    return 0;
+}
+*/
 
 void copyUser(User * dest,User * src){
     if(src == NULL) return;
