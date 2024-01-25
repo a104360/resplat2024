@@ -166,8 +166,8 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
         Temporary * uFDatabase1 = getUserFlights((void *) fDatabase,(void *) pDatabase,id);
         Temporary * uRDatabase1 = getAListOfSomething((void *) rDatabase,id,NULL,NULL,&allUserReservs);
         
-        Reservation ** rList1 = (Reservation **) getTempList(uRDatabase1);
-        Flight ** fList1 = (Flight **) getTempList(uFDatabase1);
+        const Reservation ** rList1 = (const Reservation **) getTempList(uRDatabase1);
+        const Flight ** fList1 = (const Flight **) getTempList(uFDatabase1);
 
         int r = getTempNum(uRDatabase1);
         int f = getTempNum(uFDatabase1);
@@ -175,7 +175,7 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
         mergeSort((void **) fList1,f,"Flight");
         mergeSort((void **) rList1,r,"Reservation");
 
-        outputQ2(F,rList1,r,fList1,f);
+        outputQ2(F,(Reservation **)rList1,r,(Flight **)fList1,f);
 
         free(fList1);
         free(rList1);
@@ -189,13 +189,13 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
     case 2: // FLIGHT
         Temporary * uFDatabase2 = getUserFlights((void *) fDatabase,(void *) pDatabase,id);
         
-        Flight ** fList2 = (Flight **) getTempList(uFDatabase2);
+        const Flight ** fList2 = (const Flight **) getTempList(uFDatabase2);
 
         int max2 = getTempNum(uFDatabase2);
 
         mergeSort((void **) fList2,max2,"Flight");
 
-        outputQ2(F,NULL,0,fList2,max2);
+        outputQ2(F,NULL,0,(Flight **) fList2,max2);
 
         free(fList2);
 
@@ -206,13 +206,13 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
     case 3: // RESERVATION
         Temporary * uRDatabase3 = getAListOfSomething((void *) rDatabase,id,NULL,NULL,&allUserReservs);
         
-        Reservation ** rList3 = (Reservation **) getTempList(uRDatabase3);
+        const Reservation ** rList3 = (const Reservation **) getTempList(uRDatabase3);
 
         int max3 = getTempNum(uRDatabase3);
 
         mergeSort((void **) rList3,max3,"Reservation");
 
-        outputQ2(F,rList3,max3,NULL,0);
+        outputQ2(F,(Reservation **) rList3,max3,NULL,0);
         
         free(rList3);
         
@@ -304,22 +304,10 @@ void query7(Flights * fDatabase,char * num, bool f){
     int n = atoi(num);
     int max = getSRecordSize(allDelays);
     if(max < n) n = max;
-    /*int * delays = malloc(sizeof(int) * max);
-    for(int i = 0;i < max;
-    delays[i] = -1,
-    delays[i] = getSRecordListElement(allDelays,i),
-    i++);
-
-    char ** airports = malloc(sizeof(char *) * max);
-    for(int i = 0;i < max;
-    airports[i] = NULL,
-    airports[i] = getSRecordName(allDelays,i),
-    i++);*/
+    
 
     outputQ7(f,allDelays,n);
-    //for(int i = 0;i < max;ffree((void **) &(airports[i])),i++);
-    //ffree((void **) &airports);
-    //ffree((void **) &delays);
+
 
     destroySRecord(&allDelays);
 
@@ -335,6 +323,7 @@ void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit
 
 
     int max = getTempNum(hDatabase);
+    destroyTemporaryReservation(hDatabase);
 
     for(int i = 0;i < max;i++){
         Time * begin = getReservBeginDate(rList[i]);
@@ -360,24 +349,16 @@ void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit
 
     for(int i = 0;i < max;destroyReservation(rList[i]),i++);
     ffree((void **) &rList);
-    destroyTemporaryReservation(hDatabase);
 
     return;
 }
-/*
-void query9(){
-    outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
-    return;
-}*/
 
 void query9(Users * uDatabase, char * pre, bool f){
-    //SingularRecord * preUsers = getUsersPre(uDatabase,pre);
-    //char ** users = getSRecordNames(preUsers);
-    //int max = getSRecordSize(preUsers);
     Temporary * temp = getUsersPre(uDatabase,pre);
     char ** preUsersIds = getTempAuxChar(temp);
     char ** preUsersNames = getTempListChars(temp);
     int max = getTempNum(temp);
+    destroyTemporaryChar(temp);
 
     void ** sort = malloc(sizeof(void *) * 2);
     sort[0] = preUsersNames;
@@ -385,7 +366,6 @@ void query9(Users * uDatabase, char * pre, bool f){
 
     mergeSort(sort,max,"String");
 
-    //outputQ9(users,max,f);
     outputQ9(preUsersIds,preUsersNames,max,f);
     sort[0] = NULL;
     sort[1] = NULL;
@@ -398,7 +378,6 @@ void query9(Users * uDatabase, char * pre, bool f){
         ffree((void **) &preUsersNames[i]);
     }
     free(preUsersNames);
-    destroyTemporaryChar(temp);
     return;
 }
 
