@@ -17,7 +17,7 @@ OBJ= $(SOURCES:.c=.o)
 all: $(EXE) programa-testes
 
 $(EXE): $(OBJ)
-	$(CC) -o $@ $^ $(CFLAGS)	
+	$(CC) -o $@ $^ $(CFLAGS)
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS)
@@ -29,12 +29,12 @@ menu: $(EXE)
 	./$(EXE)
 
 run: $(EXE)
-	./$(EXE) ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt
+	./$(EXE) ../../dataset/data ../../dataset/input.txt
 
 big: $(EXE)
 	./$(EXE) ../../data_large/data ../../data_large/input.txt
 test: programa-testes
-	./programa-testes ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt ../../li3_fr/dataset/outputs
+	./programa-testes ../../dataset/data ../../dataset/input.txt ../../dataset/outputs
 
 bigTest: programa-testes
 	./programa-testes ../../data_large/data ../../data_large/input.txt ../../data_large/outputs
@@ -46,7 +46,7 @@ debug: $(EXE).debug
 	gdb $(EXE).debug
 
 grind: $(EXE).debug
-	valgrind -s --leak-check=full --show-leak-kinds=all --log-file=valgrind-out.txt ./$(EXE).debug ../../li3_fr/dataset/data ../../li3_fr/dataset/input.txt
+	valgrind -s --leak-check=full --show-leak-kinds=all --log-file=valgrind-out.txt ./$(EXE).debug ../../dataset/data ../../dataset/input.txt
 
 grindBig: $(EXE).debug
 	valgrind -s --leak-check=full --show-leak-kinds=all --log-file=valgrind-out.txt ./$(EXE).debug ../../data_large/data ../../data_large/input.txt
