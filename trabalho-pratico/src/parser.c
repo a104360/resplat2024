@@ -649,7 +649,7 @@ User * userCheck(const char * line){
         ffree((void **)&reservationAddress);
         ERRORSR(aux,reservation);
     }
-    setReservHotelAddress(reservation,reservationAddress);
+    //setReservHotelAddress(reservation,reservationAddress);
     ffree((void **)&reservationAddress);
     TOKENIZE(token,saveptr);
 
@@ -685,7 +685,7 @@ User * userCheck(const char * line){
         setReservBreakfast(reservation, includesBreakfast);
         //RoomDetails
         if(saveptr[1] == ';'){
-            setReservRoomDetails(reservation,NULL);
+            //setReservRoomDetails(reservation,NULL);
             TOKENIZE(token,saveptr);
             
             unsigned int rating = reviewCheck(token);
@@ -701,7 +701,7 @@ User * userCheck(const char * line){
             TOKENIZE(token,saveptr);
 
             //Comment
-            setReservComment(reservation,token);
+            //setReservComment(reservation,token);
             
             strcpy(aux,line);
             ffree((void **)&aux);
@@ -714,7 +714,7 @@ User * userCheck(const char * line){
                 ffree((void **)&roomDetails);
                 ERRORSR(aux,reservation);
             }
-            setReservRoomDetails(reservation,roomDetails);
+            //setReservRoomDetails(reservation,roomDetails);
             ffree((void **)&roomDetails);
             TOKENIZE(token,saveptr);
 
@@ -731,7 +731,7 @@ User * userCheck(const char * line){
             TOKENIZE(token,saveptr);
 
             //Comment
-            setReservComment(reservation,token);
+            //setReservComment(reservation,token);
             
             strcpy(aux,line);
             ffree((void **)&aux);
@@ -761,7 +761,7 @@ User * userCheck(const char * line){
         TOKENIZE(token,saveptr);
 
         //Comment
-        setReservComment(reservation,token);
+        //setReservComment(reservation,token);
         
         strcpy(aux,line);
         ffree((void **)&aux);
@@ -771,7 +771,7 @@ User * userCheck(const char * line){
     TOKENIZE(token,saveptr);
 
     //RoomDetails
-    setReservRoomDetails(reservation,token);
+    //setReservRoomDetails(reservation,token);
     TOKENIZE(token,saveptr);
     
     unsigned int rating = reviewCheck(token);
@@ -786,7 +786,7 @@ User * userCheck(const char * line){
     TOKENIZE(token,saveptr);
 
     //Comment
-    setReservComment(reservation,token);
+    //setReservComment(reservation,token);
     strcpy(aux,line);
     ffree((void **)&aux);
     aux = NULL;

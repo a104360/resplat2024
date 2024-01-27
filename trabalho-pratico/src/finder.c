@@ -214,20 +214,26 @@ void allHotelReservs(gpointer key, gpointer value, gpointer hotelData) {
         if (!strcoll(hotelId,wantedHotel) && 
         (compareTimes(beginDate,endLimit) || compareTimes(beginDate,endLimit) == 10) && 
         (compareTimes(beginLimit,endDate) || compareTimes(beginLimit,endDate) == 10)) {
-          setTempListElementReservation(array,reservation,i);
-          int rating = getReservRating(reservation);
-          increaseTempSum(array,rating);
-          incTempNum(array);
-          i++;
+            setTempListElementReservation(array,reservation,i);
+            int rating = getReservRating(reservation);
+            increaseTempSum(array,rating);
+            incTempNum(array);
+            i++;  
         }
-    }else{
-        if(!strcoll(hotelId,wantedHotel)) {
-          setTempListElementReservation(array,reservation,i);
-          int rating = getReservRating(reservation);
-          increaseTempSum(array,rating);
-          incTempNum(array);
-          i++;
-        }
+        destroyTime(beginLimit);
+        destroyTime(endLimit);
+        destroyTime(beginDate);
+        destroyTime(endDate);
+        ffree((void **) &wantedHotel);
+        ffree((void **) &hotelId);
+        return;
+    }
+    if(!strcoll(hotelId,wantedHotel)) {
+        setTempListElementReservation(array,reservation,i);
+        int rating = getReservRating(reservation);
+        increaseTempSum(array,rating);
+        incTempNum(array);
+        i++;
     }
     destroyTime(beginLimit);
     destroyTime(endLimit);

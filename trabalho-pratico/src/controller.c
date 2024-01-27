@@ -46,15 +46,28 @@ void test(char ** argv){
         clock_gettime(CLOCK_REALTIME, &start);
 
         setlocale(LC_COLLATE, "en_US.UTF-8");
+        struct rusage r_usage;
 
         Users * uDatabase = validateUsers(argv[1]);
+        getrusage(RUSAGE_SELF, &r_usage);
+
+        printf("\n\nOs users passaram a usar %ld KB de memória.\n", r_usage.ru_maxrss);
 
         Reservations * rDatabase = validateReservations(uDatabase,argv[1]);
+        getrusage(RUSAGE_SELF, &r_usage);
+
+        printf("\n\nAs reservations passaram a usar %ld KB de memória.\n", r_usage.ru_maxrss);
 
         Flights * fDatabase = validateFlights(argv[1]);
+        getrusage(RUSAGE_SELF, &r_usage);
+
+        printf("\n\nOs flights passaram a usar %ld KB de memória.\n", r_usage.ru_maxrss);
 
 
         Passengers * pDatabase = validatePassengers(uDatabase,fDatabase,argv[1]);
+        getrusage(RUSAGE_SELF, &r_usage);
+
+        printf("\n\nOs passengers passaram a usar %ld KB de memória.\n", r_usage.ru_maxrss);
 
 
         readEntryFile((const Users *) uDatabase,(const Reservations *) rDatabase,(const Flights *) fDatabase,(const Passengers *) pDatabase,4,argv,queriesTimes,queriesNumExec);
@@ -81,7 +94,6 @@ void test(char ** argv){
         printf("\nO programa demorou %.6f segundos a ser executado.\n", elapsed);
 
 
-        struct rusage r_usage;
         getrusage(RUSAGE_SELF, &r_usage);
 
         printf("\n\nO programa usou %ld KB de memória.\n", r_usage.ru_maxrss);
