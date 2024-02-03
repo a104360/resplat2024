@@ -49,25 +49,25 @@ void test(char ** argv){
         struct rusage r_usage;
 
         Users * uDatabase = validateUsers(argv[1]);
-        getrusage(RUSAGE_SELF, &r_usage);
+        //getrusage(RUSAGE_SELF, &r_usage);
 
-        printf("\n\nOs users passaram a usar %ld KB de memória.\n", r_usage.ru_maxrss);
+        //printf("\n\nOs users passaram a usar %ld KB de memória.\n", r_usage.ru_maxrss);
 
         Reservations * rDatabase = validateReservations(uDatabase,argv[1]);
-        getrusage(RUSAGE_SELF, &r_usage);
+        //getrusage(RUSAGE_SELF, &r_usage);
 
-        printf("\n\nAs reservations passaram a usar %ld KB de memória.\n", r_usage.ru_maxrss);
+        //printf("\n\nAs reservations passaram a usar %ld KB de memória.\n", r_usage.ru_maxrss);
 
         Flights * fDatabase = validateFlights(argv[1]);
-        getrusage(RUSAGE_SELF, &r_usage);
+        //getrusage(RUSAGE_SELF, &r_usage);
 
-        printf("\n\nOs flights passaram a usar %ld KB de memória.\n", r_usage.ru_maxrss);
+        //printf("\n\nOs flights passaram a usar %ld KB de memória.\n", r_usage.ru_maxrss);
 
 
         Passengers * pDatabase = validatePassengers(uDatabase,fDatabase,argv[1]);
-        getrusage(RUSAGE_SELF, &r_usage);
+        //getrusage(RUSAGE_SELF, &r_usage);
 
-        printf("\n\nOs passengers passaram a usar %ld KB de memória.\n", r_usage.ru_maxrss);
+        //printf("\n\nOs passengers passaram a usar %ld KB de memória.\n", r_usage.ru_maxrss);
 
 
         readEntryFile((const Users *) uDatabase,(const Reservations *) rDatabase,(const Flights *) fDatabase,(const Passengers *) pDatabase,4,argv,queriesTimes,queriesNumExec);

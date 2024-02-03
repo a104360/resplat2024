@@ -13,10 +13,8 @@
 
 #define BUFFERSIZE 100
 
-int apagar = 0;
 
 void query1(const Users * uDatabase, const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,const char * id,bool f){
-    struct rusage r_usage;
     char * analisa = malloc(sizeof(char) * 5);
     strncpy(analisa,id,4);
     analisa[4] = '\0';
@@ -33,9 +31,6 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         if(getUserAccountStatus(user) == false){
             ffree((void **) &analisa);
             outputQ1User(f,NULL,'\0',0,NULL,NULL,0,0,0);
-            getrusage(RUSAGE_SELF,&r_usage);
-            printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-            apagar++;
             return;
         }
 
@@ -70,9 +65,6 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         if(flight == NULL){
             ffree((void **) &analisa);
             outputQ1Flight(f,NULL,NULL,NULL,NULL,NULL,NULL,0,0);
-            getrusage(RUSAGE_SELF,&r_usage);
-            printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-            apagar++;
             return;
         }
         char * airline = getFlightAirline(flight);
@@ -111,9 +103,6 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         if(!reserv){
             ffree((void **) &analisa);
             outputQ1Reservation(f,NULL,NULL,-1,NULL,NULL,false,0,0);
-            getrusage(RUSAGE_SELF,&r_usage);
-            printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-            apagar++;
             return;
         } 
         char * hotel_id = getReservHotelId(reserv);
@@ -139,22 +128,15 @@ void query1(const Users * uDatabase, const Reservations * rDatabase,const Flight
         
         break;
     default:
-        getrusage(RUSAGE_SELF,&r_usage);
-        printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-        apagar++;
         return;
         break;
     }
     ffree((void **) &analisa);
-    getrusage(RUSAGE_SELF,&r_usage);
-    printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-    apagar++;
 
     return;
 }
 
 void query2(const Users * uDatabase, const Reservations * rDatabase,const Flights * fDatabase,const Passengers * pDatabase,const char * line,bool F){
-    struct rusage r_usage;
     char * SRecord = strdup(line);
     char * token = NULL;
     char * saveprt = NULL;
@@ -163,9 +145,6 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
     if(user == NULL){
         outputQ2(F,NULL,-1,NULL,-1);
         ffree((void **) &SRecord);
-        getrusage(RUSAGE_SELF,&r_usage);
-        printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-        apagar++;
         return;
     }
     token = strtok_r(NULL,"\n\0",&saveprt);
@@ -174,9 +153,6 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
     if(getUserAccountStatus(user) == false){
         outputQ2(F,NULL,-1,NULL,-1);
         ffree((void **) &SRecord);
-        getrusage(RUSAGE_SELF,&r_usage);
-        printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-        apagar++;
         return;
     }
     int flag = 0;
@@ -254,29 +230,21 @@ void query2(const Users * uDatabase, const Reservations * rDatabase,const Flight
 
     ffree((void **) &id);
 
-    getrusage(RUSAGE_SELF,&r_usage);
-    printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-    apagar++;
 
     return;
 }
 
 // Average rating of an hotel
 void query3(Reservations * rDatabase,const char * id,bool f){
-    struct rusage r_usage;
     double n = averageRating((void *) rDatabase,id);
 
     outputQ3(f,n);
 
-    getrusage(RUSAGE_SELF,&r_usage);
-    printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-    apagar++;
 
     return;
 }
 
 void query4(Reservations * rDatabase,const char * id,bool f){
-    struct rusage r_usage;
     Temporary * hDatabase = getAListOfSomething((void *) rDatabase,id,NULL,NULL,&allHotelReservs);
     Reservation ** rList = (Reservation **) getTempListReservations(hDatabase);
     int n = getTempNum(hDatabase);
@@ -288,15 +256,11 @@ void query4(Reservations * rDatabase,const char * id,bool f){
     ffree((void **) &rList);
     destroyTemporaryReservation(hDatabase);
 
-    getrusage(RUSAGE_SELF,&r_usage);
-    printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-    apagar++;
 
     return;
 }
 
 void query5(const Flights * fDatabase,Time * ti,Time * tf,const char * name,bool f){
-    struct rusage r_usage;
     Temporary * airportFlights = getAListOfSomething((void *) fDatabase,name,ti,tf,&checkAirports);
     Flight ** fList = (Flight **) getTempListFlights(airportFlights);
     int max = getTempNum(airportFlights);
@@ -308,14 +272,10 @@ void query5(const Flights * fDatabase,Time * ti,Time * tf,const char * name,bool
     ffree((void **) &fList);
     destroyTemporaryFlight(airportFlights);
 
-    getrusage(RUSAGE_SELF,&r_usage);
-    printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-    apagar++;
 
 }
 
 void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * year, const char * n,bool f){
-    struct rusage r_usage;
     
     int n_airports = atoi(n);
     int fYear = atoi(year);
@@ -345,14 +305,10 @@ void query6(const Flights * fDatabase,const Passengers * pDatabase,const char * 
 
     ffree((void **) &number);
 
-    getrusage(RUSAGE_SELF,&r_usage);
-    printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-    apagar++;
 
 }
 
 void query7(Flights * fDatabase,char * num, bool f){
-    struct rusage r_usage;
     SingularRecord * allDelays = getDelays((void *)fDatabase);
     int n = atoi(num);
     int max = getSRecordSize(allDelays);
@@ -364,14 +320,10 @@ void query7(Flights * fDatabase,char * num, bool f){
 
     destroySRecord(&allDelays);
 
-    getrusage(RUSAGE_SELF,&r_usage);
-    printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-    apagar++;
     
 }
 
 void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit,bool f){
-    struct rusage r_usage;
     Temporary * hDatabase = getAListOfSomething((void *) rDatabase,id,lLimit,uLimit,&allHotelReservs);
     
     Reservation ** rList = (Reservation **) getTempListReservations(hDatabase);
@@ -407,15 +359,11 @@ void query8(Reservations * rDatabase,const char * id,Time * lLimit,Time * uLimit
     for(int i = 0;i < max;destroyReservation(rList[i]),i++);
     ffree((void **) &rList);
 
-    getrusage(RUSAGE_SELF,&r_usage);
-    printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-    apagar++;
 
     return;
 }
 
 void query9(Users * uDatabase, char * pre, bool f){
-    struct rusage r_usage;
     Temporary * temp = getUsersPre(uDatabase,pre);
     char ** preUsersIds = getTempAuxChar(temp);
     char ** preUsersNames = getTempListChars(temp);
@@ -441,16 +389,12 @@ void query9(Users * uDatabase, char * pre, bool f){
     }
     free(preUsersNames);
     
-    getrusage(RUSAGE_SELF,&r_usage);
-    printf("O comando %d passou a usar %ld KB\n",apagar,r_usage.ru_maxrss);
-    apagar++;
 
     return;
 }
 
 void query10(){
     outputQ1Reservation(false,NULL,NULL,-1,NULL,NULL,false,0,0);
-    printf("query 10 não conta\n");
-    apagar++;
+    //printf("query 10 não conta\n");
     return;
 }

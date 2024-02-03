@@ -9,6 +9,7 @@
 #include <stdbool.h>
 #include <ctype.h>
 #include <string.h>
+#include <locale.h>
 
 WINDOW * terminal;
 int dist;
@@ -337,25 +338,25 @@ static bool checkQuery(const char * line){
 }
 
 static void help(int width){
-    mvwprintw(terminal,9,width * 0.3,"Função  Exemplo do input");
-    mvwprintw(terminal,11,width * 0.3,"1       Book0000033110");
-    mvwprintw(terminal,12,width * 0.3,"1F      JéssiTavares910");
-    mvwprintw(terminal,14,width * 0.3,"2       JéssiTavares910");
-    mvwprintw(terminal,15,width * 0.3,"2F      JéssiTavares910 flights");
-    mvwprintw(terminal,17,width * 0.3,"3       HTL1001");
-    mvwprintw(terminal,18,width * 0.3,"3F      HTL1002");
-    mvwprintw(terminal,20,width * 0.3,"4       HTL1001");
-    mvwprintw(terminal,21,width * 0.3,"4F      HTL1002");
-    mvwprintw(terminal,23,width * 0.3,"5       LIS \"2021/01/01 00:00:00\" \"2022/12/31 23:59:59\"");
-    mvwprintw(terminal,24,width * 0.3,"5F      AMS \"2021/01/01 00:00:00\" \"2024/01/01 23:59:59\"");
-    mvwprintw(terminal,26,width * 0.3,"6       2023 10");
-    mvwprintw(terminal,27,width * 0.3,"6F      2023 10");
-    mvwprintw(terminal,29,width * 0.3,"7       10");
-    mvwprintw(terminal,30,width * 0.3,"7F      20");
-    mvwprintw(terminal,32,width * 0.3,"8       HTL1001 2023/05/02 2023/05/02");
-    mvwprintw(terminal,33,width * 0.3,"8F      HTL1001 2021/01/01 2022/01/01");
-    mvwprintw(terminal,35,width * 0.3,"9       J");
-    mvwprintw(terminal,36,width * 0.3,"9F      \"João M\"");
+    mvwprintw(terminal,9 - 4,width * 0.35,"Função  Exemplo do input");
+    mvwprintw(terminal,11 - 4,width * 0.35,"\t1       Book0000033110");
+    mvwprintw(terminal,12 - 4,width * 0.35,"\t1F      JéssiTavares910");
+    mvwprintw(terminal,14 - 4,width * 0.35,"\t2       JéssiTavares910");
+    mvwprintw(terminal,15 - 4,width * 0.35,"\t2F      JéssiTavares910 flights");
+    mvwprintw(terminal,17 - 4,width * 0.35,"\t3       HTL1001");
+    mvwprintw(terminal,18 - 4,width * 0.35,"\t3F      HTL1002");
+    mvwprintw(terminal,20 - 4,width * 0.35,"\t4       HTL1001");
+    mvwprintw(terminal,21 - 4,width * 0.35,"\t4F      HTL1002");
+    mvwprintw(terminal,23 - 4,width * 0.35,"\t5       LIS \"2021/01/01 00:00:00\" \"2022/12/31 23:59:59\"");
+    mvwprintw(terminal,24 - 4,width * 0.35,"\t5F      AMS \"2021/01/01 00:00:00\" \"2024/01/01 23:59:59\"");
+    mvwprintw(terminal,26 - 4,width * 0.35,"\t6       2023 10");
+    mvwprintw(terminal,27 - 4,width * 0.35,"\t6F      2023 10");
+    mvwprintw(terminal,29 - 4,width * 0.35,"\t7       10");
+    mvwprintw(terminal,30 - 4,width * 0.35,"\t7F      20");
+    mvwprintw(terminal,32 - 4,width * 0.35,"\t8       HTL1001 2023/05/02 2023/05/02");
+    mvwprintw(terminal,33 - 4,width * 0.35,"\t8F      HTL1001 2021/01/01 2022/01/01");
+    mvwprintw(terminal,35 - 4,width * 0.35,"\t9       J");
+    mvwprintw(terminal,36 - 4,width * 0.35,"\t9F      \"João M\"");
 }
 
 static void printHelp(WINDOW * search,int yW, int xW,int heightW,int widthW,char * buffer){
@@ -1272,6 +1273,7 @@ int getInput(){
 }
 
 void menus(){
+    setlocale(LC_ALL,"");
     initscr();
     raw();
     cursorOn();

@@ -13,9 +13,9 @@ typedef struct flight{
     struct time * schedule_arrival_date;
     struct time * real_departure_date;
     struct time * real_arrival_date;
-    char * pilot;
-    char * copilot;
-    char * notes;
+    //char * pilot;
+    //char * copilot;
+    //char * notes;
 } Flight;
 
 
@@ -40,9 +40,9 @@ typedef struct flight{
     flight->schedule_arrival_date = createTime();
     flight->real_departure_date = createTime();
     flight->real_arrival_date = createTime();
-    flight->pilot = NULL;
-    flight->copilot = NULL;
-    flight->notes = NULL;
+    //flight->pilot = NULL;
+    //flight->copilot = NULL;
+    //flight->notes = NULL;
 }
 
   void destroyFlight(Flight * f) {
@@ -56,9 +56,9 @@ typedef struct flight{
         destroyTime(f->schedule_arrival_date); 
         destroyTime(f->real_departure_date); 
         destroyTime(f->real_arrival_date); 
-        ffree((void **) &f->pilot);
-        ffree((void **) &f->copilot);
-        ffree((void **) &f->notes);
+        //ffree((void **) &f->pilot);
+        //ffree((void **) &f->copilot);
+        //ffree((void **) &f->notes);
         ffree((void **) &f); 
     }
 }
@@ -231,7 +231,7 @@ Time *getFlightRArrivalDate(Flight * flight){
 }
 
 
-void setFlightPilot(Flight * flight,const char * line){
+/*void setFlightPilot(Flight * flight,const char * line){
     if(flight == NULL) return;
 
     ffree((void **) &flight->pilot);
@@ -282,7 +282,7 @@ char *getFlightNotes(Flight * flight){
         return notes;
     }
     return NULL;
-}
+}*/
 
 int getFlightDelay(Flight * flight){
     if(flight == NULL) return -1;
@@ -302,9 +302,9 @@ void copyFlight(Flight * dest,Flight * src){
     char * flightPlaneModel = getFlightPlaneModel(src);         setFlightPlaneModel(dest,flightPlaneModel);         ffree((void **) &flightPlaneModel);
     char * flightOrigin = getFlightOrigin(src);                 setFlightOrigin(dest,flightOrigin);                 ffree((void **) &flightOrigin);
     char * flightDestination = getFlightDestination(src);       setFlightDestination(dest,flightDestination);       ffree((void **) &flightDestination);
-    char * flightPilot = getFlightPilot(src);                   setFlightPilot(dest,flightPilot);                   ffree((void **) &flightPilot);
-    char * flightCopilot = getFlightCopilot(src);               setFlightCopilot(dest,flightCopilot);               ffree((void **) &flightCopilot);
-    char * flightNotes = getFlightNotes(src);                   setFlightNotes(dest,flightNotes);                   ffree((void **) &flightNotes);
+    //char * flightPilot = getFlightPilot(src);                   setFlightPilot(dest,flightPilot);                   ffree((void **) &flightPilot);
+    //char * flightCopilot = getFlightCopilot(src);               setFlightCopilot(dest,flightCopilot);               ffree((void **) &flightCopilot);
+    //char * flightNotes = getFlightNotes(src);                   setFlightNotes(dest,flightNotes);                   ffree((void **) &flightNotes);
     Time * flightSDepartureDate = getFlightSDepartureDate(src); setFlightSDepartureDate(dest,flightSDepartureDate); destroyTime(flightSDepartureDate);
     Time * flightSArrivalDate = getFlightSArrivalDate(src);     setFlightSArrivalDate(dest,flightSArrivalDate);     destroyTime(flightSArrivalDate);
     Time * flightRDepartureDate = getFlightRDepartureDate(src); setFlightRDepartureDate(dest,flightRDepartureDate); destroyTime(flightRDepartureDate);

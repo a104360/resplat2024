@@ -484,7 +484,7 @@ User * userCheck(const char * line){
         ffree((void **)&email);
         ERRORSU(aux,user);
     }
-    setUserEmail(user,token);
+    //setUserEmail(user,token);
     ffree((void **)&email);
     TOKENIZE(token,saveptr);
 
@@ -494,7 +494,7 @@ User * userCheck(const char * line){
         ffree((void **)&phone);
         ERRORSU(aux,user);
     }
-    setUserPhone(user,token);
+    //setUserPhone(user,token);
     ffree((void **)&phone);
     TOKENIZE(token,saveptr);
     
@@ -547,7 +547,7 @@ User * userCheck(const char * line){
         ffree((void **)&address);
         ERRORSU(aux,user);
     }
-    setUserAddress(user,address);
+    //setUserAddress(user,address);
     ffree((void **)&address);
     TOKENIZE(token,saveptr);
 
@@ -569,7 +569,7 @@ User * userCheck(const char * line){
         ffree((void **)&payMethod);
         ERRORSU(aux,user);
     }
-    setUserPayMethod(user,payMethod);
+    //setUserPayMethod(user,payMethod);
     ffree((void **)&payMethod);
     TOKENIZE(token,saveptr);
     
@@ -916,7 +916,7 @@ User * userCheck(const char * line){
         ffree((void **)&pilot);
         ERRORSF(aux,flight);
     }
-    setFlightPilot(flight,pilot);
+    //setFlightPilot(flight,pilot);
     ffree((void **)&pilot);
     TOKENIZE(token,saveptr);
 
@@ -925,7 +925,7 @@ User * userCheck(const char * line){
         ffree((void **)&copilot);
         ERRORSF(aux,flight);
     }
-    setFlightCopilot(flight,copilot);
+    //setFlightCopilot(flight,copilot);
     ffree((void **)&copilot);
     if(saveptr[0] == ';'){
         ffree((void **)&aux);
@@ -934,7 +934,7 @@ User * userCheck(const char * line){
     TOKENIZE(token,saveptr);
 
 
-    if(token) setFlightNotes(flight,token);
+    //if(token) setFlightNotes(flight,token);
     
     ffree((void **)&aux);
     aux = NULL;
@@ -974,6 +974,9 @@ Passenger * passengerCheck(const char * line,Users * uDatabase,Flights * fDataba
     ffree((void **)&aux);
     return passenger;
 }
+
+
+
 
 Users * validateUsers(const char * folderPath){
     size_t argSize = 0;
@@ -1053,8 +1056,37 @@ Users * validateUsers(const char * folderPath){
     userErrors = NULL;
 
     ffree((void **)&filePath);
+
+
+
     return uDatabase;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Reservations * validateReservations(Users * uDatabase, const char * folderPath){
     size_t argSize = 0;
@@ -1132,6 +1164,31 @@ Reservations * validateReservations(Users * uDatabase, const char * folderPath){
     ffree((void **)&filePath);
     return rDatabase;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 Flights * validateFlights(const char * folderPath){
     size_t argSize = 0;
@@ -1238,6 +1295,39 @@ Flights * validateFlights(const char * folderPath){
     return fDatabase;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 Passengers * validatePassengers(Users * uDatabase,Flights * fDatabase,const char * folderPath){
     size_t argSize = 0;
     argSize = strlen(folderPath);
@@ -1313,3 +1403,5 @@ Passengers * validatePassengers(Users * uDatabase,Flights * fDatabase,const char
     ffree((void **)&filePath);
     return pDatabase;
 }
+
+
